@@ -1,14 +1,16 @@
 import {
   bookHighlightParts,
-  bookKindLabels,
+  bookRoleLabels,
   bookResultHref,
   bookSnippet,
   createBookSearch,
-  type BookFilter,
   type BookIndexData,
 } from "../../util/bookSearch"
 
-const loaded = new Map<string, Promise<ReturnType<typeof createBookSearch>>>()
+const loaded = new Map<
+  string,
+  Promise<{ engine: ReturnType<typeof createBookSearch>; data: BookIndexData }>
+>()
 
 function initializeBookSearch(root: HTMLElement) {
   if (root.dataset.searchBound) return
@@ -20,10 +22,12 @@ function initializeBookSearch(root: HTMLElement) {
   const closer = root.querySelector<HTMLButtonElement>(".book-search-close")!
   const results = root.querySelector<HTMLUListElement>(".book-search-results")!
   const status = root.querySelector<HTMLElement>(".book-search-status")!
-  const filters = [...root.querySelectorAll<HTMLButtonElement>("[data-search-filter]")]
+  const scope = root.querySelector<HTMLSelectElement>(".book-search-scope")!
+  const auxiliary = root.querySelector<HTMLInputElement>(".book-search-aux")!
   const indexUrl = new URL(root.dataset.searchIndex!, document.baseURI)
   const siteRoot = new URL("../", indexUrl)
-  let filter: BookFilter = "all"
+  const currentBook = document.querySelector<HTMLElement>("#reader-context")?.dataset.bookId
+  let scopeInitialized = false
   let selected = -1
   let previousFocus: HTMLElement = opener
   let generation = 0
@@ -56,11 +60,7 @@ function initializeBookSearch(root: HTMLElement) {
     results.replaceChildren()
     select(-1)
     input.setAttribute("aria-expanded", "false")
-    if (!query) {
-      status.textContent = "输入关键词，搜索公开教材。"
-      return
-    }
-    status.textContent = "正在搜索…"
+    status.textContent = query ? "正在搜索…" : "输入关键词，搜索公开教材。"
     try {
       if (!loaded.has(indexUrl.href)) {
         loaded.set(
@@ -69,9 +69,9 @@ function initializeBookSearch(root: HTMLElement) {
             .then(async (response) => {
               if (!response.ok) throw new Error("Search index unavailable")
               const data = (await response.json()) as BookIndexData
-              if (data.version !== 1 || !Array.isArray(data.documents))
+              if (data.version !== 2 || !Array.isArray(data.documents) || !data.catalog?.pages)
                 throw new Error("Invalid search index")
-              return createBookSearch(data.documents)
+              return { engine: createBookSearch(data.documents), data }
             })
             .catch((error) => {
               loaded.delete(indexUrl.href)
@@ -79,12 +79,27 @@ function initializeBookSearch(root: HTMLElement) {
             }),
         )
       }
-      const engine = await loaded.get(indexUrl.href)!
+      const { engine, data } = await loaded.get(indexUrl.href)!
       if (ownGeneration !== generation || !dialog.open) return
-      const matches = engine(query, filter)
+      if (!scopeInitialized) {
+        for (const book of data.catalog.books) {
+          const option = document.createElement("option")
+          option.value = book.id
+          option.textContent = `${book.id === currentBook ? "当前书 · " : ""}${book.title}`
+          scope.append(option)
+        }
+        if (currentBook && data.catalog.books.some((book) => book.id === currentBook))
+          scope.value = currentBook
+        scopeInitialized = true
+      }
+      if (!query) return
+      const matches = engine(query, {
+        bookId: scope.value || undefined,
+        includeAuxiliary: auxiliary.checked,
+      })
       status.textContent = matches.length
         ? `${matches.length}${matches.length === 40 ? "+" : ""} 条结果`
-        : "没有找到匹配内容。试试别名、英文术语或切换到“全部”。"
+        : "没有找到匹配内容。试试别名、英文术语、所有书籍，或包含辅助资料。"
       for (const [at, match] of matches.entries()) {
         const li = document.createElement("li")
         li.setAttribute("role", "presentation")
@@ -95,17 +110,20 @@ function initializeBookSearch(root: HTMLElement) {
         link.setAttribute("role", "option")
         link.setAttribute("aria-selected", "false")
         link.dataset.kind = match.kind
+        link.dataset.bookId = match.bookId ?? ""
+        link.dataset.auxiliary = String(match.auxiliary)
         const title = document.createElement("span")
         title.className = "book-search-result-title"
         highlight(title, match.title, query)
         const meta = document.createElement("span")
         meta.className = "book-search-result-meta"
-        meta.textContent = [bookKindLabels[match.kind], match.status, match.layer, match.type]
+        meta.textContent = [bookRoleLabels[match.role] ?? match.role, match.status]
           .filter(Boolean)
           .join(" · ")
         const path = document.createElement("span")
         path.className = "book-search-result-path"
-        path.textContent = match.slug
+        path.textContent =
+          [match.bookTitle, match.chapterTitle].filter(Boolean).join(" / ") || "独立笔记"
         const snippet = document.createElement("span")
         snippet.className = "book-search-result-snippet"
         highlight(snippet, bookSnippet(match, query), query)
@@ -174,13 +192,8 @@ function initializeBookSearch(root: HTMLElement) {
       }
     }
   })
-  filters.forEach((button) =>
-    button.addEventListener("click", () => {
-      filter = button.dataset.searchFilter as BookFilter
-      filters.forEach((item) => item.setAttribute("aria-pressed", String(item === button)))
-      void search()
-    }),
-  )
+  scope.addEventListener("change", () => void search())
+  auxiliary.addEventListener("change", () => void search())
   document.addEventListener("keydown", (event) => {
     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
       event.preventDefault()

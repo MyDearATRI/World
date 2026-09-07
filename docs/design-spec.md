@@ -1,10 +1,20 @@
 # Design specification
 
-## Textbook interface extension
+## Current bookshelf and reading interface
 
-The approved follow-up adds a structured home page from the Vault's home Markdown, a collapsible directory tree, breadcrumbs, source-defined chapter navigation, a visible search field and interactive relation graphs. Body/plan/example/navigation status is textual and follows source metadata. A graph line means an actual note link, not a mathematical implication. The homepage contains an inline full-library graph; article launchers begin at one-hop neighbours. Graph panels use the same restrained paper/ink/blue palette, with drag/pan/zoom, fit/reset/pause, keyboard access and reduced motion. Canvas views preserve the author's groups, arrows and annotations separately from the automatic note graph.
+The homepage is a quiet bookshelf with a clear book entry, source label and extent of existing exposition. Writing explanations and demonstrations sit in an expandable auxiliary area. Book pages offer chapter reading and a knowledge index; chapter pages group continuous section readings, reusable knowledge, connections and exercises. The primary directory follows the book and section order instead of mirroring every Vault folder. Original home/book/chapter navigation remains available in expandable source sections with its title and maintenance metadata.
 
-The wide grid now starts at a 224px directory rail, 720px reading column, 160px margin, and 48px gaps. The home page can span the reading and margin columns. Below 1280px the directory is collapsed above the text; the phone returns to one reading column. Search and graph modal focus must remain usable, return to the trigger on close, and fit the viewport. These additions supersede the historical phase-one omission of search/graph below.
+Clicking knowledge opens a complete reading panel beside the current desktop context, using an approximately 740px maximum panel width; narrow screens devote the available viewport to reading. Preserve the original page and graph state underneath. The panel supports chained knowledge reading, back/close, an independent-page link, focus restoration, local heading and footnote navigation, MathML, and formula scrolling inside the formula container. Ordinary links must remain useful when JavaScript is unavailable or a panel request fails.
+
+Graphs are secondary reading aids. The book level uses labelled chapter rectangles; the chapter level uses knowledge circles. A focused knowledge view exposes real direct references, listing cross-chapter references separately. A graph line never asserts a mathematical implication or prerequisite. Keep drag, pan, zoom, fit, reset, pause, accessible controls and reduced-motion behavior; avoid constantly moving decoration. Clicking a knowledge node shares the same reading panel. Canvas views continue to preserve authored groups, arrows and annotations separately from automatic link graphs.
+
+Retain the near-white paper, dark ink, restrained blue, fine rules and serif reading direction. The desktop grid keeps a compact book navigation rail, approximately 720px reading column and margin region; index views can use more of the reading/margin space without widening long-form prose. Below 1280px navigation collapses above a clear single-column reading flow. Search starts within the current book where applicable and offers an explicit auxiliary-material toggle. Dialog controls and content must fit the viewport, restore focus on close, and remain usable by keyboard and at enlarged text sizes.
+
+At 600px and below, the section's knowledge links start in a collapsed, labelled disclosure with the knowledge count. Opening it reveals every linked knowledge page. This keeps long lists of concepts from pushing the mathematical exposition below the phone's first screen; larger screens show the same list expanded.
+
+## Historical phase-one defaults
+
+The defaults below remain useful for typography and mathematics. Their synthetic-only metadata and omission of search/graphs describe the initial phase and are superseded by the current reader interface above.
 
 This document was created from the approved phase-one design request. Its values are implementation defaults to be checked against the actual mixed Chinese/English article; the acceptance document defines required browser observations.
 

@@ -1,12 +1,22 @@
-# Phase-one acceptance
+# Website acceptance
 
-## Current textbook acceptance
+## Current reader-interface acceptance
 
-The full textbook follow-up replaces the two-sample acceptance boundary below. Verify every manifest output and asset hash, the exact generated-page/resource allowlist, all local links and block/heading anchors, title/status metadata and HTML/MathML equations. Search and graph node sets must equal the exported source-note set, excluding generated Canvas pages; no excluded files may enter an index. Test export additions, changes, removals, idempotence, source drift, linked paths, unknown outputs, aliases, math/table compatibility and Canvas conversion with isolated fixtures.
+The current reader interface replaces the historical two-sample and full-library-graph requirements below. Verify every manifest output and asset hash, the exact generated-page/resource allowlist, all local links and block/heading anchors, source document titles, status/layer metadata and HTML/MathML equations. Bookshelf and book/chapter presentation headings may differ from source titles; complete original navigation remains in expandable `.source-navigation` sections. Presentation changes must leave content and the publication manifest unchanged.
 
-Test the home page, directory, reading sequence, search queries/filters, inline and full-screen graph, mouse/keyboard/touch gestures, Canvas zoom and note links, formula/table overflow and reading at 1440×1000, 1024×900 and 390×844. Check root, /World/ and /math-notes/ hosting. Document text scaling separately from native browser zoom and simulated touch separately from a physical phone. The publication entry point must reject pre-existing staging, changes after preview, and staged bytes that differ from the approved snapshot. Test the Windows runtime fallback with an ordinary PATH.
+Verify ReaderCatalog covers every approved page and every classified chapter reading, knowledge, connection and exercise is exposed in its chapter. Test section ordering, many-to-many and cross-chapter knowledge mappings, the five explicit supplements, stable output, input immutability, caching, missing-target diagnostics and discoverability of new chapter content. Exact auxiliary navigation pages must not suppress same-named directories; mathematical examples and the discovery archive remain eligible for ordinary reading.
 
-After local checks, publish through the existing World workflow, wait for the exact commit's successful Pages run, and verify the hosted home, articles, search, graph and resources. Record actual results in validation.md; historical phase-one results below are not evidence for the full textbook release.
+BookIndex v2 retains every approved source-note document and includes the shared catalog. Check titles, aliases, headings, source statuses and catalog grouping. Test current-book and all-book search, default auxiliary exclusion, the explicit auxiliary toggle, real exposition snippets, Chinese/English queries and keyboard result navigation. Generated Canvas must not duplicate source notes in search.
+
+Check the bookshelf, book/chapter directories and continuous section navigation at 1440×1000, 1024×900 and 390×844. Open knowledge from directories, search, body links and graph nodes; verify complete content, formulas, footnotes, heading links, chained reading, back/close, restored focus/position, independent navigation and request-failure recovery. Check book chapter rectangles, default chapter knowledge circles, focused direct-reference views, separate cross-chapter references, real node destinations, drag/pan/zoom and keyboard operation. Graph nodes must match the catalog's allowed non-auxiliary book contents; edges must correspond to real source links. Do not require a homepage graph or an all-note graph on every page.
+
+Continue checking Canvas zoom and note links, formula/table overflow, root, /World/ and /math-notes/ hosting. Document text scaling separately from native browser zoom and simulated touch separately from a physical phone. Preserve exporter fixture coverage for additions, changes, removals, idempotence, source drift, unknown outputs, aliases, math/table compatibility and Canvas conversion. The existing publication entry point must reject pre-existing staging, changes after preview, and staged bytes that differ from the approved snapshot; its ordinary Windows runtime fallback remains supported.
+
+If publication is included in the current authorized task, use the existing World workflow, wait for the exact commit's successful Pages run, and verify the hosted reader, search, graph and resources. Record actual local and online results in validation.md. This document describes checks to perform and makes no assertion that the latest release has passed or deployed.
+
+## Historical phase-one acceptance
+
+The remaining sections record the first two-note sample. Their content limit, missing publication features and homepage assumptions are superseded by the current acceptance above; typography, mathematical integrity and honest evidence requirements continue to apply.
 
 This document was created from the approved implementation request. It specifies required checks and expected behavior. It does not claim that any check has run or passed; record actual commands, outcomes, limitations, and screenshot paths in the README or validation report after running them.
 

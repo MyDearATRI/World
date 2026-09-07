@@ -2,7 +2,9 @@
 
 网站工程已连接公开仓库 [MyDearATRI/World](https://github.com/MyDearATRI/World)，网站地址是 [mydearatri.github.io/World/](https://mydearatri.github.io/World/)。Git 根目录只有 `website`，`main` 跟踪 `origin/main`，本机 Git Credential Manager 已完成登录。日常写作和发布不需要重新连接仓库，也不需要手工执行 Git 提交命令。
 
-这次实现已将内容入口扩展为批准公开的教材、导航、写作规划和示例笔记，并提供主页、搜索、笔记关系图及 Canvas 阅读页。页面数量根据每次导出清单确定，不再受最初两篇合成样板的限制。本文说明已实现的发布流程；本次版本是否已完成线上部署，以 [验证记录](validation.md) 和对应的 [Actions 运行](https://github.com/MyDearATRI/World/actions)结果为准。
+内容范围包括批准公开的教材、导航、写作规划和示例笔记。当前阅读入口为书架、书章目录和连续研读，知识条目可以就地打开；搜索按书选择范围，关系图按章节和知识点分层，Canvas 保留单独的阅读页。页面数量根据每次导出清单确定。本文说明已实现的发布流程；本次版本是否已完成线上部署，以 [验证记录](validation.md) 和对应的 [Actions 运行](https://github.com/MyDearATRI/World/actions)结果为准。
+
+本轮阅读界面调整没有改动源笔记或公开内容快照，日常发布仍使用下面的两个入口。规划和明确的辅助资料默认不参与普通搜索，但仍有公开页面，也可勾选后查询；数学正文中的例子不会因名称带有 example 被隐藏。这些展示规则由网站的 `reader.config.ts` 与统一阅读模型负责，不要求在 Obsidian 里重排文件。
 
 ## 平时怎样更新
 

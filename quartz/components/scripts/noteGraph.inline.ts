@@ -5,25 +5,32 @@ import {
   zoomIdentity,
   forceSimulation,
   forceLink,
-  forceManyBody,
-  forceCollide,
   forceX,
   forceY,
   type SimulationNodeDatum,
   type SimulationLinkDatum,
   type ZoomTransform,
 } from "d3"
-import { filterNoteGraph, type NoteGraphData, type NoteGraphFilter } from "../../util/noteGraph"
+import {
+  readerChapterGraph,
+  wrapGraphTitle,
+  type ReaderGraphData,
+  type ReaderGraphNode,
+} from "../../util/noteGraph"
 
-type GraphNode = NoteGraphData["nodes"][number] & SimulationNodeDatum
+type GraphNode = ReaderGraphNode &
+  SimulationNodeDatum & {
+    anchorX: number
+    anchorY: number
+    labelWidth: number
+    labelHeight: number
+    labelLines: string[]
+  }
 type GraphEdge = SimulationLinkDatum<GraphNode> & { source: GraphNode; target: GraphNode }
-const kindLabels = { body: "正文", plan: "规划", example: "样例", navigation: "导航" }
-
 function initialize(root: HTMLElement) {
   if (root.dataset.graphBound) return
   root.dataset.graphBound = "true"
-  const data = JSON.parse(root.dataset.graph!) as NoteGraphData
-  const currentId = data.nodes.find((node) => node.current)?.id
+  const data = JSON.parse(root.dataset.graph!) as ReaderGraphData
   const inline = root.dataset.variant === "inline"
   const dialog = root.querySelector<HTMLDialogElement>(".note-graph-dialog")!
   const host = root.querySelector<HTMLElement>(".note-graph-inline-host")!
@@ -32,105 +39,70 @@ function initialize(root: HTMLElement) {
   const closer = root.querySelector<HTMLButtonElement>(".note-graph-close")!
   const svgElement = root.querySelector<SVGSVGElement>(".note-graph-svg")!
   const canvas = root.querySelector<HTMLElement>(".note-graph-canvas")!
-  const error = root.querySelector<HTMLElement>(".note-graph-error")!
   const tooltip = root.querySelector<HTMLElement>(".note-graph-hover")!
+  const error = root.querySelector<HTMLElement>(".note-graph-error")!
   const pauseButton = root.querySelector<HTMLButtonElement>('[data-graph-action="pause"]')!
+  const focusControl = root.querySelector<HTMLLabelElement>(".note-graph-focus-control")!
+  const focusSelect = root.querySelector<HTMLSelectElement>(".note-graph-focus-select")!
   const list = root.querySelector<HTMLUListElement>(".note-graph-list ul")!
+  const cross = root.querySelector<HTMLElement>(".note-graph-cross")!
   const count = root.querySelector<HTMLElement>(".note-graph-count")!
   const reduced = matchMedia("(prefers-reduced-motion: reduce)")
-  let scope: "local" | "global" = inline ? "global" : "local"
-  let filter: NoteGraphFilter = "all"
-  let paused = false
-  let width = 0
-  let height = 0
-  let onScreen = inline
+  let chapterId = data.initialChapterId
+  let focusId = data.initialFocusId
+  let paused = false,
+    width = 0,
+    height = 0,
+    suppressUntil = 0
   let transform: ZoomTransform = zoomIdentity
-  let suppressClickUntil = 0
-  let focused: string | undefined
-  let nodes: GraphNode[] = []
-  let links: GraphEdge[] = []
-  let neighbours = new Map<string, Set<string>>()
-  let labelPriority: GraphNode[] = []
-  let labelOrder = ""
-  const labelWidths = new Map<string, number>()
+  let nodes: GraphNode[] = [],
+    links: GraphEdge[] = []
   const measure = document.createElement("canvas").getContext("2d")!
-  measure.font = `12px ${getComputedStyle(root).fontFamily}`
+  const nodeLabelFont = `12px ${getComputedStyle(root).fontFamily}`
   const svg = select(svgElement)
   const layer = svg.append("g").attr("class", "note-graph-layer")
   const edgeGroup = layer.append("g").attr("aria-hidden", "true")
+  const chapterGroup = layer.append("g").attr("class", "note-graph-chapters")
   const nodeGroup = layer.append("g")
-  let edgeElements = edgeGroup.selectAll<SVGLineElement, GraphEdge>("line")
   let nodeElements = nodeGroup.selectAll<SVGAElement, GraphNode>("a")
-  const simulation = forceSimulation<GraphNode>([])
-    .stop()
-    .force("charge", forceManyBody<GraphNode>().strength(-180).distanceMax(300))
-    .force("collision", forceCollide<GraphNode>(20).iterations(2))
-    .alphaDecay(0.055)
-    .velocityDecay(0.4)
-  const radius = (node: GraphNode) =>
-    Math.min(15, 5 + Math.sqrt((neighbours.get(node.id)?.size ?? 1) - 1) * 1.5)
-  const active = () => dialog.open || (inline && onScreen)
-
-  function running(value: boolean) {
-    root.dataset.running = dialog.dataset.running = String(value)
-  }
+  let edgeElements = edgeGroup.selectAll<SVGLineElement, GraphEdge>("line")
+  const simulation = forceSimulation<GraphNode>([]).stop().alphaDecay(0.08).velocityDecay(0.5)
+  const active = () => dialog.open || (inline && host.getBoundingClientRect().height > 0)
   function stop() {
     simulation.stop().alphaTarget(0)
-    running(false)
+    root.dataset.running = dialog.dataset.running = "false"
   }
   function wake() {
     if (paused || reduced.matches || !active() || document.hidden || !nodes.length) return stop()
-    simulation.alpha(0.35).alphaTarget(0).restart()
-    running(true)
+    simulation.alpha(0.3).alphaTarget(0).restart()
+    root.dataset.running = dialog.dataset.running = "true"
   }
-  function labels() {
-    const shown = new Set<string>()
-    const offsets = new Map<string, number>()
-    const placed: { x: number; y: number; width: number }[] = []
-    const nearby = focused ? neighbours.get(focused) : undefined
-    for (const node of labelPriority) {
-      const important = node.id === focused || node.current
-      const dense = nodes.length > 32 && transform.k < 0.85
-      if (dense && !important && !nearby?.has(node.id) && (neighbours.get(node.id)?.size ?? 1) < 5)
-        continue
-      const x = (node.x ?? 0) * transform.k + transform.x
-      const y = (node.y ?? 0) * transform.k + transform.y + 30
-      const labelWidth = labelWidths.get(node.id) ?? 150
-      const safeX = Math.max(labelWidth / 2 + 7, Math.min(width - labelWidth / 2 - 7, x))
-      if (!important && (safeX !== x || y < 0 || y > height - 25)) continue
-      if (
-        !important &&
-        placed.some(
-          (point) =>
-            Math.abs(point.x - safeX) < (point.width + labelWidth) / 2 + 10 &&
-            Math.abs(point.y - y) < 44,
-        )
-      )
-        continue
-      shown.add(node.id)
-      offsets.set(node.id, (safeX - x) / transform.k)
-      placed.push({ x: safeX, y, width: labelWidth })
-    }
-    nodeElements
-      .select("text")
-      .attr("opacity", (node) => (shown.has(node.id) ? 1 : 0))
-      .attr("font-size", 12 / transform.k)
-      .attr("y", (node) => radius(node) + 15 / transform.k)
-      .attr("stroke-width", 3 / transform.k)
-    nodeElements
-      .selectAll<SVGTSpanElement, GraphNode>("tspan")
-      .attr("x", (node) => offsets.get(node.id) ?? 0)
-      .attr("dy", function (_, index) {
-        return index ? 15 / transform.k : 0
-      })
-    const order = [...shown].join("\0")
-    if (order !== labelOrder) {
-      // Draw readable labels over nearby unlabelled dots, with focus/current last.
-      for (const node of labelPriority.toReversed()) {
-        if (shown.has(node.id)) nodeElements.filter((entry) => entry.id === node.id).raise()
+  function emitRead(node: ReaderGraphNode, trigger: Element) {
+    document.dispatchEvent(
+      new CustomEvent("reader:open", { detail: { slug: node.id, href: node.href, trigger } }),
+    )
+  }
+  function wrapTitle(
+    title: string,
+    limit = width < 600 ? 142 : 182,
+    font = nodeLabelFont,
+    maxLines = 3,
+  ) {
+    measure.font = font
+    const lines = wrapGraphTitle(title, limit, (text) => measure.measureText(text).width)
+    if (lines.length > maxLines) {
+      lines.length = maxLines
+      let last = lines[maxLines - 1]
+      while (last && measure.measureText(last + "…").width > limit) {
+        const space = last.lastIndexOf(" ")
+        last = space > 0 ? last.slice(0, space) : Array.from(last).slice(0, -1).join("")
       }
-      labelOrder = order
+      lines[maxLines - 1] = last + "…"
     }
+    return lines
+  }
+  function updateLabels() {
+    nodeElements.select("text").attr("font-size", 12 / Math.max(0.8, transform.k))
   }
   function render() {
     nodeElements.attr("transform", (node) => `translate(${node.x ?? 0},${node.y ?? 0})`)
@@ -139,280 +111,395 @@ function initialize(root: HTMLElement) {
       .attr("y1", (edge) => edge.source.y ?? 0)
       .attr("x2", (edge) => edge.target.x ?? 0)
       .attr("y2", (edge) => edge.target.y ?? 0)
-    labels()
+    updateLabels()
   }
-  simulation.on("tick", render).on("end", () => running(false))
   const zoomBehavior = zoom<SVGSVGElement, unknown>()
-    .scaleExtent([0.12, 5])
-    .filter((event) => {
-      if (event.type === "wheel") return true
-      if (event.touches?.length > 1) return true
-      return !event.button && !(event.target as Element).closest(".note-graph-node")
-    })
+    .scaleExtent([0.35, 3])
+    .filter(
+      (event) =>
+        event.type === "wheel" ||
+        event.touches?.length > 1 ||
+        (!event.button &&
+          !(event.target as Element).closest(".note-graph-node,.note-graph-chapter")),
+    )
     .on("zoom", (event) => {
       transform = event.transform
       layer.attr("transform", transform.toString())
-      labels()
+      updateLabels()
     })
   svg.call(zoomBehavior).on("dblclick.zoom", null)
-
   function fit() {
-    if (!width || !height || !nodes.length) return
-    // Bounds derive from real node positions rather than hidden full-length labels.
-    const xs = nodes.map((node) => node.x ?? 0)
-    const ys = nodes.map((node) => node.y ?? 0)
-    const left = Math.min(...xs),
-      right = Math.max(...xs)
-    const top = Math.min(...ys),
-      bottom = Math.max(...ys)
-    const scale = Math.max(
-      0.12,
-      Math.min(
-        1.2,
-        (width - 90) / Math.max(110, right - left + 60),
-        (height - 130) / Math.max(100, bottom - top + 60),
-      ),
-    )
+    if (!width || !height) return
+    const bounds = layer.node()!.getBBox()
+    if (!bounds.width || !bounds.height) return
+    const k = Math.min(1, (width - 28) / bounds.width, (height - 76) / bounds.height)
     svg.call(
       zoomBehavior.transform,
       zoomIdentity
         .translate(
-          width / 2 - ((left + right) / 2) * scale,
-          (height - 38) / 2 - ((top + bottom) / 2) * scale,
+          width / 2 - (bounds.x + bounds.width / 2) * k,
+          (height - 58) / 2 - (bounds.y + bounds.height / 2) * k,
         )
-        .scale(scale),
+        .scale(Math.max(0.35, k)),
     )
+  }
+  function collideLabels(alpha: number) {
+    for (let i = 0; i < nodes.length; i++)
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i],
+          b = nodes[j],
+          dx = (b.x ?? 0) - (a.x ?? 0),
+          dy = (b.y ?? 0) - (a.y ?? 0)
+        const overlapX = (a.labelWidth + b.labelWidth) / 2 + 18 - Math.abs(dx)
+        const overlapY = Math.max(a.labelHeight, b.labelHeight) + 28 - Math.abs(dy)
+        if (overlapX <= 0 || overlapY <= 0) continue
+        if (overlapX < overlapY) {
+          const nudge = Math.sign(dx || 1) * overlapX * alpha * 0.6
+          if (a.fx == null) a.vx = (a.vx ?? 0) - nudge
+          if (b.fx == null) b.vx = (b.vx ?? 0) + nudge
+        } else {
+          const nudge = Math.sign(dy || 1) * overlapY * alpha * 0.6
+          if (a.fy == null) a.vy = (a.vy ?? 0) - nudge
+          if (b.fy == null) b.vy = (b.vy ?? 0) + nudge
+        }
+      }
   }
   function reset() {
     stop()
     if (!width || !height) return
+    if (!chapterId) {
+      renderChapters()
+      return
+    }
+    const cols = width < 600 ? 2 : Math.min(4, Math.max(2, Math.floor(width / 205)))
+    const rows = Math.ceil(nodes.length / cols)
+    const cellW = Math.max(width / cols, width < 600 ? 174 : 200)
+    const cellH = Math.max(76, Math.min(112, (height - 80) / Math.max(1, rows)))
     nodes.forEach((node, index) => {
-      const angle = index * Math.PI * (3 - Math.sqrt(5))
-      const spread = Math.sqrt(index + 1) * (nodes.length > 12 ? 26 : 55)
-      node.x = width / 2 + Math.cos(angle) * spread
-      node.y = height / 2 + Math.sin(angle) * spread
+      node.labelLines = wrapTitle(node.title)
+      node.labelWidth = Math.max(
+        60,
+        ...node.labelLines.map((line) => measure.measureText(line).width),
+      )
+      node.labelHeight = node.labelLines.length * 15
+      node.x = node.anchorX = ((index % cols) + 0.5) * cellW
+      node.y = node.anchorY = Math.floor(index / cols) * cellH + 20
       node.fx = node.fy = null
       node.vx = node.vy = 0
     })
+    nodeElements.selectAll("text").remove()
+    nodeElements.each(function (node) {
+      const text = select(this)
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("y", 21)
+        .attr("font-size", 12)
+      node.labelLines.forEach((line, index) =>
+        text
+          .append("tspan")
+          .attr("x", 0)
+          .attr("dy", index ? 15 : 0)
+          .text(line),
+      )
+    })
     simulation
       .nodes(nodes)
-      .force(
-        "link",
-        forceLink<GraphNode, GraphEdge>(links)
-          .distance(nodes.length > 20 ? 65 : 130)
-          .strength(0.4),
-      )
-      .force("x", forceX<GraphNode>(width / 2).strength(0.035))
-      .force("y", forceY<GraphNode>(height / 2).strength(0.035))
-      .alpha(1)
-      .tick(180)
+      .force("link", forceLink<GraphNode, GraphEdge>(links).distance(160).strength(0.018))
+      .force("x", forceX<GraphNode>((node) => node.anchorX).strength(0.28))
+      .force("y", forceY<GraphNode>((node) => node.anchorY).strength(0.28))
+      .force("label-collision", collideLabels)
     render()
     fit()
   }
   function highlight(id?: string) {
-    const adjacent = id ? neighbours.get(id) : undefined
+    const adjacent = new Set(id ? [id] : [])
+    if (id)
+      for (const edge of links) {
+        if (edge.source.id === id) adjacent.add(edge.target.id)
+        if (edge.target.id === id) adjacent.add(edge.source.id)
+      }
     nodeElements
       .classed("is-active", (node) => node.id === id)
-      .classed("is-dim", (node) => Boolean(adjacent && !adjacent.has(node.id)))
+      .classed("is-dim", (node) => Boolean(id && !adjacent.has(node.id)))
     edgeElements.classed("is-active", (edge) => edge.source.id === id || edge.target.id === id)
-    const node = nodes.find((entry) => entry.id === id)
-    tooltip.hidden = !node
-    tooltip.textContent = node
-      ? [node.title, kindLabels[node.kind], node.status, node.layer].filter(Boolean).join(" · ")
-      : ""
-    // Put the active node first so its full label is never sacrificed to density rules.
-    labelPriority = [...nodes].sort(
-      (a, b) =>
-        Number(b.id === id) - Number(a.id === id) ||
-        Number(b.current) - Number(a.current) ||
-        (neighbours.get(b.id)?.size ?? 0) - (neighbours.get(a.id)?.size ?? 0),
-    )
-    labels()
+    tooltip.hidden = !id
+    tooltip.textContent = data.nodes.find((node) => node.id === id)?.title ?? ""
+    if (id) nodeElements.filter((node) => node.id === id).raise()
   }
-  function navigate(node: GraphNode, event: KeyboardEvent) {
-    event.preventDefault()
-    event.stopPropagation()
-    // SVG links do not consistently provide native Enter activation in Chromium.
-    // Keyboard navigation deliberately bypasses the short pointer-drag click guard.
-    if (event.ctrlKey || event.metaKey) window.open(node.href, "_blank", "noopener")
-    else window.location.assign(node.href)
+  function listLink(node: ReaderGraphNode) {
+    const li = document.createElement("li"),
+      a = document.createElement("a")
+    a.href = node.href
+    a.dataset.graphRead = node.id
+    a.textContent = node.title
+    li.append(a)
+    return li
+  }
+  function renderChapters() {
+    if (!width || !height) return
+    const columns = width < 700 ? 1 : Math.min(3, data.chapters.length)
+    const cardWidth = Math.min(300, width / columns - 36)
+    const groups = chapterGroup
+      .selectAll<SVGGElement, ReaderGraphData["chapters"][number]>("g")
+      .data(data.chapters)
+      .join("g")
+      .attr("class", "note-graph-chapter")
+      .attr("data-chapter-id", (chapter) => chapter.id)
+      .attr("role", "button")
+      .attr("tabindex", 0)
+      .attr("aria-label", (chapter) => `展开${chapter.title}，${chapter.knowledge.length}个知识点`)
+      .attr(
+        "transform",
+        (_, index) =>
+          `translate(${(((index % columns) + 0.5) * width) / columns - cardWidth / 2},${Math.floor(index / columns) * 128 + 36})`,
+      )
+    groups.selectAll("*").remove()
+    groups.append("rect").attr("width", cardWidth).attr("height", 92).attr("rx", 2)
+    groups.each(function (chapter) {
+      const group = select(this),
+        title = group
+          .append("text")
+          .attr("class", "note-graph-chapter-title")
+          .attr("x", 16)
+          .attr("y", 27)
+      const titleStyle = getComputedStyle(title.node()!)
+      const lines = wrapTitle(
+        chapter.title,
+        cardWidth - 32,
+        `${titleStyle.fontWeight} ${titleStyle.fontSize} ${titleStyle.fontFamily}`,
+        2,
+      )
+      lines.forEach((line, i) =>
+        title
+          .append("tspan")
+          .attr("x", 16)
+          .attr("dy", i ? 18 : 0)
+          .text(line),
+      )
+      group
+        .append("text")
+        .attr("class", "note-graph-chapter-meta")
+        .attr("x", 16)
+        .attr("y", 75)
+        .text(`${chapter.knowledge.length} 个知识点 · 展开`)
+    })
+    groups
+      .on("click.graph", (_, chapter) => {
+        chapterId = chapter.id
+        focusId = undefined
+        populate()
+      })
+      .on("keydown.graph", (event: KeyboardEvent, chapter) => {
+        if (["Enter", " "].includes(event.key)) {
+          event.preventDefault()
+          chapterId = chapter.id
+          focusId = undefined
+          populate()
+          focusSelect.focus()
+        }
+      })
+    fit()
   }
   function populate() {
     stop()
-    focused = undefined
-    const graph = filterNoteGraph(data, currentId, scope, filter)
-    nodes = graph.nodes.map((node) => ({ ...node }))
-    const byId = new Map(nodes.map((node) => [node.id, node]))
-    links = graph.links.map((edge) => ({
-      source: byId.get(edge.source)!,
-      target: byId.get(edge.target)!,
-    }))
-    neighbours = new Map(nodes.map((node) => [node.id, new Set([node.id])]))
-    for (const edge of links) {
-      neighbours.get(edge.source.id)!.add(edge.target.id)
-      neighbours.get(edge.target.id)!.add(edge.source.id)
+    tooltip.hidden = true
+    const chapter = data.chapters.find((entry) => entry.id === chapterId)
+    if (!chapter) chapterId = undefined
+    root.dataset.graphLevel = chapter ? "chapter" : "book"
+    root.dataset.chapterId = chapterId ?? ""
+    root.dataset.focusId = focusId ?? ""
+    panel.querySelector<HTMLElement>(".note-graph-chapter-name")!.textContent = chapter
+      ? ` / ${chapter.title}`
+      : data.book.title
+    focusControl.hidden = !chapter
+    pauseButton.disabled = !chapter
+    focusSelect.replaceChildren(
+      new Option("本章全部知识点", ""),
+      ...(chapter?.knowledge ?? []).map(
+        (id) => new Option(data.nodes.find((node) => node.id === id)?.title ?? id, id),
+      ),
+    )
+    focusSelect.value = focusId ?? ""
+    chapterGroup.selectAll("*").remove()
+    if (!chapter) {
+      nodes = []
+      links = []
+      nodeGroup.selectAll("*").remove()
+      edgeGroup.selectAll("*").remove()
+      cross.hidden = true
+      count.textContent = `${data.chapters.length} 章 · ${data.chapters.reduce((sum, entry) => sum + entry.knowledge.length, 0)} 个知识点`
+      list.replaceChildren(
+        ...data.chapters.map((entry) => {
+          const li = document.createElement("li"),
+            a = document.createElement("a")
+          a.href = entry.href
+          a.textContent = `${entry.title} · ${entry.knowledge.length} 个知识点`
+          li.append(a)
+          return li
+        }),
+      )
+      error.hidden = data.chapters.length > 0
+      renderChapters()
+      return
     }
+    const view = readerChapterGraph(data, chapter.id, focusId)
+    nodes = view.nodes.map((node) => ({
+      ...node,
+      anchorX: 0,
+      anchorY: 0,
+      labelWidth: 0,
+      labelHeight: 0,
+      labelLines: [],
+    }))
+    const byId = new Map(nodes.map((node) => [node.id, node]))
+    links = view.links.map((link) => ({
+      source: byId.get(link.source)!,
+      target: byId.get(link.target)!,
+    }))
     edgeElements = edgeGroup
       .selectAll<SVGLineElement, GraphEdge>("line")
-      .data(links, (edge) => `${edge.source.id}\0${edge.target.id}`)
+      .data(links)
       .join("line")
       .attr("class", "note-graph-edge")
     nodeElements = nodeGroup
       .selectAll<SVGAElement, GraphNode>("a")
       .data(nodes, (node) => node.id)
       .join<SVGAElement>("a")
-      .attr("class", (node) => `note-graph-node${node.current ? " is-current" : ""}`)
-      .attr("href", (node) => node.href)
+      .attr(
+        "class",
+        (node) =>
+          `note-graph-node${node.current ? " is-current" : ""}${node.id === focusId ? " is-focus" : ""}`,
+      )
       .attr("data-id", (node) => node.id)
-      .attr("data-kind", (node) => node.kind)
+      .attr("data-role", (node) => node.role)
+      .attr("href", (node) => node.href)
       .attr("tabindex", 0)
-      .attr("aria-label", (node) => `${node.title}${node.current ? "（当前文章）" : ""}`)
+      .attr("aria-label", (node) => `阅读${node.title}`)
       .attr("aria-current", (node) => (node.current ? "page" : null))
     nodeElements.selectAll("*").remove()
-    nodeElements.append("circle").attr("class", "note-graph-hit").attr("r", 22)
+    nodeElements.append("circle").attr("class", "note-graph-hit").attr("r", 19)
+    nodeElements.append("circle").attr("class", "note-graph-focus").attr("r", 15)
     nodeElements
       .append("circle")
-      .attr("class", "note-graph-focus")
-      .attr("r", (node) => radius(node) + 6)
-    nodeElements.append("circle").attr("class", "note-graph-dot").attr("r", radius)
+      .attr("class", "note-graph-dot")
+      .attr("r", (node) => (node.id === focusId ? 8 : 6))
     nodeElements.append("title").text((node) => node.title)
-    nodeElements.each(function (node) {
-      const label = select(this).append("text").attr("text-anchor", "middle")
-      const words = Array.from(node.title)
-      const lines: string[] = []
-      while (words.length && lines.length < 2) {
-        let length = Math.min(22, words.length)
-        if (words.length > length) {
-          const space = words.slice(0, length).lastIndexOf(" ")
-          if (space >= 10) length = space + 1
-        }
-        lines.push(words.splice(0, length).join("").trim())
-      }
-      if (words.length) lines[1] = `${lines[1].slice(0, 20)}…`
-      labelWidths.set(
-        node.id,
-        Math.max(0, ...lines.map((line) => measure.measureText(line).width)) + 4,
-      )
-      lines.forEach((line) => label.append("tspan").attr("x", 0).text(line))
-    })
-    let dragDistance = 0
+    let moved = 0
     nodeElements.call(
       drag<SVGAElement, GraphNode>()
         .clickDistance(6)
         .on("start", (event, node) => {
           event.sourceEvent.stopPropagation()
-          dragDistance = 0
+          moved = 0
           node.fx = node.x
           node.fy = node.y
           highlight(node.id)
           wake()
-          if (!paused && !reduced.matches) simulation.alphaTarget(0.12)
         })
         .on("drag", (event, node) => {
-          dragDistance += Math.hypot(event.dx, event.dy) * transform.k
+          moved += Math.hypot(event.dx, event.dy) * transform.k
           node.fx = node.x = event.x
           node.fy = node.y = event.y
           render()
         })
         .on("end", (_, node) => {
-          if (dragDistance > 6) suppressClickUntil = performance.now() + 400
+          if (moved > 6) suppressUntil = performance.now() + 400
+          node.anchorX = node.x ?? node.anchorX
+          node.anchorY = node.y ?? node.anchorY
           node.fx = node.fy = null
           wake()
-          highlight(focused)
+          highlight()
         }),
     )
     nodeElements
-      .on("click.graph", (event) => {
-        if (
-          event.detail !== 0 &&
-          (performance.now() < suppressClickUntil || event.defaultPrevented)
-        )
+      .on("click.graph", function (event, node) {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+        if (event.defaultPrevented || performance.now() < suppressUntil) {
           event.preventDefault()
+          return
+        }
+        event.preventDefault()
+        event.stopPropagation()
+        emitRead(node, this)
       })
+      .on("focus.graph", (_, node) => highlight(node.id))
+      .on("blur.graph", () => highlight())
       .on("mouseenter.graph", (_, node) => highlight(node.id))
-      .on("mouseleave.graph", () => highlight(focused))
-      .on("focus.graph", (_, node) => {
-        focused = node.id
-        highlight(node.id)
-      })
-      .on("blur.graph", () => {
-        focused = undefined
-        highlight()
-      })
-      .on("keydown.graph", (event: KeyboardEvent, node) => {
-        if (event.key === "Enter") return navigate(node, event)
-        const deltas: Record<string, [number, number]> = {
+      .on("mouseleave.graph", () => highlight())
+      .on("keydown.graph", function (event: KeyboardEvent, node) {
+        if (event.key === "Enter") {
+          if (!event.ctrlKey && !event.metaKey) {
+            event.preventDefault()
+            event.stopPropagation()
+            emitRead(node, this)
+          }
+          return
+        }
+        const delta: Record<string, [number, number]> = {
           ArrowLeft: [-20, 0],
           ArrowRight: [20, 0],
           ArrowUp: [0, -20],
           ArrowDown: [0, 20],
         }
-        const delta = deltas[event.key]
-        if (!delta) return
-        event.preventDefault()
-        event.stopPropagation()
-        stop()
-        node.x = (node.x ?? 0) + delta[0] / transform.k
-        node.y = (node.y ?? 0) + delta[1] / transform.k
-        render()
+        if (delta[event.key]) {
+          event.preventDefault()
+          event.stopPropagation()
+          stop()
+          node.x = node.anchorX = (node.x ?? 0) + delta[event.key][0] / transform.k
+          node.y = node.anchorY = (node.y ?? 0) + delta[event.key][1] / transform.k
+          render()
+        }
       })
-    list.replaceChildren(
-      ...nodes.map((node) => {
-        const li = document.createElement("li")
-        const link = document.createElement("a")
-        link.href = node.href
-        link.textContent = node.title
-        if (node.current) link.setAttribute("aria-current", "page")
-        li.append(link)
+    list.replaceChildren(...nodes.map(listLink))
+    cross.hidden = view.crossChapter.length === 0
+    cross.querySelector("ul")!.replaceChildren(
+      ...view.crossChapter.map((node) => {
+        const li = listLink(node)
+        const chapter = data.chapters.find((entry) => entry.id === node.chapterId)
+        li.append(document.createTextNode(` · ${chapter?.title ?? "其他章节"}`))
         return li
       }),
     )
-    count.textContent = `${nodes.length} 篇笔记 · ${links.length} 条联系`
-    root.dataset.scope = scope
-    root.dataset.filter = filter
-    panel
-      .querySelectorAll<HTMLButtonElement>("[data-graph-scope]")
-      .forEach((button) =>
-        button.setAttribute("aria-pressed", String(button.dataset.graphScope === scope)),
-      )
-    panel
-      .querySelectorAll<HTMLButtonElement>("[data-graph-filter]")
-      .forEach((button) =>
-        button.setAttribute("aria-pressed", String(button.dataset.graphFilter === filter)),
-      )
+    count.textContent = `${nodes.length} 个${focusId ? "相关条目" : "知识点"} · ${links.length} 处引用`
     error.hidden = nodes.length > 0
-    error.textContent = "这个范围暂时没有笔记。可以切换类型或查看全局。"
-    highlight()
+    error.textContent = "这个章节暂时没有知识点。"
     reset()
   }
-  svgElement.addEventListener("keydown", (event) => {
-    if (["+", "=", "-", "0"].includes(event.key)) {
+  root.addEventListener("click", (event) => {
+    const link = (event.target as Element).closest<HTMLAnchorElement>("a[data-graph-read]")
+    if (
+      !link ||
+      event.defaultPrevented ||
+      event.ctrlKey ||
+      event.metaKey ||
+      event.shiftKey ||
+      event.altKey ||
+      event.button !== 0
+    )
+      return
+    const entry = data.nodes.find((node) => node.id === link.dataset.graphRead)
+    if (entry) {
       event.preventDefault()
-      if (event.key === "0") fit()
-      else svg.call(zoomBehavior.scaleBy, event.key === "-" ? 1 / 1.25 : 1.25)
+      emitRead(entry, link)
     }
-    const pan: Record<string, [number, number]> = {
-      ArrowLeft: [30, 0],
-      ArrowRight: [-30, 0],
-      ArrowUp: [0, 30],
-      ArrowDown: [0, -30],
-    }
-    if (pan[event.key]) {
-      event.preventDefault()
-      svg.call(
-        zoomBehavior.translateBy,
-        ...(pan[event.key].map((value) => value / transform.k) as [number, number]),
-      )
-    }
+  })
+  focusSelect.addEventListener("change", () => {
+    focusId = focusSelect.value || undefined
+    populate()
   })
   panel.querySelectorAll<HTMLButtonElement>("[data-graph-action]").forEach((button) =>
     button.addEventListener("click", () => {
       switch (button.dataset.graphAction) {
+        case "book":
+          chapterId = undefined
+          focusId = undefined
+          populate()
+          break
         case "zoom-in":
-          svg.call(zoomBehavior.scaleBy, 1.25)
+          svg.call(zoomBehavior.scaleBy, 1.2)
           break
         case "zoom-out":
-          svg.call(zoomBehavior.scaleBy, 1 / 1.25)
+          svg.call(zoomBehavior.scaleBy, 1 / 1.2)
           break
         case "fit":
           fit()
@@ -422,31 +509,22 @@ function initialize(root: HTMLElement) {
           break
         case "pause":
           paused = !paused
+          root.dataset.paused = dialog.dataset.paused = String(paused)
           pauseButton.setAttribute("aria-pressed", String(paused))
           pauseButton.textContent = paused ? "恢复" : "暂停"
-          root.dataset.paused = dialog.dataset.paused = String(paused)
           if (paused) stop()
           else wake()
       }
     }),
   )
-  panel.querySelectorAll<HTMLButtonElement>("[data-graph-scope]").forEach((button) =>
-    button.addEventListener("click", () => {
-      scope = button.dataset.graphScope as typeof scope
-      populate()
-    }),
-  )
-  panel.querySelectorAll<HTMLButtonElement>("[data-graph-filter]").forEach((button) =>
-    button.addEventListener("click", () => {
-      filter = button.dataset.graphFilter as NoteGraphFilter
-      populate()
-    }),
-  )
+  simulation.on("tick", render).on("end", () => {
+    root.dataset.running = dialog.dataset.running = "false"
+  })
   function resizeCanvas() {
     if (!active()) return
     const bounds = canvas.getBoundingClientRect()
     if (!bounds.width || !bounds.height) return
-    const first = !width
+    const changed = width !== bounds.width || height !== bounds.height
     width = bounds.width
     height = bounds.height
     svg.attr("viewBox", `0 0 ${width} ${height}`)
@@ -454,21 +532,11 @@ function initialize(root: HTMLElement) {
       [0, 0],
       [width, height],
     ])
-    if (first) reset()
-    else {
-      stop()
-      fit()
-    }
+    if (changed) reset()
   }
   const resize = new ResizeObserver(resizeCanvas)
   resize.observe(canvas)
-  const intersection = new IntersectionObserver(([entry]) => {
-    onScreen = entry.isIntersecting
-    if (!active()) stop()
-    else if (!width) resizeCanvas()
-  })
-  intersection.observe(host)
-  running(false)
+  stop()
   root.dataset.paused = dialog.dataset.paused = "false"
   populate()
   opener.addEventListener("click", () => {
@@ -490,44 +558,28 @@ function initialize(root: HTMLElement) {
   })
   dialog.addEventListener("keydown", (event) => {
     if (event.key !== "Tab") return
-    const focusable = [
+    const candidates = [
       ...dialog.querySelectorAll<HTMLElement | SVGElement>(
-        'button:not([disabled]), a[href], summary, [tabindex="0"]',
+        'button:not([disabled]),select,a[href],summary,[tabindex="0"]',
       ),
     ].filter((element) => {
-      const closedDetails = element.closest("details:not([open])")
-      if (closedDetails && !closedDetails.querySelector("summary")?.contains(element)) return false
+      const closed = element.closest("details:not([open])")
       return (
-        element.getClientRects().length > 0 && getComputedStyle(element).visibility !== "hidden"
+        (!closed || closed.querySelector("summary")?.contains(element)) &&
+        element.getClientRects().length > 0 &&
+        getComputedStyle(element).visibility !== "hidden"
       )
     })
-    if (!focusable.length) return
-    const first = focusable[0],
-      last = focusable.at(-1)!
-    if (
-      event.shiftKey &&
-      (document.activeElement === first || !dialog.contains(document.activeElement))
-    ) {
+    if (!candidates.length) return
+    const first = candidates[0],
+      last = candidates.at(-1)!
+    if (event.shiftKey && document.activeElement === first) {
       event.preventDefault()
       ;(last as HTMLElement).focus()
-    } else if (
-      !event.shiftKey &&
-      (document.activeElement === last || !dialog.contains(document.activeElement))
-    ) {
+    } else if (!event.shiftKey && document.activeElement === last) {
       event.preventDefault()
       ;(first as HTMLElement).focus()
     }
-  })
-  dialog.addEventListener("click", (event) => {
-    const bounds = dialog.getBoundingClientRect()
-    if (
-      event.target === dialog &&
-      (event.clientX < bounds.left ||
-        event.clientX > bounds.right ||
-        event.clientY < bounds.top ||
-        event.clientY > bounds.bottom)
-    )
-      dialog.close()
   })
   const visibility = () => {
     if (document.hidden) stop()
@@ -541,15 +593,11 @@ function initialize(root: HTMLElement) {
   window.addCleanup(() => {
     stop()
     resize.disconnect()
-    intersection.disconnect()
     document.removeEventListener("visibilitychange", visibility)
     reduced.removeEventListener("change", motion)
     window.removeEventListener("pagehide", stop)
-    if (dialog.open) dialog.close()
-    root.dataset.graphBound = ""
   })
 }
-
-document.addEventListener("nav", () => {
-  document.querySelectorAll<HTMLElement>(".note-graph").forEach(initialize)
-})
+document.addEventListener("nav", () =>
+  document.querySelectorAll<HTMLElement>(".note-graph").forEach(initialize),
+)

@@ -3,21 +3,20 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { chromium } from "playwright"
 import { startPreview } from "./preview.mjs"
-
-const root = fileURLToPath(new URL("../", import.meta.url))
-const live = Boolean(process.env.GRAPH_SITE_URL)
-const suffix = live ? "-live" : ""
-const artifactRoot = path.join(root, "artifacts")
-const screenshots = path.join(artifactRoot, "screenshots")
+const root = fileURLToPath(new URL("../", import.meta.url)),
+  live = Boolean(process.env.GRAPH_SITE_URL),
+  suffix = live ? "-live" : ""
+const artifactRoot = path.join(root, "artifacts"),
+  screenshots = path.join(artifactRoot, "screenshots")
 await mkdir(screenshots, { recursive: true })
 const report = {
   startedAt: new Date().toISOString(),
   browserChannel: process.env.BROWSER_CHANNEL ?? "msedge",
   browserVersion: null,
-  site: process.env.GRAPH_SITE_URL ?? "local artifact at /World/",
+  site: process.env.GRAPH_SITE_URL ?? "local /World/",
   inputMethods: [
-    "Playwright mouse, wheel and keyboard input",
-    "Chromium CDP native touch drag, pan and pinch at 390px; no physical phone tested",
+    "Playwright mouse, wheel and keyboard",
+    "Chromium CDP touch drag, pan and pinch; no physical mobile device",
   ],
   scenarios: [],
   screenshots: [],
@@ -36,31 +35,24 @@ async function shot(page, name) {
   await page.screenshot({ path: file, animations: "disabled" })
   report.screenshots.push(path.relative(root, file).replaceAll(path.sep, "/"))
 }
-async function point(locator) {
-  const box = await locator.boundingBox()
-  if (!box) throw new Error(`No visible box: ${locator}`)
-  return { x: box.x + box.width / 2, y: box.y + box.height / 2 }
-}
-const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y)
 const node = (graph, id) => graph.locator(`a.note-graph-node[data-id=${JSON.stringify(id)}]`)
 const dot = (graph, id) => node(graph, id).locator("circle.note-graph-dot")
-const action = (graph, value) => graph.locator(`button[data-graph-action="${value}"]`)
-async function state(graph) {
-  return graph.evaluate((element) => ({
-    paused: element.dataset.paused,
-    running: element.dataset.running,
-    scope: element.dataset.scope,
-    filter: element.dataset.filter,
-  }))
+const action = (graph, name) => graph.locator(`button[data-graph-action="${name}"]`)
+const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y)
+const hrefFor = (site, slug) => new URL(slug.replace(/(^|\/)index$/, "$1"), site).href
+async function point(locator) {
+  const b = await locator.boundingBox()
+  if (!b) throw new Error(`No visible box for ${locator}`)
+  return { x: b.x + b.width / 2, y: b.y + b.height / 2 }
 }
 async function matrix(graph) {
-  return graph.locator("g.note-graph-layer").evaluate((element) => {
-    const m = element.transform.baseVal.consolidate()?.matrix
+  return graph.locator("g.note-graph-layer").evaluate((g) => {
+    const m = g.transform.baseVal.consolidate()?.matrix
     return m ? { x: m.e, y: m.f, scale: Math.hypot(m.a, m.b) } : { x: 0, y: 0, scale: 1 }
   })
 }
 async function pause(graph, page) {
-  if ((await state(graph)).paused !== "true") await action(graph, "pause").click()
+  if ((await graph.getAttribute("data-paused")) !== "true") await action(graph, "pause").click()
   await page.waitForTimeout(60)
 }
 async function mouseDrag(page, start, delta, held) {
@@ -72,83 +64,78 @@ async function mouseDrag(page, start, delta, held) {
   await page.waitForTimeout(80)
 }
 async function touchDrag(session, start, delta, held) {
-  const touchPoints = (x, y) => [{ x, y, id: 1, radiusX: 3, radiusY: 3, force: 1 }]
+  const points = (x, y) => [{ x, y, id: 1, radiusX: 3, radiusY: 3, force: 1 }]
   await session.send("Input.dispatchTouchEvent", {
     type: "touchStart",
-    touchPoints: touchPoints(start.x, start.y),
+    touchPoints: points(start.x, start.y),
   })
-  for (let i = 1; i <= 12; i++)
+  for (let i = 1; i <= 10; i++)
     await session.send("Input.dispatchTouchEvent", {
       type: "touchMove",
-      touchPoints: touchPoints(start.x + (delta.x * i) / 12, start.y + (delta.y * i) / 12),
+      touchPoints: points(start.x + (delta.x * i) / 10, start.y + (delta.y * i) / 10),
     })
   await held?.()
   await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] })
 }
-async function graphRoot(page, preferInline = true) {
-  const inline = page.locator(".note-graph--inline")
-  if (preferInline && (await inline.count())) return inline.first()
-  return page.locator(".note-graph--launcher").filter({ visible: true }).first()
-}
-async function openGraph(page, preferInline = true) {
-  const graph = await graphRoot(page, preferInline)
-  const trigger = graph.locator("button.note-graph-open")
-  await trigger.focus()
-  await page.keyboard.press("Enter")
-  const dialog = graph.locator("dialog.note-graph-dialog")
-  await dialog.waitFor({ state: "visible" })
-  await page.evaluate(() => document.fonts.ready)
-  await page.waitForTimeout(100)
-  return { graph, trigger, dialog }
-}
-async function globalAll(graph) {
-  await graph.locator('button[data-graph-scope="global"]').click()
-  await graph.locator('button[data-graph-filter="all"]').click()
-}
-async function sourceData(graph) {
-  return graph.evaluate((element) => JSON.parse(element.dataset.graph))
-}
-async function visibleIds(graph) {
+async function ids(graph) {
   return graph
     .locator("a.note-graph-node")
     .evaluateAll((nodes) => nodes.map((node) => node.dataset.id).sort())
 }
-async function pickNode(graph, data) {
-  const connected = [...new Set(data.links.flatMap((link) => [link.source, link.target]))]
-  const found = await graph.locator("a.note-graph-node").evaluateAll((nodes, connected) => {
-    const picks = nodes.map((node) => {
-      const dot = node.querySelector("circle.note-graph-dot").getBoundingClientRect()
-      const canvas = node.closest("svg").getBoundingClientRect()
-      const x = dot.x + dot.width / 2,
-        y = dot.y + dot.height / 2
+async function openGraph(page) {
+  const graph = page.locator(".note-graph").first(),
+    trigger = graph.locator(".note-graph-open")
+  await trigger.focus()
+  await page.keyboard.press("Enter")
+  const dialog = graph.locator("dialog.note-graph-dialog")
+  await dialog.waitFor({ state: "visible" })
+  await page.waitForTimeout(100)
+  return { graph, trigger, dialog }
+}
+async function defaultChapter(graph, chapterId) {
+  await action(graph, "book").click()
+  const group = graph.locator(`g.note-graph-chapter[data-chapter-id=${JSON.stringify(chapterId)}]`)
+  await group.focus()
+  await group.press("Enter")
+}
+async function labelMetrics(graph) {
+  return graph.locator("a.note-graph-node text").evaluateAll((labels) => {
+    const rects = labels.map((label) => {
+      const b = label.getBoundingClientRect(),
+        s = label.closest("svg").getBoundingClientRect()
       return {
-        id: node.dataset.id,
-        connected: connected.includes(node.dataset.id),
-        current: node.getAttribute("aria-current") === "page",
-        touchable: document.elementFromPoint(x, y)?.closest("a.note-graph-node") === node,
-        safe:
-          x > canvas.x + 45 &&
-          x < canvas.right - 65 &&
-          y > canvas.y + 50 &&
-          y < canvas.bottom - 110,
+        text: label.textContent,
+        left: b.left,
+        right: b.right,
+        top: b.top,
+        bottom: b.bottom,
+        fits:
+          b.left >= s.left - 1 &&
+          b.right <= s.right + 1 &&
+          b.top >= s.top - 1 &&
+          b.bottom <= s.bottom + 1,
       }
     })
-    return picks
-      .filter((pick) => pick.touchable && pick.safe)
-      .sort(
-        (a, b) =>
-          Number(b.connected) - Number(a.connected) || Number(a.current) - Number(b.current),
-      )[0]
-  }, connected)
-  if (!found) throw new Error("No unobscured graph node available for a real pointer drag")
-  return found.id
+    const overlaps = []
+    for (let i = 0; i < rects.length; i++)
+      for (let j = i + 1; j < rects.length; j++) {
+        const a = rects[i],
+          b = rects[j]
+        if (
+          a.left < b.right - 1 &&
+          a.right > b.left + 1 &&
+          a.top < b.bottom - 1 &&
+          a.bottom > b.top + 1
+        )
+          overlaps.push([a.text, b.text])
+      }
+    return {
+      labels: rects.length,
+      outside: rects.filter((rect) => !rect.fits).map((rect) => rect.text),
+      overlaps,
+    }
+  })
 }
-async function fitAndPick(graph, data, page) {
-  await action(graph, "fit").click()
-  await page.waitForTimeout(80)
-  return pickNode(graph, data)
-}
-
 try {
   if (!live) preview = await startPreview({ port: Number(process.env.VERIFY_PORT ?? 0) })
   const site = new URL(process.env.GRAPH_SITE_URL ?? `${preview.url}/World/`)
@@ -175,13 +162,13 @@ try {
     }
     report.scenarios.push(scenario)
     const context = await browser.newContext({
-      viewport,
-      deviceScaleFactor: 1,
-      hasTouch: viewport.width === 390,
-      isMobile: viewport.width === 390,
-    })
-    const page = await context.newPage()
-    page.setDefaultTimeout(10_000)
+        viewport,
+        hasTouch: viewport.width === 390,
+        isMobile: viewport.width === 390,
+        deviceScaleFactor: 1,
+      }),
+      page = await context.newPage()
+    page.setDefaultTimeout(12_000)
     page.on("pageerror", (error) => scenario.runtimeErrors.push(error.message))
     page.on("console", (message) => {
       if (message.type() === "error") scenario.runtimeErrors.push(message.text())
@@ -195,444 +182,422 @@ try {
     )
     try {
       const response = await page.goto(site.href, { waitUntil: "networkidle" })
-      check(scenario, response?.ok(), "Home page loads under the repository subpath")
-      const inline = await graphRoot(page)
+      check(scenario, response?.ok(), "Reader shelf loads under the Pages subpath")
       check(
         scenario,
-        (await inline.getAttribute("data-variant")) === "inline",
-        "Homepage displays the global graph directly",
+        (await page.locator(".note-graph").count()) === 0,
+        "Shelf has no whole-library graph",
       )
-      await inline.scrollIntoViewIfNeeded()
-      await page.waitForTimeout(160)
-      const data = await sourceData(inline)
-      const expectedIds = data.nodes.map((node) => node.id).sort()
+      const indexResponse = await context.request.get(new URL("static/bookIndex.json", site).href),
+        index = await indexResponse.json(),
+        book = index.catalog.books[0]
       check(
         scenario,
-        data.nodes.length > 0 &&
-          JSON.stringify(await visibleIds(inline)) === JSON.stringify(expectedIds),
-        "Inline graph displays every real published non-Canvas node",
-        { nodes: data.nodes.length, edges: data.links.length },
+        indexResponse.ok() && Boolean(book?.chapters?.length),
+        "Graph test uses the actual published reading catalog",
       )
-      check(
-        scenario,
-        (await state(inline)).running === "false",
-        "Inline graph settles without decorative animation",
-      )
-      await pause(inline, page)
-      const inlineId = await fitAndPick(inline, data, page)
-      const inlineStart = await point(dot(inline, inlineId))
-      let inlineHeld
-      await mouseDrag(page, inlineStart, { x: 24, y: 20 }, async () => {
-        inlineHeld = await point(dot(inline, inlineId))
-      })
-      check(
-        scenario,
-        distance(inlineHeld, { x: inlineStart.x + 24, y: inlineStart.y + 20 }) < 8 &&
-          page.url() === site.href,
-        "Embedded graph supports direct dragging without navigation",
-        { inlineStart, inlineHeld },
-      )
-      await action(inline, "reset").click()
-      if (viewport.width !== 1024) await shot(page, `inline-${viewport.width}`)
+      const bookUrl = hrefFor(site, book.slug)
+      await page.goto(bookUrl, { waitUntil: "networkidle" })
+      const inline = page.locator(".note-graph--inline").first()
+      const data = await inline.evaluate((element) => JSON.parse(element.dataset.graph))
+      scenario.metrics.book = {
+        id: data.book.id,
+        chapters: data.chapters.map((chapter) => ({
+          id: chapter.id,
+          count: chapter.knowledge.length,
+        })),
+      }
+      if (viewport.width === 390)
+        check(
+          scenario,
+          (await inline.locator(".note-graph-compact").isVisible()) &&
+            !(await inline.locator(".note-graph-inline-host").isVisible()),
+          "Mobile book graph starts as chapter links and an explicit open button",
+        )
+      else
+        check(
+          scenario,
+          await inline.locator(".note-graph-svg").isVisible(),
+          "Desktop book graph is directly visible",
+        )
       let { graph, trigger, dialog } = await openGraph(page)
-      await globalAll(graph)
-      await action(graph, "reset").click()
+      check(
+        scenario,
+        (await graph.getAttribute("data-graph-level")) === "book" &&
+          (await graph.locator("g.note-graph-chapter rect").count()) === data.chapters.length &&
+          (await graph.locator("a.note-graph-node").count()) === 0,
+        "Book overview shows chapter rectangles, not a cloud of article nodes",
+      )
+      const chapterTitles = await graph.locator("g.note-graph-chapter").evaluateAll((groups) =>
+        groups.map((group) => {
+          const chapter = group.__data__,
+            rect = group.querySelector("rect"),
+            lines = [...group.querySelectorAll(".note-graph-chapter-title tspan")],
+            availableWidth = Number(rect.getAttribute("width")) - 32,
+            words = (value) => value.match(/[A-Za-z]+/g) ?? []
+          return {
+            title: chapter.title,
+            lines: lines.map((line) => line.textContent),
+            availableWidth,
+            fits: lines.every((line) => line.getComputedTextLength() <= availableWidth + 1),
+            preservesWords:
+              JSON.stringify(words(chapter.title)) ===
+              JSON.stringify(words(lines.map((line) => line.textContent).join(" "))),
+          }
+        }),
+      )
+      scenario.metrics.chapterTitles = chapterTitles
+      check(
+        scenario,
+        chapterTitles.every((title) => title.fits && title.preservesWords),
+        "Chapter titles use the card width and preserve complete English words",
+        chapterTitles,
+      )
+      check(
+        scenario,
+        (await graph.getAttribute("data-running")) === "false",
+        "Chapter overview has no force animation",
+      )
       const layout = await dialog.evaluate((element) => {
-        const box = element.getBoundingClientRect(),
-          svg = element.querySelector("svg.note-graph-svg").getBoundingClientRect()
+        const b = element.getBoundingClientRect()
         return {
-          x: box.x,
-          y: box.y,
-          right: box.right,
-          bottom: box.bottom,
-          width: innerWidth,
-          height: innerHeight,
-          documentWidth: document.documentElement.scrollWidth,
-          client: element.clientWidth,
+          left: b.left,
+          top: b.top,
+          right: b.right,
+          bottom: b.bottom,
+          viewportWidth: innerWidth,
+          viewportHeight: innerHeight,
+          pageWidth: document.documentElement.scrollWidth,
           scroll: element.scrollWidth,
-          canvas: { x: svg.x, y: svg.y, width: svg.width, height: svg.height },
+          client: element.clientWidth,
           named: Boolean(
             document.getElementById(element.getAttribute("aria-labelledby"))?.textContent.trim(),
           ),
         }
       })
-      scenario.metrics.layout = layout
       check(
         scenario,
-        layout.x >= -1 &&
-          layout.y >= -1 &&
-          layout.right <= layout.width + 1 &&
-          layout.bottom <= layout.height + 1 &&
-          layout.documentWidth <= layout.width + 1 &&
-          layout.scroll <= layout.client + 1 &&
-          layout.canvas.width > 200 &&
-          layout.canvas.height > 150,
-        "Expanded graph fits the viewport without page overflow",
+        layout.named &&
+          layout.left >= -1 &&
+          layout.top >= -1 &&
+          layout.right <= layout.viewportWidth + 1 &&
+          layout.bottom <= layout.viewportHeight + 1 &&
+          layout.pageWidth <= layout.viewportWidth + 1 &&
+          layout.scroll <= layout.client + 1,
+        "Named graph dialog fits the viewport without document overflow",
         layout,
       )
-      check(scenario, layout.named, "Expanded graph has an accessible dialog name")
-      const controls = await dialog.locator("button").evaluateAll((buttons) =>
-        buttons.map((button) => {
-          const b = button.getBoundingClientRect()
-          return {
-            named: Boolean(button.getAttribute("aria-label") || button.textContent.trim()),
-            visible:
-              b.width > 0 &&
-              b.x >= 0 &&
-              b.y >= 0 &&
-              b.right <= innerWidth + 1 &&
-              b.bottom <= innerHeight + 1,
-          }
-        }),
-      )
-      check(
-        scenario,
-        controls.every((control) => control.named && control.visible),
-        "All graph controls are named and visible",
-        controls,
-      )
-      const ids = await visibleIds(graph)
-      const uniquePairs = new Set(
-        data.links.map((link) => [link.source, link.target].sort().join("\0")),
-      )
-      check(
-        scenario,
-        JSON.stringify(ids) === JSON.stringify(expectedIds) &&
-          (await graph.locator("line.note-graph-edge").count()) === data.links.length &&
-          uniquePairs.size === data.links.length,
-        "Expanded graph uses the published graph data without duplicate relationships",
-        { nodes: ids.length, edges: uniquePairs.size },
-      )
+      await shot(page, `book-${viewport.width}`)
+      for (const chapter of data.chapters) {
+        await defaultChapter(graph, chapter.id)
+        await page.waitForTimeout(100)
+        check(
+          scenario,
+          JSON.stringify(await ids(graph)) === JSON.stringify([...chapter.knowledge].sort()),
+          `Chapter ${chapter.id} starts with its real knowledge points only`,
+          {
+            expected: chapter.knowledge.length,
+            actual: await graph.locator("a.note-graph-node").count(),
+          },
+        )
+        const labels = await labelMetrics(graph)
+        check(
+          scenario,
+          labels.labels === chapter.knowledge.length &&
+            labels.outside.length === 0 &&
+            labels.overlaps.length === 0,
+          `Chapter ${chapter.id} labels are visible, separated and inside the canvas`,
+          labels,
+        )
+      }
+      const chapter = data.chapters[0]
+      await defaultChapter(graph, chapter.id)
+      await page.waitForTimeout(100)
       check(
         scenario,
         data.nodes.every(
           (entry) =>
-            new URL(entry.href, site).href.startsWith(site.href) && entry.kind !== "canvas",
-        ),
-        "Every node is a local published note with a subpath-safe link",
+            !index.catalog.pages[entry.id]?.auxiliary &&
+            ["reading", "knowledge", "connection", "exercise"].includes(entry.role),
+        ) &&
+          data.links.every(
+            (edge) =>
+              data.nodes.some((n) => n.id === edge.source) &&
+              data.nodes.some((n) => n.id === edge.target),
+          ),
+        "Graph data includes real reader content and excludes navigation, demos, planning and Canvas",
       )
-      const idCounts = await page.locator("[id]").evaluateAll((elements) => {
+      check(
+        scenario,
+        (await graph.locator(".note-graph-bottom").textContent()).includes("不表示先修顺序"),
+        "Graph explicitly describes references rather than invented prerequisites",
+      )
+      const duplicatedIds = await page.locator("[id]").evaluateAll((elements) => {
         const ids = elements.map((element) => element.id)
-        return ids.filter((id, index) => ids.indexOf(id) !== index)
+        return ids.filter((id, i) => ids.indexOf(id) !== i)
       })
       check(
         scenario,
-        idCounts.length === 0,
-        "Inline and launcher instances have unique document IDs",
-        idCounts,
+        duplicatedIds.length === 0,
+        "Graph and reader components have unique IDs",
+        duplicatedIds,
       )
-      for (const filter of ["body", "plan", "example"]) {
-        await graph.locator(`button[data-graph-filter="${filter}"]`).click()
-        const expected = data.nodes
-          .filter((node) => node.kind === filter)
-          .map((node) => node.id)
-          .sort()
-        check(
-          scenario,
-          JSON.stringify(await visibleIds(graph)) === JSON.stringify(expected),
-          `Type filter ${filter} shows only matching published notes`,
-          { expected: expected.length, actual: await graph.locator("a.note-graph-node").count() },
-        )
-      }
-      await graph.locator('button[data-graph-filter="all"]').click()
-      let dragId = await fitAndPick(graph, data, page)
-      const initial = await point(dot(graph, dragId))
-      const initialState = await state(graph)
-      await page.waitForTimeout(150)
-      check(
-        scenario,
-        initialState.running === "false" &&
-          distance(initial, await point(dot(graph, dragId))) < 0.5,
-        "Nodes stay stationary until interaction",
-      )
-      const labelBounds = await graph.locator("a.note-graph-node text").evaluateAll((labels) =>
-        labels
-          .filter((label) => Number(label.getAttribute("opacity")) > 0)
-          .map((label) => {
-            const box = label.getBoundingClientRect(),
-              canvas = label.closest("svg").getBoundingClientRect()
-            return {
-              text: label.textContent,
-              fits: box.left >= canvas.left - 1 && box.right <= canvas.right + 1,
-            }
-          }),
-      )
-      check(
-        scenario,
-        labelBounds.length > 0 && labelBounds.every((label) => label.fits),
-        "Visible labels stay inside the graph at the fitted scale",
-        labelBounds.filter((label) => !label.fits),
-      )
-      await shot(page, viewport.width)
-      await graph.locator("button.note-graph-close").focus()
+      await shot(page, `chapter-${viewport.width}`)
+      await graph.locator(".note-graph-close").focus()
       await page.keyboard.press("Shift+Tab")
-      const last = await page.evaluate(() => ({
-        inside: Boolean(document.activeElement?.closest("dialog.note-graph-dialog")),
-        tag: document.activeElement?.tagName,
-      }))
+      const lastInside = await page.evaluate(() =>
+        Boolean(document.activeElement?.closest("dialog.note-graph-dialog")),
+      )
       await page.keyboard.press("Tab")
-      const first = await graph
-        .locator("button.note-graph-close")
-        .evaluate((element) => document.activeElement === element)
       check(
         scenario,
-        last.inside && first,
-        "Shift+Tab and Tab wrap around both modal boundaries",
-        last,
+        lastInside &&
+          (await graph
+            .locator(".note-graph-close")
+            .evaluate((element) => document.activeElement === element)),
+        "Tab and Shift+Tab wrap inside the graph modal",
       )
-      const focusStyle = await graph.locator("button.note-graph-close").evaluate((element) => {
-        const style = getComputedStyle(element)
-        return {
-          keyboard: element.matches(":focus-visible"),
-          outline: style.outlineStyle,
-          width: style.outlineWidth,
-        }
+      const focusCss = await graph.locator(".note-graph-close").evaluate((element) => {
+        const css = getComputedStyle(element)
+        return (
+          element.matches(":focus-visible") &&
+          css.outlineStyle !== "none" &&
+          parseFloat(css.outlineWidth) > 0
+        )
       })
-      check(
-        scenario,
-        focusStyle.keyboard && focusStyle.outline !== "none" && parseFloat(focusStyle.width) > 0,
-        "Keyboard controls display a visible focus indicator",
-        focusStyle,
-      )
-      const listSummary = graph.locator(".note-graph-list summary")
-      await listSummary.focus()
-      await page.keyboard.press("Enter")
-      await graph.locator(".note-graph-list ul a").last().focus()
-      await page.keyboard.press("Tab")
-      check(
-        scenario,
-        await graph
-          .locator("button.note-graph-close")
-          .evaluate((element) => document.activeElement === element),
-        "The expanded keyboard list also wraps its final link back to the close button",
-      )
-      await listSummary.focus()
-      await page.keyboard.press("Enter")
-      await page.waitForTimeout(80)
+      check(scenario, focusCss, "Graph controls show visible keyboard focus")
       await pause(graph, page)
-      const beforeDrag = await point(dot(graph, dragId)),
-        delta = { x: viewport.width === 390 ? 30 : 48, y: 27 }
+      const dragId = chapter.knowledge[0],
+        initial = await point(dot(graph, dragId))
       let held
-      await mouseDrag(page, beforeDrag, delta, async () => {
+      await mouseDrag(page, initial, { x: 32, y: 21 }, async () => {
         held = await point(dot(graph, dragId))
       })
       check(
         scenario,
-        distance(held, { x: beforeDrag.x + delta.x, y: beforeDrag.y + delta.y }) < 8,
-        "Node follows the pointer while dragging",
-        { beforeDrag, held, delta },
+        distance(held, { x: initial.x + 32, y: initial.y + 21 }) < 8,
+        "Knowledge node follows the pointer",
       )
       check(
         scenario,
-        page.url() === site.href &&
-          (await dialog.isVisible()) &&
+        page.url() === bookUrl &&
+          !(await page.locator("dialog.knowledge-reader").isVisible()) &&
           distance(held, await point(dot(graph, dragId))) < 1,
-        "Paused node stays released without accidental navigation",
+        "Dragging and releasing does not open a reader or navigate",
       )
-      const canvas = await graph.locator("svg.note-graph-svg").boundingBox()
-      const blank = { x: canvas.x + 24, y: canvas.y + 26 }
-      const beforePan = await matrix(graph)
-      await mouseDrag(page, blank, { x: 35, y: 25 })
+      const canvas = await graph.locator("svg.note-graph-svg").boundingBox(),
+        blank = { x: canvas.x + 16, y: canvas.y + 12 },
+        beforePan = await matrix(graph)
+      await mouseDrag(page, blank, { x: 30, y: 22 })
       const afterPan = await matrix(graph)
       check(
         scenario,
-        Math.abs(afterPan.x - beforePan.x - 35) < 3 &&
-          Math.abs(afterPan.y - beforePan.y - 25) < 3 &&
-          Math.abs(afterPan.scale - beforePan.scale) < 0.001,
-        "Dragging empty canvas pans without changing scale",
-        { beforePan, afterPan },
+        Math.abs(afterPan.x - beforePan.x - 30) < 3 && Math.abs(afterPan.y - beforePan.y - 22) < 3,
+        "Dragging blank canvas pans the chapter graph",
       )
-      await page.mouse.move(canvas.x + canvas.width / 2, canvas.y + canvas.height / 2)
-      await page.mouse.wheel(0, -160)
-      await page.waitForTimeout(160)
+      await page.mouse.move(blank.x + 50, blank.y + 50)
+      await page.mouse.wheel(0, -140)
+      await page.waitForTimeout(150)
       const wheel = await matrix(graph)
-      check(scenario, wheel.scale > afterPan.scale, "Mouse wheel zooms the graph")
+      check(scenario, wheel.scale > afterPan.scale, "Wheel input zooms the chapter graph")
       await action(graph, "zoom-in").click()
       const zoomed = await matrix(graph)
-      check(scenario, zoomed.scale > wheel.scale, "Zoom-in control increases scale")
       await action(graph, "zoom-out").click()
       check(
         scenario,
-        (await matrix(graph)).scale < zoomed.scale,
-        "Zoom-out control decreases scale",
+        zoomed.scale > wheel.scale && (await matrix(graph)).scale < zoomed.scale,
+        "Zoom controls work in both directions",
       )
-      await action(graph, "fit").click()
-      const dotsFit = await graph.locator("circle.note-graph-dot").evaluateAll((dots) =>
-        dots.every((dot) => {
-          const b = dot.getBoundingClientRect(),
-            s = dot.closest("svg").getBoundingClientRect()
-          return (
-            b.x >= s.x - 1 && b.y >= s.y - 1 && b.right <= s.right + 1 && b.bottom <= s.bottom + 1
-          )
-        }),
-      )
-      check(scenario, dotsFit, "Fit brings every visible node inside the canvas")
       await action(graph, "reset").click()
       check(
         scenario,
         distance(initial, await point(dot(graph, dragId))) < 5,
-        "Reset restores deterministic starting positions",
-        { initial, reset: await point(dot(graph, dragId)) },
+        "Reset restores the spread-out chapter layout",
       )
       await pause(graph, page)
       await action(graph, "pause").click()
       check(
         scenario,
-        (await state(graph)).paused === "false" && (await state(graph)).running === "true",
-        "Resume starts the force layout",
-      )
-      const movingStart = await point(dot(graph, dragId))
-      const relatedId = data.links.find((link) => link.source === dragId || link.target === dragId)
-      const neighborId = relatedId
-        ? relatedId.source === dragId
-          ? relatedId.target
-          : relatedId.source
-        : undefined
-      const neighborBefore = neighborId ? await point(dot(graph, neighborId)) : null
-      let runningHeld
-      await mouseDrag(page, movingStart, { x: 24, y: 24 }, async () => {
-        await page.waitForTimeout(110)
-        runningHeld = (await state(graph)).running
-      })
-      const neighborAfter = neighborId ? await point(dot(graph, neighborId)) : null
-      check(
-        scenario,
-        runningHeld === "true" && (!neighborId || distance(neighborBefore, neighborAfter) > 0.15),
-        "Unpaused drag gives connected nodes physical feedback",
-        { neighborBefore, neighborAfter },
+        (await graph.getAttribute("data-running")) === "true",
+        "Resume enables bounded physical feedback",
       )
       await pause(graph, page)
-      check(scenario, (await state(graph)).running === "false", "Pause stops the simulation")
+      check(
+        scenario,
+        (await graph.getAttribute("data-running")) === "false",
+        "Pause stops the force simulation",
+      )
       if (viewport.width === 390) {
-        const session = await context.newCDPSession(page)
-        dragId = await fitAndPick(graph, data, page)
-        const beforeTouch = await point(dot(graph, dragId))
-        let touchHeld
-        await touchDrag(session, beforeTouch, { x: 24, y: 23 }, async () => {
-          touchHeld = await point(dot(graph, dragId))
+        const session = await context.newCDPSession(page),
+          start = await point(dot(graph, dragId))
+        let touched
+        await touchDrag(session, start, { x: 22, y: 18 }, async () => {
+          touched = await point(dot(graph, dragId))
         })
         check(
           scenario,
-          distance(touchHeld, { x: beforeTouch.x + 24, y: beforeTouch.y + 23 }) < 10 &&
-            page.url() === site.href,
-          "Native touch drags a node without navigating",
-          { beforeTouch, touchHeld },
+          distance(touched, { x: start.x + 22, y: start.y + 18 }) < 10 &&
+            !(await page.locator("dialog.knowledge-reader").isVisible()),
+          "Native touch drags without opening a note",
         )
-        const beforeTouchPan = await matrix(graph)
-        await touchDrag(session, blank, { x: 24, y: 32 })
-        const afterTouchPan = await matrix(graph)
+        const before = await matrix(graph)
+        await touchDrag(session, blank, { x: 22, y: 28 })
+        const after = await matrix(graph)
         check(
           scenario,
-          Math.abs(afterTouchPan.x - beforeTouchPan.x - 24) < 4 &&
-            Math.abs(afterTouchPan.y - beforeTouchPan.y - 32) < 4,
-          "Native touch pans empty canvas",
-          { beforeTouchPan, afterTouchPan },
+          Math.abs(after.x - before.x - 22) < 4 && Math.abs(after.y - before.y - 28) < 4,
+          "Native touch pans the graph",
         )
-        const pinchPoints = (spread) => [
-          { x: canvas.x + canvas.width / 2 - spread, y: canvas.y + 36, id: 1 },
-          { x: canvas.x + canvas.width / 2 + spread, y: canvas.y + 36, id: 2 },
-        ]
-        const beforePinch = await matrix(graph)
+        const points = (spread) => [
+            { x: canvas.x + canvas.width / 2 - spread, y: canvas.y + 14, id: 1 },
+            { x: canvas.x + canvas.width / 2 + spread, y: canvas.y + 14, id: 2 },
+          ],
+          beforePinch = await matrix(graph)
         await session.send("Input.dispatchTouchEvent", {
           type: "touchStart",
-          touchPoints: pinchPoints(35),
+          touchPoints: points(30),
         })
         for (let i = 1; i <= 8; i++)
           await session.send("Input.dispatchTouchEvent", {
             type: "touchMove",
-            touchPoints: pinchPoints(35 + i * 4),
+            touchPoints: points(30 + i * 4),
           })
         await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] })
         check(
           scenario,
           (await matrix(graph)).scale > beforePinch.scale * 1.2,
-          "Native two-finger pinch zooms the graph",
+          "Native pinch zooms the graph",
         )
         await session.detach()
+      }
+      const focusTarget =
+        chapter.knowledge.find((id) =>
+          data.links.some(
+            (edge) =>
+              (edge.source === id &&
+                data.nodes.find((n) => n.id === edge.target)?.chapterId !== chapter.id) ||
+              (edge.target === id &&
+                data.nodes.find((n) => n.id === edge.source)?.chapterId !== chapter.id),
+          ),
+        ) ?? dragId
+      await graph.locator(".note-graph-focus-select").selectOption(focusTarget)
+      await page.waitForTimeout(100)
+      const adjacent = new Set([focusTarget])
+      for (const edge of data.links) {
+        if (edge.source === focusTarget) adjacent.add(edge.target)
+        if (edge.target === focusTarget) adjacent.add(edge.source)
+      }
+      const sameChapter = data.nodes
+          .filter((entry) => entry.chapterId === chapter.id && adjacent.has(entry.id))
+          .map((entry) => entry.id)
+          .sort(),
+        crossChapter = data.nodes
+          .filter((entry) => entry.chapterId !== chapter.id && adjacent.has(entry.id))
+          .map((entry) => entry.id)
+          .sort()
+      check(
+        scenario,
+        JSON.stringify(await ids(graph)) === JSON.stringify(sameChapter),
+        "Focus shows the selected knowledge point and only its direct same-chapter content",
+      )
+      const visibleCross = await graph
+        .locator(".note-graph-cross a")
+        .evaluateAll((links) => links.map((link) => link.dataset.graphRead).sort())
+      check(
+        scenario,
+        JSON.stringify(visibleCross) === JSON.stringify(crossChapter),
+        "Cross-chapter references appear as explicit reading entrances",
+        { expected: crossChapter.length, actual: visibleCross.length },
+      )
+      await graph.locator(".note-graph-focus-select").selectOption("")
+      await page.waitForTimeout(100)
+      const beforeReader = await matrix(graph)
+      await node(graph, dragId).focus()
+      await page.keyboard.press("Enter")
+      const reader = page.locator("dialog.knowledge-reader")
+      await reader.waitFor({ state: "visible" })
+      await reader.locator(".knowledge-reader-body .markdown-content").waitFor({ state: "visible" })
+      check(
+        scenario,
+        page.url() === bookUrl &&
+          (await dialog.isVisible()) &&
+          (await reader.locator("#knowledge-reader-title").textContent()) ===
+            index.catalog.pages[dragId].title,
+        "Enter opens the real knowledge reader above the preserved graph",
+      )
+      await page.keyboard.press("Escape")
+      await reader.waitFor({ state: "hidden" })
+      await page.waitForTimeout(80)
+      const afterReader = await matrix(graph)
+      check(
+        scenario,
+        (await dialog.isVisible()) &&
+          distance(beforeReader, afterReader) < 0.5 &&
+          Math.abs(beforeReader.scale - afterReader.scale) < 0.001 &&
+          (await node(graph, dragId).evaluate((element) => document.activeElement === element)),
+        "Escape closes only the reader and restores the same graph view and focused bubble",
+      )
+      await dot(graph, dragId).click()
+      await reader.waitFor({ state: "visible" })
+      check(scenario, page.url() === bookUrl, "Ordinary bubble click uses the reading panel")
+      await reader.locator(".knowledge-reader-close").click()
+      await reader.waitFor({ state: "hidden" })
+      if (viewport.width === 1440) {
+        const popupPromise = context.waitForEvent("page")
+        await node(graph, dragId).click({ modifiers: ["Control"] })
+        const popup = await popupPromise
+        await popup.waitForLoadState("domcontentloaded")
+        check(
+          scenario,
+          popup.url() === new URL(data.nodes.find((n) => n.id === dragId).href, bookUrl).href,
+          "Ctrl-click preserves native independent note navigation",
+        )
+        await popup.close()
       }
       await page.keyboard.press("Escape")
       check(
         scenario,
-        !(await dialog.isVisible()) && (await state(graph)).running === "false",
-        "Escape closes the modal and stops simulation",
+        !(await dialog.isVisible()) && (await graph.getAttribute("data-running")) === "false",
+        "Escape closes the graph and stops simulation",
       )
       check(
         scenario,
         await trigger.evaluate((element) => document.activeElement === element),
-        "Closing returns focus to the opening button",
+        "Graph closure returns keyboard focus to its trigger",
       )
-      ;({ graph, trigger, dialog } = await openGraph(page))
-      await globalAll(graph)
-      const target =
-        data.nodes.find((entry) => !entry.current && entry.kind === "body") ??
-        data.nodes.find((entry) => !entry.current)
-      if (!target)
-        throw new Error("A second published note is required to verify real graph navigation")
-      const targetUrl = new URL(target.href, site).href
-      await node(graph, target.id).focus()
-      await page.keyboard.press("Enter")
-      await page.waitForURL((url) => url.href === targetUrl)
-      await page.waitForLoadState("networkidle")
+      await page.goto(hrefFor(site, book.chapters[0].slug), { waitUntil: "networkidle" })
+      const chapterInline = page.locator(".note-graph--inline").first()
       check(
         scenario,
-        (await page.locator("article#article-content").count()) === 1,
-        "Enter activates the actual note link under the repository subpath",
-        targetUrl,
+        (await chapterInline.getAttribute("data-graph-level")) === "chapter",
+        "A chapter page starts directly in its chapter knowledge view",
       )
-      ;({ graph, trigger, dialog } = await openGraph(page, false))
-      const nestedData = await sourceData(graph)
-      const currentId = nestedData.nodes.find((entry) => entry.current)?.id
-      const adjacent = new Set([currentId])
-      for (const edge of nestedData.links) {
-        if (edge.source === currentId) adjacent.add(edge.target)
-        if (edge.target === currentId) adjacent.add(edge.source)
-      }
-      check(
-        scenario,
-        (await state(graph)).scope === "local" &&
-          JSON.stringify(await visibleIds(graph)) === JSON.stringify([...adjacent].sort()),
-        "Article launcher initially shows exactly its one-hop relationships",
-      )
-      await globalAll(graph)
-      const home = nestedData.nodes.find((entry) => entry.id === "index")
-      check(
-        scenario,
-        Boolean(home) && new URL(home.href, page.url()).href === site.href,
-        "Nested graph resolves the home link beneath the repository prefix",
-        home?.href,
-      )
-      await node(graph, "index").locator("circle.note-graph-dot").click()
-      await page.waitForURL(site.href)
-      check(
-        scenario,
-        (await page.locator("article#article-content").count()) === 1,
-        "Deliberate node click returns to the home page",
-      )
+      if (viewport.width === 390)
+        check(
+          scenario,
+          (await chapterInline.locator(".note-graph-compact a[data-graph-read]").count()) ===
+            chapter.knowledge.length &&
+            (await chapterInline.locator(".note-graph-compact").isVisible()),
+          "Mobile chapter entry is a complete readable knowledge list",
+        )
       await page.emulateMedia({ reducedMotion: "reduce" })
       ;({ graph, trigger, dialog } = await openGraph(page))
-      await globalAll(graph)
-      check(
-        scenario,
-        (await state(graph)).running === "false",
-        "Reduced-motion preference keeps the layout stationary",
-      )
-      dragId = await fitAndPick(graph, data, page)
       const reducedStart = await point(dot(graph, dragId))
       let reducedHeld
-      await mouseDrag(page, reducedStart, { x: 24, y: 20 }, async () => {
+      await mouseDrag(page, reducedStart, { x: 22, y: 18 }, async () => {
         reducedHeld = await point(dot(graph, dragId))
       })
       check(
         scenario,
-        distance(reducedHeld, { x: reducedStart.x + 24, y: reducedStart.y + 20 }) < 8 &&
-          (await state(graph)).running === "false",
-        "Reduced motion permits direct dragging without a force animation",
+        distance(reducedHeld, { x: reducedStart.x + 22, y: reducedStart.y + 18 }) < 8 &&
+          (await graph.getAttribute("data-running")) === "false",
+        "Reduced motion preserves direct dragging without force animation",
       )
-      await graph.locator("button.note-graph-close").click()
+      await graph.locator(".note-graph-close").click()
       check(
         scenario,
-        !(await dialog.isVisible()) && (await state(graph)).running === "false",
-        "Close button also stops graph activity",
+        !(await dialog.isVisible()) && (await graph.getAttribute("data-running")) === "false",
+        "Close control also stops the graph",
       )
     } catch (error) {
       check(scenario, false, "Scenario completes", error.stack ?? error.message)
@@ -646,7 +611,7 @@ try {
       check(
         scenario,
         scenario.failedResources.length === 0,
-        "No failed website resources",
+        "No failed resources",
         scenario.failedResources,
       )
       await context.close()
@@ -658,19 +623,17 @@ try {
   await browser?.close()
   await preview?.close()
   report.finishedAt = new Date().toISOString()
-  const checks = report.scenarios.flatMap((scenario) => scenario.checks)
+  const checks = report.scenarios.flatMap((s) => s.checks)
   report.summary = {
-    passed: checks.filter((check) => check.passed).length,
-    failed: checks.filter((check) => !check.passed).length,
+    passed: checks.filter((c) => c.passed).length,
+    failed: checks.filter((c) => !c.passed).length,
   }
   report.passed = !report.fatalError && report.scenarios.length === 3 && report.summary.failed === 0
   await writeFile(
     path.join(artifactRoot, `graph${suffix}-report.json`),
     `${JSON.stringify(report, null, 2)}\n`,
   )
-  console.log(
-    `\nGraph report: artifacts/graph${suffix}-report.json; ${report.summary.passed} passed, ${report.summary.failed} failed.`,
-  )
+  console.log(`\nGraph report: ${report.summary.passed} passed, ${report.summary.failed} failed.`)
   if (report.fatalError) console.error(report.fatalError)
   if (!report.passed) process.exitCode = 1
 }

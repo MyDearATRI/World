@@ -63,7 +63,7 @@ try {
   const expectedPages = new Map(manifest.notes.map((note) => [htmlPath(note.output), note]))
   const expectedSlugs = new Set(manifest.notes.map((note) => fullSlug(note.output)))
   const noteEntries = manifest.notes.filter((note) => note.kind === "note")
-  const expectedGraphSlugs = new Set(noteEntries.map((note) => fullSlug(note.output)))
+  const expectedNoteSlugs = new Set(noteEntries.map((note) => fullSlug(note.output)))
   const sourceBySlug = new Map()
   const htmlByPath = new Map()
   const assets = new Set(manifest.assets.map((asset) => asset.output))
@@ -124,6 +124,172 @@ try {
     htmlByPath.set(page, { raw, dom, all, ids, entry, markdown })
   }
 
+  const contentIndex = JSON.parse(
+    await readFile(path.join(publicRoot, "static/contentIndex.json"), "utf8"),
+  )
+  const search = JSON.parse(await readFile(path.join(publicRoot, "static/bookIndex.json"), "utf8"))
+  check(
+    search.version === 2 && Array.isArray(search.documents),
+    "Search index has schema version 2",
+  )
+  const catalog = search.catalog
+  if (
+    !check(
+      catalog?.version === 1 &&
+        Array.isArray(catalog.books) &&
+        catalog.pages &&
+        typeof catalog.pages === "object",
+      "Search index includes the shared reader catalog",
+    )
+  )
+    throw new Error("No usable reader catalog")
+  check(
+    sameSet(new Set(Object.keys(catalog.pages)), expectedSlugs),
+    "Reader catalog contains exactly the approved pages",
+  )
+  const booksById = new Map(catalog.books.map((book) => [book.id, book]))
+  check(booksById.size === catalog.books.length, "Reader book identities are unique")
+  const chapterIds = new Set()
+  const roles = new Set([
+    "book",
+    "chapter",
+    "reading",
+    "knowledge",
+    "connection",
+    "exercise",
+    "auxiliary",
+    "other",
+  ])
+  for (const [slug, readerPage] of Object.entries(catalog.pages)) {
+    const source = sourceBySlug.get(slug)
+    check(
+      Boolean(source) &&
+        readerPage.slug === slug &&
+        readerPage.title === source.title &&
+        roles.has(readerPage.role) &&
+        typeof readerPage.auxiliary === "boolean" &&
+        stringArray(readerPage.sections),
+      "Reader page preserves approved identity, title and role",
+      slug,
+    )
+    if (readerPage.bookId) check(booksById.has(readerPage.bookId), "Reader page book exists", slug)
+    if (source?.kind === "canvas" || source?.siteKind === "plan")
+      check(
+        readerPage.auxiliary && readerPage.role === "auxiliary",
+        "Canvas and planning pages are auxiliary",
+        slug,
+      )
+    for (const section of readerPage.sections ?? [])
+      check(
+        catalog.pages[section]?.role === "reading",
+        "Associated section is a published reading page",
+        slug,
+        section,
+      )
+  }
+  for (const book of catalog.books) {
+    check(
+      catalog.pages[book.slug]?.role === "book" &&
+        catalog.pages[book.slug]?.bookId === book.id &&
+        expectedNoteSlugs.has(book.contentsSlug),
+      "Book opens approved book and contents pages",
+      book.slug,
+    )
+    check(
+      [book.id, book.title, book.subtitle, book.source].every(
+        (value) => typeof value === "string" && value.length > 0,
+      ),
+      "Book identity and source labels are present",
+      book.slug,
+    )
+    check(
+      stringArray(book.plans) &&
+        book.plans.every(
+          (slug) => catalog.pages[slug]?.auxiliary && catalog.pages[slug]?.bookId === book.id,
+        ),
+      "Book plans remain explicit auxiliary pages",
+      book.slug,
+    )
+    for (const chapter of book.chapters) {
+      check(!chapterIds.has(chapter.id), "Chapter identity is globally unique", chapter.slug)
+      chapterIds.add(chapter.id)
+      check(
+        expectedNoteSlugs.has(chapter.slug) && catalog.pages[chapter.slug]?.bookId === book.id,
+        "Chapter opens an approved page within its book",
+        chapter.slug,
+      )
+      const memberLists = [
+        ["knowledge", chapter.knowledge],
+        ["connection", chapter.connections],
+        ["exercise", chapter.exercises],
+      ]
+      for (const [role, members] of memberLists)
+        check(
+          stringArray(members) &&
+            new Set(members).size === members.length &&
+            members.every(
+              (slug) =>
+                catalog.pages[slug]?.role === role &&
+                catalog.pages[slug]?.chapterId === chapter.id &&
+                !catalog.pages[slug]?.auxiliary,
+            ),
+          "Chapter groups contain their approved reading roles",
+          chapter.slug,
+          role,
+        )
+      check(
+        stringArray(chapter.canvas) &&
+          chapter.canvas.every((slug) => sourceBySlug.get(slug)?.kind === "canvas"),
+        "Chapter Canvas references remain separate derived resources",
+        chapter.slug,
+      )
+      check(
+        Array.isArray(chapter.sections) &&
+          new Set(chapter.sections.map((section) => section.slug)).size === chapter.sections.length,
+        "Chapter reading sequence has no duplicate sections",
+        chapter.slug,
+      )
+      for (const section of chapter.sections) {
+        check(
+          catalog.pages[section.slug]?.role === "reading" &&
+            catalog.pages[section.slug]?.chapterId === chapter.id &&
+            section.title === sourceBySlug.get(section.slug)?.title &&
+            typeof section.number === "string",
+          "Continuous section identity matches its source",
+          section.slug,
+        )
+        check(
+          stringArray(section.knowledge) &&
+            section.knowledge.every(
+              (slug) =>
+                catalog.pages[slug]?.role === "knowledge" &&
+                catalog.pages[slug]?.sections.includes(section.slug),
+            ),
+          "Section knowledge associations are reciprocal published links",
+          section.slug,
+        )
+      }
+      for (const readerPage of Object.values(catalog.pages).filter(
+        (page) => page.chapterId === chapter.id && !page.auxiliary,
+      )) {
+        const exposed =
+          readerPage.role === "reading"
+            ? chapter.sections.some((section) => section.slug === readerPage.slug)
+            : readerPage.role === "knowledge"
+              ? chapter.knowledge.includes(readerPage.slug)
+              : readerPage.role === "connection"
+                ? chapter.connections.includes(readerPage.slug)
+                : readerPage.role === "exercise"
+                  ? chapter.exercises.includes(readerPage.slug)
+                  : true
+        check(exposed, "Every classified chapter page is exposed in its chapter", readerPage.slug)
+      }
+    }
+  }
+  for (const readerPage of Object.values(catalog.pages))
+    if (readerPage.chapterId)
+      check(chapterIds.has(readerPage.chapterId), "Reader page chapter exists", readerPage.slug)
+
   function localTarget(href, page, prefix) {
     const base = new URL(prefix + page, "https://publication.invalid")
     let target
@@ -172,10 +338,22 @@ try {
     const { all, ids, entry, markdown, raw } = document
     const before = failures.length,
       beforeChecks = checks
+    const slug = fullSlug(entry.output)
+    const readerPage = catalog.pages[slug]
+    const book = booksById.get(readerPage?.bookId)
+    const chapter = book?.chapters.find((item) => item.id === readerPage?.chapterId)
+    const expectedTitle =
+      slug === "index"
+        ? "书架"
+        : readerPage?.role === "book"
+          ? book?.title
+          : readerPage?.role === "chapter"
+            ? chapter?.title
+            : entry.title
     const heading = all.find((node) => node.tagName === "h1")
     check(
-      normalize(text(heading ?? {})) === normalize(entry.title),
-      "Markdown title is rendered as the page heading",
+      normalize(text(heading ?? {})) === normalize(expectedTitle),
+      "Page heading matches the reader view or original Markdown title",
       page,
     )
     const pageTitle = all.find((node) => node.tagName === "title")
@@ -184,11 +362,20 @@ try {
       "Document title contains the Markdown title",
       page,
     )
-    const status = all.find((node) => hasClass(node, "note-status"))
+    const status = all
+      .filter(
+        (node) =>
+          hasClass(node, "note-status") ||
+          hasClass(node, "source-note-status") ||
+          hasClass(node, "reader-meta") ||
+          hasClass(node, "source-navigation"),
+      )
+      .map(text)
+      .join(" ")
     for (const value of [markdown.data.status, markdown.data.layer].filter(Boolean))
       check(
-        normalize(text(status ?? {})).includes(String(value)),
-        "Source status/layer is visible",
+        normalize(status).includes(String(value)),
+        "Source status/layer remains readable in the page or source navigation",
         page,
       )
     const duplicates = [...ids]
@@ -205,6 +392,22 @@ try {
       "A semantic article supplies the skip-link target",
       page,
     )
+    check(
+      all.some((node) => hasClass(node, "markdown-content")),
+      "Original Markdown remains in the reader document",
+      page,
+    )
+    if (slug === "index" || readerPage?.role === "book" || readerPage?.role === "chapter")
+      check(
+        all.some(
+          (node) =>
+            node.tagName === "details" &&
+            hasClass(node, "source-navigation") &&
+            elements(node).some((child) => hasClass(child, "markdown-content")),
+        ),
+        "Landing page preserves original navigation in an expandable source section",
+        page,
+      )
     check(!all.some((node) => hasClass(node, "katex-error")), "No KaTeX error output", page)
     if (!markdown.data.published && !markdown.data.publishDate && !markdown.data.date)
       check(
@@ -291,13 +494,61 @@ try {
         continue
       }
       const graphIds = new Set(graph.nodes?.map((node) => node.id))
+      const graphBook = booksById.get(graph.book?.id)
+      const allowedNodes = new Set(
+        (graphBook?.chapters ?? [])
+          .flatMap((item) => [
+            ...item.sections.map((section) => section.slug),
+            ...item.knowledge,
+            ...item.connections,
+            ...item.exercises,
+          ])
+          .filter((slug) => expectedNoteSlugs.has(slug) && !catalog.pages[slug]?.auxiliary),
+      )
       check(
         Array.isArray(graph.nodes) &&
           graph.nodes.length === graphIds.size &&
-          sameSet(graphIds, expectedGraphSlugs),
-        "Graph contains exactly approved source notes, excluding Canvas",
+          Boolean(graphBook) &&
+          sameSet(graphIds, allowedNodes),
+        "Graph contains exactly the published non-auxiliary reading nodes of its book",
         page,
       )
+      check(
+        graph.book?.title === graphBook?.title,
+        "Graph book label matches the reader catalog",
+        page,
+      )
+      if (graph.book?.href) verifyHref(graph.book.href, page, "Graph book link")
+      check(
+        Array.isArray(graph.chapters) &&
+          graph.chapters.length === graphBook?.chapters.length &&
+          graph.chapters.every((item, index) => {
+            const original = graphBook.chapters[index]
+            return (
+              item.id === original.id &&
+              item.title === original.title &&
+              stringArray(item.knowledge) &&
+              sameSet(new Set(item.knowledge), new Set(original.knowledge))
+            )
+          }),
+        "Graph chapter layers exactly match the shared catalog",
+        page,
+      )
+      for (const item of graph.chapters ?? []) verifyHref(item.href, page, "Graph chapter link")
+      if (graph.initialChapterId)
+        check(
+          graphBook?.chapters.some((item) => item.id === graph.initialChapterId),
+          "Initial graph chapter exists in its book",
+          page,
+        )
+      if (graph.initialFocusId)
+        check(
+          catalog.pages[graph.initialFocusId]?.role === "knowledge" &&
+            graphIds.has(graph.initialFocusId) &&
+            catalog.pages[graph.initialFocusId]?.chapterId === graph.initialChapterId,
+          "Initial graph focus is a published knowledge node in the displayed chapter",
+          page,
+        )
       const pairs = new Set()
       check(
         Array.isArray(graph.links) &&
@@ -316,25 +567,54 @@ try {
         "Graph edges use approved nodes without duplicate edges",
         page,
       )
+      const refersTo = (from, to) =>
+        (contentIndex[from]?.links ?? []).some(
+          (target) => target === to || target === to.replace(/(?:^|\/)index$/, "/"),
+        )
+      check(
+        (graph.links ?? []).every(
+          (edge) => refersTo(edge.source, edge.target) || refersTo(edge.target, edge.source),
+        ),
+        "Every graph edge is an existing Markdown reference rather than an inferred relationship",
+        page,
+      )
       for (const node of graph.nodes ?? []) {
         const source = sourceBySlug.get(node.id)
         check(
           Boolean(source) &&
             node.title === source.title &&
-            node.kind === source.siteKind &&
+            node.role === catalog.pages[node.id]?.role &&
+            node.chapterId === catalog.pages[node.id]?.chapterId &&
+            !catalog.pages[node.id]?.auxiliary &&
             node.current === (node.id === fullSlug(entry.output)),
           "Graph node metadata matches approved Markdown",
           page,
           node.id,
         )
         verifyHref(node.href, page, "Graph node link")
+        check(
+          Boolean(source) &&
+            ["/", "/World/"].every(
+              (prefix) => localTarget(node.href, page, prefix).target === htmlPath(source.output),
+            ),
+          "Graph node link opens that exact published note",
+          page,
+          node.id,
+        )
       }
     }
-    check(
-      entry.kind === "canvas" || all.some((node) => Boolean(attrs(node)["data-graph"])),
-      "Every source-note page exposes the approved graph",
-      page,
-    )
+    if (slug === "index")
+      check(
+        !all.some((node) => Boolean(attrs(node)["data-graph"])),
+        "Bookshelf remains free of the full note graph",
+        page,
+      )
+    if (["book", "chapter"].includes(readerPage?.role))
+      check(
+        all.some((node) => Boolean(attrs(node)["data-graph"])),
+        "Book and chapter views expose the appropriate layered graph",
+        page,
+      )
     if (entry.kind === "canvas")
       check(
         all.some((node) => hasClass(node, "canvas-reading-map")),
@@ -349,9 +629,6 @@ try {
     })
   }
 
-  const contentIndex = JSON.parse(
-    await readFile(path.join(publicRoot, "static/contentIndex.json"), "utf8"),
-  )
   check(
     sameSet(new Set(Object.keys(contentIndex)), expectedSlugs),
     "Quartz content index contains exactly approved pages",
@@ -362,14 +639,9 @@ try {
       "Content-index file references are relative exported paths",
       slug,
     )
-  const search = JSON.parse(await readFile(path.join(publicRoot, "static/bookIndex.json"), "utf8"))
-  check(
-    search.version === 1 && Array.isArray(search.documents),
-    "Search index has the documented schema",
-  )
   const searchIds = new Set(search.documents.map((doc) => doc.slug))
   check(
-    searchIds.size === search.documents.length && sameSet(searchIds, expectedGraphSlugs),
+    searchIds.size === search.documents.length && sameSet(searchIds, expectedNoteSlugs),
     "Search includes approved source notes without Canvas duplicates",
   )
   for (const doc of search.documents) {
@@ -378,6 +650,23 @@ try {
     check(
       doc.title === note.title && doc.kind === note.siteKind,
       "Search title and category preserve source metadata",
+      doc.slug,
+    )
+    const readerPage = catalog.pages[doc.slug]
+    const book = booksById.get(readerPage?.bookId)
+    const chapter = book?.chapters.find((item) => item.id === readerPage?.chapterId)
+    check(
+      doc.role === readerPage?.role &&
+        doc.auxiliary === readerPage?.auxiliary &&
+        doc.bookId === readerPage?.bookId &&
+        doc.bookTitle === (book?.title ?? "") &&
+        doc.chapterTitle === (chapter?.title ?? ""),
+      "Search grouping and auxiliary state match the shared reading model",
+      doc.slug,
+    )
+    check(
+      typeof doc.snippetText === "string",
+      "Search provides source-paragraph snippet text",
       doc.slug,
     )
     check(
@@ -431,6 +720,9 @@ try {
     pages: expectedPages.size,
     sourceNotes: noteEntries.length,
     assets: assets.size,
+    books: catalog.books.length,
+    chapters: chapterIds.size,
+    readerDiagnostics: catalog.diagnostics ?? [],
     graphs: totalGraphs,
     formulas: totalMath,
     links: totalLinks,

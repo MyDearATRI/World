@@ -1,106 +1,104 @@
 import { useId } from "preact/hooks"
 import { QuartzComponent, QuartzComponentProps } from "./types"
-import { buildNoteGraph, filterNoteGraph } from "../util/noteGraph"
+import { buildReaderGraph, readerChapterGraph } from "../util/noteGraph"
+import { getReaderCatalog } from "../util/readerCatalog"
 // @ts-ignore
 import script from "./scripts/noteGraph.inline"
 import style from "./styles/noteGraph.scss"
 
-export type NoteGraphProps = QuartzComponentProps & { variant?: "inline" | "launcher" }
-
+export type NoteGraphProps = QuartzComponentProps & {
+  variant?: "inline" | "launcher"
+  bookId?: string
+  chapterId?: string
+}
 const NoteGraph: QuartzComponent = ({
   allFiles,
   fileData,
   variant = "launcher",
+  bookId,
+  chapterId,
 }: NoteGraphProps) => {
   const id = `note-graph-${useId()}`
-  if (fileData.frontmatter?.siteKind === "canvas") return null
-  const graph = buildNoteGraph(allFiles, fileData.slug!)
-  const scope = variant === "inline" ? "global" : "local"
-  const initial = filterNoteGraph(graph, fileData.slug, scope, "all")
+  const graph = buildReaderGraph(allFiles, fileData.slug!, getReaderCatalog(allFiles), {
+    bookId,
+    chapterId,
+    focusCurrent: variant === "launcher",
+  })
+  if (!graph) return null
+  const initial = graph.initialChapterId
+    ? readerChapterGraph(graph, graph.initialChapterId, graph.initialFocusId)
+    : undefined
   return (
     <div
       class={`note-graph note-graph--${variant}`}
       data-graph={JSON.stringify(graph)}
       data-variant={variant}
-      data-scope={scope}
-      data-filter="all"
+      data-graph-level={initial ? "chapter" : "book"}
     >
-      {variant === "inline" ? (
-        <div class="note-graph-intro">
-          <p>从联系中浏览</p>
-          <button
-            class="note-graph-open"
-            type="button"
-            aria-haspopup="dialog"
-            aria-controls={`${id}-dialog`}
-          >
-            展开关系图 <span aria-hidden="true">↗</span>
-          </button>
-        </div>
-      ) : (
+      <div class="note-graph-intro">
+        {variant === "inline" && <p>{initial ? "这一章的知识点" : "按章节展开"}</p>}
         <button
           class="note-graph-open"
           type="button"
           aria-haspopup="dialog"
           aria-controls={`${id}-dialog`}
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true" width="20" height="20">
-            <path d="M5 6 18 8 10 19 5 6" fill="none" stroke="currentColor" />
-            <circle cx="5" cy="6" r="3" fill="currentColor" />
-            <circle cx="18" cy="8" r="2.5" fill="currentColor" />
-            <circle cx="10" cy="19" r="2" fill="currentColor" />
-          </svg>
-          关联笔记 <span class="graph-open-en">Graph</span>
+          {variant === "inline" ? "打开关系图" : "查看相关知识"} <span aria-hidden="true">↗</span>
         </button>
+      </div>
+      {variant === "inline" && (
+        <div class="note-graph-compact" aria-label="章节与知识点列表">
+          <ul>
+            {initial
+              ? initial.nodes.map((node) => (
+                  <li key={node.id}>
+                    <a href={node.href} data-graph-read={node.id}>
+                      {node.title}
+                    </a>
+                  </li>
+                ))
+              : graph.chapters.map((chapter) => (
+                  <li key={chapter.id}>
+                    <a href={chapter.href} data-graph-chapter-link={chapter.id}>
+                      {chapter.title}
+                      <span>{chapter.knowledge.length} 个知识点</span>
+                    </a>
+                  </li>
+                ))}
+          </ul>
+        </div>
       )}
       <div class="note-graph-inline-host" hidden={variant !== "inline"}>
-        <section class="note-graph-panel" aria-label="公开笔记关系图">
+        <section class="note-graph-panel" aria-label="章节与知识点关系图">
           <header class="note-graph-header">
             <div>
-              <p class="note-graph-kicker">The connected notebook</p>
-              <h2 id={`${id}-title`}>笔记之间</h2>
+              <p class="note-graph-kicker">Read through connections</p>
+              <h2 id={`${id}-title`}>知识之间</h2>
             </div>
             <button class="note-graph-close" type="button" aria-label="关闭关系图">
-              <span aria-hidden="true">×</span>
+              ×
             </button>
           </header>
           <div class="note-graph-toolbar">
-            <div class="note-graph-scope" role="group" aria-label="关系图范围">
-              <button type="button" data-graph-scope="global" aria-pressed={scope === "global"}>
-                全局
+            <nav class="note-graph-breadcrumbs" aria-label="关系图层级">
+              <button type="button" data-graph-action="book">
+                全书章节
               </button>
-              <button type="button" data-graph-scope="local" aria-pressed={scope === "local"}>
-                当前关联
-              </button>
-            </div>
-            <span class="note-graph-count" role="status" aria-live="polite">
-              {initial.nodes.length} 篇笔记 · {initial.links.length} 条联系
-            </span>
+              <span class="note-graph-chapter-name" />
+            </nav>
+            <span class="note-graph-count" role="status" aria-live="polite" />
           </div>
-          <div class="note-graph-filters" role="group" aria-label="笔记类型筛选">
-            {(
-              [
-                ["all", "全部"],
-                ["body", "正文"],
-                ["plan", "规划"],
-                ["example", "样例"],
-              ] as const
-            ).map(([value, label]) => (
-              <button
-                key={value}
-                type="button"
-                data-graph-filter={value}
-                aria-pressed={value === "all"}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+          <label class="note-graph-focus-control">
+            聚焦知识点
+            <select class="note-graph-focus-select" aria-label="聚焦知识点">
+              <option value="">本章全部知识点</option>
+            </select>
+          </label>
           <div class="note-graph-canvas">
             <svg
               class="note-graph-svg"
               role="group"
-              aria-label="公开笔记关系图，可拖动节点或平移缩放"
+              aria-label="章节是矩形，知识点是圆点；可拖动知识点"
               aria-describedby={`${id}-help`}
               tabIndex={0}
             />
@@ -124,35 +122,29 @@ const NoteGraph: QuartzComponent = ({
               </button>
             </div>
           </div>
+          <aside class="note-graph-cross" hidden>
+            <p>跨章相关内容</p>
+            <ul />
+          </aside>
           <div class="note-graph-bottom">
-            <p id={`${id}-help`}>拖动圆点或空白处 · 滚轮 / 双指缩放 · 点击圆点阅读</p>
+            <p id={`${id}-help`}>
+              矩形展开章节，圆点打开阅读面板。连线仅表示已有引用，不表示先修顺序。
+            </p>
             <details class="note-graph-list">
-              <summary>笔记列表与键盘操作</summary>
+              <summary>列表与键盘操作</summary>
               <p>
-                Tab 选择节点，Enter 阅读。方向键移动节点或平移画布，+ / − 缩放，0 适应视图，Esc
+                Tab 选择，Enter 阅读或展开章节；拖动圆点或空白，滚轮／双指缩放。方向键移动节点，Esc
                 关闭。
               </p>
-              <ul>
-                {initial.nodes.map((node) => (
-                  <li key={node.id}>
-                    <a href={node.href} aria-current={node.current ? "page" : undefined}>
-                      {node.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              <ul />
             </details>
           </div>
         </section>
       </div>
       <dialog class="note-graph-dialog" id={`${id}-dialog`} aria-labelledby={`${id}-title`} />
-      <noscript>
-        <p>关系图的拖动与展开需要 JavaScript。已公开笔记仍可通过网站目录阅读。</p>
-      </noscript>
     </div>
   )
 }
-
 NoteGraph.css = style
 NoteGraph.afterDOMLoaded = script
 export default NoteGraph

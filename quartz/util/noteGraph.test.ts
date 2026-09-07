@@ -1,6 +1,14 @@
 import assert from "node:assert/strict"
 import test, { describe } from "node:test"
-import { buildNoteGraph, filterNoteGraph, type NoteGraphFile } from "./noteGraph"
+import {
+  buildNoteGraph,
+  filterNoteGraph,
+  buildReaderGraph,
+  readerChapterGraph,
+  wrapGraphTitle,
+  type NoteGraphFile,
+  type ReaderGraphCatalog,
+} from "./noteGraph"
 import type { FullSlug, SimpleSlug } from "./path"
 
 const full = (value: string) => value as FullSlug
@@ -9,6 +17,157 @@ const note = (slug: string, links: string[] = [], title = slug): NoteGraphFile =
   slug: full(slug),
   frontmatter: { title },
   links: links.map(simple),
+})
+
+describe("graph title wrapping", () => {
+  const measure = (text: string) =>
+    Array.from(text).reduce(
+      (width, character) => width + (/\p{Script=Han}/u.test(character) ? 2 : 1),
+      0,
+    )
+
+  test("wraps mixed Chinese and English at word boundaries", () => {
+    assert.deepEqual(wrapGraphTitle("第一章 Topological Spaces and 连续映射", 16, measure), [
+      "第一章",
+      "Topological",
+      "Spaces and 连续",
+      "映射",
+    ])
+    assert.deepEqual(wrapGraphTitle("Topology and Fourier", 12, measure), [
+      "Topology and",
+      "Fourier",
+    ])
+  })
+
+  test("only splits an English token when the token itself is wider than the line", () => {
+    assert.deepEqual(wrapGraphTitle("Topological Spaces", 11, measure), ["Topological", "Spaces"])
+    assert.deepEqual(wrapGraphTitle("Topological Spaces", 8, measure), [
+      "Topologi",
+      "cal",
+      "Spaces",
+    ])
+    assert.deepEqual(wrapGraphTitle("中文测度", 4, measure), ["中文", "测度"])
+  })
+})
+
+describe("reader hierarchy graph", () => {
+  const catalog: ReaderGraphCatalog = {
+    books: [
+      {
+        id: "book",
+        title: "Book",
+        slug: "book/index",
+        chapters: [
+          {
+            id: "one",
+            title: "Chapter one",
+            slug: "book/one",
+            sections: [{ slug: "reading" }],
+            knowledge: ["a", "b", "aux", "unpublished"],
+            connections: ["math-example"],
+            exercises: [],
+            canvas: ["map"],
+          },
+          {
+            id: "two",
+            title: "Chapter two",
+            slug: "book/two",
+            sections: [],
+            knowledge: ["c"],
+            connections: [],
+            exercises: [],
+            canvas: [],
+          },
+        ],
+      },
+    ],
+    pages: Object.fromEntries(
+      [
+        ["book/index", "book", undefined, false],
+        ["book/one", "chapter", "one", false],
+        ["a", "knowledge", "one", false],
+        ["b", "knowledge", "one", false],
+        ["c", "knowledge", "two", false],
+        ["reading", "reading", "one", false],
+        ["math-example", "connection", "one", false],
+        ["aux", "knowledge", "one", true],
+        ["unpublished", "knowledge", "one", false],
+      ].map(([slug, role, chapterId, auxiliary]) => [
+        String(slug),
+        {
+          slug: String(slug),
+          title: String(slug),
+          bookId: "book",
+          role: String(role),
+          chapterId: chapterId as string | undefined,
+          auxiliary: Boolean(auxiliary),
+        },
+      ]),
+    ),
+  }
+  const files = [
+    note("book/index"),
+    note("book/one"),
+    note("book/two"),
+    note("a", ["b", "c", "reading", "math-example", "aux", "map", "unpublished"]),
+    note("b", ["reading"]),
+    note("c"),
+    note("reading"),
+    {
+      ...note("math-example"),
+      frontmatter: { title: "A mathematical counterexample", siteKind: "example" },
+    },
+    note("aux"),
+    { ...note("map"), frontmatter: { title: "Canvas", siteKind: "canvas" } },
+  ]
+
+  test("book overview is real chapter metadata, not invented ordinary note nodes", () => {
+    const graph = buildReaderGraph(files, full("book/index"), catalog)!
+    assert.equal(graph.chapters.length, 2)
+    assert.equal(graph.initialChapterId, undefined)
+    assert.deepEqual(graph.chapters[0].knowledge, ["a", "b"])
+    assert.equal(
+      graph.nodes.some((node) =>
+        ["book/index", "book/one", "aux", "map", "unpublished"].includes(node.id),
+      ),
+      false,
+    )
+    assert.equal(buildReaderGraph(files, full("index"), catalog), undefined)
+  })
+
+  test("chapter view starts with knowledge; mathematical examples are retained as related content", () => {
+    const graph = buildReaderGraph(files, full("book/one"), catalog)!
+    assert.equal(graph.initialChapterId, "one")
+    assert.deepEqual(
+      readerChapterGraph(graph, "one").nodes.map((node) => node.id),
+      ["a", "b"],
+    )
+    assert.equal(graph.nodes.find((node) => node.id === "math-example")?.role, "connection")
+  })
+
+  test("focused graph keeps only direct same-chapter references and exposes cross-chapter links separately", () => {
+    const graph = buildReaderGraph(files, full("a"), catalog, { focusCurrent: true })!
+    assert.equal(graph.initialFocusId, "a")
+    const focused = readerChapterGraph(graph, "one", "a")
+    assert.deepEqual(
+      focused.nodes.map((node) => node.id),
+      ["reading", "a", "b", "math-example"],
+    )
+    assert.deepEqual(
+      focused.crossChapter.map((node) => node.id),
+      ["c"],
+    )
+    assert.equal(
+      focused.links.every((link) => link.source === "a" || link.target === "a"),
+      true,
+    )
+    assert.deepEqual(readerChapterGraph(graph, "missing"), {
+      nodes: [],
+      links: [],
+      crossChapter: [],
+    })
+    assert.deepEqual(readerChapterGraph(graph, "one", "aux"), readerChapterGraph(graph, "one"))
+  })
 })
 
 describe("published note graph", () => {

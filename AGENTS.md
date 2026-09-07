@@ -1,14 +1,28 @@
 # Website implementation rules
 
+## Current authorized reader interface
+
+The latest approved interface is a bookshelf, book and chapter reading directories, complete in-place knowledge reading, book-scoped search, and hierarchical chapter/knowledge graphs. This section takes precedence over older interface descriptions below. The homepage presents books and folds writing/template material into an auxiliary area; do not restore the full-library homepage graph or the raw Vault directory tree as the primary reading route.
+
+Use one shared reader model: `reader.config.ts` declares book/chapter entry points, exact auxiliary page identities, and the verified supplemental knowledge-to-section mappings. `ReaderMetadata()` follows FrontMatter and extracts headings and links from exported Markdown before OFM link rewriting. `quartz/util/readerCatalog.ts` builds browser-safe data from published file metadata; reading components, BookIndex v2, the knowledge panel, and graphs consume that same model. Keep many-to-many section mappings. New chapter content must remain visible at chapter level and produce diagnostics when its preferred mapping is not configured.
+
+Auxiliary classification changes presentation, not publication permission. Planning metadata, explicit demonstration paths, and the exact `auxiliaryFiles` list control default search exclusion. Do not infer auxiliary identity from the word “example”, hide mathematical examples, or use a parent-path exclusion for the exact navigation pages. In particular, `知识主干` is currently auxiliary but future `知识主干/*` exposition must remain eligible; `笔记主体/发现归档` contains mathematical excerpts and remains readable. Search documents retain every published source note, while generated Canvas pages remain separate. Graphs show chapter rectangles and chapter knowledge nodes; edges are actual references, never inferred prerequisites.
+
+The bookshelf and book/chapter headings may use the reading model's presentation titles. Keep source titles in the document title and preserve complete original navigation Markdown, status, layer, mathematics and anchors in the expandable source section. Knowledge panels read generated article HTML with MathML and working local links; they must retain an independent-page escape route and restore focus/reading position. Do not edit generated content or run a fresh export merely to adjust this interface. The ordinary `发布博客.cmd` / `预览博客.cmd` workflow and preview-before-`PUBLISH` confirmation remain unchanged. Record only checks actually run in `docs/validation.md`.
+
 ## Current authorized textbook publication
 
-The user explicitly approved and requested implementation of the complete textbook site: read-only export of all textbook, navigation, planning and example Markdown and referenced illustrations; a real home page, directory tree, search, global/local graph, Canvas views, and a preview-confirm-publish entry point. The approved destination is the existing public MyDearATRI/World repository and GitHub Pages. This supersedes the historical synthetic-only and no-graph scope below.
+The user explicitly approved and requested implementation of the complete textbook site: read-only export of all textbook, navigation, planning and example Markdown and referenced illustrations; reading navigation, search, relationship graphs, Canvas views, and a preview-confirm-publish entry point. The approved destination is the existing public MyDearATRI/World repository and GitHub Pages. The current reader-interface section above defines their presentation. This supersedes the historical synthetic-only and no-graph scope below.
 
 Only the exporter may read the Vault. It must never modify source notes. Exclude hidden configuration, backups, credentials, prompts (including standalone prompt documents), blank templates, maintenance logs and source PDFs. Respect explicit private/draft metadata. Keep the build rooted in website/content, verify publish-manifest.json, and use the explicit approved-assets emitter. Do not point Quartz or CI at the Vault. Generated content must not be reformatted by hand. New source content is exported and reviewed before publication; no unattended synchronization is authorized.
 
 The site must preserve source status, proof status and provenance, with no invented dates. The old reading samples are test fixtures. Update the actual validation record after checks; historical results below do not count as current acceptance.
 
 These rules supplement the repository-root instructions and apply only inside `website/`.
+
+## Historical phase-one rules
+
+The current authorizations above supersede the synthetic-only and unpublished scope in this historical record. Source integrity, mathematical accuracy and content-boundary requirements remain applicable.
 
 - This project is the public reading interface for an Obsidian writing source. Phase 1 uses synthetic Markdown only. Do not read, copy, rename, reorganize, or modify private Vault notes or attachments to implement this phase.
 - Keep implementation, generated output, screenshots, and validation records inside `website/`. Never point a build, watcher, search, asset copier, or content symlink at the parent Vault.

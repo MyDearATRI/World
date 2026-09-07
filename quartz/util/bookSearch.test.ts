@@ -8,6 +8,8 @@ import {
   bookSearchTokens,
   bookSnippet,
   createBookSearch,
+  cleanBookSnippet,
+  bookExpositionText,
   type BookDocument,
 } from "./bookSearch"
 
@@ -22,6 +24,10 @@ const document = (slug: string, extra: Partial<BookDocument> = {}): BookDocument
   status: "",
   layer: "",
   type: "",
+  bookTitle: "",
+  chapterTitle: "",
+  role: "reading",
+  auxiliary: false,
   ...extra,
 })
 
@@ -133,4 +139,58 @@ test("snippets reveal a nearby match and highlighting preserves untrusted text l
     { text: "+", match: true },
     { text: " y", match: false },
   ])
+})
+
+test("reading search excludes auxiliaries by default and scopes before limiting results", () => {
+  const search = createBookSearch([
+    document("a/reading", { title: "Compactness", bookId: "a" }),
+    document("b/reading", { title: "Compactness", bookId: "b" }),
+    document("a/plan", {
+      title: "Compactness plan",
+      bookId: "a",
+      role: "auxiliary",
+      auxiliary: true,
+    }),
+  ])
+  assert.deepEqual(
+    search("compactness", { bookId: "a" }).map((doc) => doc.slug),
+    ["a/reading"],
+  )
+  assert.equal(search("compactness").length, 2)
+  assert.equal(search("compactness", { bookId: "a", includeAuxiliary: true }).length, 2)
+  assert.equal(search("compactness", { bookId: "b" }, 1)[0].slug, "b/reading")
+})
+
+test("snippet text uses exposition and removes repeated tags and PDF maintenance labels", () => {
+  const doc = document("a/compact", {
+    text: "#用途/正文 PDF 158（来源 PDF，第158页，原文件未公开） metadata",
+    snippetText: "Compactness supplies a finite subcover for every open cover.",
+  })
+  assert.equal(bookSnippet(doc, "compactness"), doc.snippetText)
+  assert.ok(!cleanBookSnippet(doc.text).includes("#用途"))
+  assert.ok(!cleanBookSnippet(doc.text).includes("原文件未公开"))
+})
+
+test("search exposition includes one visible math representation without TeX annotation duplicates", () => {
+  const text = (value: string) => ({ type: "text" as const, value })
+  const span = (className: string, children: any[]) => ({
+    type: "element" as const,
+    tagName: "span",
+    properties: { className: [className] },
+    children,
+  })
+  const paragraph = {
+    type: "element" as const,
+    tagName: "p",
+    properties: {},
+    children: [
+      text("A point "),
+      span("katex", [
+        span("katex-mathml", [text("x ∈ X"), text("x \\in X")]),
+        span("katex-html", [text("x ∈ X")]),
+      ]),
+      text(" has a neighbourhood."),
+    ],
+  }
+  assert.equal(bookExpositionText(paragraph), "A point x ∈ X has a neighbourhood.")
 })

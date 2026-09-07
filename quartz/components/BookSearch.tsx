@@ -49,19 +49,17 @@ const BookSearch: QuartzComponent = ({ fileData }) => {
           aria-controls="book-search-results"
           autoFocus
         />
-        <div class="book-search-filters" role="group" aria-label="按内容状态筛选">
-          {(
-            [
-              ["all", "全部"],
-              ["body", "正文"],
-              ["plan", "规划"],
-              ["example", "示例"],
-            ] as const
-          ).map(([value, label]) => (
-            <button type="button" data-search-filter={value} aria-pressed={value === "all"}>
-              {label}
-            </button>
-          ))}
+        <div class="book-search-filters">
+          <label class="book-search-scope-label" for="book-search-scope">
+            搜索范围
+            <select id="book-search-scope" class="book-search-scope" aria-label="搜索范围">
+              <option value="">所有书籍</option>
+            </select>
+          </label>
+          <label class="book-search-aux-label">
+            <input type="checkbox" class="book-search-aux" />
+            包含规划与辅助资料
+          </label>
         </div>
         <p class="book-search-status" role="status" aria-live="polite">
           输入关键词，搜索公开教材。

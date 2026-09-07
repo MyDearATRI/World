@@ -1,12 +1,22 @@
 # Project brief
 
-## Current textbook follow-up
+## Current reader-interface follow-up
 
-The user subsequently approved implementing and publicly deploying the full textbook interface: a Markdown-driven home page, directory navigation and chapter reading sequence, local full-text search, interactive global/local note graphs, and Canvas reading views. Publication includes all textbook, navigation, planning and example notes and referenced illustrations; it excludes configuration, backups, prompts, blank templates, maintenance logs and source PDFs. A manual entry point exports, checks, previews, then publishes only after the user's confirmation. Preserve source files and use a manifest-verified copy. The earlier phase-one paragraphs below describe historical scope, not the current content limit.
+The approved site is a reading interface for complete mathematical textbook notes. Its entry is a bookshelf: choose a book, browse its chapters, and follow the continuous section readings. Book and chapter pages also expose reusable knowledge, connections and exercises. Knowledge opens in an in-place reading panel with full generated content and an independent article link. The original home, book and chapter navigation Markdown remains available in expandable source sections rather than being rewritten to fit the website.
+
+Reading, search and graphs share the website-owned ReaderCatalog. Explicit book/chapter configuration combines with headings and links extracted from exported Markdown; verified supplements fill only the known gaps in section associations. Preserve cross-chapter and many-to-many reuse. New published sections, knowledge and chapters remain discoverable even when a preferred mapping is not configured, and the model reports that condition.
+
+Search defaults to the current book where applicable and excludes explicit auxiliary material until requested. Mathematical examples and the discovery archive remain part of ordinary reading. Book graphs begin with chapter rectangles; chapter graphs show local knowledge circles, and focused views distinguish direct references from cross-chapter references. No full-library graph dominates the homepage, and no edge is presented as a prerequisite or implication. Canvas remains a separate representation of authored groups, arrows and annotations.
+
+Publication still includes the approved textbook, navigation, planning and example notes and referenced illustrations, excluding configuration, backups, prompts, blank templates, maintenance logs, source PDFs and explicitly private/draft material. The reader-interface change does not alter source notes, exported Markdown or the publication manifest. The existing manual entry point exports, checks and previews, then publishes only after `PUBLISH`. Current verification and deployment evidence belongs in validation.md.
+
+## Historical implementation scope
+
+The remaining sections record earlier phases. Their two-sample content limit, old interface descriptions and initial GitHub setup are historical and are superseded by the current follow-up above.
 
 This document was created for the approved phase-one implementation request. There was no pre-existing project brief to preserve. It records the intended behavior; test results belong in the implementation's validation report.
 
-The original phase-one scope is preserved below as historical scope. The appended GitHub-connection and publication follow-up records the later explicit authorization and current deployment state. Private Vault access and publication remain outside that authorization.
+The original phase-one scope is preserved below as historical scope. The appended initial GitHub-connection account is also historical; the current approved export boundary is defined above and in content-contract.md.
 
 ## Purpose
 

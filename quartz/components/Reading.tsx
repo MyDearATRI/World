@@ -1,7 +1,7 @@
 import { ComponentChildren } from "preact"
 import { QuartzComponent, QuartzComponentProps } from "./types"
 import { htmlToJsx } from "../util/jsx"
-import { joinSegments, pathToRoot, resolveRelative, simplifySlug } from "../util/path"
+import { joinSegments, pathToRoot, resolveRelative, simplifySlug, FullSlug } from "../util/path"
 import {
   CSSResourceToStyleElement,
   JSResourceToScriptElement,
@@ -9,14 +9,28 @@ import {
 } from "../util/resources"
 import NoteGraph from "./NoteGraph"
 import BookSearch from "./BookSearch"
-import {
-  bookTree,
-  compareBookLabels,
-  readingSequence,
-  type BookBranch,
-} from "../util/bookNavigation"
+import KnowledgeReader from "./KnowledgeReader"
+import { getReaderCatalog, ReaderBook, ReaderChapter, ReaderCatalog } from "../util/readerCatalog"
 // @ts-ignore
 import readingScript from "./scripts/reading.inline"
+
+const href = (from: string, to: string) => resolveRelative(from as FullSlug, to as FullSlug)
+const roleNames: Record<string, string> = {
+  reading: "章节研读",
+  knowledge: "知识点",
+  connection: "联系",
+  exercise: "习题与核校",
+  auxiliary: "附属资料",
+  other: "笔记",
+}
+function context(props: QuartzComponentProps) {
+  const catalog = getReaderCatalog(props.allFiles)
+  const slug = props.fileData.slug!
+  const page = catalog.pages[slug]
+  const book = catalog.books.find((item) => item.id === page?.bookId)
+  const chapter = book?.chapters.find((item) => item.id === page?.chapterId)
+  return { catalog, slug, page, book, chapter }
+}
 
 export const ReadingHead: QuartzComponent = ({ cfg, fileData, externalResources }) => {
   const root = pathToRoot(fileData.slug!)
@@ -37,7 +51,7 @@ export const ReadingHead: QuartzComponent = ({ cfg, fileData, externalResources 
       <link rel="icon" href="data:," />
       <link rel="stylesheet" href={joinSegments(root, "static/fonts/serif.css")} />
       <link rel="stylesheet" href={joinSegments(root, "static/katex/katex.min.css")} />
-      {externalResources.css.map((resource) => CSSResourceToStyleElement(resource))}
+      {externalResources.css.map((r) => CSSResourceToStyleElement(r))}
       {externalResources.js
         .filter((r) => r.loadTime === "beforeDOMReady")
         .map((r) => JSResourceToScriptElement(r))}
@@ -57,244 +71,614 @@ function Contents({ fileData }: QuartzComponentProps) {
   )
 }
 
-export const ReadingRail: QuartzComponent = (props) => {
-  const { fileData, allFiles } = props
-  const renderBranch = (branch: BookBranch): ComponentChildren => (
-    <ul>
-      {[...branch.files]
-        .sort((a, b) =>
-          a.slug === "index"
-            ? -1
-            : b.slug === "index"
-              ? 1
-              : compareBookLabels(a.frontmatter!.title, b.frontmatter!.title),
-        )
-        .map((file) => (
-          <li key={file.slug}>
-            <a
-              href={resolveRelative(fileData.slug!, file.slug!)}
-              aria-current={file.slug === fileData.slug ? "page" : undefined}
-              title={file.frontmatter?.title}
-            >
-              {file.slug === "index" ? "首页" : file.frontmatter?.title}
-            </a>
-            {file.frontmatter?.siteKind === "plan" && <span class="tree-status">规划</span>}
-            {file.frontmatter?.siteKind === "example" && <span class="tree-status">示例</span>}
-          </li>
-        ))}
-      {[...branch.branches.values()]
-        .sort((a, b) => compareBookLabels(a.name, b.name))
-        .map((child) => (
-          <li key={child.path} class="book-branch">
-            <details open={fileData.slug?.startsWith(`${child.path}/`)}>
-              <summary>{child.name}</summary>
-              {renderBranch(child)}
-            </details>
-          </li>
-        ))}
-    </ul>
+function NoteLink({
+  catalog,
+  from,
+  to,
+  children,
+}: {
+  catalog: ReaderCatalog
+  from: string
+  to: string
+  children?: ComponentChildren
+}) {
+  const item = catalog.pages[to]
+  if (!item) return null
+  return (
+    <a href={href(from, to)} data-reader-slug={item.role === "knowledge" ? to : undefined}>
+      {children ?? item.title}
+    </a>
   )
+}
+
+export const ReadingRail: QuartzComponent = (props) => {
+  const { slug, page, book, chapter } = context(props)
+  const landing = slug === "index" || page?.role === "book" || page?.role === "chapter"
   return (
     <>
       <a class="skip-link" href="#article-content">
-        Skip to content · 跳至正文
+        跳至正文
       </a>
-      <a class="site-title" href={pathToRoot(fileData.slug!)}>
+      <div
+        id="reader-context"
+        data-page-slug={slug}
+        data-root={pathToRoot(slug)}
+        data-book-id={book?.id ?? ""}
+        hidden
+      />
+      <a class="site-title" href={pathToRoot(slug)}>
         Notes &amp; Knowledge<span lang="zh-CN">数学与物理笔记</span>
       </a>
       <div class="book-tools">
         <BookSearch {...props} />
-        <NoteGraph {...props} />
       </div>
-      <nav class="book-navigation" aria-label="教材目录">
-        <details class="book-directory">
-          <summary>
-            教材目录 <span>Contents</span>
-          </summary>
-          {renderBranch(bookTree(allFiles))}
-        </details>
-      </nav>
-      <nav class="reading-toc" aria-label="On this page">
-        <p class="rail-label">On this page</p>
-        <Contents {...props} />
-      </nav>
+      {book ? (
+        <nav class="book-navigation" aria-label="本书目录">
+          <a class="rail-book-title" href={href(slug, book.slug)}>
+            {book.title}
+          </a>
+          <details class="book-directory">
+            <summary>
+              章节目录{" "}
+              <span class="current-section-label">
+                {page?.role === "reading" ? props.fileData.frontmatter?.title : "选择章节"}
+              </span>
+            </summary>
+            <div class="reader-chapters">
+              {book.chapters.map((item) => (
+                <details class="reader-chapter" key={item.id} open={item.id === chapter?.id}>
+                  <summary>{item.title}</summary>
+                  <a class="chapter-overview-link" href={href(slug, item.slug)}>
+                    本章总览
+                  </a>
+                  <ol>
+                    {item.sections.map((section) => (
+                      <li key={section.slug}>
+                        <a
+                          href={href(slug, section.slug)}
+                          aria-current={section.slug === slug ? "page" : undefined}
+                        >
+                          {section.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                </details>
+              ))}
+            </div>
+          </details>
+          <a class="rail-knowledge-link" href={`${href(slug, book.slug)}#knowledge-index`}>
+            查找本书知识点
+          </a>
+          <a class="rail-shelf-link" href={pathToRoot(slug)}>
+            返回书架
+          </a>
+        </nav>
+      ) : (
+        <nav class="shelf-navigation" aria-label="网站导航">
+          <a href={pathToRoot(slug)} aria-current={slug === "index" ? "page" : undefined}>
+            书架
+          </a>
+          <a href={`${pathToRoot(slug)}/#about-notes`}>关于这些笔记</a>
+        </nav>
+      )}
+      {!landing && (props.fileData.toc?.length ?? 0) > 0 && (
+        <nav class="reading-toc" aria-label="本页目录">
+          <p class="rail-label">本页内容</p>
+          <Contents {...props} />
+        </nav>
+      )}
+      <KnowledgeReader {...props} />
     </>
   )
 }
-
-ReadingRail.css = concatenateResources(NoteGraph.css, BookSearch.css)
+ReadingRail.css = concatenateResources(BookSearch.css, KnowledgeReader.css, NoteGraph.css)
 ReadingRail.afterDOMLoaded = concatenateResources(
-  NoteGraph.afterDOMLoaded,
   BookSearch.afterDOMLoaded,
+  KnowledgeReader.afterDOMLoaded,
+  NoteGraph.afterDOMLoaded,
   readingScript,
 )
 
 export const ReadingHeader: QuartzComponent = (props) => {
-  const { fileData, allFiles } = props
-  const home = fileData.slug === "index"
-  const kind = String(fileData.frontmatter?.siteKind ?? "body")
-  const labels: Record<string, string> = {
-    body: "正文",
-    navigation: "阅读路线",
-    plan: "写作规划",
-    example: "示例",
-    canvas: "关系白板",
-  }
-  const parts = fileData.slug!.split("/").slice(0, -1)
+  const { slug, page, book, chapter } = context(props)
+  const home = slug === "index"
+  const title = home
+    ? "书架"
+    : page?.role === "book"
+      ? book!.title
+      : page?.role === "chapter"
+        ? chapter!.title
+        : props.fileData.frontmatter?.title
   return (
     <>
       {!home && (
         <nav class="breadcrumbs" aria-label="所在位置">
-          <a href={pathToRoot(fileData.slug!)}>首页</a>
-          {parts.map((part, i) => {
-            const directory = parts.slice(0, i + 1).join("/")
-            const landing = allFiles.find(
-              (file) =>
-                file.frontmatter?.siteKind === "navigation" &&
-                file.slug?.slice(0, file.slug.lastIndexOf("/")) === directory,
-            )
-            return (
-              <span key={directory}>
-                <span aria-hidden="true"> / </span>
-                {landing && landing.slug !== fileData.slug ? (
-                  <a href={resolveRelative(fileData.slug!, landing.slug!)}>{part}</a>
-                ) : (
-                  part
-                )}
-              </span>
-            )
-          })}
+          <a href={pathToRoot(slug)}>书架</a>
+          {book && (
+            <>
+              <span aria-hidden="true"> / </span>
+              {page?.role === "book" ? (
+                <span>{book.title}</span>
+              ) : (
+                <a href={href(slug, book.slug)}>{book.title}</a>
+              )}
+            </>
+          )}
+          {chapter && (
+            <>
+              <span aria-hidden="true"> / </span>
+              {page?.role === "chapter" ? (
+                <span>{chapter.title}</span>
+              ) : (
+                <a href={href(slug, chapter.slug)}>{chapter.title}</a>
+              )}
+            </>
+          )}
         </nav>
       )}
       <div class="article-eyebrow">
-        <span>{home ? "Mathematics · Physics" : (labels[kind] ?? "笔记")}</span>
-        <span class="note-status">
-          {String(fileData.frontmatter?.status ?? "")}
-          {fileData.frontmatter?.layer ? ` · ${String(fileData.frontmatter.layer)}` : ""}
+        <span>
+          {home
+            ? "从一本书开始"
+            : page?.role === "book"
+              ? "按章节读 · 按知识点查"
+              : page?.role === "chapter"
+                ? "本章阅读"
+                : roleNames[page?.role ?? "other"]}
         </span>
+        {!home && (
+          <details class="reader-meta">
+            <summary>整理信息</summary>
+            <div>
+              {String(props.fileData.frontmatter?.status ?? "")}
+              {props.fileData.frontmatter?.layer
+                ? ` · ${String(props.fileData.frontmatter.layer)}`
+                : ""}
+            </div>
+          </details>
+        )}
       </div>
-      <h1>{props.fileData.frontmatter?.title}</h1>
-      {fileData.frontmatter?.description && (
-        <p class="article-deck">{fileData.frontmatter.description}</p>
-      )}
-      {!home && (
-        <details class="mobile-toc">
-          <summary>
-            On this page <span lang="zh-CN">目录</span>
-          </summary>
-          <nav aria-label="On this page">
-            <Contents {...props} />
-          </nav>
-        </details>
-      )}
+      <h1>{title}</h1>
+      {home ? (
+        <p class="article-deck shelf-deck">选择一本书，沿章节阅读，或直接找到需要的知识点。</p>
+      ) : page?.role === "book" ? (
+        <p class="article-deck">
+          {book!.subtitle}
+          <span class="book-source">{book!.source}</span>
+        </p>
+      ) : null}
+      {!home &&
+        page?.role !== "book" &&
+        page?.role !== "chapter" &&
+        (props.fileData.toc?.length ?? 0) > 0 && (
+          <details class="mobile-toc">
+            <summary>本页目录</summary>
+            <nav aria-label="本页目录">
+              <Contents {...props} />
+            </nav>
+          </details>
+        )}
     </>
   )
 }
 
-export const ReadingContent: QuartzComponent = (props) => {
-  const { fileData, tree, allFiles } = props
-  const home = fileData.slug === "index"
-  const sequence = readingSequence(fileData, allFiles)
-  const position = sequence.findIndex((file) => file.slug === fileData.slug)
-  const previous = sequence[position - 1],
-    next = position >= 0 ? sequence[position + 1] : undefined
-  const source = allFiles.find(
-    (file) =>
-      file.slug !== "index" &&
-      file.frontmatter?.siteKind === "navigation" &&
-      file.slug?.endsWith("笔记主体"),
+function SectionList({
+  chapter,
+  catalog,
+  from,
+}: {
+  chapter: ReaderChapter
+  catalog: ReaderCatalog
+  from: string
+}) {
+  return (
+    <ol class="section-list">
+      {chapter.sections.map((section) => (
+        <li key={section.slug}>
+          <a class="section-reading-link" href={href(from, section.slug)}>
+            <span class="section-number">{section.number}</span>
+            <span>{section.title.replace(/^\d+\.\d+\s*[·.、—-]?\s*/, "")}</span>
+            <span class="section-arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
+          {section.knowledge.length > 0 && (
+            <div class="section-concepts">
+              <span class="concept-label">知识点</span>
+              {section.knowledge.map((target) => (
+                <NoteLink key={target} catalog={catalog} from={from} to={target} />
+              ))}
+            </div>
+          )}
+        </li>
+      ))}
+    </ol>
   )
+}
+
+function KnowledgeIndex({
+  book,
+  catalog,
+  from,
+  chapterOnly,
+}: {
+  book: ReaderBook
+  catalog: ReaderCatalog
+  from: string
+  chapterOnly?: ReaderChapter
+}) {
+  const chapters = chapterOnly ? [chapterOnly] : book.chapters
+  return (
+    <section class="knowledge-index" id="knowledge-index" aria-label="知识点索引">
+      <div class="section-caption">
+        <h2>知识点</h2>
+        <p>点开查看，关闭后继续读</p>
+      </div>
+      <label class="knowledge-filter-label">
+        筛选知识点
+        <input
+          type="search"
+          class="knowledge-filter"
+          placeholder="名称、别名或节号"
+          autoComplete="off"
+        />
+      </label>
+      <p class="knowledge-filter-status" role="status" aria-live="polite" />
+      {chapters.map((chapter) => (
+        <section class="knowledge-group" key={chapter.id} data-knowledge-group={chapter.id}>
+          {!chapterOnly && <h3>{chapter.title}</h3>}
+          <ul>
+            {chapter.knowledge.map((target) => {
+              const item = catalog.pages[target]
+              if (!item) return null
+              const related = book.chapters
+                .flatMap((ch) => ch.sections)
+                .filter((section) => item.sections.includes(section.slug))
+              return (
+                <li key={target} class="knowledge-index-item" data-knowledge-slug={target}>
+                  <NoteLink catalog={catalog} from={from} to={target} />
+                  <span class="knowledge-related">
+                    {related.length ? (
+                      <>
+                        相关节{" "}
+                        {related.map((section, i) => (
+                          <span key={section.slug}>
+                            {i > 0 && " · "}
+                            <a href={href(from, section.slug)}>{section.number}</a>
+                          </span>
+                        ))}
+                      </>
+                    ) : (
+                      "本章补充知识"
+                    )}
+                  </span>
+                </li>
+              )
+            })}
+          </ul>
+        </section>
+      ))}
+      <p class="knowledge-empty" hidden>
+        没有匹配的知识点。换一个名称，或使用教材全文搜索。
+      </p>
+    </section>
+  )
+}
+
+function ChapterExtras({
+  chapter,
+  catalog,
+  from,
+}: {
+  chapter: ReaderChapter
+  catalog: ReaderCatalog
+  from: string
+}) {
+  const groups = [
+    { title: "联系与应用", items: chapter.connections },
+    { title: "习题与核校", items: chapter.exercises },
+    { title: "作者编排的关系白板", items: chapter.canvas },
+  ]
+  return (
+    <div class="chapter-extras">
+      {groups
+        .filter((group) => group.items.length)
+        .map((group) => (
+          <section key={group.title}>
+            <h3>{group.title}</h3>
+            <ul>
+              {group.items.map((target) => (
+                <li key={target}>
+                  <NoteLink catalog={catalog} from={from} to={target} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+    </div>
+  )
+}
+
+function Original({
+  props,
+  title = "原始导航说明",
+}: {
+  props: QuartzComponentProps
+  title?: string
+}) {
+  return (
+    <details class="source-navigation">
+      <summary>{title}</summary>
+      <div class="source-note-metadata">
+        <h2>{props.fileData.frontmatter?.title}</h2>
+        <p class="source-note-status">
+          {String(props.fileData.frontmatter?.status ?? "")}
+          {props.fileData.frontmatter?.layer
+            ? ` · ${String(props.fileData.frontmatter.layer)}`
+            : ""}
+        </p>
+      </div>
+      <div class="markdown-content">
+        {htmlToJsx(props.fileData.filePath!, props.tree) as ComponentChildren}
+      </div>
+    </details>
+  )
+}
+
+export const ReadingContent: QuartzComponent = (props) => {
+  const { catalog, slug, page, book, chapter } = context(props)
+  const home = slug === "index"
+  const landing = home || page?.role === "book" || page?.role === "chapter"
+  const sequence = book?.chapters.flatMap((item) => item.sections) ?? []
+  const position = sequence.findIndex((item) => item.slug === slug)
+  const previous = position > 0 ? sequence[position - 1] : undefined
+  const next = position >= 0 ? sequence[position + 1] : undefined
+  const concepts = position >= 0 ? sequence[position].knowledge : []
   return (
     <article
       id="article-content"
-      class={home ? "home-article" : "book-article"}
+      class={`${landing ? "catalog-article" : "book-article"}${home ? " home-article" : ""}`}
       tabIndex={-1}
-      aria-label={fileData.frontmatter?.title}
+      aria-label={home ? "书架" : props.fileData.frontmatter?.title}
       role="main"
     >
-      {home && (
-        <div class="home-intro">
-          <p>连续阅读 · 概念检索 · 笔记之间的联系</p>
-          <a
-            class="start-reading"
-            href={source ? resolveRelative(fileData.slug!, source.slug!) : "#notes"}
-          >
-            进入笔记主体 <span aria-hidden="true">↗</span>
-          </a>
-        </div>
-      )}
-      <div class="markdown-content">{htmlToJsx(fileData.filePath!, tree) as ComponentChildren}</div>
-      {home && (
-        <section class="home-graph" aria-label="全库关系图">
-          <div class="section-caption">
-            <h2>笔记之间</h2>
-            <p>从已有链接探索教材结构</p>
+      {home ? (
+        <>
+          <div class="bookshelf">
+            {catalog.books.map((item, index) => (
+              <section class="shelf-book" key={item.id}>
+                <div class="book-spine" aria-hidden="true">
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <span>ANALYSIS</span>
+                </div>
+                <div class="shelf-book-body">
+                  <p class="shelf-book-source">{item.source}</p>
+                  <h2>
+                    <a href={href(slug, item.slug)}>{item.title}</a>
+                  </h2>
+                  <p>{item.subtitle}</p>
+                  <p class="shelf-book-extent">
+                    {item.chapters.length} 章已有正文 ·{" "}
+                    {item.chapters.reduce((sum, ch) => sum + ch.sections.length, 0)} 节研读 ·{" "}
+                    {item.chapters.reduce((sum, ch) => sum + ch.knowledge.length, 0)} 个知识点
+                  </p>
+                  <a class="reader-primary shelf-enter" href={href(slug, item.slug)}>
+                    进入阅读 <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </section>
+            ))}
           </div>
-          <NoteGraph {...props} variant="inline" />
-        </section>
-      )}
-      {(previous || next) && (
-        <nav class="reading-sequence" aria-label="沿章节阅读">
-          {previous ? (
-            <a rel="prev" href={resolveRelative(fileData.slug!, previous.slug!)}>
-              <span>上一节</span>
-              {previous.frontmatter?.title}
+          <section id="about-notes" class="about-notes">
+            <details>
+              <summary>
+                关于这些笔记 <span>写作说明与附属资料</span>
+              </summary>
+              <p>这里保留写作说明、模板演示与规划入口，供需要时查阅。</p>
+              <ul>
+                {Object.values(catalog.pages)
+                  .filter(
+                    (item) =>
+                      item.auxiliary &&
+                      item.slug !== "index" &&
+                      !item.bookId &&
+                      !item.slug.startsWith("maps/"),
+                  )
+                  .map((item) => (
+                    <li key={item.slug}>
+                      <a href={href(slug, item.slug)}>{item.title}</a>
+                    </li>
+                  ))}
+              </ul>
+              <Original props={props} title="查看原首页说明" />
+            </details>
+          </section>
+        </>
+      ) : page?.role === "book" && book ? (
+        <>
+          <nav class="book-view-nav" aria-label="选择阅读方式">
+            <a href="#chapter-readings">按章节阅读</a>
+            <a href="#knowledge-index">查找知识点</a>
+            <a href="#book-map" class="secondary-view-link">
+              查看章节地图
             </a>
-          ) : (
-            <span />
-          )}
-          {next && (
-            <a rel="next" href={resolveRelative(fileData.slug!, next.slug!)}>
-              <span>下一节</span>
-              {next.frontmatter?.title}
+          </nav>
+          <nav class="chapter-jump" aria-label="快速选择章节">
+            {book.chapters.map((item) => (
+              <a href={`#${item.id}`} key={item.id}>
+                <span>{item.title}</span>
+                <small>{item.sections.length} 节研读</small>
+              </a>
+            ))}
+          </nav>
+          <section id="chapter-readings" class="book-chapters-view">
+            {book.chapters.map((item) => (
+              <section class="chapter-block" key={item.id} id={item.id}>
+                <header>
+                  <h2>
+                    <a href={href(slug, item.slug)}>{item.title}</a>
+                  </h2>
+                  <span>
+                    {item.sections.length} 节 · {item.knowledge.length} 个知识点
+                  </span>
+                </header>
+                <SectionList chapter={item} catalog={catalog} from={slug} />
+              </section>
+            ))}
+          </section>
+          <KnowledgeIndex book={book} catalog={catalog} from={slug} />
+          <section class="reader-map-section" id="book-map">
+            <div class="section-caption">
+              <h2>章节地图</h2>
+              <p>先选章，再看知识点之间的联系</p>
+            </div>
+            <NoteGraph {...props} bookId={book.id} variant="inline" />
+          </section>
+          <details class="future-chapters">
+            <summary>后续章节与写作规划</summary>
+            <p>以下资料保留来源目录与写作安排，不代表章节正文已经完成。</p>
+            <ul>
+              {book.plans.map((target) => (
+                <li key={target}>
+                  <NoteLink catalog={catalog} from={slug} to={target} />
+                </li>
+              ))}
+            </ul>
+            <a href={href(slug, book.contentsSlug)}>完整来源目录</a>
+          </details>
+          <Original props={props} />
+        </>
+      ) : page?.role === "chapter" && chapter && book ? (
+        <>
+          <div class="chapter-start">
+            <p>
+              {chapter.sections.length} 节研读 · {chapter.knowledge.length} 个知识点
+            </p>
+            {chapter.sections[0] && (
+              <a class="reader-primary" href={href(slug, chapter.sections[0].slug)}>
+                开始本章 <span aria-hidden="true">→</span>
+              </a>
+            )}
+          </div>
+          <nav class="book-view-nav" aria-label="本章入口">
+            <a href="#chapter-readings">按节阅读</a>
+            <a href="#knowledge-index">本章知识点</a>
+            <a href="#chapter-map" class="secondary-view-link">
+              看本章关系
             </a>
+          </nav>
+          <section id="chapter-readings">
+            <SectionList chapter={chapter} catalog={catalog} from={slug} />
+          </section>
+          <KnowledgeIndex book={book} catalog={catalog} from={slug} chapterOnly={chapter} />
+          <ChapterExtras chapter={chapter} catalog={catalog} from={slug} />
+          <section id="chapter-map" class="reader-map-section">
+            <div class="section-caption">
+              <h2>本章关系</h2>
+              <p>点开知识点，对照正文阅读</p>
+            </div>
+            <NoteGraph {...props} bookId={book.id} chapterId={chapter.id} variant="inline" />
+          </section>
+          <Original props={props} />
+        </>
+      ) : (
+        <>
+          {concepts.length > 0 && (
+            <details class="section-knowledge" aria-label="本节知识点" open>
+              <summary>本节知识点 · {concepts.length}</summary>
+              <div>
+                {concepts.map((target) => (
+                  <NoteLink key={target} catalog={catalog} from={slug} to={target} />
+                ))}
+              </div>
+            </details>
           )}
-        </nav>
+          {page?.role === "knowledge" && page.sections.length > 0 && (
+            <nav class="related-readings" aria-label="相关研读节">
+              <span>在这些章节中使用</span>
+              {page.sections.map((target) => (
+                <NoteLink key={target} catalog={catalog} from={slug} to={target} />
+              ))}
+            </nav>
+          )}
+          <div class="markdown-content">
+            {htmlToJsx(props.fileData.filePath!, props.tree) as ComponentChildren}
+          </div>
+          {(previous || next) && (
+            <nav class="reading-sequence" aria-label="沿章节阅读">
+              {previous ? (
+                <a rel="prev" href={href(slug, previous.slug)}>
+                  <span>上一节</span>
+                  {previous.title}
+                </a>
+              ) : (
+                <span />
+              )}
+              {next && (
+                <a rel="next" href={href(slug, next.slug)}>
+                  <span>下一节</span>
+                  {next.title}
+                </a>
+              )}
+            </nav>
+          )}
+        </>
       )}
     </article>
   )
 }
 
-export const ReadingConnections: QuartzComponent = ({ fileData, allFiles }) => {
-  if (fileData.slug === "index") return null
-  const backlinks = allFiles.filter(
-    (file) => file.slug !== fileData.slug && file.links?.includes(simplifySlug(fileData.slug!)),
+export const ReadingConnections: QuartzComponent = (props) => {
+  const { catalog, slug, page, book, chapter } = context(props)
+  if (slug === "index" || page?.role === "book" || page?.role === "chapter" || page?.auxiliary)
+    return null
+  const backlinks = props.allFiles.filter(
+    (file) =>
+      file.slug !== slug &&
+      file.links?.includes(simplifySlug(slug)) &&
+      catalog.pages[file.slug!]?.bookId &&
+      !catalog.pages[file.slug!]?.auxiliary &&
+      !["book", "chapter"].includes(catalog.pages[file.slug!]?.role),
   )
   return (
-    <nav class="connections" aria-label="Linked notes">
-      <p class="rail-label">
-        Connected notes <span lang="zh-CN">关联笔记</span>
-      </p>
-      <ul>
-        {backlinks.slice(0, 8).map((file) => (
-          <li key={file.slug}>
-            <a key={file.slug} href={resolveRelative(fileData.slug!, file.slug!)}>
-              {file.frontmatter?.title}
-              <span aria-hidden="true"> ↗</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-      {backlinks.length > 8 && (
-        <details>
-          <summary>其余 {backlinks.length - 8} 篇引用</summary>
+    <section class="connections" aria-label="继续阅读">
+      <div class="section-caption">
+        <h2>继续阅读</h2>
+        {chapter && <a href={href(slug, chapter.slug)}>返回本章目录</a>}
+      </div>
+      {backlinks.length > 0 && (
+        <>
+          <p class="rail-label">引用本页的正文</p>
           <ul>
-            {backlinks.slice(8).map((file) => (
+            {backlinks.slice(0, 5).map((file) => (
               <li key={file.slug}>
-                <a href={resolveRelative(fileData.slug!, file.slug!)}>{file.frontmatter?.title}</a>
+                <NoteLink catalog={catalog} from={slug} to={file.slug!} />
               </li>
             ))}
           </ul>
-        </details>
+          {backlinks.length > 5 && (
+            <details>
+              <summary>其余 {backlinks.length - 5} 篇引用</summary>
+              <ul>
+                {backlinks.slice(5).map((file) => (
+                  <li key={file.slug}>
+                    <NoteLink catalog={catalog} from={slug} to={file.slug!} />
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
+        </>
       )}
-      {!backlinks.length && <p>目前没有其他公开笔记链接到本页。</p>}
-    </nav>
+      {book && <NoteGraph {...props} bookId={book.id} chapterId={chapter?.id} variant="launcher" />}
+    </section>
   )
 }
 
-export const ReadingFooter: QuartzComponent = () => (
+export const ReadingFooter: QuartzComponent = ({ fileData }) => (
   <footer class="reading-footer">
-    <span>Notes &amp; Knowledge</span>
-    <span lang="zh-CN">定义 · 推理 · 联系</span>
+    <a href={pathToRoot(fileData.slug!)}>Notes &amp; Knowledge</a>
+    <a href={`${pathToRoot(fileData.slug!)}/#about-notes`}>关于这些笔记</a>
   </footer>
 )

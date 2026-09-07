@@ -6,9 +6,25 @@ The current source boundary is publish.config.json plus the committed publish-ma
 
 Build input stays inside website/content; CI never reads the source Vault. Export uses staging, verifies the source file list and hashes, rejects unknown/modified public copies, and replaces only its managed output with rollback on failure. Canonical links and compatibility conversions exist only in the copies. Missing links become labelled text; ambiguous targets fail export. PDF references retain their citation/page context without serving the original file. Display-math delimiters and table formula pipes are normalized without changing mathematical meaning. Preserve block identifiers through semantic conversion, and allow independent excerpts from the same source without falsely calling them cycles.
 
-Title uses explicit source title or the first H1 with a filename fallback. Source status/layer/tags/aliases remain available; no source timestamp is converted to a public date. siteKind distinguishes body, plan, example, navigation and generated canvas pages. Search and graph use the same published note set and exclude Canvas-derived pages. Original synthetic samples remain only under tests/fixtures/synthetic.
+Title uses explicit source title or the first H1 with a filename fallback. Source status/layer/tags/aliases remain available; no source timestamp is converted to a public date. siteKind distinguishes body, plan, example, navigation and generated canvas pages. All derived reader data is bounded to this approved snapshot. Original synthetic samples remain only under tests/fixtures/synthetic.
 
-This document was created for the approved synthetic-content phase. It is the contract for the sample input and its rendering, not permission to access or publish real Vault content.
+## Current reader-model contract
+
+`reader.config.ts` contains website-only book/chapter identities and entry slugs, display labels, precise auxiliary classifications, and five verified supplements to knowledge-to-section mappings. `ReaderMetadata()` runs after FrontMatter and before OFM link rewriting, extracting ordered links and heading groups from exported Markdown without including code examples. `buildReaderCatalog` is pure and browser-safe; `getReaderCatalog` caches by the supplied file-array reference. Neither may read the Vault or filesystem, change exported content, or synthesize unavailable note targets.
+
+The model has books, chapters, continuous reading sections and a record for every published page. Page roles are book, chapter, reading, knowledge, connection, exercise, auxiliary or other. `ReaderPage.sections` holds associated reading-page slugs; `ReaderSection.knowledge` holds knowledge-page slugs. Association may be many-to-many and cross chapters, while a knowledge page keeps its own chapter identity. Chapter entry links determine the reading order, contents headings supply section associations, and explicit supplements fill only the verified missing associations. Newly published chapters, unindexed sections and unmapped knowledge remain visible at chapter level with diagnostics; they must not silently disappear.
+
+Auxiliary identity changes default presentation, not the public file allowlist. Use planning metadata, explicit demonstration paths and exact `auxiliaryFiles`. The exact current auxiliary navigation pages are `index`, `笔记科学与逻辑`, `笔记主体/笔记主体`, `知识主干`, and the Simon contents page. This does not exclude future `知识主干/*` or similarly named subdirectory exposition. `笔记主体/发现归档` remains ordinary readable material. A mathematical example is not auxiliary merely because its title or siteKind says example.
+
+BookIndex v2 includes the shared catalog and all published source-note search documents, including auxiliary documents; generated Canvas pages do not duplicate source notes in search. Default search filters auxiliaries and supports a book scope, while its explicit toggle restores them. Graph nodes come from that same catalog's published non-auxiliary section, knowledge, connection and exercise pages. Book-level chapter rectangles are navigation controls, not fabricated note nodes. Chapter overview circles represent chapter knowledge only. Every graph edge must correspond to an actual source link; Canvas remains a separate derived resource.
+
+The homepage may display “书架” and book/chapter pages may use reader presentation titles. Keep the source title in the HTML document title and source-navigation section. Full original navigation Markdown, source status/layer, formulas and anchors remain in the rendered document. The knowledge panel loads this generated article content, retains accessible mathematics and links, and offers independent page navigation. This interface work must not rewrite source notes or trigger a new export merely for presentation changes.
+
+## Historical sample contract
+
+The remaining two-note examples document the original rendering sample and its mathematical semantics. The authorized export and reader-model contracts above supersede their input and publication limits.
+
+This document originated in the synthetic-content phase; the sample rules below do not grant any additional source access beyond the current approved export boundary.
 
 ## Source boundary and page metadata
 

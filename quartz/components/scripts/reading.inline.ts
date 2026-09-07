@@ -1,13 +1,91 @@
 document.addEventListener("nav", () => {
   const directory = document.querySelector<HTMLDetailsElement>(".book-directory")
-  if (!directory) return
   const wide = matchMedia("(min-width: 1280px)")
   const adapt = () => {
-    directory.open = wide.matches
+    if (directory) directory.open = wide.matches
   }
   adapt()
   wide.addEventListener("change", adapt)
   window.addCleanup(() => wide.removeEventListener("change", adapt))
+
+  const concepts = document.querySelector<HTMLDetailsElement>(".section-knowledge")
+  const phone = matchMedia("(max-width: 600px)")
+  const adaptConcepts = () => {
+    if (concepts) concepts.open = !phone.matches
+  }
+  adaptConcepts()
+  phone.addEventListener("change", adaptConcepts)
+  window.addCleanup(() => phone.removeEventListener("change", adaptConcepts))
+
+  // Existing links into the preserved source navigation must still reveal their target.
+  const revealHash = () => {
+    if (!location.hash) return
+    let target: HTMLElement | null = null
+    try {
+      target = document.getElementById(decodeURIComponent(location.hash.slice(1)))
+    } catch {
+      return
+    }
+    if (!target) return
+    let parent: HTMLElement | null = target.parentElement
+    let opened = false
+    while (parent) {
+      if (parent instanceof HTMLDetailsElement && !parent.open) {
+        parent.open = true
+        opened = true
+      }
+      parent = parent.parentElement
+    }
+    if (opened) target.scrollIntoView({ block: "start" })
+  }
+  revealHash()
+  window.addEventListener("hashchange", revealHash)
+  window.addCleanup(() => window.removeEventListener("hashchange", revealHash))
+
+  document.querySelectorAll<HTMLElement>(".knowledge-index").forEach((index) => {
+    const input = index.querySelector<HTMLInputElement>(".knowledge-filter")!
+    const rows = [...index.querySelectorAll<HTMLElement>(".knowledge-index-item")]
+    const status = index.querySelector<HTMLElement>(".knowledge-filter-status")!
+    const empty = index.querySelector<HTMLElement>(".knowledge-empty")!
+    const normalize = (s: string) => s.normalize("NFKC").toLocaleLowerCase()
+    const labels = new Map(
+      rows.map((row) => [row.dataset.knowledgeSlug!, normalize(row.textContent ?? "")]),
+    )
+    const filter = () => {
+      const words = normalize(input.value.trim()).split(/\s+/).filter(Boolean)
+      let count = 0
+      rows.forEach((row) => {
+        row.hidden = !words.every((word) => labels.get(row.dataset.knowledgeSlug!)?.includes(word))
+        if (!row.hidden) count++
+      })
+      index.querySelectorAll<HTMLElement>(".knowledge-group").forEach((group) => {
+        group.hidden = !group.querySelector(".knowledge-index-item:not([hidden])")
+      })
+      status.textContent = `${count} 个知识点${input.value ? "匹配" : ""}`
+      empty.hidden = count > 0
+    }
+    input.addEventListener("input", filter)
+    filter()
+    const root = document.querySelector<HTMLElement>("#reader-context")?.dataset.root ?? "."
+    void fetch(new URL(`${root}/static/bookIndex.json`, document.baseURI))
+      .then((response) => {
+        if (!response.ok) throw new Error("Index unavailable")
+        return response.json()
+      })
+      .then((data) => {
+        for (const doc of data.documents ?? []) {
+          if (labels.has(doc.slug) && Array.isArray(doc.aliases))
+            labels.set(
+              doc.slug,
+              `${labels.get(doc.slug)} ${normalize(doc.aliases.filter((s: unknown) => typeof s === "string").join(" "))}`,
+            )
+        }
+        filter()
+      })
+      .catch(() => {
+        input.placeholder = "筛选名称或节号"
+      })
+  })
 
   document.querySelectorAll<HTMLElement>(".canvas-reading-map").forEach((map) => {
     const svg = map.querySelector<SVGSVGElement>("svg")

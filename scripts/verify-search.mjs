@@ -20,7 +20,8 @@ if (liveSite) {
 const primaryMount = liveSite?.pathname ?? "/World/"
 let baseUrl = liveSite?.origin
 const data = JSON.parse(await readFile(path.join(root, "public/static/bookIndex.json"), "utf8"))
-assert.equal(data.version, 1)
+assert.equal(data.version, 2)
+assert.ok(data.catalog?.books.length > 0, "A real reading catalog is built")
 assert.ok(data.documents.length > 2, "Build the real book content before running search acceptance")
 assert.ok(
   data.documents.every((doc) => doc.kind !== "canvas"),
@@ -29,9 +30,12 @@ assert.ok(
 const documents = data.documents
 const aliasDoc = documents.find(
   (doc) =>
+    !doc.auxiliary &&
+    doc.role !== "knowledge" &&
     doc.aliases.some(
       (alias) => alias.length >= 3 && alias.toLowerCase() !== doc.title.toLowerCase(),
-    ) && doc.slug.includes("/"),
+    ) &&
+    doc.slug.includes("/"),
 )
 assert.ok(aliasDoc, "The production index must include a real note with an alias")
 const aliasQuery = aliasDoc.aliases.find(
@@ -48,11 +52,12 @@ for (const query of ["度量", "compactness"]) {
     `Production notes contain ${query}`,
   )
 }
-const filterDocuments = ["body", "plan", "example"].map((kind) => {
-  const doc = documents.find((item) => item.kind === kind && item.title.trim().length > 2)
-  assert.ok(doc, `Production notes include ${kind}`)
-  return doc
-})
+const auxiliaryDoc = documents.find((item) => item.auxiliary && item.title.trim().length > 5)
+assert.ok(auxiliaryDoc, "Production notes include auxiliary material")
+const readingDoc = documents.find(
+  (item) => !item.auxiliary && item.role === "reading" && item.bookId,
+)
+assert.ok(readingDoc, "Production notes include a book reading page")
 const report = {
   startedAt: new Date().toISOString(),
   browserChannel: process.env.BROWSER_CHANNEL ?? "msedge",
@@ -140,8 +145,16 @@ try {
     })
     try {
       await page.goto(`${baseUrl}${mount}`, { waitUntil: "networkidle" })
-      const launch = page.locator(".book-search-launch-input")
-      check(scenario, await launch.isVisible(), "Home has a visible text search input")
+      const launch = page.locator(
+        viewport.width < 600 ? ".book-search-open" : ".book-search-launch-input",
+      )
+      check(
+        scenario,
+        await launch.isVisible(),
+        viewport.width < 600
+          ? "Compact mobile header has a visible search button"
+          : "Home has a visible text search input",
+      )
       await launch.click()
       await page.waitForSelector(".book-search-dialog[open]")
       check(
@@ -186,19 +199,56 @@ try {
         }
       }
 
-      for (const doc of filterDocuments) {
-        await page.locator(`[data-search-filter="${doc.kind}"]`).click()
-        await search(page, doc.title)
-        const kinds = await page
+      check(
+        scenario,
+        await page
           .locator(".book-search-result")
-          .evaluateAll((links) => links.map((link) => link.dataset.kind))
-        check(
-          scenario,
-          kinds.length > 0 && kinds.every((kind) => kind === doc.kind),
-          `The ${doc.kind} filter returns only that content category`,
-        )
-      }
-      await page.locator('[data-search-filter="all"]').click()
+          .evaluateAll((links) => links.every((link) => link.dataset.auxiliary === "false")),
+        "Default search excludes auxiliary pages",
+      )
+      await search(page, auxiliaryDoc.title)
+      check(
+        scenario,
+        !(
+          await page
+            .locator(".book-search-result")
+            .evaluateAll((links) =>
+              links.map((link) => decodeURIComponent(new URL(link.href).pathname)),
+            )
+        ).some((url) => url.endsWith(auxiliaryDoc.slug)),
+        "A matching auxiliary page stays hidden by default",
+      )
+      await page.locator(".book-search-aux").check()
+      await search(page, auxiliaryDoc.title)
+      check(
+        scenario,
+        (
+          await page
+            .locator(".book-search-result")
+            .evaluateAll((links) =>
+              links.map((link) => decodeURIComponent(new URL(link.href).pathname)),
+            )
+        ).some((url) => url.endsWith(auxiliaryDoc.slug)),
+        "Include auxiliary material reveals its real matching note",
+      )
+      await page.locator(".book-search-aux").uncheck()
+      await page.locator(".book-search-scope").selectOption(readingDoc.bookId)
+      await search(page, "compactness")
+      check(
+        scenario,
+        await page
+          .locator(".book-search-result")
+          .evaluateAll(
+            (links) =>
+              links.length > 0 &&
+              links.every(
+                (link) =>
+                  link.dataset.bookId === document.querySelector(".book-search-scope").value,
+              ),
+          ),
+        "Book scope returns only that book",
+      )
+      await page.locator(".book-search-scope").selectOption("")
       await search(page, "zz_no_such_book_topic_938714")
       check(
         scenario,
@@ -296,6 +346,42 @@ try {
         scenario,
         (await page.locator(".book-search-result").count()) > 0,
         "Search index and links work from a nested note",
+      )
+      await page.keyboard.press("Escape")
+      const readingHref = new URL(
+        readingDoc.slug.split("/").map(encodeURIComponent).join("/"),
+        `${baseUrl}${mount}`,
+      ).href
+      await page.goto(readingHref, { waitUntil: "networkidle" })
+      await page.keyboard.press("Control+k")
+      await search(page, "compactness")
+      check(
+        scenario,
+        (await page.locator(".book-search-scope").inputValue()) === readingDoc.bookId,
+        "Opening from a book defaults to its current book",
+      )
+      check(
+        scenario,
+        await page
+          .locator(".book-search-result")
+          .evaluateAll((links) =>
+            links.every(
+              (link) => link.dataset.bookId === document.querySelector(".book-search-scope").value,
+            ),
+          ),
+        "Nested-page default scope is applied before ranking",
+      )
+      const snippets = await page.locator(".book-search-result-snippet").allTextContents()
+      check(
+        scenario,
+        snippets.length > 0 && snippets.every((text) => !/#用途\/|原文件未公开/.test(text)),
+        "Results show matched exposition without repeated tag or PDF headers",
+      )
+      const positions = await page.locator(".book-search-result-path").allTextContents()
+      check(
+        scenario,
+        positions.every((text) => text.length > 0),
+        "Results show their book and chapter context",
       )
       await page.keyboard.press("Escape")
     } catch (error) {

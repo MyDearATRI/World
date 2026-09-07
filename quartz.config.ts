@@ -5,6 +5,7 @@ import { SemanticBlocks } from "./quartz/plugins/transformers/semanticBlocks"
 import { ReadingContent } from "./quartz/components/Reading"
 import { ApprovedAssets } from "./quartz/plugins/emitters/approvedAssets"
 import { BookIndex } from "./quartz/plugins/emitters/bookIndex"
+import { ReaderMetadata } from "./quartz/plugins/transformers/readerMetadata"
 
 // Quartz 4.5.2 — d25a6eabf96751ffca56f8a8139272def7a65041.
 // Only the manifest-verified website/content export is an input.
@@ -41,6 +42,7 @@ const config: QuartzConfig = {
   plugins: {
     transformers: [
       Plugin.FrontMatter(),
+      ReaderMetadata(),
       Plugin.SyntaxHighlighting({ keepBackground: false }),
       Plugin.ObsidianFlavoredMarkdown({
         enableInHtmlEmbed: false,

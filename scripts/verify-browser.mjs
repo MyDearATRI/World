@@ -240,17 +240,20 @@ try {
           scenario,
           (await page.locator("h1").count()) === 1 &&
             (await page.locator(".home-article").count()) === 1,
-          "Home is a Markdown reading entrance with one title",
+          "Home is a bookshelf with one title and preserved source navigation",
         )
         check(
           scenario,
-          await page.locator(".book-search-launch-input").isVisible(),
-          "Home includes a visible search input",
+          await page
+            .locator(viewport.width < 600 ? ".book-search-open" : ".book-search-launch-input")
+            .isVisible(),
+          "Home includes a visible search entry",
         )
         check(
           scenario,
-          (await page.locator(".home-graph .note-graph-node").count()) > 2,
-          "Home graph contains real published notes",
+          (await page.locator(".note-graph").count()) === 0 &&
+            (await page.locator(".shelf-enter").count()) === index.catalog.books.length,
+          "Home leads to real books and does not load a whole-library graph",
         )
         check(
           scenario,
