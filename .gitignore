@@ -1,0 +1,25 @@
+.DS_Store
+node_modules
+public
+prof
+tsconfig.tsbuildinfo
+.obsidian
+.quartz-cache
+private/
+.replit
+replit.nix
+.setup/
+artifacts/
+quartz/static/fonts/
+quartz/static/katex/
+
+# Local environment values and private key material are not source files.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519

@@ -1,0 +1,7 @@
+public
+node_modules
+.quartz-cache
+.setup
+artifacts
+quartz/static/fonts
+quartz/static/katex
