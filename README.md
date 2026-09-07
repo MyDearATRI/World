@@ -4,6 +4,8 @@
 
 正文来自本地 Obsidian 笔记。首页是一张书架，从书进入章节目录，再沿研读节连续阅读；需要查定义、定理或证明时，可以就地打开知识阅读面板。网站还提供按书搜索、章节知识图与 Canvas 阅读视图。规划、示例和整理状态沿用源笔记，不推断作者经历、掌握程度或发布日期。当前版本的实际部署与验收情况见 [验证记录](docs/validation.md)。
 
+当前视觉规则用灰白页面层次和近白阅读区域区分导航与正文：主标题采用 700 字重无衬线字体，章节标题采用 650 字重，正文保持约 18px 的中文友好衬线字体。数学块以简短类型标记和原题名分别呈现；有明确“来源：”或“Source:”标记的开头来源段用 12px 无衬线字体，保留全部引用文字与链接。控件提供短暂反馈，原生 `details` / `dialog` 提供轻量展开或入场效果，并响应减少动态效果设置。排版层级与交互反馈参考 [Apple MacBook Pro 页面](https://www.apple.com/macbook-pro/)和 [Human Interface Guidelines：Motion](https://developer.apple.com/design/human-interface-guidelines/motion)，使用本站自己的字体、配色和图形，不复制商标视觉。具体效果及验证结果仍以验证记录为准。
+
 ## 平时怎样写、怎样更新
 
 1. 在 Obsidian 中写作并保存。不要编辑 `website/content`，它是自动生成的公开副本。

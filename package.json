@@ -27,6 +27,7 @@
     "test:search": "node scripts/verify-search.mjs",
     "test:reader": "node scripts/verify-reader.mjs",
     "test:navigation": "node scripts/verify-navigation.mjs",
+    "test:interface": "node scripts/verify-interface.mjs",
     "export": "node scripts/export-vault.mjs",
     "publish:preview": "node scripts/publish.mjs --preview-only",
     "publish:notes": "node scripts/publish.mjs",

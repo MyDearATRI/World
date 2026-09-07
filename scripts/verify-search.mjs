@@ -285,6 +285,21 @@ try {
       await page.screenshot({ path: screenshot, animations: "disabled" })
       report.screenshots.push(path.relative(root, screenshot).replaceAll(path.sep, "/"))
       await page.locator(".book-search-query").focus()
+      await page.keyboard.press("Escape")
+      check(
+        scenario,
+        await page.locator(".book-search-dialog").evaluate((item) => !item.open),
+        "One Escape closes search while its nonempty query input is focused",
+      )
+      check(
+        scenario,
+        (await launch.evaluate((item) => item === document.activeElement)) &&
+          (await page.locator(".book-search-query").inputValue()) === "度量",
+        "Nonempty-query Escape restores the launcher and preserves the query",
+      )
+      await page.keyboard.press("Control+k")
+      await search(page, "度量")
+      await page.locator(".book-search-query").focus()
       await page.keyboard.press("ArrowDown")
       const firstSelection = await page
         .locator(".book-search-query")

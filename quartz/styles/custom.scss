@@ -1,5 +1,6 @@
 @use "./book.scss";
 @use "./reader.scss";
+@use "./interface.scss";
 // Reading theme: no application UI styles or global overflow clipping.
 :root {
   --paper: #fafaf8;
@@ -618,3 +619,4 @@ code {
 
 @include book.styles;
 @include reader.styles;
+@include interface.styles;

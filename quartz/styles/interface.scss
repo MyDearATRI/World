@@ -1,0 +1,768 @@
+// Visual hierarchy and interaction feedback. Mathematical font families remain renderer-owned.
+@mixin styles {
+  :root {
+    --paper: #ffffff;
+    --canvas: #f5f5f7;
+    --ink: #1d1d1f;
+    --muted: #626269;
+    --accent: #075eae;
+    --rule: #dedee4;
+    --soft-blue: #eaf2fa;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ui-speed: 180ms;
+  }
+  body {
+    background: var(--canvas);
+  }
+  :is(button, a, input, select, summary) {
+    -webkit-tap-highlight-color: transparent;
+  }
+  :is(a, button, input, select, summary):focus-visible {
+    outline: 3px solid #2684cf;
+    outline-offset: 4px;
+  }
+  .sidebar.left {
+    padding-top: 42px;
+  }
+  .center {
+    padding-top: 42px;
+  }
+  .site-title {
+    font-family: var(--sans);
+    font-size: 21px;
+    line-height: 1.3;
+    letter-spacing: -0.045em;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .site-title span {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    margin-top: 8px;
+  }
+  .book-tools {
+    margin-top: 30px;
+  }
+  .book-search .book-search-label {
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .book-search .book-search-launch-row {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 9px;
+    padding: 3px;
+  }
+  .book-search .book-search-launch-input {
+    border: 0;
+    background: transparent;
+    padding-inline: 8px;
+    font-size: 12px;
+  }
+  .book-search .book-search-open {
+    border: 0;
+    background: var(--soft-blue);
+    border-radius: 6px;
+    font-size: 12px;
+    padding-inline: 10px;
+  }
+  .book-search .book-search-shortcut {
+    font-size: 10px;
+    padding-left: 2px;
+    margin-top: 9px;
+  }
+  .rail-book-title {
+    font-size: 14px;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .reader-chapter > summary {
+    font-weight: 550;
+    border-radius: 6px;
+  }
+  .reader-chapter li > a {
+    padding: 7px 9px;
+    border-radius: 6px;
+    border: 0;
+    color: #52525a;
+  }
+  .reader-chapter li > a[aria-current="page"] {
+    background: #e2ecf7;
+    color: #074e90;
+    font-weight: 650;
+    box-shadow: inset 3px 0 #1671c0;
+  }
+  .reader-chapter > ol {
+    padding-left: 10px;
+  }
+  .reading-toc a[aria-current="location"] {
+    color: var(--accent);
+    font-weight: 650;
+  }
+  .reading-toc li {
+    font-size: 12px;
+  }
+  .rail-label {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+  .breadcrumbs {
+    color: var(--muted);
+    font-size: 11px;
+    margin-bottom: 24px;
+  }
+  .breadcrumbs a {
+    color: #626269;
+  }
+  .article-eyebrow {
+    border: 0;
+    padding: 0;
+    align-items: center;
+    letter-spacing: 0.02em;
+  }
+  .article-eyebrow > span:first-child {
+    color: #085293;
+    background: #e7eff8;
+    font: 600 11px/1.5 var(--sans);
+    padding: 6px 10px;
+    border-radius: 5px;
+  }
+  .reader-meta {
+    font-size: 11px;
+  }
+  .page-title {
+    font-family: var(--sans);
+    font-size: clamp(36px, 3.8vw, 54px);
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: -0.05em;
+    margin: 22px 0 24px;
+    text-wrap: balance;
+  }
+  .page-title[data-reading-role="shelf"] {
+    font-size: 56px;
+    letter-spacing: -0.045em;
+  }
+  .article-deck {
+    font: 400 19px/1.7 var(--sans);
+    color: #626269;
+    margin-bottom: 32px;
+  }
+  .book-source {
+    font-size: 12px;
+    margin-top: 14px;
+    color: #6b6b72;
+  }
+  .bookshelf {
+    margin-top: 36px;
+    margin-bottom: 48px;
+  }
+  .shelf-book {
+    grid-template-columns: 156px minmax(0, 1fr);
+    gap: 36px;
+    padding: 34px;
+    background: white;
+    border: 1px solid #e6e6eb;
+    border-radius: 14px;
+    box-shadow: 0 6px 24px #1c273b05;
+    align-items: center;
+  }
+  .book-spine {
+    height: 222px;
+    padding: 22px 20px;
+    align-items: flex-start;
+    position: relative;
+    background: #193d60;
+    border: 0;
+    border-radius: 2px 7px 7px 2px;
+    box-shadow:
+      inset 6px 0 #122d48,
+      inset -3px 0 #6b86a0,
+      5px 7px 14px #102b4620;
+    color: #f7faff;
+  }
+  .book-spine > span:first-child {
+    font: 500 28px/1.2 var(--serif);
+  }
+  .book-spine > span:last-child {
+    font: 500 10px/1.4 var(--sans);
+    writing-mode: horizontal-tb;
+    letter-spacing: 0.18em;
+  }
+  .book-cover-art {
+    width: 100%;
+    height: 110px;
+    stroke: #b8d0e5;
+    stroke-width: 0.8;
+  }
+  .book-cover-art circle {
+    fill: #193d60;
+    stroke-width: 1.1;
+  }
+  .shelf-book h2 {
+    font: 650 32px/1.2 var(--sans);
+    letter-spacing: -0.045em;
+    margin: 10px 0 14px;
+  }
+  .shelf-book-source {
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .shelf-book-body > p {
+    font-size: 15px;
+    color: #55555c;
+  }
+  .shelf-book-body > .shelf-book-source,
+  .shelf-book-body > .shelf-book-extent {
+    font-size: 11px;
+    color: #6b6b72;
+  }
+  .reader-primary {
+    background: #0968b9;
+    border-color: #0968b9;
+    color: white;
+    border-radius: 8px;
+    padding: 11px 18px;
+    gap: 22px;
+    font-size: 13px;
+    font-weight: 550;
+  }
+  .reader-primary:hover {
+    background: #07589e;
+    color: white;
+  }
+  .book-view-nav {
+    background: #e9e9ee;
+    border: 1px solid #e1e1e7;
+    border-radius: 11px;
+    padding: 5px;
+    gap: 4px;
+    align-items: center;
+    margin: 0 0 28px;
+  }
+  .book-view-nav > a {
+    padding: 10px 16px;
+    border-radius: 7px;
+    color: #50505a;
+    font-weight: 500;
+    font-size: 13px;
+  }
+  .book-view-nav > a[aria-current="location"] {
+    background: white;
+    color: var(--ink);
+    box-shadow: 0 1px 4px #22222a14;
+  }
+  .book-view-nav .secondary-view-link {
+    font-size: 12px;
+    margin-left: auto;
+  }
+  .chapter-jump {
+    gap: 14px;
+  }
+  .chapter-jump a {
+    background: #fff;
+    border: 1px solid #e2e2e8;
+    border-radius: 9px;
+    padding: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    color: #393940;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  .chapter-jump-number {
+    color: #2674b9;
+    font: 600 20px/1.25 var(--sans);
+    letter-spacing: -0.035em;
+    flex-shrink: 0;
+  }
+  .chapter-jump-main {
+    display: block;
+    min-width: 0;
+  }
+  .chapter-jump small {
+    margin-top: 8px;
+    font-size: 10px;
+    color: #717179;
+  }
+  .chapter-block {
+    margin-bottom: 48px;
+  }
+  .chapter-block > header {
+    padding-bottom: 17px;
+    border-bottom: 1px solid #bfc9d4;
+  }
+  .catalog-article .chapter-block > header h2,
+  .catalog-article > section > .section-caption h2 {
+    font: 650 25px/1.4 var(--sans);
+    letter-spacing: -0.035em;
+  }
+  .chapter-block > header > span {
+    font-size: 11px;
+    color: #626269;
+  }
+  .section-list > li {
+    border-bottom: 1px solid #e3e3e8;
+    padding: 16px 12px;
+    border-radius: 6px;
+  }
+  .section-reading-link {
+    font-weight: 550;
+    color: #27272e;
+    font-size: 17px;
+  }
+  .section-number {
+    font-size: 12px;
+    font-weight: 650;
+    color: #626c79;
+    font-variant-numeric: tabular-nums;
+  }
+  .section-arrow {
+    color: #5d7893;
+  }
+  .section-concepts {
+    font-size: 11px;
+    gap: 4px 12px;
+    margin-top: 9px;
+  }
+  .knowledge-index .section-caption,
+  .reader-map-section .section-caption {
+    gap: 18px;
+    align-items: baseline;
+  }
+  .knowledge-group h3,
+  .chapter-extras h3 {
+    font: 650 19px/1.5 var(--sans);
+    color: #383841;
+  }
+  .knowledge-index-item > a {
+    font-weight: 550;
+    color: #184f81;
+    line-height: 1.6;
+  }
+  .knowledge-related {
+    margin-top: 9px;
+    font-size: 11px;
+  }
+  .knowledge-filter {
+    border-radius: 9px;
+    border: 1px solid #ced3db;
+    background: #fff;
+    padding: 12px 15px;
+  }
+  .book-article {
+    background: white;
+    box-shadow: 0 0 0 24px white;
+    margin-top: 34px;
+    padding-block: 8px;
+  }
+  .book-article > .markdown-content > h2,
+  .knowledge-reader-article .markdown-content > h2 {
+    font-family: var(--sans);
+    font-weight: 650;
+    font-size: 27px;
+    letter-spacing: -0.035em;
+    padding-top: 26px;
+    border-top: 1px solid var(--rule);
+  }
+  .book-article > .markdown-content > h3,
+  .knowledge-reader-article .markdown-content > h3 {
+    font-family: var(--sans);
+    font-weight: 650;
+    font-size: 21px;
+    letter-spacing: -0.02em;
+  }
+  .section-knowledge,
+  .related-readings {
+    background: #f5f7fa;
+    border: 1px solid #e8ecf0;
+    padding: 14px 16px;
+    border-radius: 7px;
+    margin-bottom: 28px;
+  }
+  .section-knowledge > summary {
+    font-weight: 600;
+  }
+  .section-knowledge > div {
+    padding-top: 7px;
+    font-size: 12px;
+  }
+  .note-tags {
+    color: #6b7380;
+    font-size: 11px;
+    line-height: 1.8;
+  }
+  article .note-provenance {
+    font: 12px/1.9 var(--sans);
+    color: #646872;
+    border-left: 2px solid #d5dee9;
+    padding-left: 14px;
+    margin-bottom: 30px;
+  }
+  .note-provenance a {
+    color: #4f6984;
+  }
+  .semantic-block {
+    border-top: 1px solid #d9dfe7;
+    padding-top: 22px;
+    margin: 2.1em 0;
+  }
+  .semantic-block.theorem {
+    border-top: 2px solid #4c789f;
+    border-bottom: 1px solid #d9dfe7;
+  }
+  .block-label {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 12px;
+    align-items: baseline;
+    margin-bottom: 18px;
+    color: #283b50;
+  }
+  .block-kind {
+    font: 600 11px/1.7 var(--sans);
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: #eaf1f9;
+    color: #265b8e;
+    flex-shrink: 0;
+  }
+  .block-title {
+    font: 650 18px/1.6 var(--sans);
+    letter-spacing: -0.015em;
+  }
+  .block-title p {
+    margin: 0;
+  }
+  :is(.proof, .proof-strategy, .example, .info, .insight) > .block-label > .block-kind {
+    background: #f0f1f4;
+    color: #565e6b;
+  }
+  .connections {
+    padding-top: 32px;
+    margin-top: 55px;
+  }
+  .connections h2 {
+    font: 650 21px/1.4 var(--sans);
+  }
+  .reading-sequence {
+    margin-top: 46px;
+    gap: 16px;
+  }
+  .reading-sequence a {
+    border: 1px solid #e3e7ee;
+    background: #f7f8fb;
+    border-radius: 9px;
+    padding: 17px;
+    color: #284c70;
+    font-weight: 550;
+  }
+  .reading-sequence a > span {
+    font-size: 10px;
+    color: #647386;
+    letter-spacing: 0.05em;
+    margin-bottom: 7px;
+  }
+  .about-notes,
+  .source-navigation {
+    color: #64646d;
+  }
+  .about-notes summary,
+  .source-navigation > summary,
+  .future-chapters > summary {
+    color: #596775;
+    font-size: 13px;
+  }
+  .mobile-toc {
+    border-color: #dadfe6;
+  }
+  .mobile-toc > summary {
+    font-size: 12px;
+    font-weight: 550;
+    padding-block: 12px;
+  }
+  .book-search-dialog {
+    border: 1px solid #dde2e9;
+    border-radius: 13px;
+    box-shadow: 0 18px 70px #17233230;
+    padding: 24px;
+  }
+  .book-search-dialog .book-search-query {
+    border-radius: 8px;
+    padding: 13px 15px;
+    border-color: #cfd7e1;
+    background: #f7f9fc;
+  }
+  .book-search-dialog .book-search-result {
+    border-radius: 7px;
+    padding: 15px 12px;
+  }
+  .book-search-dialog .book-search-result-title {
+    font-weight: 650;
+    color: #20496e;
+    font-size: 17px;
+  }
+  .knowledge-reader {
+    box-shadow: -16px 0 55px #1b2d4626;
+    border-left: 1px solid #d4dce7;
+  }
+  .knowledge-reader .knowledge-reader-toolbar {
+    border-bottom: 1px solid #edf0f5;
+    padding-block: 12px;
+  }
+  .knowledge-reader #knowledge-reader-title {
+    font: 650 30px/1.3 var(--sans);
+    letter-spacing: -0.04em;
+  }
+  .knowledge-reader .knowledge-reader-location {
+    font-size: 11px;
+    color: #68788a;
+  }
+  .knowledge-reader button,
+  .book-search .book-search-close,
+  .note-graph button,
+  .note-graph select {
+    border-radius: 7px;
+    border-color: #d4dce5;
+  }
+  .knowledge-reader button {
+    background: #f5f7fa;
+    font-size: 12px;
+  }
+  .note-graph-inline-host:not([hidden]) {
+    border-radius: 11px;
+    border: 1px solid #dbe1e9;
+    background: #fff;
+  }
+  .note-graph-dialog {
+    border-radius: 12px;
+  }
+  .note-graph-header h2 {
+    font-family: var(--sans);
+    font-weight: 650;
+  }
+  .note-graph-chapter rect {
+    fill: #f6f9fd;
+  }
+  .note-graph-controls {
+    border-radius: 9px;
+  }
+  @media (hover: hover) {
+    .reader-chapter li > a:hover,
+    .reader-chapter > summary:hover {
+      background: #e9edf3;
+    }
+    .section-list > li:hover {
+      background: #fff;
+    }
+    .chapter-jump a:hover {
+      border-color: #a9bfd7;
+      box-shadow: 0 5px 12px #172a4310;
+      transform: translateY(-2px);
+    }
+    .reader-primary:hover > span,
+    .section-reading-link:hover .section-arrow {
+      transform: translateX(3px);
+    }
+    .reading-sequence a:hover {
+      border-color: #b8cee3;
+      background: #eef4fb;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .reader-primary,
+    .chapter-jump a,
+    .section-reading-link .section-arrow,
+    .reader-primary > span,
+    .reader-chapter li > a,
+    .reader-chapter > summary,
+    .book-view-nav > a,
+    .section-list > li,
+    .reading-sequence a,
+    .book-search-open,
+    .book-search-close,
+    .knowledge-reader button,
+    .note-graph button {
+      transition:
+        color var(--ui-speed) ease,
+        background-color var(--ui-speed) ease,
+        border-color var(--ui-speed) ease,
+        box-shadow var(--ui-speed) ease,
+        transform var(--ui-speed) var(--ease-out);
+    }
+    :is(.reader-primary, .chapter-jump a, .book-search-open, .knowledge-reader button):active {
+      transform: scale(0.98);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chapter-jump a:hover,
+    .reader-primary:hover > span,
+    .section-reading-link:hover .section-arrow {
+      transform: none;
+    }
+  }
+  @media (max-width: 1279px) {
+    .sidebar.left {
+      padding: 22px 0 16px;
+    }
+    .center {
+      padding-top: 28px;
+    }
+    .book-tools {
+      margin-top: 0;
+    }
+    .book-view-nav {
+      top: 8px;
+    }
+    .shelf-book {
+      padding: 28px;
+      grid-template-columns: 140px minmax(0, 1fr);
+      gap: 26px;
+    }
+    .book-spine {
+      height: 210px;
+    }
+  }
+  @media (max-width: 599px) {
+    .sidebar.left {
+      padding-top: 18px;
+      padding-bottom: 13px;
+    }
+    .site-title {
+      font-size: 17px;
+    }
+    .site-title span {
+      font-size: 10px;
+      margin-top: 5px;
+    }
+    .page-title,
+    .page-title[data-reading-role="shelf"] {
+      font-size: 34px;
+      line-height: 1.22;
+      margin: 17px 0 20px;
+      letter-spacing: -0.05em;
+    }
+    .article-eyebrow > span:first-child {
+      font-size: 10px;
+      padding: 4px 8px;
+    }
+    .article-deck {
+      font-size: 15px;
+      margin-bottom: 25px;
+    }
+    .breadcrumbs {
+      margin-bottom: 20px;
+      font-size: 10px;
+    }
+    .book-source {
+      font-size: 11px;
+    }
+    .shelf-book {
+      padding: 22px 18px;
+      grid-template-columns: 76px minmax(0, 1fr);
+      gap: 19px;
+    }
+    .book-spine {
+      height: 130px;
+      padding: 12px 10px;
+      align-self: start;
+      margin-top: 4px;
+    }
+    .book-spine > span:first-child {
+      font-size: 20px;
+    }
+    .book-spine > span:last-child {
+      font-size: 6px;
+      letter-spacing: 0.08em;
+    }
+    .book-cover-art {
+      height: 70px;
+    }
+    .shelf-book h2 {
+      font-size: 23px;
+      line-height: 1.25;
+    }
+    .shelf-book-body > p {
+      font-size: 12px;
+    }
+    .shelf-book-body > .shelf-book-source,
+    .shelf-book-body > .shelf-book-extent {
+      font-size: 10px;
+    }
+    .reader-primary {
+      padding: 10px 14px;
+      font-size: 12px;
+      gap: 20px;
+    }
+    .book-view-nav {
+      flex-wrap: nowrap;
+      gap: 0;
+      padding: 4px;
+    }
+    .book-view-nav > a {
+      padding: 9px 10px;
+      font-size: 12px;
+      flex: 1;
+      text-align: center;
+    }
+    .book-view-nav .secondary-view-link {
+      font-size: 11px;
+    }
+    .chapter-jump {
+      gap: 9px;
+    }
+    .chapter-jump a {
+      padding: 14px;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+    .chapter-jump small {
+      margin-top: 5px;
+    }
+    .catalog-article .chapter-block > header h2,
+    .catalog-article > section > .section-caption h2 {
+      font-size: 23px;
+    }
+    .section-list > li {
+      padding-inline: 3px;
+    }
+    .section-reading-link {
+      font-size: 16px;
+    }
+    .book-article {
+      box-shadow: 0 0 0 20px white;
+      margin-top: 25px;
+    }
+    .book-article > .markdown-content > h2,
+    .knowledge-reader-article .markdown-content > h2 {
+      font-size: 24px;
+    }
+    .section-knowledge,
+    .related-readings {
+      padding: 12px;
+    }
+    .block-title {
+      font-size: 17px;
+    }
+    .book-search-dialog {
+      padding: 20px 16px;
+      border-radius: 9px;
+    }
+    .knowledge-reader #knowledge-reader-title {
+      font-size: 26px;
+    }
+    .knowledge-reader {
+      border: 0;
+    }
+  }
+  @media print {
+    body {
+      background: white;
+    }
+    .book-article {
+      box-shadow: none;
+    }
+  }
+}

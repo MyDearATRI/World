@@ -174,7 +174,12 @@ function initializeBookSearch(root: HTMLElement) {
   input.addEventListener("compositionend", () => void search())
   input.addEventListener("keydown", (event) => {
     if (event.isComposing) return
-    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+    if (event.key === "Escape") {
+      // type=search otherwise consumes the first Escape to clear a nonempty
+      // query before the dialog receives its native cancel action.
+      event.preventDefault()
+      dialog.close()
+    } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault()
       select(
         selected < 0

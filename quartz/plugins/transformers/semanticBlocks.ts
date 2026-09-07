@@ -1,24 +1,26 @@
-import { Root, Element } from "hast"
+import type { Root, Element } from "hast"
 import { visit, SKIP } from "unist-util-visit"
-import { QuartzTransformerPlugin } from "../types"
+import type { QuartzTransformerPlugin } from "../types"
 import { createHash } from "node:crypto"
+import { toString } from "hast-util-to-string"
 
-const types = new Set([
-  "definition",
-  "theorem",
-  "proof-strategy",
-  "example",
-  "sidenote",
-  "insight",
-  "relation",
-  "question",
-  "warning",
-  "info",
-  "proof",
-  "lemma",
-  "proposition",
-  "corollary",
-])
+const kindLabels: Record<string, string> = {
+  definition: "定义",
+  theorem: "定理",
+  "proof-strategy": "证明策略",
+  example: "例子",
+  sidenote: "边注",
+  insight: "观察",
+  relation: "联系",
+  question: "问题",
+  warning: "提醒",
+  info: "说明",
+  proof: "证明",
+  lemma: "引理",
+  proposition: "命题",
+  corollary: "推论",
+}
+const types = new Set(Object.keys(kindLabels))
 const classes = (node: Element): string[] => (node.properties.className ?? []) as string[]
 
 export const SemanticBlocks: QuartzTransformerPlugin = () => ({
@@ -54,10 +56,30 @@ export const SemanticBlocks: QuartzTransformerPlugin = () => ({
                   child.type === "element" && classes(child).includes("callout-title-inner"),
               )
               title.properties = {
+                ...title.properties,
                 className: ["block-label"],
-                id: `block-label-${prefix}-${blockNumber}`,
+                id: title.properties.id ?? `block-label-${prefix}-${blockNumber}`,
               }
-              title.children = inner?.children ?? [{ type: "text", value: type }]
+              node.properties["aria-labelledby"] = title.properties.id
+              const originalTitle: Element = {
+                type: "element",
+                tagName: "span",
+                properties: {
+                  ...inner?.properties,
+                  className: ["block-title"],
+                },
+                children: inner?.children ?? title.children,
+              }
+              title.children = [
+                {
+                  type: "element",
+                  tagName: "span",
+                  properties: { className: ["block-kind"] },
+                  children: [{ type: "text", value: kindLabels[type] }],
+                },
+                { type: "text", value: " " },
+                originalTitle,
+              ]
             }
           }
           if (
@@ -99,6 +121,17 @@ export const SemanticBlocks: QuartzTransformerPlugin = () => ({
             return SKIP
           }
         })
+        // An explicit source label in the opening paragraph is reliable metadata.
+        // Do not infer provenance from author names, dates, PDFs or later prose.
+        const opening = tree.children.find(
+          (node): node is Element =>
+            node.type === "element" && !classes(node).includes("note-tags"),
+        )
+        if (
+          opening?.tagName === "p" &&
+          /^(?:来源\s*[:：]|Source\s*:)(?=\s*\S)/u.test(toString(opening).trimStart())
+        )
+          opening.properties.className = [...new Set([...classes(opening), "note-provenance"])]
       },
     ]
   },

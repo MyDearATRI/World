@@ -13,6 +13,8 @@ import KnowledgeReader from "./KnowledgeReader"
 import { getReaderCatalog, ReaderBook, ReaderChapter, ReaderCatalog } from "../util/readerCatalog"
 // @ts-ignore
 import readingScript from "./scripts/reading.inline"
+// @ts-ignore
+import interfaceMotion from "./scripts/interfaceMotion.inline"
 
 const href = (from: string, to: string) => resolveRelative(from as FullSlug, to as FullSlug)
 const roleNames: Record<string, string> = {
@@ -178,6 +180,7 @@ ReadingRail.afterDOMLoaded = concatenateResources(
   KnowledgeReader.afterDOMLoaded,
   NoteGraph.afterDOMLoaded,
   readingScript,
+  interfaceMotion,
 )
 
 export const ReadingHeader: QuartzComponent = (props) => {
@@ -239,7 +242,9 @@ export const ReadingHeader: QuartzComponent = (props) => {
           </details>
         )}
       </div>
-      <h1>{title}</h1>
+      <h1 class="page-title" data-reading-role={home ? "shelf" : (page?.role ?? "other")}>
+        {title}
+      </h1>
       {home ? (
         <p class="article-deck shelf-deck">选择一本书，沿章节阅读，或直接找到需要的知识点。</p>
       ) : page?.role === "book" ? (
@@ -450,6 +455,14 @@ export const ReadingContent: QuartzComponent = (props) => {
               <section class="shelf-book" key={item.id}>
                 <div class="book-spine" aria-hidden="true">
                   <span>{String(index + 1).padStart(2, "0")}</span>
+                  <svg class="book-cover-art" viewBox="0 0 120 110" fill="none">
+                    <path d="M18 82 57 22 103 70 18 82 83 94 57 22M18 82 66 61 103 70M66 61 83 94" />
+                    <circle cx="18" cy="82" r="4" />
+                    <circle cx="57" cy="22" r="4" />
+                    <circle cx="103" cy="70" r="4" />
+                    <circle cx="66" cy="61" r="4" />
+                    <circle cx="83" cy="94" r="4" />
+                  </svg>
                   <span>ANALYSIS</span>
                 </div>
                 <div class="shelf-book-body">
@@ -505,10 +518,15 @@ export const ReadingContent: QuartzComponent = (props) => {
             </a>
           </nav>
           <nav class="chapter-jump" aria-label="快速选择章节">
-            {book.chapters.map((item) => (
+            {book.chapters.map((item, index) => (
               <a href={`#${item.id}`} key={item.id}>
-                <span>{item.title}</span>
-                <small>{item.sections.length} 节研读</small>
+                <span class="chapter-jump-number" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span class="chapter-jump-main">
+                  {item.title}
+                  <small>{item.sections.length} 节研读</small>
+                </span>
               </a>
             ))}
           </nav>

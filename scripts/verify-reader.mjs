@@ -144,6 +144,12 @@ try {
         )
         await knowledge.locator("summary").focus()
         await page.keyboard.press("Enter")
+        check(
+          scenario,
+          await knowledge.evaluate((item) => item.open),
+          "Keyboard changes the disclosure open state immediately",
+        )
+        await target.waitFor({ state: "visible", timeout: 500 })
         check(scenario, await target.isVisible(), "Keyboard expands the section knowledge links")
       }
       await target.scrollIntoViewIfNeeded()
