@@ -2,7 +2,7 @@
 
 网站使用公开仓库 [MyDearATRI/World](https://github.com/MyDearATRI/World)。本地网站目录已初始化 Git，`origin` 已设置为 `https://github.com/MyDearATRI/World.git`，`main` 已跟踪 `origin/main`。本地现有工程目录叫 `website`，新机器克隆后的默认目录叫 `World`；两者都是网站工程根目录。
 
-当前本地分支以远端已有提交 `54e412c` 为起点，该提交只有 `# World` README；全部网站工作文件已保留，网站源码已保存为本地提交，尚未推送。远端读取已连通，GitHub Credential Manager 设备登录仍待完成。首次公开推送和上线尚未授权或执行；连接 Git 与准备工作流不代表网站已经发布。
+当前本地分支以远端已有提交 `54e412c` 为起点，该提交只有 `# World` README；全部网站工作文件已保留，网站源码已保存为本地提交，尚未推送。远端读取已连通，Git Credential Manager 已完成设备登录，凭据已保存；`git push --dry-run origin main` 已验证成功且未上传提交。首次公开推送和上线尚未授权或执行；连接 Git 与准备工作流不代表网站已经发布。
 
 ## 哪些文件会进入仓库
 

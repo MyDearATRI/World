@@ -34,7 +34,7 @@ After explicit approval of a small note list and its attachment/dependency list,
 
 ## GitHub-connection follow-up
 
-The user requested connecting the website to a GitHub repository for convenient future pushes and updates. Git now exists only in `website/`, with `origin` set to `https://github.com/MyDearATRI/World.git`. Local `main` tracks `origin/main` and is based on the remote's existing README-only initial commit. All website working files were preserved; website-source changes are saved in a local commit; public pushes and deployment have not been performed. GitHub Credential Manager authentication is still awaiting completion.
+The user requested connecting the website to a GitHub repository for convenient future pushes and updates. Git now exists only in `website/`, with `origin` set to `https://github.com/MyDearATRI/World.git`. Local `main` tracks `origin/main` and is based on the remote's existing README-only initial commit. All website working files were preserved; website-source changes are saved in a local commit; public pushes and deployment have not been performed. Git Credential Manager authentication is complete and credentials are saved locally. A non-interactive git push --dry-run succeeded without uploading commits.
 
 The local `.github/workflows/pages.yml` is prepared to build and deploy through GitHub Actions after authorized pushes to `main`, with a manual trigger as well. The target URL is `https://mydearatri.github.io/World/`, and the corresponding Quartz base URL has been set, but the site is not live. This preparation does not grant permission to upload or deploy; the first public push and deployment still require explicit authorization.
 

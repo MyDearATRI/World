@@ -43,7 +43,7 @@ pnpm --package=npm@10.9.2 dlx npm run preview
 
 仓库、首次推送边界、日常提交命令和后续 Pages 流程见 [GitHub 使用说明](docs/github.md)。日常使用标准 Git：先 `git pull --ff-only`，修改后检查 `git status` 和 `git diff`，只添加本次需要的路径，再提交并 `git push`。不要使用 Quartz 的 `sync` 命令代替这些步骤；当前引擎的该命令包含强制推送。
 
-本地分支已经接上远端原有的 README 初始提交，并保留了全部网站工作文件。GitHub Credential Manager 的设备登录尚待完成；首次公开推送及部署仍需明确授权。[Pages 工作流](.github/workflows/pages.yml)已在本地准备，获准上传和启用 Pages 后，向 `main` 推送会触发构建与部署，也支持手动触发。
+本地分支已经接上远端原有的 README 初始提交，并保留了全部网站工作文件。Git Credential Manager 已完成设备登录并保存本机凭据，普通推送的 dry-run 验证通过；首次公开推送及部署仍需明确授权。[Pages 工作流](.github/workflows/pages.yml)已在本地准备，获准上传和启用 Pages 后，向 `main` 推送会触发构建与部署，也支持手动触发。
 
 当前构建仍只允许两篇合成样本。新增真实文章前，需要批准具体笔记与附件清单，并完成只读导出和输入清单调整；连接仓库不代表允许上传整个私人库。
 
