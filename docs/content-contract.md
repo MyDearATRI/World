@@ -1,5 +1,13 @@
 # Content contract
 
+## Authorized textbook export contract
+
+The current source boundary is publish.config.json plus the committed publish-manifest.json, replacing the historical two-file input restriction below. The exporter reads the approved source files, preserves their prose and metadata, generates a home index and Canvas representations, and copies only referenced approved illustrations. Source filenames/hashes are recorded only for public files; excluded-path diagnostics remain local under ignored artifacts. Configuration, backups, prompts, templates, maintenance logs, source PDFs and explicitly private/draft notes are excluded.
+
+Build input stays inside website/content; CI never reads the source Vault. Export uses staging, verifies the source file list and hashes, rejects unknown/modified public copies, and replaces only its managed output with rollback on failure. Canonical links and compatibility conversions exist only in the copies. Missing links become labelled text; ambiguous targets fail export. PDF references retain their citation/page context without serving the original file. Display-math delimiters and table formula pipes are normalized without changing mathematical meaning. Preserve block identifiers through semantic conversion, and allow independent excerpts from the same source without falsely calling them cycles.
+
+Title uses explicit source title or the first H1 with a filename fallback. Source status/layer/tags/aliases remain available; no source timestamp is converted to a public date. siteKind distinguishes body, plan, example, navigation and generated canvas pages. Search and graph use the same published note set and exclude Canvas-derived pages. Original synthetic samples remain only under tests/fixtures/synthetic.
+
 This document was created for the approved synthetic-content phase. It is the contract for the sample input and its rendering, not permission to access or publish real Vault content.
 
 ## Source boundary and page metadata

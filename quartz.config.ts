@@ -3,9 +3,11 @@ import * as Plugin from "./quartz/plugins"
 import { LocalMath } from "./quartz/plugins/transformers/localMath"
 import { SemanticBlocks } from "./quartz/plugins/transformers/semanticBlocks"
 import { ReadingContent } from "./quartz/components/Reading"
+import { ApprovedAssets } from "./quartz/plugins/emitters/approvedAssets"
+import { BookIndex } from "./quartz/plugins/emitters/bookIndex"
 
 // Quartz 4.5.2 — d25a6eabf96751ffca56f8a8139272def7a65041.
-// Only website/content is an input. Never point this configuration at a Vault.
+// Only the manifest-verified website/content export is an input.
 const colors = {
   light: "#fafaf8",
   lightgray: "#d9dde2",
@@ -20,8 +22,8 @@ const colors = {
 
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Mathematical Notes",
-    pageTitleSuffix: " · Mathematical Notes",
+    pageTitle: "Notes & Knowledge",
+    pageTitleSuffix: " · Notes & Knowledge",
     enableSPA: false,
     enablePopovers: false,
     analytics: null,
@@ -40,7 +42,11 @@ const config: QuartzConfig = {
     transformers: [
       Plugin.FrontMatter(),
       Plugin.SyntaxHighlighting({ keepBackground: false }),
-      Plugin.ObsidianFlavoredMarkdown({ enableInHtmlEmbed: false, mermaid: false }),
+      Plugin.ObsidianFlavoredMarkdown({
+        enableInHtmlEmbed: false,
+        mermaid: false,
+        parseTags: false,
+      }),
       Plugin.GitHubFlavoredMarkdown(),
       Plugin.TableOfContents({ minEntries: 0, maxDepth: 2 }),
       Plugin.CrawlLinks({ markdownLinkResolution: "absolute", externalLinkIcon: false }),
@@ -53,6 +59,8 @@ const config: QuartzConfig = {
       Plugin.ComponentResources(),
       Plugin.ContentPage({ pageBody: ReadingContent }),
       Plugin.ContentIndex({ enableSiteMap: false, enableRSS: false }),
+      BookIndex(),
+      ApprovedAssets(),
       Plugin.Static(),
     ],
   },

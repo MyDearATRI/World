@@ -1,5 +1,13 @@
 # Website implementation rules
 
+## Current authorized textbook publication
+
+The user explicitly approved and requested implementation of the complete textbook site: read-only export of all textbook, navigation, planning and example Markdown and referenced illustrations; a real home page, directory tree, search, global/local graph, Canvas views, and a preview-confirm-publish entry point. The approved destination is the existing public MyDearATRI/World repository and GitHub Pages. This supersedes the historical synthetic-only and no-graph scope below.
+
+Only the exporter may read the Vault. It must never modify source notes. Exclude hidden configuration, backups, credentials, prompts (including standalone prompt documents), blank templates, maintenance logs and source PDFs. Respect explicit private/draft metadata. Keep the build rooted in website/content, verify publish-manifest.json, and use the explicit approved-assets emitter. Do not point Quartz or CI at the Vault. Generated content must not be reformatted by hand. New source content is exported and reviewed before publication; no unattended synchronization is authorized.
+
+The site must preserve source status, proof status and provenance, with no invented dates. The old reading samples are test fixtures. Update the actual validation record after checks; historical results below do not count as current acceptance.
+
 These rules supplement the repository-root instructions and apply only inside `website/`.
 
 - This project is the public reading interface for an Obsidian writing source. Phase 1 uses synthetic Markdown only. Do not read, copy, rename, reorganize, or modify private Vault notes or attachments to implement this phase.

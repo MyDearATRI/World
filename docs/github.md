@@ -1,57 +1,60 @@
-# World 仓库与日常更新
+# World 仓库与日常发布
 
-网站使用公开仓库 [MyDearATRI/World](https://github.com/MyDearATRI/World)。本地网站目录已初始化 Git，`origin` 已设置为 `https://github.com/MyDearATRI/World.git`，`main` 已跟踪 `origin/main`。本地现有工程目录叫 `website`，新机器克隆后的默认目录叫 `World`；两者都是网站工程根目录。
+网站工程已连接公开仓库 [MyDearATRI/World](https://github.com/MyDearATRI/World)，网站地址是 [mydearatri.github.io/World/](https://mydearatri.github.io/World/)。Git 根目录只有 `website`，`main` 跟踪 `origin/main`，本机 Git Credential Manager 已完成登录。日常写作和发布不需要重新连接仓库，也不需要手工执行 Git 提交命令。
 
-本地分支保留了远端已有的 README 初始提交 `54e412c`，网站实现提交为 `153b5cd`；首次公开推送到 `main` 的版本为 `def8717`。Git Credential Manager 已完成设备登录并保存本机凭据。用户已明确批准网站源码与两篇合成样本的公开推送及 Pages 部署，这些操作已完成。网站地址为 [mydearatri.github.io/World/](https://mydearatri.github.io/World/)。
+这次实现已将内容入口扩展为批准公开的教材、导航、写作规划和示例笔记，并提供主页、搜索、笔记关系图及 Canvas 阅读页。页面数量根据每次导出清单确定，不再受最初两篇合成样板的限制。本文说明已实现的发布流程；本次版本是否已完成线上部署，以 [验证记录](validation.md) 和对应的 [Actions 运行](https://github.com/MyDearATRI/World/actions)结果为准。
 
-## 哪些文件会进入仓库
+## 平时怎样更新
 
-Git 的范围仅限网站目录，包括 Quartz 源码、配置、脚本、文档和 `content/` 中批准的内容。父目录的 Obsidian 库、真实源笔记和私人附件不在这个 Git 仓库内。不要在父目录运行 `git init`，也不要通过符号链接、递归复制或更改构建输入把整个库纳入网站。
+1. 在 Obsidian 中继续编辑原来的笔记，保存文件。无需到 `website/content` 中再写一份，也不用手工复制附件。
+2. 打开 `website` 文件夹，双击 [发布博客.cmd](../发布博客.cmd)。程序会检查仓库状态，读取批准范围，生成独立公开副本，并显示本次新增、修改和移除公开副本的清单。
+3. 等待类型检查、构建和全量内容检查完成。浏览器会打开本地预览，地址是终端显示的 `http://127.0.0.1:端口/World/`；端口自动分配，无需自己设置。
+4. 看过清单和预览后，回到命令窗口。只有输入大写 `PUBLISH` 并按 Enter，程序才会提交这一批公开副本并推送到 World。其他输入取消发布，已生成的本地副本和检查报告保留。
+5. 推送后程序会查询部署状态。只有 GitHub Actions 构建和部署成功，线上网站才算更新；看到“推送成功”不等于网站已经切换到新版本。
 
-`.gitignore` 排除了 `node_modules/`、`public/`、生成的字体和 KaTeX 资源、缓存、截图报告、本地环境变量和常见私钥文件。新机器通过安装和构建重新生成需要的资源。不要把令牌、密码或本机密钥写进源码、Markdown、远程 URL 或提交消息。
+如果只想看效果，双击 [预览博客.cmd](../预览博客.cmd)。它同样执行导出、构建和内容检查，但不会提交或上传。浏览结束后，回到命令窗口按 Enter 关闭本地预览服务。
 
-当前 `scripts/prepare-assets.mjs` 的输入清单只允许 `content/index.md` 和 `content/notes/complete-metric-spaces.md` 两篇合成样本。真实 Obsidian 笔记仍是唯一写作源；新增真实文章应先明确批准笔记、所需链接和附件清单，再实现只读导出，并同步调整输入清单。批准一篇文章不等于批准所有关联笔记或附件。
+只在 Obsidian 中保存笔记不会自动上传。没有后台监控或无人值守同步；每次发布都以实际查看过的公开副本为准。发布入口只处理 `content/` 和 `publish-manifest.json`，不会顺便提交网站样式、脚本或其他工程改动。
 
-## 拉取和提交更新
+## 哪些内容会公开
 
-在网站目录打开 PowerShell。现有 `main` 已跟踪 `origin/main`，下面的命令可以用于日常更新。拉取前先处理已有的未提交改动，不要为了拉取而丢弃文件：
+[publish.config.json](../publish.config.json) 是导出范围的配置，当前 `sourceRoot` 为 `..`，表示网站工程的父目录，也就是现有 Obsidian 库。导出器只读这个来源，网站构建始终只读取自身的 `content/`，不会把父目录变成 Git 仓库或网站公开目录。
 
-```powershell
-git status
-git pull --ff-only
-```
+用户批准的范围包括教材正文、阅读入口、规划和示例 Markdown，以及实际引用的插图和 Canvas。网站保留原来的文档状态和维护阶段，规划不会因上线而被称为已经完成，示例也不会混成正式研究成果。源 Markdown 的首个一级标题用于页面标题；显式设置的 `title` 属性优先。
 
-`--ff-only` 在本地与远端历史分叉时会停下，不自动合并或改写历史。遇到这种情况先检查双方提交，再决定如何处理；不要直接使用强制推送。
+以下内容被排除：网站工程自身、隐藏目录、Obsidian 配置、备份、Prompts、空白 Templates、独立的提示词文档、AGENTS、更新日志和原版 PDF。`private: true`、`publish: false` 或 `draft: true` 的笔记也不会进入公开副本。普通的 `status: 待写` 或 `layer: Working` 不等于这些禁止公开的标记。
 
-完成修改后，检查改动并运行与改动相符的验证。样例文章、样式或内容管道修改至少重新构建并检查内容；改变阅读布局时还应运行浏览器验收：
+附件按实际引用导出，不递归复制整个附件目录。批准插图使用明确的资源路径；引用 Canvas 转换成可阅读的图示、完整说明和笔记链接，不上传原始 Canvas 文件。原版 PDF 引用保留来源与页码说明，并标明原文件未公开；排除内容的链接改为说明文字，真正不存在的目标标为尚未建立。指向多个同名目标而无法确定的链接会使导出停止。
 
-```powershell
-git status
-git diff
-pnpm --package=npm@10.9.2 dlx npm run build
-pnpm --package=npm@10.9.2 dlx npm run check
-pnpm --package=npm@10.9.2 dlx npm run test:content
-```
+[publish-manifest.json](../publish-manifest.json) 记录本次公开文件的相对路径、源文件哈希和导出副本哈希。它不包含未批准文件的完整清单或本机绝对路径。详细排除项、缺失链接和转换诊断只写入被 Git 忽略的 `artifacts/`，不会随普通内容发布上传。
 
-只添加本次实际修改的文件。以下路径仅演示一次修改样例正文的提交；修改其他文件时使用相应的具体路径：
+不要直接编辑 `content/` 中的导出副本。下次导出前会验证已管理副本的哈希；发现手工修改或清单之外的文件时，程序会停止，避免覆盖内容。日常正文应回到 Obsidian 源文件修改。若需要调整公开范围，应先修改并检查发布配置，再单独处理这项工程变更。
 
-```powershell
-git add -- content/index.md
-git diff --cached
-git commit -m "Revise contraction sample"
-git push
-```
+## 预览与发布期间的保护
 
-当前跟踪关系已经设置，在 `main` 上直接 `git push` 即可。推送后 GitHub Actions 会自动构建并更新网站；只在 Obsidian 保存文件不会自动上传。切换机器时，使用 `git clone https://github.com/MyDearATRI/World.git`，进入 `World` 并按照 README 安装依赖。身份认证使用 GitHub 或本机凭据管理器，不在命令和文件中存放令牌。本机网络配置属于本地 Git 配置，不纳入仓库。
+导出会记录源文件快照，重新核对文件清单和哈希，再将完整输出写入暂存位置进行验证。只有检查通过，才替换本工程内已经管理的公开副本；交换失败时恢复旧副本。导出器不修改、重命名或删除源笔记，移除公开副本也不等于删除源文件。符号链接和越过来源边界的路径不会用来带入其他目录。
 
-不要把 `quartz sync` 当作普通同步命令：本项目固定的 Quartz 版本会自动执行 `git add .` 和 `git push -uf`。`quartz update` 用于引入 Quartz 上游变更，也不等于拉取 World 仓库的日常更新。这里统一使用标准 Git 命令。
+如果源库在导出过程中变化，程序会停止并要求重新运行。预览建立之后，再写入源库的内容不会悄悄加入已经查看过的发布版本；下一次运行时再导出这批新变化。如果预览期间网站副本、Git 提交位置、改动范围或暂存区发生变化，发布前的复核会阻止提交未经检查的内容。
 
-## GitHub Pages 自动更新
+普通发布入口要求位于 `main`，远程仓库是已批准的 World，且没有待夹带的暂存文件、未处理的网站代码改动或其他尚未推送的提交。它会检查远端更新；能够安全快进时才拉取，遇到分叉或与本地改动冲突时停下。它不会强制推送、自动合并冲突或丢弃文件。
 
-`.github/workflows/pages.yml` 已上传并启用，配置为向 `main` 推送时触发，也支持 `workflow_dispatch` 手动触发；使用的官方 Actions 版本已核对。`.node-version` 固定为本机验证过的 Node 24.19.0，Quartz `baseUrl` 已设置为 `mydearatri.github.io/World`。仓库 Pages 的发布来源已设为 GitHub Actions（`build_type: workflow`），并启用强制 HTTPS。
+## 遇到停止或失败
 
-向 `main` 推送提交会触发 Actions：根据 npm 锁文件安装依赖、运行检查、从 `content/` 构建 `public/`，再将构建产物部署到 Pages。仓库里维护源码，不提交本机生成的 `public/`。
+- **检查或构建失败：** 不会继续发布。查看窗口中的具体错误和 `artifacts/export-diagnostics.json`、`artifacts/content-report.json`。修正源笔记、配置或代码后重新运行，不必重建 GitHub 仓库。
+- **提示副本被修改或存在未知文件：** 先保留并核对相关文件。不要为了继续发布直接删除文件或绕过哈希检查。
+- **提示网站代码、暂存区或历史另有改动：** 这是为了避免把其他工作一并公开。先单独处理这些改动，再用普通内容发布入口。
+- **Git 登录或网络失败：** 保留已有文件和提交。恢复网络或本机 Git 登录后再继续，不要把令牌写进文件、远程地址或聊天内容。
+- **已经创建本地提交，但推送失败：** 窗口会给出保存的提交编号和恢复命令。恢复连接后，在网站目录执行提示中的 `git push origin main` 即可，不要重复创建同一批提交。
+- **已推送，但部署状态未确认或失败：** 到 [Actions](https://github.com/MyDearATRI/World/actions) 查看对应提交的运行日志。此时不应把线上更新写成已经成功。
 
-首次 [Actions 运行 34099696588](https://github.com/MyDearATRI/World/actions/runs/34099696588) 的构建和部署均成功，线上首页返回 HTTP 200，并包含正确的样本标题和 MathML。线上 Edge 在 1440px、1024px、390px 三种视口的检查为 77 项通过、0 项失败，4 张实际截图均已打开检查。每次推送后到仓库的 [Actions 页面](https://github.com/MyDearATRI/World/actions)确认运行结果；构建或部署失败时先查看日志，不能把推送成功当作网站已更新。详细线上浏览器验收记录见 `validation.md`。
+`artifacts/publication-preview.json` 保存该次新增、修改、移除公开副本及排除项清单，便于回看；这些报告只留在本机。实际执行过的构建、浏览器检查和线上验收统一记在 [validation.md](validation.md)，不把计划中的检查当作完成结果。
 
-当前仍只有两篇合成样本进入公开仓库。真实文章尚未接入：下一步是批准少量笔记及其依赖/附件清单，再实现只读导出。现有网站上线和自动部署不包含读取、上传或公开私人 Vault 的授权。
+## GitHub Pages 与换机器
+
+[Pages 工作流](../.github/workflows/pages.yml) 在 `main` 收到推送后自动运行，也支持从 Actions 页面手动触发。它根据 npm 锁文件安装依赖、执行工程检查和测试、验证公开清单、构建 `public/`，再部署到 GitHub Pages。GitHub 上构建时不会连接你的电脑，也不需要访问私人 Vault。
+
+仓库维护网站源码、配置、公开清单和批准的内容副本。`node_modules/`、`public/`、生成字体、KaTeX 资源、缓存、截图、检查报告、本机环境变量及常见密钥文件由 `.gitignore` 排除。历史上的 Quartz 样板保存在测试夹具中，不作为当前网站正文。
+
+新机器可以克隆 World 并按 [README](../README.md) 安装依赖，直接构建已经提交的公开副本。若还要从新机器发布 Obsidian 原稿，须先准备正确的本地 Vault，并核对 `publish.config.json` 的 `sourceRoot`：克隆目录的父目录未必是笔记库，不能照搬当前 `..` 的位置关系。登录凭据属于本机设置，不通过仓库传递。
+
+维护网站代码时仍可以使用普通 Git 工作流；日常内容更新使用上面的两个 `.cmd` 入口即可。不要以 `quartz sync` 替代发布入口：当前固定版本的该命令包含自动暂存和强制推送行为。`quartz update` 用于引入上游框架变更，也不是更新个人博客内容的命令。

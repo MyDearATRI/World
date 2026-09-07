@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "sourceRoot": "..",
+  "home": "首页.md",
+  "excludeDirectories": ["website", "Prompts", "Templates", "backup", "backups", "备份"],
+  "excludeFiles": [
+    "AGENTS.md",
+    "更新日志.md",
+    "Haru_Obsidian_模板与提示词.md",
+    "Haru_数学与物理笔记提示词.md"
+  ],
+  "excludeLinkTitles": [
+    "数学与物理笔记写作约定",
+    "知识笔记",
+    "研读笔记",
+    "联系笔记",
+    "问题笔记",
+    "路线笔记"
+  ],
+  "imageExtensions": [".svg", ".png", ".jpg", ".jpeg", ".webp", ".gif", ".avif"],
+  "respectPrivateMetadata": true
+}

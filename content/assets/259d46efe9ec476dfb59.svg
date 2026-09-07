@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="550" viewBox="0 0 760 550" role="img" aria-labelledby="title desc">
+  <title id="title">From continuous notes to a knowledge backbone</title>
+  <desc id="desc">Source material is written into a continuous account. Reusable content is then distilled into a knowledge backbone. The notes can cite or embed the maintained content.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L8 4.5 L0 9" fill="none" stroke="#315f91" stroke-width="1.6"/></marker>
+  </defs>
+  <rect width="760" height="550" fill="#fafaf8"/>
+  <g font-family="Inter, Segoe UI, Noto Sans SC, sans-serif" fill="#24282d">
+    <text x="32" y="30" font-size="12" letter-spacing="2" fill="#69717a">WRITE FIRST / DISTILL AFTERWARDS</text>
+    <rect x="40" y="54" width="390" height="90" fill="none" stroke="#90979f"/>
+    <text x="60" y="90" font-size="24" font-weight="600">Source material</text>
+    <text x="60" y="120" font-size="17" fill="#58626e">Book · course · article · independent work</text>
+    <path d="M235 144 V218" fill="none" stroke="#315f91" stroke-width="1.6" marker-end="url(#arrow)"/>
+    <text x="252" y="179" font-size="16" fill="#315f91">preserve and write</text>
+    <rect x="40" y="222" width="390" height="90" fill="#f0f4f8" stroke="#315f91" stroke-width="1.6"/>
+    <text x="60" y="258" font-size="24" font-weight="600">Notes / 笔记主体</text>
+    <text x="60" y="288" font-size="18" fill="#58626e">A continuous mathematical account</text>
+    <path d="M235 312 V386" fill="none" stroke="#315f91" stroke-width="1.6" marker-end="url(#arrow)"/>
+    <text x="252" y="347" font-size="16" fill="#315f91">distill reusable content</text>
+    <rect x="40" y="390" width="390" height="90" fill="none" stroke="#315f91" stroke-width="1.6"/>
+    <text x="60" y="426" font-size="24" font-weight="600">Knowledge backbone</text>
+    <text x="60" y="456" font-size="18" fill="#58626e">Concepts, results, methods, connections</text>
+    <path d="M430 435 H700 V267 H434" fill="none" stroke="#315f91" stroke-width="1.6" marker-end="url(#arrow)"/>
+    <text x="493" y="322" font-size="17" fill="#315f91">Reuse in the notes</text>
+    <text x="493" y="350" font-size="16" fill="#58626e">Cite or embed the</text>
+    <text x="493" y="375" font-size="16" fill="#58626e">maintained content.</text>
+    <text x="32" y="523" font-size="14" fill="#69717a">Arrows describe editorial actions, not mathematical implications.</text>
+  </g>
+</svg>

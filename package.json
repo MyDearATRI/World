@@ -23,6 +23,11 @@
     "build": "node quartz/bootstrap-cli.mjs build -d content -o public --concurrency 2",
     "test:content": "node scripts/verify-content.mjs",
     "test:browser": "node scripts/verify-browser.mjs",
+    "test:graph": "node scripts/verify-graph.mjs",
+    "test:search": "node scripts/verify-search.mjs",
+    "export": "node scripts/export-vault.mjs",
+    "publish:preview": "node scripts/publish.mjs --preview-only",
+    "publish:notes": "node scripts/publish.mjs",
     "preview": "node scripts/preview.mjs",
     "test:upstream": "node scripts/verify-upstream.mjs"
   },

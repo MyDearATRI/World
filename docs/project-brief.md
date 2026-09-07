@@ -1,5 +1,9 @@
 # Project brief
 
+## Current textbook follow-up
+
+The user subsequently approved implementing and publicly deploying the full textbook interface: a Markdown-driven home page, directory navigation and chapter reading sequence, local full-text search, interactive global/local note graphs, and Canvas reading views. Publication includes all textbook, navigation, planning and example notes and referenced illustrations; it excludes configuration, backups, prompts, blank templates, maintenance logs and source PDFs. A manual entry point exports, checks, previews, then publishes only after the user's confirmation. Preserve source files and use a manifest-verified copy. The earlier phase-one paragraphs below describe historical scope, not the current content limit.
+
 This document was created for the approved phase-one implementation request. There was no pre-existing project brief to preserve. It records the intended behavior; test results belong in the implementation's validation report.
 
 The original phase-one scope is preserved below as historical scope. The appended GitHub-connection and publication follow-up records the later explicit authorization and current deployment state. Private Vault access and publication remain outside that authorization.

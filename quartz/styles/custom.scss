@@ -1,3 +1,4 @@
+@use "./book.scss";
 // Reading theme: no application UI styles or global overflow clipping.
 :root {
   --paper: #fafaf8;
@@ -48,7 +49,7 @@ a:hover {
 }
 #quartz-body {
   display: grid;
-  grid-template-columns: 176px minmax(0, 720px) 208px;
+  grid-template-columns: 224px minmax(0, 720px) 160px;
   gap: 0 48px;
   align-items: start;
 }
@@ -326,8 +327,8 @@ article [role="anchor"]:focus {
 .sidenote {
   float: right;
   clear: right;
-  width: 208px;
-  margin: 8px -256px 24px 32px;
+  width: 160px;
+  margin: 8px -208px 24px 32px;
   padding-top: 13px;
   border-top: 1px solid var(--rule);
   font-size: 14px;
@@ -613,3 +614,5 @@ code {
     overflow: visible;
   }
 }
+
+@include book.styles;

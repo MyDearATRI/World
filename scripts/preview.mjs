@@ -55,9 +55,9 @@ export async function startPreview({ port = 8081, host = "127.0.0.1" } = {}) {
       )
     }
     if (!inside(candidate)) return fail(403, "Path outside the public directory")
-    const candidates = path.extname(candidate)
-      ? [candidate]
-      : [candidate, `${candidate}.html`, path.join(candidate, "index.html")]
+    // A chapter such as 3.5-Classical-Fourier-Series is still an extensionless
+    // article route. Only a successfully found file determines its content type.
+    const candidates = [candidate, `${candidate}.html`, path.join(candidate, "index.html")]
     for (const file of candidates) {
       try {
         const actual = await realpath(file)

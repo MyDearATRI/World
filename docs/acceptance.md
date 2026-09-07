@@ -1,5 +1,13 @@
 # Phase-one acceptance
 
+## Current textbook acceptance
+
+The full textbook follow-up replaces the two-sample acceptance boundary below. Verify every manifest output and asset hash, the exact generated-page/resource allowlist, all local links and block/heading anchors, title/status metadata and HTML/MathML equations. Search and graph node sets must equal the exported source-note set, excluding generated Canvas pages; no excluded files may enter an index. Test export additions, changes, removals, idempotence, source drift, linked paths, unknown outputs, aliases, math/table compatibility and Canvas conversion with isolated fixtures.
+
+Test the home page, directory, reading sequence, search queries/filters, inline and full-screen graph, mouse/keyboard/touch gestures, Canvas zoom and note links, formula/table overflow and reading at 1440×1000, 1024×900 and 390×844. Check root, /World/ and /math-notes/ hosting. Document text scaling separately from native browser zoom and simulated touch separately from a physical phone. The publication entry point must reject pre-existing staging, changes after preview, and staged bytes that differ from the approved snapshot. Test the Windows runtime fallback with an ordinary PATH.
+
+After local checks, publish through the existing World workflow, wait for the exact commit's successful Pages run, and verify the hosted home, articles, search, graph and resources. Record actual results in validation.md; historical phase-one results below are not evidence for the full textbook release.
+
 This document was created from the approved implementation request. It specifies required checks and expected behavior. It does not claim that any check has run or passed; record actual commands, outcomes, limitations, and screenshot paths in the README or validation report after running them.
 
 ## Local build and content pipeline

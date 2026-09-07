@@ -1,5 +1,11 @@
 # Design specification
 
+## Textbook interface extension
+
+The approved follow-up adds a structured home page from the Vault's home Markdown, a collapsible directory tree, breadcrumbs, source-defined chapter navigation, a visible search field and interactive relation graphs. Body/plan/example/navigation status is textual and follows source metadata. A graph line means an actual note link, not a mathematical implication. The homepage contains an inline full-library graph; article launchers begin at one-hop neighbours. Graph panels use the same restrained paper/ink/blue palette, with drag/pan/zoom, fit/reset/pause, keyboard access and reduced motion. Canvas views preserve the author's groups, arrows and annotations separately from the automatic note graph.
+
+The wide grid now starts at a 224px directory rail, 720px reading column, 160px margin, and 48px gaps. The home page can span the reading and margin columns. Below 1280px the directory is collapsed above the text; the phone returns to one reading column. Search and graph modal focus must remain usable, return to the trigger on close, and fit the viewport. These additions supersede the historical phase-one omission of search/graph below.
+
 This document was created from the approved phase-one design request. Its values are implementation defaults to be checked against the actual mixed Chinese/English article; the acceptance document defines required browser observations.
 
 ## Reading character

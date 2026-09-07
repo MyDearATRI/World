@@ -2,25 +2,11 @@ import { createRequire } from "node:module"
 import { fileURLToPath } from "node:url"
 import path from "node:path"
 import { copyFile, mkdir, readFile, readdir, lstat } from "node:fs/promises"
+import { verifyManifest } from "./lib/export-boundary.mjs"
 
 const root = fileURLToPath(new URL("../", import.meta.url))
 const require = createRequire(import.meta.url)
-const approved = new Set(["index.md", "notes/complete-metric-spaces.md"])
-
-async function checkInput(directory, prefix = "") {
-  if ((await lstat(directory)).isSymbolicLink())
-    throw new Error(`Refusing linked content: ${prefix}`)
-  for (const entry of await readdir(directory, { withFileTypes: true })) {
-    const relative = prefix + entry.name
-    if (entry.isSymbolicLink()) throw new Error(`Refusing linked input: ${relative}`)
-    if (entry.isDirectory() && relative === "notes")
-      await checkInput(path.join(directory, entry.name), "notes/")
-    else if (!entry.isFile() || !approved.has(relative))
-      throw new Error(`Unapproved phase-one input: ${relative}`)
-  }
-}
-
-await checkInput(path.join(root, "content"))
+const manifest = await verifyManifest(root)
 for (const name of ["public", ".quartz-cache", "quartz/static"]) {
   try {
     if ((await lstat(path.join(root, name))).isSymbolicLink())
@@ -62,5 +48,5 @@ for (const name of await readdir(path.join(katexRoot, "dist/fonts"))) {
 await copyFile(path.join(katexRoot, "LICENSE"), path.join(katexOutput, "LICENSE.txt"))
 const katex = JSON.parse(await readFile(path.join(katexRoot, "package.json"), "utf8"))
 console.log(
-  `Prepared local Noto Serif SC (${fontFiles.length} WOFF2 files) and renderer-matched KaTeX ${katex.version}; input limited to two synthetic notes.`,
+  `Prepared local Noto Serif SC (${fontFiles.length} WOFF2 files) and renderer-matched KaTeX ${katex.version}; verified ${manifest.notes.length} approved pages and ${manifest.assets.length} images without reading the Vault.`,
 )
