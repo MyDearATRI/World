@@ -2,7 +2,7 @@
 
 This document was created for the approved phase-one implementation request. There was no pre-existing project brief to preserve. It records the intended behavior; test results belong in the implementation's validation report.
 
-The original phase-one scope is preserved below. The appended GitHub-connection follow-up records the later request and current state without treating it as authorization to publish.
+The original phase-one scope is preserved below as historical scope. The appended GitHub-connection and publication follow-up records the later explicit authorization and current deployment state. Private Vault access and publication remain outside that authorization.
 
 ## Purpose
 
@@ -32,12 +32,12 @@ This phase must not inspect the real Vault, mutate source notes, expose private 
 
 After explicit approval of a small note list and its attachment/dependency list, implement a read-only export into a separate staging content directory. Verify that unapproved notes, embeds, links, and attachments cannot be included implicitly. Decide the actual GitHub repository address and publication path only when remote setup and publication are separately authorized.
 
-## GitHub-connection follow-up
+## GitHub-connection and publication follow-up
 
-The user requested connecting the website to a GitHub repository for convenient future pushes and updates. Git now exists only in `website/`, with `origin` set to `https://github.com/MyDearATRI/World.git`. Local `main` tracks `origin/main` and is based on the remote's existing README-only initial commit. All website working files were preserved; website-source changes are saved in a local commit; public pushes and deployment have not been performed. Git Credential Manager authentication is complete and credentials are saved locally. A non-interactive git push --dry-run succeeded without uploading commits.
+The user requested connecting the website to a GitHub repository for convenient future pushes and updates, then explicitly approved publicly pushing the website source and its two synthetic examples and enabling GitHub Pages. Git exists only in `website/`, with `origin` set to `https://github.com/MyDearATRI/World.git`. Local `main` tracks `origin/main`. The existing README-only initial commit `54e412c` and website implementation commit `153b5cd` were preserved; version `def8717` was pushed to `main`. Git Credential Manager authentication is complete and credentials are saved locally.
 
-The local `.github/workflows/pages.yml` is prepared to build and deploy through GitHub Actions after authorized pushes to `main`, with a manual trigger as well. The target URL is `https://mydearatri.github.io/World/`, and the corresponding Quartz base URL has been set, but the site is not live. This preparation does not grant permission to upload or deploy; the first public push and deployment still require explicit authorization.
+The uploaded `.github/workflows/pages.yml` builds and deploys through GitHub Actions on pushes to `main`, with a manual trigger as well. The site is live at `https://mydearatri.github.io/World/`, with the corresponding Quartz base URL configured, the Pages source set to GitHub Actions, and HTTPS enforced. The first Actions run, `34099696588`, completed both build and deploy successfully. The online homepage returned HTTP 200 with the correct sample title and MathML. Online Edge checks at 1440px, 1024px, and 390px passed all 77 assertions; all four generated screenshots were opened for inspection. Detailed results are recorded in `validation.md`.
 
 Daily updates use standard Git commands, including `git pull --ff-only`, inspection of changed and staged files, commits with deliberate file selection, and ordinary `git push`. Quartz's force-pushing `sync` command is not the daily update interface. Build output, generated font assets, caches, and local credentials stay outside version control.
 
-The content scope remains the two synthetic Markdown examples. The next minimal content task is still an explicitly approved note/dependency list, a read-only export, and verification that unapproved notes and attachments cannot enter the build. Repository setup does not authorize reading or uploading the private Vault. Actual local follow-up results, including the Git-ignore resource regression and its repair, are recorded in `validation.md`.
+The content scope remains the two synthetic Markdown examples. The next minimal content task is still an explicitly approved note/dependency list, a read-only export, and verification that unapproved notes and attachments cannot enter the build. The approved synthetic-site publication does not authorize reading or uploading the private Vault. Actual follow-up results, including the Git-ignore resource regression and its repair and deployment verification, are recorded in `validation.md`.

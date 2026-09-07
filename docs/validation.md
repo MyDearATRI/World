@@ -86,3 +86,35 @@ Initializing Git exposed a static-resource regression. The upstream `glob` helpe
 The preview and browser scripts now support `/`, `/math-notes/`, and `/World/`. Each mount is checked at 1440 × 1000, 1024 × 900, and 390 × 844, with separate 200% computed-text-scaling and 720px reflow scenarios. The latest machine results are in `artifacts/browser-report.json`. These remain local Edge checks; native browser zoom, physical mobile devices, Safari, screen readers, and the actual hosted site were not tested in this follow-up. Earlier phase-one test counts are retained above and should not be read as a second execution of those tests during the repository setup.
 
 The upstream `punycode` deprecation notice remains non-fatal. Real-note export, approved attachment handling, and publication of personal content remain unimplemented.
+
+## Authorized GitHub Pages publication
+
+The user subsequently explicitly approved publishing the website source and two synthetic articles to the public World repository and enabling GitHub Pages. The earlier local-only and not-yet-published statements above describe the preceding stages, not the current deployment state. No private Vault content or attachments were read or uploaded.
+
+The website commits were pushed normally to `MyDearATRI/World` on `main`, preserving the original remote README commit. Pages was enabled with `build_type: workflow` and HTTPS enforcement. The first deployed source commit was `def8717b976685284e7f0e92d00ac7bff70a9602`.
+
+[The first GitHub Actions run](https://github.com/MyDearATRI/World/actions/runs/34099696588) completed successfully, including both `build` and `deploy`. The actual Ubuntu runner logs confirmed:
+
+- Node 24.19.0, npm 10.9.2 and lockfile installation succeeded; npm reported zero vulnerabilities.
+- TypeScript and Prettier passed.
+- All 69 upstream tests passed, with zero failures; the additional sharp/TOML compatibility checks also passed.
+- Quartz processed exactly two Markdown inputs and emitted 272 files.
+- All 136 content assertions passed before the Pages artifact was uploaded.
+- The deployment reported success for the same source commit.
+
+The HTTPS home page at [mydearatri.github.io/World](https://mydearatri.github.io/World/) returned HTTP 200 with the expected article title and MathML. Its published content index contained only `index` and `notes/complete-metric-spaces`.
+
+### Actual hosted-browser verification
+
+Edge 152.0.4191.66 loaded the real HTTPS site at 1440 × 1000, 1024 × 900 and 390 × 844. All 77 checks passed, with zero failures. The document widths remained 1440, 1024 and 390 pixels respectively. The 878px formula scrolled within its own container using the keyboard. The actual Noto Serif SC and KaTeX fonts loaded; formula HTML and MathML were present, with no KaTeX errors.
+
+The hosted checks exercised the skip link, compact table of contents, footnote reference/return links, and navigation to the related note and back using the keyboard. Sidenotes occupied the wide margin and retained their visible document order on smaller screens. No console/runtime errors, failed resource requests or third-party reading-resource requests were observed.
+
+The real-site report is `artifacts/live-browser-report.json`; the local verification script is `artifacts/verify-live.mjs`. Four actual screenshots were generated and opened for visual inspection:
+
+- `artifacts/screenshots/live-1440-top.png`
+- `artifacts/screenshots/live-1024-top.png`
+- `artifacts/screenshots/live-390-top.png`
+- `artifacts/screenshots/live-390-sidenote.png`
+
+These are desktop Edge tests of the hosted site, not physical-device, Safari, screen-reader or performance-benchmark results. The earlier local 200% text-scaling and reflow checks were not rerun against the hosted site. No new performance score is claimed. Approved real-note export and attachment handling remain the next content task.

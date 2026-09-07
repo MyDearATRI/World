@@ -1,12 +1,14 @@
-# Mathematical Notes — 本地阅读样板
+# Mathematical Notes
 
-以 Markdown 为正文来源的数学阅读页，基于 Quartz 4.5.2。首页为合成文章 **Contractions and fixed points**，另有一篇 **Complete metric spaces** 关联笔记。网站目录已初始化 Git，`origin` 已连接公开仓库 [MyDearATRI/World](https://github.com/MyDearATRI/World)，本地 `main` 跟踪 `origin/main`。网站源码已保存为本地提交，尚未推送，目标站点尚未上线。只有本网站目录进入版本管理；没有读取或接入私人 Vault。
+网站：[mydearatri.github.io/World/](https://mydearatri.github.io/World/) · 源码仓库：[MyDearATRI/World](https://github.com/MyDearATRI/World)。
+
+以 Markdown 为正文来源的数学阅读页，基于 Quartz 4.5.2。首页为合成文章 **Contractions and fixed points**，另有一篇 **Complete metric spaces** 关联笔记。网站源码已推送，GitHub Pages 已上线；向 `main` 推送更新后，GitHub Actions 会自动构建并部署。只有本网站目录进入版本管理；没有读取或接入私人 Vault。
 
 ## 本地运行
 
 本机已验证 Node 24.19.0、pnpm 11.19.0。上游要求 Node ≥22、npm ≥10.9.2；以下命令通过 pnpm 调用隔离的 npm 10.9.2，不改变全局 npm 安装，且只维护 `package-lock.json`。
 
-从当前库根目录打开 PowerShell 时，先运行 `cd website`；已经在网站目录中则无需切换目录。在新机器上，待首次推送完成后，可以运行 `git clone https://github.com/MyDearATRI/World.git`，然后 `cd World`。接着安装依赖并启动：
+从当前库根目录打开 PowerShell 时，先运行 `cd website`；已经在网站目录中则无需切换目录。在新机器上，可以运行 `git clone https://github.com/MyDearATRI/World.git`，然后 `cd World`。接着安装依赖并启动：
 
 ```powershell
 pnpm --package=npm@10.9.2 dlx npm ci
@@ -37,13 +39,13 @@ pnpm --package=npm@10.9.2 dlx npm run test:browser
 pnpm --package=npm@10.9.2 dlx npm run preview
 ```
 
-正式产物预览同时支持 <http://127.0.0.1:8081/>、<http://127.0.0.1:8081/math-notes/> 和 <http://127.0.0.1:8081/World/>。最后一个路径对应已经配置的目标站点 [mydearatri.github.io/World/](https://mydearatri.github.io/World/)，该站点尚未上线。这些本机预览用于检查路径兼容性，不代表已部署。
+正式产物预览同时支持 <http://127.0.0.1:8081/>、<http://127.0.0.1:8081/math-notes/> 和 <http://127.0.0.1:8081/World/>。最后一个路径对应线上站点的仓库子路径。这些本机预览用于检查路径兼容性；线上部署结果仍须单独验证。
 
 ## GitHub 更新
 
-仓库、首次推送边界、日常提交命令和后续 Pages 流程见 [GitHub 使用说明](docs/github.md)。日常使用标准 Git：先 `git pull --ff-only`，修改后检查 `git status` 和 `git diff`，只添加本次需要的路径，再提交并 `git push`。不要使用 Quartz 的 `sync` 命令代替这些步骤；当前引擎的该命令包含强制推送。
+仓库范围、日常提交命令和 Pages 流程见 [GitHub 使用说明](docs/github.md)。日常使用标准 Git：先 `git pull --ff-only`，修改后检查 `git status` 和 `git diff`，只添加本次需要的路径，再提交并 `git push`。推送到 `main` 后网站会自动重建；在 Obsidian 中保存文件本身不会触发上传。不要使用 Quartz 的 `sync` 命令代替这些步骤；当前引擎的该命令包含强制推送。
 
-本地分支已经接上远端原有的 README 初始提交，并保留了全部网站工作文件。Git Credential Manager 已完成设备登录并保存本机凭据，普通推送的 dry-run 验证通过；首次公开推送及部署仍需明确授权。[Pages 工作流](.github/workflows/pages.yml)已在本地准备，获准上传和启用 Pages 后，向 `main` 推送会触发构建与部署，也支持手动触发。
+本地 `main` 已跟踪 `origin/main`，并保留远端原有的 README 初始提交。Git Credential Manager 已完成设备登录并保存本机凭据。用户已明确批准公开推送网站源码及两篇合成样本，并启用 GitHub Pages；这些操作已完成。[Pages 工作流](.github/workflows/pages.yml)会在向 `main` 推送时构建与部署，也支持手动触发。
 
 当前构建仍只允许两篇合成样本。新增真实文章前，需要批准具体笔记与附件清单，并完成只读导出和输入清单调整；连接仓库不代表允许上传整个私人库。
 
@@ -60,7 +62,7 @@ pnpm --package=npm@10.9.2 dlx npm run preview
 | `quartz/plugins/transformers/semanticBlocks.ts` | 从 Obsidian callout 生成有标签的 `section`/`aside`，并包装独立公式。           |
 | `scripts/prepare-assets.mjs`                    | 限定输入，复制同版本数学资源和完整字体 Unicode 覆盖。                          |
 | `scripts/verify-*.mjs`、`scripts/preview.mjs`   | 内容、浏览器、依赖兼容性检查及受限静态预览。                                   |
-| `.github/workflows/pages.yml`                   | 已在本地准备的 GitHub Pages 构建与部署工作流；尚未上传或运行。                 |
+| `.github/workflows/pages.yml`                   | 已启用的 GitHub Pages 构建与部署工作流；推送到 `main` 后自动运行。             |
 | `docs/`、`AGENTS.md`                            | 本次需求新建的工程、设计、内容与验收约定。                                     |
 | `artifacts/`                                    | 实际验证报告与截图；不参与网站构建。                                           |
 
@@ -80,12 +82,14 @@ Quartz 引擎来自官方提交 [`d25a6eabf96751ffca56f8a8139272def7a65041`](htt
 
 详细实际结果记录在 `docs/validation.md`；浏览器机器报告位于 `artifacts/browser-report.json`。截图均由本机浏览器实际生成，视觉检查后才纳入交付引用。
 
-Git 连接后的本地复验结果：构建从两篇 Markdown 生成 272 个文件，内容检查 136 项通过，TypeScript 和格式检查通过；Edge 浏览器在三个挂载路径及缩放/重排场景中共检查 11 个场景，254 项通过、0 项失败。新增的 `/World/` 检查与初始化 Git 后的资源回归已纳入本次结果；GitHub Actions 和线上 Pages 尚未运行。
+Git 连接后的本地复验结果：构建从两篇 Markdown 生成 272 个文件，内容检查 136 项通过，TypeScript 和格式检查通过；Edge 浏览器在三个挂载路径及缩放/重排场景中共检查 11 个场景，254 项通过、0 项失败。新增的 `/World/` 检查与初始化 Git 后的资源回归已纳入本次结果。
+
+首次公开推送后，[GitHub Actions 运行 34099696588](https://github.com/MyDearATRI/World/actions/runs/34099696588) 的构建与部署均成功。Pages 已使用 GitHub Actions 作为发布来源并强制 HTTPS；线上首页返回 HTTP 200，含正确的样本标题与 MathML。线上 Edge 152.0.4191.66 在 1440px、1024px、390px 三种视口的检查为 77 项通过、0 项失败，4 张实际截图均已打开检查。线上机器报告为 `artifacts/live-browser-report.json`，详细结果见 `docs/validation.md`。
 
 构建仍会输出上游间接依赖的 Node `DEP0040 punycode` 弃用提示；它不是构建失败。浏览器测试使用 Edge 模拟视口，不等同于真实手机或 Safari 测试。200% 检查采用明确记录的计算字号翻倍与 720px 重排，并非浏览器原生缩放。
 
 ## 未实现与下一阶段
 
-真实 Vault 导出、附件处理和正式个人内容尚未实现。网站源码已在本地提交；公开推送、GitHub Actions 运行和 Pages 部署尚未完成；现阶段仅完成本地 Git 连接、发布配置准备与本地验证。Git 根目录为当前网站目录，不能在父级私人库根目录初始化 Git 来代替它。
+真实 Vault 导出、附件处理和正式个人内容尚未实现。网站源码和两篇合成样本已公开，Pages 已上线。Git 根目录为当前网站目录，不能在父级私人库根目录初始化 Git 来代替它。
 
-下一阶段只需批准少量公开笔记及其依赖/附件清单，再实现到独立内容目录的只读导出。现有构建前检查只接受两篇合成文件，后续必须与批准清单一起明确调整；不能把整个 Vault 或附件目录改成 `content`、`public` 或它们的符号链接。上传与公开发布另需明确授权。
+下一阶段只需批准少量公开笔记及其依赖/附件清单，再实现到独立内容目录的只读导出。现有构建前检查只接受两篇合成文件，后续必须与批准清单一起明确调整；不能把整个 Vault 或附件目录改成 `content`、`public` 或它们的符号链接。本次合成样本发布授权不包含读取或公开任何真实私人内容。
