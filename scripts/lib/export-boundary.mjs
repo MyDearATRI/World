@@ -45,7 +45,7 @@ export async function listFiles(root) {
   return result.sort()
 }
 
-export async function verifyManifest(root) {
+export async function verifyManifest(root, { allowUnmanaged = false } = {}) {
   const manifest = JSON.parse(await readFile(path.join(root, "publish-manifest.json"), "utf8"))
   if (manifest.version !== 1 || !Array.isArray(manifest.notes) || !Array.isArray(manifest.assets))
     throw new Error("Invalid publication manifest")
@@ -61,7 +61,10 @@ export async function verifyManifest(root) {
       throw new Error(`Publication copy changed; export it again: ${entry.output}`)
   }
   const actual = await listFiles(path.join(root, "content"))
-  if (actual.length !== expected.size || actual.some((file) => !expected.has(file)))
+  if (
+    !allowUnmanaged &&
+    (actual.length !== expected.size || actual.some((file) => !expected.has(file)))
+  )
     throw new Error("Content contains files outside the publication manifest")
   return manifest
 }

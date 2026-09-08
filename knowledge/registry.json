@@ -1,0 +1,990 @@
+{
+  "version": 1,
+  "nextId": 124,
+  "entries": [
+    {
+      "id": "a-000096",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/联系/From-Compactness-to-Uniform-Control",
+      "locator": "callout:IDEA — Finite reduction preserves different data in different proofs",
+      "fingerprint": "73ec608ec4be2dcc7a8a7d1fd02c793f2ca58acd897296246238033c811217e9",
+      "type": "observation",
+      "title": "IDEA — Finite reduction preserves different data in different proofs"
+    },
+    {
+      "id": "a-000001",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Algebras,-Lattices,-and-Uniform-Approximation",
+      "locator": "heading:DEF — Separation by functions and lattice operations",
+      "fingerprint": "f04c4dc68079baf213c27d7adc2a43b146e685622b6f4a2360f158aa19bbcaed",
+      "type": "definition-group",
+      "title": "DEF — Separation by functions and lattice operations"
+    },
+    {
+      "id": "a-000002",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Algebras,-Lattices,-and-Uniform-Approximation",
+      "locator": "heading:THM — Real Stone–Weierstrass",
+      "fingerprint": "c559ad56332def209c7dce3d46cf7f7e38c6deb86aefbf7b18511e05c41ce9d8",
+      "type": "theorem",
+      "title": "THM — Real Stone–Weierstrass"
+    },
+    {
+      "id": "a-000003",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Algebras,-Lattices,-and-Uniform-Approximation",
+      "locator": "heading:Proof — From multiplication to absolute values",
+      "fingerprint": "422e8bc7dcfef6ecb148f6eb562e8dedee8e863d2d9d836ae9dee7a8cc02bd43",
+      "type": "proof",
+      "title": "Proof — From multiplication to absolute values"
+    },
+    {
+      "id": "a-000004",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Algebras,-Lattices,-and-Uniform-Approximation",
+      "locator": "heading:Proof — Two finite patching steps",
+      "fingerprint": "e46c4ff79c39c4cc345b4338a14ed29bb3c33afd58152449625903652778e345",
+      "type": "proof",
+      "title": "Proof — Two finite patching steps"
+    },
+    {
+      "id": "a-000005",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Algebras,-Lattices,-and-Uniform-Approximation",
+      "locator": "heading:THM — Complex Stone–Weierstrass",
+      "fingerprint": "d5db09047baf524b4df671ed74ddc37205171477e7fa4963bfe456ba63b07ffd",
+      "type": "theorem",
+      "title": "THM — Complex Stone–Weierstrass"
+    },
+    {
+      "id": "a-000006",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Bases-and-Countability-Conditions",
+      "locator": "heading:DEF — Four countability properties",
+      "fingerprint": "afe89a7a8acd7d2d27ec1fd3a3c7cda3955b6552823721440853db5f38c690fd",
+      "type": "definition-group",
+      "title": "DEF — Four countability properties"
+    },
+    {
+      "id": "a-000007",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Bases-and-Countability-Conditions",
+      "locator": "heading:THM — Metric equivalence, with proof",
+      "fingerprint": "e598a0a999c94df6747de5d476ad795a6d7eb1c2be4ebe776e4a372d4724b184",
+      "type": "theorem",
+      "title": "THM — Metric equivalence, with proof"
+    },
+    {
+      "id": "a-000008",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Bases-and-Countability-Conditions",
+      "locator": "heading:PROP — The exact role of a countable neighborhood base",
+      "fingerprint": "4664953e5709bf2f5a388fca83e9a666973420502aefb7781528530d383dcb5b",
+      "type": "proposition",
+      "title": "PROP — The exact role of a countable neighborhood base"
+    },
+    {
+      "id": "a-000097",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Bases-and-Countability-Conditions",
+      "locator": "callout:IDEA — How a countable neighborhood base makes sequences sufficient",
+      "fingerprint": "7602ee4db0f7c92137ec00d7d9c27055bdb84ba0deee4a15c9a61a49290955fb",
+      "type": "observation",
+      "title": "IDEA — How a countable neighborhood base makes sequences sufficient"
+    },
+    {
+      "id": "a-000009",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Compactness-and-Total-Boundedness",
+      "locator": "heading:DEF — Compactness and finite intersections",
+      "fingerprint": "44f6e228dd3f4b8bee456a31ebe5b13f14730371053485844f5105b3d7931868",
+      "type": "definition-group",
+      "title": "DEF — Compactness and finite intersections"
+    },
+    {
+      "id": "a-000010",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Compactness-and-Total-Boundedness",
+      "locator": "heading:THM — Three equivalent metric compactness criteria",
+      "fingerprint": "d4cf04096de76cf3a295924b63d6d8a3f0b951a261a2b728459bae160d61ee05",
+      "type": "theorem",
+      "title": "THM — Three equivalent metric compactness criteria"
+    },
+    {
+      "id": "a-000011",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Compactness-and-Total-Boundedness",
+      "locator": "heading:Proof — Prevent escape, then use completeness",
+      "fingerprint": "3be2c8a2c9bbe8d7b4dabe74915bd4881b1eb6382e86b585ad41ac10002e7a91",
+      "type": "proof",
+      "title": "Proof — Prevent escape, then use completeness"
+    },
+    {
+      "id": "a-000098",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Compactness-and-Total-Boundedness",
+      "locator": "callout:IDEA — Compactness has two independent metric failure modes",
+      "fingerprint": "d7da907d190a40bac0678f3525f852512a6a6319aaeb955a2df9956124fdcbbf",
+      "type": "observation",
+      "title": "IDEA — Compactness has two independent metric failure modes"
+    },
+    {
+      "id": "a-000012",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Connectedness-and-Components",
+      "locator": "heading:DEF — Connectedness and paths",
+      "fingerprint": "3ed682b7e9b6162e119b11fc4317f28a252ac7183f6b432cda21ad5e501998c8",
+      "type": "definition-group",
+      "title": "DEF — Connectedness and paths"
+    },
+    {
+      "id": "a-000013",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Connectedness-and-Components",
+      "locator": "heading:THM — Connectedness survives closure, images, and overlapping unions",
+      "fingerprint": "485b658cd366eb5c81661557fa8b0489337ca92b4b62c3198e00e4df8bfa57cd",
+      "type": "theorem",
+      "title": "THM — Connectedness survives closure, images, and overlapping unions"
+    },
+    {
+      "id": "a-000014",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Connectedness-and-Components",
+      "locator": "heading:THM — Local paths turn connectedness into a global path",
+      "fingerprint": "ac08b0079bd4206f86a188493772defc674c77fcb8de9e92c9fd2c50dd9181ba",
+      "type": "theorem",
+      "title": "THM — Local paths turn connectedness into a global path"
+    },
+    {
+      "id": "a-000015",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Equicontinuity-and-Compact-Families",
+      "locator": "heading:DEF — One modulus for a family",
+      "fingerprint": "e3bf76c3d1ab5d15f49106550f9efdfc933f1564881a475293c1b0c18827413e",
+      "type": "definition",
+      "title": "DEF — One modulus for a family"
+    },
+    {
+      "id": "a-000016",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Equicontinuity-and-Compact-Families",
+      "locator": "heading:THM — Arzelà–Ascoli in the form used here",
+      "fingerprint": "db0c2d6789d02bf1d74f6d801f3a35e833a7b8710349c1db8e3cd609a791e566",
+      "type": "theorem",
+      "title": "THM — Arzelà–Ascoli in the form used here"
+    },
+    {
+      "id": "a-000017",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Equicontinuity-and-Compact-Families",
+      "locator": "heading:Proof — Diagonal selection followed by spatial control",
+      "fingerprint": "6783c69fdb437e374dabd288a685b1665d824137ec443108c9e36c19209ce992",
+      "type": "proof",
+      "title": "Proof — Diagonal selection followed by spatial control"
+    },
+    {
+      "id": "a-000099",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Equicontinuity-and-Compact-Families",
+      "locator": "callout:IDEA — Diagonal selection and uniformization perform different jobs",
+      "fingerprint": "828b2b099f4cc0ede5af881d784fe6de4e2524f84df7e392a925a180008e7b98",
+      "type": "observation",
+      "title": "IDEA — Diagonal selection and uniformization perform different jobs"
+    },
+    {
+      "id": "a-000018",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Local-Compactness-and-Compactification",
+      "locator": "heading:DEF — Compact neighborhoods and the extra point",
+      "fingerprint": "3d89b5942e508127a805fc1aaf8d1ca2073006e06d01af019a61409367ff7434",
+      "type": "definition-group",
+      "title": "DEF — Compact neighborhoods and the extra point"
+    },
+    {
+      "id": "a-000019",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Local-Compactness-and-Compactification",
+      "locator": "heading:THM — Compactness and Hausdorffness of the extension",
+      "fingerprint": "20d3912a71148b44ecc5a897a2f495f65fbf6414e1aa4864908f264b21c6c39b",
+      "type": "theorem",
+      "title": "THM — Compactness and Hausdorffness of the extension"
+    },
+    {
+      "id": "a-000020",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Metrization-and-the-Hilbert-Cube",
+      "locator": "heading:DEF — A countable coordinate space",
+      "fingerprint": "919f40580822d9ba1f5fe7ec169f04244917851d8e17ef8f4cebe1dd4bf99a3b",
+      "type": "definition",
+      "title": "DEF — A countable coordinate space"
+    },
+    {
+      "id": "a-000021",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Metrization-and-the-Hilbert-Cube",
+      "locator": "heading:THM — Urysohn metrization in Simon's formulation",
+      "fingerprint": "0d7575ecd12b33be7df950ad79458dfc224d9a339bf4927dd01939a88186fe11",
+      "type": "theorem",
+      "title": "THM — Urysohn metrization in Simon's formulation"
+    },
+    {
+      "id": "a-000022",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Metrization-and-the-Hilbert-Cube",
+      "locator": "heading:Proof — Produce coordinates that recognize the base",
+      "fingerprint": "0e55879b1017e269f477e259df10bc664626f353d22637a1b9cbe101dab1711f",
+      "type": "proof",
+      "title": "Proof — Produce coordinates that recognize the base"
+    },
+    {
+      "id": "a-000100",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Metrization-and-the-Hilbert-Cube",
+      "locator": "callout:PROP — Injective coordinates must also recover open sets",
+      "fingerprint": "4da14f79e9859ca61825447a8f68b9da8f916a5d193c3d504f3036692c6a8cb4",
+      "type": "observation",
+      "title": "PROP — Injective coordinates must also recover open sets"
+    },
+    {
+      "id": "a-000023",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Nets-and-General-Convergence",
+      "locator": "heading:DEF — Directed tests, convergence, and subnets",
+      "fingerprint": "030ee1403f1df7477859b3f6f497e1320e882d68d7dd0c19b98a3febff6de543",
+      "type": "definition-group",
+      "title": "DEF — Directed tests, convergence, and subnets"
+    },
+    {
+      "id": "a-000024",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Nets-and-General-Convergence",
+      "locator": "heading:THM — Nets recover closure and continuity",
+      "fingerprint": "f3dc6c36be87106ed4e622948a954218f3d2a0c68fbe47351783fb6b49f4c8d9",
+      "type": "theorem",
+      "title": "THM — Nets recover closure and continuity"
+    },
+    {
+      "id": "a-000025",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Nets-and-General-Convergence",
+      "locator": "heading:THM — Cluster points, subnets, and compactness",
+      "fingerprint": "2b31366d77efa160660b64a677833c9a21178a86b768068d6ca780ecdb8bb4d4",
+      "type": "theorem",
+      "title": "THM — Cluster points, subnets, and compactness"
+    },
+    {
+      "id": "a-000026",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Open-Sets,-Closure,-and-Continuity",
+      "locator": "heading:DEF — Topology and local information",
+      "fingerprint": "a0bf9441191792770a603e3037d3fba7198234cd92670eb053772211361b6d8b",
+      "type": "definition-group",
+      "title": "DEF — Topology and local information"
+    },
+    {
+      "id": "a-000027",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Open-Sets,-Closure,-and-Continuity",
+      "locator": "heading:PROP — Closure as an alternative specification",
+      "fingerprint": "9d61475d49d8bcd6d6bda73cfc2933a1ec0202d26abad2eaa70b59f0d1c6f730",
+      "type": "proposition",
+      "title": "PROP — Closure as an alternative specification"
+    },
+    {
+      "id": "a-000028",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Open-Sets,-Closure,-and-Continuity",
+      "locator": "heading:THM — Continuity is an inverse-image property",
+      "fingerprint": "e341d490573a2ca2e38e4685d1e73085eb8789dfafc2e9f2f3d7e715818c471c",
+      "type": "theorem",
+      "title": "THM — Continuity is an inverse-image property"
+    },
+    {
+      "id": "a-000029",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Open-Sets,-Closure,-and-Continuity",
+      "locator": "heading:THM — Uniform limits and complete function spaces",
+      "fingerprint": "6bd86356ec15dca6970731808c133c3b384b17535a657b6e0ca3517c6fc5321a",
+      "type": "theorem",
+      "title": "THM — Uniform limits and complete function spaces"
+    },
+    {
+      "id": "a-000030",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Positive-Approximation-and-Bernstein-Polynomials",
+      "locator": "heading:THM — An explicit polynomial approximation",
+      "fingerprint": "9d76a46ef9c246732da798f61e072fd577881026333ae39d053a9d9e042658f3",
+      "type": "theorem",
+      "title": "THM — An explicit polynomial approximation"
+    },
+    {
+      "id": "a-000031",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Positive-Approximation-and-Bernstein-Polynomials",
+      "locator": "heading:Proof — Separate nearby samples from the tail",
+      "fingerprint": "6680fc74681fe46010268ecb05d8c5887f15caaa1b30b9eb8272e4926ce7d5f0",
+      "type": "proof",
+      "title": "Proof — Separate nearby samples from the tail"
+    },
+    {
+      "id": "a-000101",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Positive-Approximation-and-Bernstein-Polynomials",
+      "locator": "callout:IDEA — Positive mass concentration is the reusable part of Bernstein approximation",
+      "fingerprint": "bba3fd87459d52869c60b030761eda4092bf09d6700db0a5849eca0f72d06f98",
+      "type": "observation",
+      "title": "IDEA — Positive mass concentration is the reusable part of Bernstein approximation"
+    },
+    {
+      "id": "a-000032",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Positive-Approximation-and-Bernstein-Polynomials",
+      "locator": "heading:PROP — Approximation in the complex variable needs both directions",
+      "fingerprint": "beec5539f6a61a38092789cede68552c88b44bdc00bb7aac1ad7895c04ccef25",
+      "type": "proposition",
+      "title": "PROP — Approximation in the complex variable needs both directions"
+    },
+    {
+      "id": "a-000033",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Positive-Approximation-and-Bernstein-Polynomials",
+      "locator": "heading:THM — Korovkin's testing principle",
+      "fingerprint": "b208041daa545d15ad57a72ad92802f9bd199a1c35cee80142e98de0315b103e",
+      "type": "theorem",
+      "title": "THM — Korovkin's testing principle"
+    },
+    {
+      "id": "a-000034",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Products-and-Compactness",
+      "locator": "heading:DEF — Product topology and finite-coordinate neighborhoods",
+      "fingerprint": "5a94ac5b2e71988f33e2288ec214577523681d0dc4c75f5d8bb0b266a94ae7d6",
+      "type": "definition-group",
+      "title": "DEF — Product topology and finite-coordinate neighborhoods"
+    },
+    {
+      "id": "a-000035",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Products-and-Compactness",
+      "locator": "heading:THM — Tychonoff in the compact Hausdorff case",
+      "fingerprint": "5e8ca4e567343e69ed05228c49f4d7d2cec6edfd2286197a9f9c7a2d45949cd9",
+      "type": "theorem",
+      "title": "THM — Tychonoff in the compact Hausdorff case"
+    },
+    {
+      "id": "a-000036",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Products-and-Compactness",
+      "locator": "heading:Proof — Enlarge compatible partial cluster points",
+      "fingerprint": "f148dccbb3e70ab25f765e820af2eb5db81c60fbc3139893b0f82912e9e832af",
+      "type": "proof",
+      "title": "Proof — Enlarge compatible partial cluster points"
+    },
+    {
+      "id": "a-000102",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Products-and-Compactness",
+      "locator": "callout:IDEA — Finite tests are what make the chain union admissible",
+      "fingerprint": "a949e696db0ba957692acfbb7a307d654122a8a3d1d012bb57e17d9cc5fd8e32",
+      "type": "observation",
+      "title": "IDEA — Finite tests are what make the chain union admissible"
+    },
+    {
+      "id": "a-000037",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Quotient-Topologies",
+      "locator": "heading:DEF — The strongest topology compatible with the quotient map",
+      "fingerprint": "b36b39e4b90593d7258b528828eeb22917149a06bf0ff596265099769b94851c",
+      "type": "definition",
+      "title": "DEF — The strongest topology compatible with the quotient map"
+    },
+    {
+      "id": "a-000038",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Quotient-Topologies",
+      "locator": "heading:PROP — When a quotient describes a target space",
+      "fingerprint": "5a554f4db8eac60b548dfa3635d4646dbfb8655353d473240670190284a54bb5",
+      "type": "proposition",
+      "title": "PROP — When a quotient describes a target space"
+    },
+    {
+      "id": "a-000039",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Semicontinuity,-Extrema,-and-Continuous-Partitions",
+      "locator": "heading:DEF — One-sided continuity",
+      "fingerprint": "b7e19d4c2215285db009e18b52f1e7547bb44f58da8367fc72e90336b3697bda",
+      "type": "definition-group",
+      "title": "DEF — One-sided continuity"
+    },
+    {
+      "id": "a-000040",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Semicontinuity,-Extrema,-and-Continuous-Partitions",
+      "locator": "heading:THM — A lower semicontinuous function attains its minimum",
+      "fingerprint": "e7b7c3d003824e71af0a8f313380c23d9a865ed34b39486e2d251b17d26ac9c9",
+      "type": "theorem",
+      "title": "THM — A lower semicontinuous function attains its minimum"
+    },
+    {
+      "id": "a-000041",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Semicontinuity,-Extrema,-and-Continuous-Partitions",
+      "locator": "heading:THM — Continuous finite partitions on a compact target",
+      "fingerprint": "084266ee0ecad51fe48b7b1c5a0d7ff6159e604e5a3716f62b46a92c724e9d47",
+      "type": "theorem",
+      "title": "THM — Continuous finite partitions on a compact target"
+    },
+    {
+      "id": "a-000042",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Semicontinuity,-Extrema,-and-Continuous-Partitions",
+      "locator": "heading:THM — Continuous approximation from below",
+      "fingerprint": "5cabd4f9f56a6f01334086be49e67f2738516724a3fa2901a14d4a2f9e016c55",
+      "type": "theorem",
+      "title": "THM — Continuous approximation from below"
+    },
+    {
+      "id": "a-000103",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Semicontinuity,-Extrema,-and-Continuous-Partitions",
+      "locator": "callout:IDEA — A one-sided limit inequality is enough for minimization",
+      "fingerprint": "82a6dcb497a0ce6e75943f996fcc5660ea52281d71e9daae2eecb852485efdf1",
+      "type": "observation",
+      "title": "IDEA — A one-sided limit inequality is enough for minimization"
+    },
+    {
+      "id": "a-000043",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Separation-and-Continuous-Extension",
+      "locator": "heading:DEF — Separation hypotheses, including Simon's convention",
+      "fingerprint": "83ad4ca150d8ce7878f309f019c3710f20bc3f234fbddb1edf046e308221ab5b",
+      "type": "definition-group",
+      "title": "DEF — Separation hypotheses, including Simon's convention"
+    },
+    {
+      "id": "a-000044",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Separation-and-Continuous-Extension",
+      "locator": "heading:THM — Urysohn's lemma",
+      "fingerprint": "05b717e987c20b4417412c444d18ac046df456b55622fc56b96493c3873ebfa3",
+      "type": "theorem",
+      "title": "THM — Urysohn's lemma"
+    },
+    {
+      "id": "a-000045",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Separation-and-Continuous-Extension",
+      "locator": "heading:Proof — Build ordered neighborhoods, then recover a function",
+      "fingerprint": "4efc47441adf6931a92717213b95e54d0d4413d34e78906dbc3aa667a5a1d25b",
+      "type": "proof",
+      "title": "Proof — Build ordered neighborhoods, then recover a function"
+    },
+    {
+      "id": "a-000046",
+      "slug": "笔记主体/书籍/Simon实分析/第二章/知识/Separation-and-Continuous-Extension",
+      "locator": "heading:THM — Tietze extension and zero sets",
+      "fingerprint": "1c32f89962ab3054e9efc73b29830049ba44b2077772cb5f2a31b49d3f22f5aa",
+      "type": "theorem",
+      "title": "THM — Tietze extension and zero sets"
+    },
+    {
+      "id": "a-000104",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/联系/From-Uniform-Approximation-to-Fourier-Expansions",
+      "locator": "callout:IDEA — Existence, prescribed coefficients, and optimality are different claims",
+      "fingerprint": "89ee6adb3c63abe5660da67fcedb8dd6e31764100a460f9eda5b288f7c6798ff",
+      "type": "observation",
+      "title": "IDEA — Existence, prescribed coefficients, and optimality are different claims"
+    },
+    {
+      "id": "a-000047",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Dirichlet-Kernels-and-Dini-Convergence",
+      "locator": "callout:THM — Local Dini test",
+      "fingerprint": "7391096640f30df3c97800abdc869455bcb352c94fc2a0e7cf4bf378bf2b566d",
+      "type": "theorem",
+      "title": "THM — Local Dini test"
+    },
+    {
+      "id": "a-000048",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Dirichlet-Kernels-and-Dini-Convergence",
+      "locator": "heading:Proof — Separate the small region from the oscillatory region",
+      "fingerprint": "94826184283b03ae6d2ca180b2d1fb3a31fba7a9837919b21da26999017dbcb5",
+      "type": "proof",
+      "title": "Proof — Separate the small region from the oscillatory region"
+    },
+    {
+      "id": "a-000049",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Fourier-Series-and-Summation-Kernels",
+      "locator": "callout:DEF — Approximate identity on the circle",
+      "fingerprint": "19aa19cbef15a2be35d42c4853e60221b5cf3ea7211dd37fd09ce490c2494b53",
+      "type": "definition",
+      "title": "DEF — Approximate identity on the circle"
+    },
+    {
+      "id": "a-000105",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Fourier-Series-and-Summation-Kernels",
+      "locator": "callout:PROP — Positivity supplies stability as well as convergence",
+      "fingerprint": "f6348f52827f49be2ae79f493866cfecac4e4c5919d6089f24dd8cdc9ecd7a80",
+      "type": "observation",
+      "title": "PROP — Positivity supplies stability as well as convergence"
+    },
+    {
+      "id": "a-000050",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Hilbert-Completeness-and-Norm-Identities",
+      "locator": "callout:DEF — Inner product and Hilbert space",
+      "fingerprint": "5fd5f2e6a315421bc0f2f03a83f04afa2d3e7adadcb5f39c79f1270e49d32333",
+      "type": "definition-group",
+      "title": "DEF — Inner product and Hilbert space"
+    },
+    {
+      "id": "a-000106",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Hilbert-Completeness-and-Norm-Identities",
+      "locator": "callout:PROP — Point evaluation does not survive L2 completion",
+      "fingerprint": "d7d5a4e40420a66467df9540923b5161262b66406d72855886e55df714c7adf9",
+      "type": "observation",
+      "title": "PROP — Point evaluation does not survive L2 completion"
+    },
+    {
+      "id": "a-000051",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Hilbert-Sums-and-Tensor-Products",
+      "locator": "heading:Proof — Well-definedness and positivity",
+      "fingerprint": "5b0c72e37ac437fd36cbcc85924e4573ff10bc691f05d243810a148cdb944b48",
+      "type": "proof",
+      "title": "Proof — Well-definedness and positivity"
+    },
+    {
+      "id": "a-000107",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Hilbert-Sums-and-Tensor-Products",
+      "locator": "callout:RMK — Abstract unitary equivalence does not retain a chosen factorization",
+      "fingerprint": "f41f247ee7a780671b95fbc668904e8032a632365d5473f8be76011a3671f3fa",
+      "type": "observation",
+      "title": "RMK — Abstract unitary equivalence does not retain a chosen factorization"
+    },
+    {
+      "id": "a-000052",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Linear-Functionals-as-Vectors",
+      "locator": "callout:THM — A bounded functional has a unique representing vector",
+      "fingerprint": "ae8c945e7ae5cd7adc937c728d7f9e095f51576c2464dc2d26f9b82e8c1c6424",
+      "type": "theorem",
+      "title": "THM — A bounded functional has a unique representing vector"
+    },
+    {
+      "id": "a-000108",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Linear-Functionals-as-Vectors",
+      "locator": "callout:RMK — The identification with the dual is antilinear",
+      "fingerprint": "7acf40effe9428132743d698c009acff1225874c12e23ebdc30c662977a5244f",
+      "type": "observation",
+      "title": "RMK — The identification with the dual is antilinear"
+    },
+    {
+      "id": "a-000053",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Nearest-Points-in-Convex-Sets",
+      "locator": "callout:THM — Nearest point in a closed convex set",
+      "fingerprint": "a0b142d7bb647ac0c85aba02b8a89593c2573b812cd63ca8307803b30ece5777",
+      "type": "theorem",
+      "title": "THM — Nearest point in a closed convex set"
+    },
+    {
+      "id": "a-000054",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Nearest-Points-in-Convex-Sets",
+      "locator": "heading:Proof — Near minimizers must approach one another",
+      "fingerprint": "3c1bac5e76dc288ded7a5c76d0f894a2e777f424c95b8dc5ab8afba2a53b03d9",
+      "type": "proof",
+      "title": "Proof — Near minimizers must approach one another"
+    },
+    {
+      "id": "a-000109",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Nearest-Points-in-Convex-Sets",
+      "locator": "callout:IDEA — Existence through a Cauchy estimate",
+      "fingerprint": "6da4850a84383dd4909168ffeea474bd66a3a089f092afa2ad21f1e1f8e8c4ff",
+      "type": "observation",
+      "title": "IDEA — Existence through a Cauchy estimate"
+    },
+    {
+      "id": "a-000055",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Orthonormal-Expansions",
+      "locator": "callout:THM — Four equivalent forms of completeness of an orthonormal family",
+      "fingerprint": "3a8f84c8b6bdc8f1265f6c7f4d833d6d2143a9eae3d0419f00c2ccccc1c9994d",
+      "type": "theorem",
+      "title": "THM — Four equivalent forms of completeness of an orthonormal family"
+    },
+    {
+      "id": "a-000110",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Pointwise-Fourier-Convergence-and-Jumps",
+      "locator": "callout:RMK — A shrinking error region can retain a fixed amplitude",
+      "fingerprint": "f77022e353eb5ab0838ce2c5abc47a4c57db833214610cb790870ef81cdfe3e0",
+      "type": "observation",
+      "title": "RMK — A shrinking error region can retain a fixed amplitude"
+    },
+    {
+      "id": "a-000056",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Trigonometric-Density-and-L2-Fourier-Expansion",
+      "locator": "callout:THM — Trigonometric polynomials are uniformly dense",
+      "fingerprint": "8ccba453a534edaf6644847435d68e7bc7dca93dde7413a6c323fc471e80469f",
+      "type": "theorem",
+      "title": "THM — Trigonometric polynomials are uniformly dense"
+    },
+    {
+      "id": "a-000111",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Trigonometric-Density-and-L2-Fourier-Expansion",
+      "locator": "callout:RMK — Density and a prescribed approximation algorithm are different claims",
+      "fingerprint": "a69c01f04a451440d95c2c2467038ea724d634c169134d67bb73128d56a01c58",
+      "type": "observation",
+      "title": "RMK — Density and a prescribed approximation algorithm are different claims"
+    },
+    {
+      "id": "a-000112",
+      "slug": "笔记主体/书籍/Simon实分析/第三章/知识/Weak-Topologies-and-Dual-Pairings",
+      "locator": "callout:PROP — Boundedness converts basis tests into all tests",
+      "fingerprint": "72807008d0c111cf94656f811a02cd0e6116730f6386a8fa97d04e5c59d5d69e",
+      "type": "observation",
+      "title": "PROP — Boundedness converts basis tests into all tests"
+    },
+    {
+      "id": "a-000057",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/联系/从代数投影到正交谱分解",
+      "locator": "callout:代数投影与正交投影",
+      "fingerprint": "221aa4e4ef61ddbf44189835932fc24b73cc39a9f6336c8b77e3133e3ab1aece",
+      "type": "definition-group",
+      "title": "代数投影与正交投影"
+    },
+    {
+      "id": "a-000113",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/联系/从代数投影到正交谱分解",
+      "locator": "callout:IDEA — The range alone does not determine a projection",
+      "fingerprint": "67e291e29a0ad12d363adb878ef71dd713e25bace0fe26f70d4ebd943fef0f03",
+      "type": "observation",
+      "title": "IDEA — The range alone does not determine a projection"
+    },
+    {
+      "id": "a-000114",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/联系/从商构造到完备化与实数",
+      "locator": "callout:IDEA — A quotient identifies; completion first enlarges",
+      "fingerprint": "b07f5b849606718b83043aed8db9442aa7d5f8065f7c6faeb1438793819feb6a",
+      "type": "observation",
+      "title": "IDEA — A quotient identifies; completion first enlarges"
+    },
+    {
+      "id": "a-000115",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/联系/从商构造到完备化与实数",
+      "locator": "callout:RMK — Construct the real-valued distance without presupposing real limits",
+      "fingerprint": "f4564404a1571942c2a9913b767359bce7e1a94d717526692dac404ba3836891",
+      "type": "observation",
+      "title": "RMK — Construct the real-valued distance without presupposing real limits"
+    },
+    {
+      "id": "a-000116",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/联系/可数递进与极大性存在证明",
+      "locator": "callout:IDEA — Finite dependence checks make unions of chains admissible",
+      "fingerprint": "ab218d4b329ebfeaa8f05e6cb8c276b06e6b1ce75560b9cad620cd689ee8b3ca",
+      "type": "observation",
+      "title": "IDEA — Finite dependence checks make unions of chains admissible"
+    },
+    {
+      "id": "a-000117",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/习题与原书核校",
+      "locator": "callout:从一个具体问题进入",
+      "fingerprint": "b1aae89f97c1370be39f1d63e915789485c35c99d92d8b70fe46a6eab12066f3",
+      "type": "question",
+      "title": "从一个具体问题进入"
+    },
+    {
+      "id": "a-000058",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/研读/1.1-记号与术语",
+      "locator": "callout:同一个对象的不同表示",
+      "fingerprint": "915ce4b9988d6f237aa01697908ff7ca18683d0e99f565867774bc5c7e6707fd",
+      "type": "definition-group",
+      "title": "同一个对象的不同表示"
+    },
+    {
+      "id": "a-000059",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/研读/1.2-度量空间",
+      "locator": "callout:半度量与度量的差别",
+      "fingerprint": "ddf9d46e5c0aea9a8a2c954d20976b1454e631f55282663e563949d8f493044e",
+      "type": "definition-group",
+      "title": "半度量与度量的差别"
+    },
+    {
+      "id": "a-000060",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/研读/1.2-度量空间",
+      "locator": "callout:连续性有三种可互换的检查方法",
+      "fingerprint": "17074e773c12c97c86960fa4c308e93f6bfb1d29425a5c489391cd9a54efb6f2",
+      "type": "theorem",
+      "title": "连续性有三种可互换的检查方法"
+    },
+    {
+      "id": "a-000061",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/研读/1.3-实数",
+      "locator": "callout:非空有界集合具有最小上界",
+      "fingerprint": "810f592be17d88a644c4d2f9d2078d385dbb115e84d7526bd1202dff99904d4c",
+      "type": "theorem",
+      "title": "非空有界集合具有最小上界"
+    },
+    {
+      "id": "a-000062",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/研读/1.4-序",
+      "locator": "callout:偏序保留一致性，不要求两两可比",
+      "fingerprint": "078ac2358c4f49d8012b883191f8cbb766b88f6f9eb0c813363b7c72149a95ea",
+      "type": "definition-group",
+      "title": "偏序保留一致性，不要求两两可比"
+    },
+    {
+      "id": "a-000063",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/研读/1.5-选择公理与-Zorn-引理",
+      "locator": "callout:选择公理与 Zorn 引理",
+      "fingerprint": "5b60d0d120df3fe1bbd354d2b120024828b26efbf39d28b8e04d644de1f626ad",
+      "type": "theorem",
+      "title": "选择公理与 Zorn 引理"
+    },
+    {
+      "id": "a-000064",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/研读/1.6-可数性",
+      "locator": "callout:可数包含有限情形",
+      "fingerprint": "81b1049d84b13d9b1c60a7c80f34586ca4d6c51c1cbf46b8092c365f85e26cbe",
+      "type": "definition-group",
+      "title": "可数包含有限情形"
+    },
+    {
+      "id": "a-000065",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/等价关系与商构造",
+      "locator": "callout:等价关系与等价类",
+      "fingerprint": "2451c91a59c56da3761337e784d6fe6dd334769606920f907dc2f39167dad871",
+      "type": "definition-group",
+      "title": "等价关系与等价类"
+    },
+    {
+      "id": "a-000066",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/等价关系与商构造",
+      "locator": "callout:半度量商空间",
+      "fingerprint": "1a845743c8f8644a2f5d7d6ed6d0e0d090a7cd2f0fda2a50be4b8a5194b06297",
+      "type": "theorem",
+      "title": "半度量商空间"
+    },
+    {
+      "id": "a-000067",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/度量拓扑与连续性的三种刻画",
+      "locator": "callout:度量与度量拓扑",
+      "fingerprint": "c795123219e2f43c56d36d0057dbd8b528d94aa088319a780ddb0a5562844cba",
+      "type": "definition-group",
+      "title": "度量与度量拓扑"
+    },
+    {
+      "id": "a-000068",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/度量拓扑与连续性的三种刻画",
+      "locator": "callout:闭包与序列，原书命题 1.2.1",
+      "fingerprint": "d5e695c691850c7a9b76b8a9d82b57a0d8152de6f6d8288c4066b443b2f765c8",
+      "type": "theorem",
+      "title": "闭包与序列，原书命题 1.2.1"
+    },
+    {
+      "id": "a-000094",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/度量拓扑与连续性的三种刻画",
+      "locator": "reviewed-paragraph:闭包与序列刻画的证明",
+      "fingerprint": "f2bfeb69df587657ef45121cab2ee484b18dd5badcfc0d4f52981e88449d475d",
+      "type": "proof",
+      "title": "闭包与序列刻画的证明"
+    },
+    {
+      "id": "a-000118",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/度量拓扑与连续性的三种刻画",
+      "locator": "callout:IDEA — The sequence test for closure uses a countable local scale",
+      "fingerprint": "1c2c22d3838f6419fc82dcc2557b4fb29a63db1554a14ea63fb377034b720e01",
+      "type": "observation",
+      "title": "IDEA — The sequence test for closure uses a countable local scale"
+    },
+    {
+      "id": "a-000069",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/度量拓扑与连续性的三种刻画",
+      "locator": "reviewed-paragraph:逐点连续与一致连续的条件",
+      "fingerprint": "a6f32d51563dce3fb022014e0d9ab97638e8c2a1a26748604f591ca074721626",
+      "type": "definition-group",
+      "title": "逐点连续与一致连续的条件"
+    },
+    {
+      "id": "a-000070",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/度量拓扑与连续性的三种刻画",
+      "locator": "callout:连续性的三种刻画，原书命题 1.2.2",
+      "fingerprint": "b7afbe7d0b10051882e9dd3cd4d40e3796e40d833bd44ac7d35505a94cd8f48e",
+      "type": "theorem",
+      "title": "连续性的三种刻画，原书命题 1.2.2"
+    },
+    {
+      "id": "a-000095",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/度量拓扑与连续性的三种刻画",
+      "locator": "reviewed-paragraph:连续性三种刻画的证明",
+      "fingerprint": "b355223fd7564e1b5a4722701a9e58288739f14f0a86b95e17f7b4c501385b12",
+      "type": "proof",
+      "title": "连续性三种刻画的证明"
+    },
+    {
+      "id": "a-000071",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/光滑截断与有限单位分解",
+      "locator": "callout:支集与局部截断",
+      "fingerprint": "9a131a4fba58fe1a077c77fc6dd15f38f917e17b10e48dfd2765cb55a32ae9ea",
+      "type": "definition-group",
+      "title": "支集与局部截断"
+    },
+    {
+      "id": "a-000072",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/光滑截断与有限单位分解",
+      "locator": "callout:原书定理1.8.4：有限光滑单位分解",
+      "fingerprint": "a56ddbfac4ed9ab9944ef4a5aea2af9171883436c2d72f7b7981851c64e68085",
+      "type": "theorem",
+      "title": "原书定理1.8.4：有限光滑单位分解"
+    },
+    {
+      "id": "a-000119",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/光滑截断与有限单位分解",
+      "locator": "callout:PROP — The finite partition already sums to one on a neighborhood",
+      "fingerprint": "9be5bb4bc452b27d0692bb8058e66512014299fddb7cd22f85c1be5c1b2c9ae6",
+      "type": "observation",
+      "title": "PROP — The finite partition already sums to one on a neighborhood"
+    },
+    {
+      "id": "a-000073",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/可数性与两种对角线方法",
+      "locator": "callout:可数与可数无限",
+      "fingerprint": "61b6cb8505b3301b2e1721066a632477c4ff7882aec9a2dde130647986c28ff9",
+      "type": "definition-group",
+      "title": "可数与可数无限"
+    },
+    {
+      "id": "a-000120",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/可数性与两种对角线方法",
+      "locator": "callout:IDEA — Diagonal extraction controls each fixed coordinate, not their supremum",
+      "fingerprint": "f63f1431726bba5fcfc44d4c1932a41689693ef95e949bfbae40512723bcd6a9",
+      "type": "observation",
+      "title": "IDEA — Diagonal extraction controls each fixed coordinate, not their supremum"
+    },
+    {
+      "id": "a-000074",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/可数性与两种对角线方法",
+      "locator": "callout:Cantor 不可数性",
+      "fingerprint": "4045fed8e913cb49eba3e34a94642f4eb6a93aec04303c4fa8c997fc53d574f2",
+      "type": "theorem",
+      "title": "Cantor 不可数性"
+    },
+    {
+      "id": "a-000075",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/内积、自伴算子与有限维谱定理",
+      "locator": "callout:Simon 的内积约定与自伴性",
+      "fingerprint": "f53e151719516074cd7c18d8ff6f6e23809937e6937d56724efa161cce820100",
+      "type": "definition-group",
+      "title": "Simon 的内积约定与自伴性"
+    },
+    {
+      "id": "a-000076",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/内积、自伴算子与有限维谱定理",
+      "locator": "callout:原书定理1.7.9：有限维谱定理",
+      "fingerprint": "979a2c67dcd39167e4e25dd16daa63cfa30218b30db2a396e03d1b88607720df",
+      "type": "theorem",
+      "title": "原书定理1.7.9：有限维谱定理"
+    },
+    {
+      "id": "a-000077",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/偏序、链与-Zorn-引理",
+      "locator": "callout:偏序、全序与链",
+      "fingerprint": "64697e306b7ffc6605176565c99fa1ffef7b016811781c4bff0ab3555cbfc44d",
+      "type": "definition-group",
+      "title": "偏序、全序与链"
+    },
+    {
+      "id": "a-000078",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/偏序、链与-Zorn-引理",
+      "locator": "callout:Zorn 引理与选择公理",
+      "fingerprint": "3f8600556ed7d5e8754268ca77a58203f41b79fb205c43cecb1510b0606c6054",
+      "type": "theorem",
+      "title": "Zorn 引理与选择公理"
+    },
+    {
+      "id": "a-000079",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/实数构造与上确界性质",
+      "locator": "callout:实数作为有理 Cauchy 序列的等价类",
+      "fingerprint": "5615434449918ee1fca04bed35a04284daa5b7840f67e0c5090e425d09518e56",
+      "type": "definition",
+      "title": "实数作为有理 Cauchy 序列的等价类"
+    },
+    {
+      "id": "a-000080",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/实数构造与上确界性质",
+      "locator": "callout:上确界性质",
+      "fingerprint": "7552dbd56f580934365a606cef65249009dc796755e0d6ae7059423d3abadfaa",
+      "type": "theorem",
+      "title": "上确界性质"
+    },
+    {
+      "id": "a-000081",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/投影、直和与不变子空间",
+      "locator": "callout:投影与不变子空间",
+      "fingerprint": "9a0716662b4e025624fbd9c9b5cddc33790ef1053bd7fa40e7577b7b06ca9560",
+      "type": "definition-group",
+      "title": "投影与不变子空间"
+    },
+    {
+      "id": "a-000082",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/投影、直和与不变子空间",
+      "locator": "callout:原书命题1.7.2",
+      "fingerprint": "5451138812bf507a4b0cd1d37fc320ec77f8fd1272dcb12ea346537f2f0dbe1e",
+      "type": "theorem",
+      "title": "原书命题1.7.2"
+    },
+    {
+      "id": "a-000083",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/投影、直和与不变子空间",
+      "locator": "callout:原书命题1.7.3",
+      "fingerprint": "951992d6184247b4ae092c605cc56f089d72aabc7ee74593ec1a3e519eee1fd9",
+      "type": "theorem",
+      "title": "原书命题1.7.3"
+    },
+    {
+      "id": "a-000121",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/投影、直和与不变子空间",
+      "locator": "callout:IDEA — Commutation preserves both sides of a direct sum",
+      "fingerprint": "ca9193ca3bb1314787930d83ef22c69fd7121388e0f33bb25ad1c151398d49dc",
+      "type": "observation",
+      "title": "IDEA — Commutation preserves both sides of a direct sum"
+    },
+    {
+      "id": "a-000084",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/线性基、维数与代数补空间",
+      "locator": "callout:生成、线性无关与代数基",
+      "fingerprint": "36a28bfbfc6ccb35a5a1a0753ba488b62bed1354e72cb81c9acdff4d4c3001a0",
+      "type": "definition-group",
+      "title": "生成、线性无关与代数基"
+    },
+    {
+      "id": "a-000085",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/线性基、维数与代数补空间",
+      "locator": "callout:基的存在与扩充",
+      "fingerprint": "10cdb916ddb48d76a7b6e00186dfd778c7da29a0ba40e303e028b5d33fb6987b",
+      "type": "theorem",
+      "title": "基的存在与扩充"
+    },
+    {
+      "id": "a-000086",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/线性基、维数与代数补空间",
+      "locator": "callout:代数直和",
+      "fingerprint": "13e3e34ba7ad5095840994ec127345a4cd95cdd733e265e5e5cd3321d352d8d4",
+      "type": "definition",
+      "title": "代数直和"
+    },
+    {
+      "id": "a-000087",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/最小多项式与-Jordan-分解",
+      "locator": "callout:最小多项式",
+      "fingerprint": "46c3c631d33fab8cc3ce4f60133bb4bef25993af79ab293baa650ca38e9d1c88",
+      "type": "definition",
+      "title": "最小多项式"
+    },
+    {
+      "id": "a-000088",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/最小多项式与-Jordan-分解",
+      "locator": "callout:幂零与幂零链",
+      "fingerprint": "fa909430c6739b10e70a0ed44b35369bc920c5032eaa3ca7cf4eb0b4d88200ed",
+      "type": "definition-group",
+      "title": "幂零与幂零链"
+    },
+    {
+      "id": "a-000089",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/最小多项式与-Jordan-分解",
+      "locator": "callout:原书定理1.7.6：投影与幂零部分",
+      "fingerprint": "a2c8e1c4fab354a00df63f9eb38c24870668a4a313b63d895ec601218b807ff3",
+      "type": "theorem",
+      "title": "原书定理1.7.6：投影与幂零部分"
+    },
+    {
+      "id": "a-000090",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/Cauchy-序列与度量完备化",
+      "locator": "callout:Cauchy 与完备",
+      "fingerprint": "e87b03412d3c820854e2ce2cdf73fd6285cb3062053266256604eaae639a725d",
+      "type": "definition-group",
+      "title": "Cauchy 与完备"
+    },
+    {
+      "id": "a-000091",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/Cauchy-序列与度量完备化",
+      "locator": "callout:完备化存在且相容地唯一",
+      "fingerprint": "7c69f252122847ce995097cb7cb34c6a6da0a28148dadfed2bec2d8d9e5e5c90",
+      "type": "theorem",
+      "title": "完备化存在且相容地唯一"
+    },
+    {
+      "id": "a-000122",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/Cauchy-序列与度量完备化",
+      "locator": "callout:IDEA — Uniqueness belongs to the completion together with its embedding",
+      "fingerprint": "1a5850f33b1ca2ac9964f89acfe7a12a5bb274356c0f53adfba717b13cd4755f",
+      "type": "observation",
+      "title": "IDEA — Uniqueness belongs to the completion together with its embedding"
+    },
+    {
+      "id": "a-000092",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/Taylor-余项与误差估计",
+      "locator": "callout:原书定理1.8.1，按展开基点校正",
+      "fingerprint": "3c0e642bee75db5a8e7c96947da2105689e418e79e23f0ccb0006d4e30424ec6",
+      "type": "theorem",
+      "title": "原书定理1.8.1，按展开基点校正"
+    },
+    {
+      "id": "a-000093",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/Taylor-余项与误差估计",
+      "locator": "callout:原书定理1.8.2，明确实值条件",
+      "fingerprint": "e9f4ba445c44d98f895a833523f6dc97d7445038a36dc3b27db6da703c95be5b",
+      "type": "theorem",
+      "title": "原书定理1.8.2，明确实值条件"
+    },
+    {
+      "id": "a-000123",
+      "slug": "笔记主体/书籍/Simon实分析/第一章/知识/Taylor-余项与误差估计",
+      "locator": "callout:IDEA — Taylor coefficients require a remainder argument to recover the function",
+      "fingerprint": "89cbf9046d27cce8ec85199e7343b24997ce8984a0df118eaea4e814a07fdd23",
+      "type": "observation",
+      "title": "IDEA — Taylor coefficients require a remainder argument to recover the function"
+    }
+  ]
+}

@@ -87,6 +87,19 @@ test("exports approved notes and referenced images, omits private inputs, and is
   await verifyManifest(f.root)
 })
 
+test("read-only snapshot checks allow unrelated copies but publication remains strict", async (t) => {
+  const f = await fixture(t)
+  await f.run()
+  const extra = path.join(f.root, "content/unapproved copy.md")
+  await writeFile(extra, "unreviewed material")
+  const manifest = await verifyManifest(f.root, { allowUnmanaged: true })
+  assert.equal(manifest.notes.length, 2)
+  await assert.rejects(verifyManifest(f.root), /outside the publication manifest/)
+  assert.equal(await readFile(extra, "utf8"), "unreviewed material")
+  await writeFile(path.join(f.root, "content/index.md"), "changed approved content")
+  await assert.rejects(verifyManifest(f.root, { allowUnmanaged: true }), /changed/)
+})
+
 test("preserves source metadata and block embeds without rewriting code examples", async (t) => {
   const f = await fixture(t)
   await f.source("首页.md", "# Home\n\n![[First#^claim]]\n\n```markdown\n[[missing]]\n```\n")

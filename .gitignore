@@ -12,6 +12,8 @@ replit.nix
 artifacts/
 quartz/static/fonts/
 quartz/static/katex/
+quartz/static/semantic/
+.cache/semantic/
 
 # Local environment values and private key material are not source files.
 .env

@@ -6,7 +6,7 @@ import { verifyManifest } from "./lib/export-boundary.mjs"
 
 const root = fileURLToPath(new URL("../", import.meta.url))
 const require = createRequire(import.meta.url)
-const manifest = await verifyManifest(root)
+const manifest = await verifyManifest(root, { allowUnmanaged: true })
 for (const name of ["public", ".quartz-cache", "quartz/static"]) {
   try {
     if ((await lstat(path.join(root, name))).isSymbolicLink())

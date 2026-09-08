@@ -67,6 +67,8 @@ export interface GlobalConfiguration {
   analytics: Analytics
   /** Glob patterns to not search */
   ignorePatterns: string[]
+  /** Optional reviewed output manifest: unlisted inputs are never parsed or watched. */
+  contentManifest?: string
   /** Whether to use created, modified, or published as the default type of date */
   defaultDateType: ValidDateType
   /** Base URL to use for CNAME files, sitemaps, and RSS feeds that require an absolute URL.

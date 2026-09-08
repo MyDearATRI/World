@@ -5,5 +5,9 @@ node_modules
 artifacts
 quartz/static/fonts
 quartz/static/katex
+quartz/static/semantic
+.cache
+knowledge/index.json
+knowledge/semantic.json
 content
 publish-manifest.json

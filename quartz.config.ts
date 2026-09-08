@@ -6,6 +6,8 @@ import { ReadingContent } from "./quartz/components/Reading"
 import { ApprovedAssets } from "./quartz/plugins/emitters/approvedAssets"
 import { BookIndex } from "./quartz/plugins/emitters/bookIndex"
 import { ReaderMetadata } from "./quartz/plugins/transformers/readerMetadata"
+import { Atoms } from "./quartz/plugins/transformers/atoms"
+import { Knowledge } from "./quartz/plugins/emitters/knowledge"
 
 // Quartz 4.5.2 — d25a6eabf96751ffca56f8a8139272def7a65041.
 // Only the manifest-verified website/content export is an input.
@@ -31,6 +33,7 @@ const config: QuartzConfig = {
     locale: "en-US",
     baseUrl: "mydearatri.github.io/World",
     ignorePatterns: [".obsidian", "private", "templates"],
+    contentManifest: "publish-manifest.json",
     defaultDateType: "published",
     theme: {
       fontOrigin: "local",
@@ -55,6 +58,7 @@ const config: QuartzConfig = {
       Plugin.Description(),
       LocalMath(),
       SemanticBlocks(),
+      Atoms(),
     ],
     filters: [Plugin.RemoveDrafts()],
     emitters: [
@@ -62,6 +66,7 @@ const config: QuartzConfig = {
       Plugin.ContentPage({ pageBody: ReadingContent }),
       Plugin.ContentIndex({ enableSiteMap: false, enableRSS: false }),
       BookIndex(),
+      Knowledge(),
       ApprovedAssets(),
       Plugin.Static(),
     ],

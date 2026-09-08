@@ -8,8 +8,7 @@ import {
   concatenateResources,
 } from "../util/resources"
 import NoteGraph from "./NoteGraph"
-import BookSearch from "./BookSearch"
-import KnowledgeReader from "./KnowledgeReader"
+import { KnowledgeSearch, SpatialReading } from "./SpatialReading"
 import { getReaderCatalog, ReaderBook, ReaderChapter, ReaderCatalog } from "../util/readerCatalog"
 // @ts-ignore
 import readingScript from "./scripts/reading.inline"
@@ -112,7 +111,7 @@ export const ReadingRail: QuartzComponent = (props) => {
         Notes &amp; Knowledge<span lang="zh-CN">数学与物理笔记</span>
       </a>
       <div class="book-tools">
-        <BookSearch {...props} />
+        <KnowledgeSearch {...props} />
       </div>
       {book ? (
         <nav class="book-navigation" aria-label="本书目录">
@@ -170,14 +169,16 @@ export const ReadingRail: QuartzComponent = (props) => {
           <Contents {...props} />
         </nav>
       )}
-      <KnowledgeReader {...props} />
+      <a class="rail-explore-link" href={joinSegments(pathToRoot(slug), "explore.html")}>
+        探索知识空间 →
+      </a>
+      <SpatialReading {...props} />
     </>
   )
 }
-ReadingRail.css = concatenateResources(BookSearch.css, KnowledgeReader.css, NoteGraph.css)
+ReadingRail.css = concatenateResources(SpatialReading.css, NoteGraph.css)
 ReadingRail.afterDOMLoaded = concatenateResources(
-  BookSearch.afterDOMLoaded,
-  KnowledgeReader.afterDOMLoaded,
+  SpatialReading.afterDOMLoaded,
   NoteGraph.afterDOMLoaded,
   readingScript,
   interfaceMotion,
@@ -187,7 +188,7 @@ export const ReadingHeader: QuartzComponent = (props) => {
   const { slug, page, book, chapter } = context(props)
   const home = slug === "index"
   const title = home
-    ? "书架"
+    ? "数学知识空间"
     : page?.role === "book"
       ? book!.title
       : page?.role === "chapter"
@@ -223,14 +224,16 @@ export const ReadingHeader: QuartzComponent = (props) => {
       <div class="article-eyebrow">
         <span>
           {home
-            ? "从一本书开始"
+            ? "数学与物理 · 知识空间"
             : page?.role === "book"
               ? "按章节读 · 按知识点查"
               : page?.role === "chapter"
                 ? "本章阅读"
-                : roleNames[page?.role ?? "other"]}
+                : slug === "explore"
+                  ? "按对象探索"
+                  : roleNames[page?.role ?? "other"]}
         </span>
-        {!home && (
+        {!home && slug !== "explore" && !props.fileData.knowledgeObjectId && (
           <details class="reader-meta">
             <summary>整理信息</summary>
             <div>
@@ -246,7 +249,7 @@ export const ReadingHeader: QuartzComponent = (props) => {
         {title}
       </h1>
       {home ? (
-        <p class="article-deck shelf-deck">选择一本书，沿章节阅读，或直接找到需要的知识点。</p>
+        <p class="article-deck shelf-deck">沿一本书读下去，也可以从一个定义出发。</p>
       ) : page?.role === "book" ? (
         <p class="article-deck">
           {book!.subtitle}
@@ -434,7 +437,7 @@ function Original({
 export const ReadingContent: QuartzComponent = (props) => {
   const { catalog, slug, page, book, chapter } = context(props)
   const home = slug === "index"
-  const landing = home || page?.role === "book" || page?.role === "chapter"
+  const landing = home || slug === "explore" || page?.role === "book" || page?.role === "chapter"
   const sequence = book?.chapters.flatMap((item) => item.sections) ?? []
   const position = sequence.findIndex((item) => item.slug === slug)
   const previous = position > 0 ? sequence[position - 1] : undefined
@@ -450,7 +453,19 @@ export const ReadingContent: QuartzComponent = (props) => {
     >
       {home ? (
         <>
-          <div class="bookshelf">
+          <nav class="spatial-entry" aria-label="选择进入知识空间的方式">
+            <a href="#bookshelf">
+              <span class="entry-number">01 / READ</span>
+              <strong>按书阅读 →</strong>
+              <small>保留完整论述，沿章节逐步展开。</small>
+            </a>
+            <a href={joinSegments(pathToRoot(slug), "explore.html")}>
+              <span class="entry-number">02 / EXPLORE</span>
+              <strong>探索知识 →</strong>
+              <small>从定义、定理与证明，走向相关笔记。</small>
+            </a>
+          </nav>
+          <div class="bookshelf" id="bookshelf">
             {catalog.books.map((item, index) => (
               <section class="shelf-book" key={item.id}>
                 <div class="book-spine" aria-hidden="true">

@@ -2,7 +2,7 @@ import sourceMapSupport from "source-map-support"
 sourceMapSupport.install(options)
 import path from "path"
 import { PerfTimer } from "./util/perf"
-import { rm } from "fs/promises"
+import { rm, readFile } from "fs/promises"
 import { GlobbyFilterFunction, isGitIgnored } from "globby"
 import { styleText } from "util"
 import { parseMarkdown } from "./processors/parse"
@@ -71,7 +71,19 @@ async function buildQuartz(argv: Argv, mut: Mutex, clientRefresh: () => void) {
   console.log(`Cleaned output directory \`${output}\` in ${perf.timeSince("clean")}`)
 
   perf.addEvent("glob")
-  const allFiles = await glob("**/*.*", argv.directory, cfg.configuration.ignorePatterns)
+  let allFiles = await glob("**/*.*", argv.directory, cfg.configuration.ignorePatterns)
+  if (cfg.configuration.contentManifest) {
+    const manifest = JSON.parse(await readFile(cfg.configuration.contentManifest, "utf8"))
+    const approved = new Set<string>(
+      [...manifest.notes, ...manifest.assets].map((entry: { output: string }) => entry.output),
+    )
+    const omitted = allFiles.filter((file) => !approved.has(file)).length
+    allFiles = allFiles.filter((file) => approved.has(file))
+    if (omitted)
+      console.warn(
+        `Ignored ${omitted} unlisted input files; only the reviewed publication manifest is built.`,
+      )
+  }
   const markdownPaths = allFiles.filter((fp) => fp.endsWith(".md")).sort()
   console.log(
     `Found ${markdownPaths.length} input files from \`${argv.directory}\` in ${perf.timeSince("glob")}`,
@@ -127,6 +139,7 @@ async function startWatching(
     contentMap,
     ignored: (fp) => {
       const pathStr = toPosixPath(fp.toString())
+      if (cfg.configuration.contentManifest && !allFiles.includes(pathStr as FilePath)) return true
       if (pathStr.startsWith(".git/")) return true
       if (gitIgnoredMatcher(pathStr)) return true
       for (const pattern of cfg.configuration.ignorePatterns) {

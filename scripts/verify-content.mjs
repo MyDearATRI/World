@@ -54,13 +54,19 @@ const metadataArray = (value) =>
       : []
 
 try {
-  const manifest = await verifyManifest(root)
+  const manifest = await verifyManifest(root, { allowUnmanaged: true })
   console.log(
     `Verified publication hashes for ${manifest.notes.length} pages and ${manifest.assets.length} approved assets.`,
   )
   const published = await listFiles(publicRoot)
   const publishedSet = new Set(published)
   const expectedPages = new Map(manifest.notes.map((note) => [htmlPath(note.output), note]))
+  const knowledge = JSON.parse(await readFile(path.join(root, "knowledge/index.json"), "utf8"))
+  const derivedPages = new Set([
+    "explore.html",
+    ...knowledge.objects.filter((object) => object.kind === "atom").map((object) => object.href),
+    ...(knowledge.aliases ?? []).map((alias) => alias.href),
+  ])
   const expectedSlugs = new Set(manifest.notes.map((note) => fullSlug(note.output)))
   const noteEntries = manifest.notes.filter((note) => note.kind === "note")
   const expectedNoteSlugs = new Set(noteEntries.map((note) => fullSlug(note.output)))
@@ -70,18 +76,41 @@ try {
   check(
     sameSet(
       new Set(published.filter((file) => file.endsWith(".html"))),
-      new Set(expectedPages.keys()),
+      new Set([...expectedPages.keys(), ...derivedPages]),
     ),
-    "HTML pages exactly match the publication manifest",
+    "HTML pages exactly match approved sources and registered knowledge objects",
   )
   const staticFile =
     /^(?:index\.css|prescript\.js|postscript\.js|static\/(?:contentIndex|bookIndex)\.json|static\/fonts\/(?:serif\.css|LICENSE\.txt|files\/[\w-]+\.woff2)|static\/katex\/(?:katex\.min\.css|LICENSE\.txt|fonts\/[\w-]+\.(?:ttf|woff2?)))$/
+  const knowledgeResources = new Set([
+    "static/knowledge-index.json",
+    "static/semantic.json",
+    "static/semantic/worker.js",
+    "static/semantic/transformers.js",
+    "static/semantic/ort-wasm-simd-threaded.jsep.mjs",
+    "static/semantic/ort-wasm-simd-threaded.jsep.wasm",
+    "static/semantic/model-manifest.json",
+    "static/semantic/TRANSFORMERS-LICENSE.txt",
+    "static/semantic/ONNX-LICENSE.txt",
+  ])
   check(
-    published.every((file) => expectedPages.has(file) || assets.has(file) || staticFile.test(file)),
+    published.every(
+      (file) =>
+        expectedPages.has(file) ||
+        derivedPages.has(file) ||
+        knowledgeResources.has(file) ||
+        assets.has(file) ||
+        staticFile.test(file),
+    ),
     "Every generated file is approved",
     null,
     published.filter(
-      (file) => !expectedPages.has(file) && !assets.has(file) && !staticFile.test(file),
+      (file) =>
+        !expectedPages.has(file) &&
+        !derivedPages.has(file) &&
+        !knowledgeResources.has(file) &&
+        !assets.has(file) &&
+        !staticFile.test(file),
     ),
   )
   for (const asset of manifest.assets)
@@ -344,7 +373,7 @@ try {
     const chapter = book?.chapters.find((item) => item.id === readerPage?.chapterId)
     const expectedTitle =
       slug === "index"
-        ? "书架"
+        ? "数学知识空间"
         : readerPage?.role === "book"
           ? book?.title
           : readerPage?.role === "chapter"

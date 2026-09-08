@@ -244,9 +244,7 @@ try {
         )
         check(
           scenario,
-          await page
-            .locator(viewport.width < 600 ? ".book-search-open" : ".book-search-launch-input")
-            .isVisible(),
+          await page.locator(".space-search-launch").isVisible(),
           "Home includes a visible search entry",
         )
         check(
@@ -381,7 +379,11 @@ try {
           const href = await links.last().getAttribute("href")
           await links.last().focus()
           await Promise.all([
-            page.waitForURL(new URL(href, page.url()).href),
+            page.waitForURL(
+              (url) =>
+                url.href.replace(/\.html(?=#|$)/, "") ===
+                new URL(href, page.url()).href.replace(/\.html(?=#|$)/, ""),
+            ),
             page.keyboard.press("Enter"),
           ])
           check(
@@ -468,7 +470,9 @@ try {
             await page.waitForLoadState("networkidle")
             check(
               scenario,
-              page.url() === destination && (await page.locator("article").count()) === 1,
+              page.url().replace(/\.html(?=#|$)/, "") ===
+                destination.replace(/\.html(?=#|$)/, "") &&
+                (await page.locator("article").count()) === 1,
               "Canvas note click opens its generated page",
             )
           } else check(scenario, false, "Canvas includes a clickable published note")

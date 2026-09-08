@@ -19,6 +19,13 @@ export const Static: QuartzEmitterPlugin = () => ({
         "katex/katex.min.css",
         "katex/LICENSE.txt",
         "katex/fonts/*.{ttf,woff,woff2}",
+        "semantic/worker.js",
+        "semantic/transformers.js",
+        "semantic/ort-wasm-simd-threaded.jsep.mjs",
+        "semantic/ort-wasm-simd-threaded.jsep.wasm",
+        "semantic/model-manifest.json",
+        "semantic/TRANSFORMERS-LICENSE.txt",
+        "semantic/ONNX-LICENSE.txt",
       ],
       {
         cwd: staticPath,

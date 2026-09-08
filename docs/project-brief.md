@@ -1,5 +1,15 @@
 # Project brief
 
+## Current mathematical knowledge space
+
+The approved product is a connected research notebook with two entrances: read a book in chapter order, or explore source-derived mathematical objects. Complete notes remain the sole mathematical writing source. The website registers definitions, definition groups, theorems, propositions, proofs, observations and questions without requiring changes to Vault titles, folders or frontmatter.
+
+Stable atom identities have independent static URLs and one or more source occurrences. The central reader shows a complete atom or note; the left context retains the exploration trail and book position, and the right context separates source notes, evidenced links and precomputed machine recommendations. Search and maps share that identity model. A graph path lists actual edge types and evidence, and never manufactures a mathematical explanation for a missing connection.
+
+Reading, ordinary text/formula-symbol search and recommendations work without a reader model download. Optional local semantic queries require the reader's explicit download action and execute in a browser Worker using the pinned multilingual-e5-small model. This feature has no assistant chat, author-account dependency, subscription API or private Vault endpoint.
+
+The task uses the existing approved snapshot only. Original notes, public Markdown and the publication manifest stay unchanged. Unlisted files concurrently added to the website content directory are left untouched and omitted before parsing. Current validation, exact coverage and remaining unregistered prose are recorded separately. Earlier brief sections below describe historical interfaces.
+
 ## Current reader-interface follow-up
 
 The approved site is a reading interface for complete mathematical textbook notes. Its entry is a bookshelf: choose a book, browse its chapters, and follow the continuous section readings. Book and chapter pages also expose reusable knowledge, connections and exercises. Knowledge opens in an in-place reading panel with full generated content and an independent article link. The original home, book and chapter navigation Markdown remains available in expandable source sections rather than being rewritten to fit the website.

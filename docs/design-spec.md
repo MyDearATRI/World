@@ -1,5 +1,15 @@
 # Design specification
 
+## Current knowledge-space design
+
+Home exposes book reading and exploration as two explicit destinations. Warm gray (#f1f0ec) supports near-white (#fffefa) reading surfaces, dark ink and a restrained blue. Object type, source title, proof status, source location and mathematical prose use separate typographic levels. Prose retains the existing serif and KaTeX keeps its own fonts. The focused desktop reader has context, central reading and related-content regions; narrower screens put context into compact controls and use a single reading flow.
+
+Every object uses the same ID/title/type in search, preview, map and reader. Brief position/scale transitions connect activation to focus, while finite map camera motion explains group changes. Reduced-motion mode completes these changes directly. Dragging moves nodes without opening content. Stable positions and camera state survive filters and history changes. Mobile begins with readable grouped lists and opens its map full-screen when requested.
+
+The command panel searches names, aliases, bilingual source text, literal LaTeX and common notation. It defaults to the current book and keeps an explicit all-content option. Auxiliary content is opt-in; mathematical examples remain ordinary content. Reader model download information is disclosed before loading, separately from ordinary search. Recommendations and explicit source relationships never share an unlabelled visual category.
+
+Preserve source-relative links, internal anchors, footnote returns, native modifier-click, readable static fallback, and exact browser history. On return, restore the previous scroll position, focused link and expanded source disclosures. Use real screenshots to judge hierarchy and formula overflow; passing DOM assertions alone is not visual approval. The earlier sections below describe the preceding bookshelf/panel interface.
+
 ## Current bookshelf and reading interface
 
 The homepage is a quiet bookshelf with a clear book entry, source label and extent of existing exposition. Writing explanations and demonstrations sit in an expandable auxiliary area. Book pages offer chapter reading and a knowledge index; chapter pages group continuous section readings, reusable knowledge, connections and exercises. The primary directory follows the book and section order instead of mirroring every Vault folder. Original home/book/chapter navigation remains available in expandable source sections with its title and maintenance metadata.

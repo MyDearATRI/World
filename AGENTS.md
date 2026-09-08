@@ -1,5 +1,17 @@
 # Website implementation rules
 
+## Current authorized knowledge space
+
+The latest approved interface adds stable mathematical objects above the existing ReaderCatalog. Home offers book reading and knowledge exploration. `knowledge/registry.json` persists identity; `knowledge/index.json` describes public objects, occurrences and evidenced relationships. Atoms are extracted from the same rendered Markdown tree as full notes and have real `atoms/<id>.html` pages. Reviewed duplicate occurrences share identity; retired duplicate addresses remain explicit static aliases. Do not rewrite mathematical prose or infer completed proofs.
+
+`SpatialReading` owns focused reading, history, previews and the unified command panel; `knowledgeGraph` consumes the same public index. Preserve canonical URLs, native modifier-click behavior, scroll/focus/disclosure restoration and reduced-motion behavior. Relationships distinguish authored mathematics, references/structure, and machine similarity. Similarity must remain labelled and opt-in for path finding.
+
+This implementation uses only the previously approved export snapshot. Builds and atom preparation select manifest-listed outputs before parsing. Unlisted working copies remain untouched and cannot enter generated pages or indexes. `verifyManifest` remains strict by default for export/publication; its read-only `allowUnmanaged` option verifies approved hashes while permitting a manifest-bound build beside unrelated copies. Do not run the exporter to change this interface.
+
+Transformers.js is fixed at 3.8.1. Model revision, file sizes and SHA-256 values are in `knowledge/model-manifest.json`. Published vectors and recommendations are generated locally from public objects and checked against their exact IDs/content hashes. CI validates prepared data without inference. Reader model weights and WASM resources load only after an explicit enable action; model queries remain in the reader Worker. Never include weights, caches or private diagnostics in Git. Keep the manual preview-confirm-normal-push workflow and include only its explicit derived-file whitelist.
+
+This section supersedes older interface descriptions below. Record actual verification and limitations in `docs/validation.md`.
+
 ## Current authorized reader interface
 
 The latest approved interface is a bookshelf, book and chapter reading directories, complete in-place knowledge reading, book-scoped search, and hierarchical chapter/knowledge graphs. This section takes precedence over older interface descriptions below. The homepage presents books and folds writing/template material into an auxiliary area; do not restore the full-library homepage graph or the raw Vault directory tree as the primary reading route.

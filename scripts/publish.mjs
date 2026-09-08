@@ -16,7 +16,13 @@ const gitProgram =
     ? path.join(process.env.ProgramFiles ?? "C:\\Program Files", "Git/cmd/git.exe")
     : "git"
 const gitEnv = { ...process.env, GIT_TERMINAL_PROMPT: "0", GCM_INTERACTIVE: "never" }
-const managed = (file) => file === "publish-manifest.json" || file.startsWith("content/")
+const knowledgeFiles = [
+  "knowledge/registry.json",
+  "knowledge/index.json",
+  "knowledge/semantic.json",
+]
+const managed = (file) =>
+  file === "publish-manifest.json" || file.startsWith("content/") || knowledgeFiles.includes(file)
 const list = (value) => value.split("\0").filter(Boolean)
 async function run(
   program,
@@ -162,6 +168,17 @@ try {
     ),
   )
   await node(["node_modules/typescript/bin/tsc", "--noEmit"])
+  await node(["scripts/prepare-knowledge.mjs"])
+  review.paths = await changedPaths()
+  const reviewedKnowledge = Object.fromEntries(
+    await Promise.all(
+      knowledgeFiles.map(async (file) => [file, digest(await readFile(path.join(root, file)))]),
+    ),
+  )
+  const knowledgeIndex = JSON.parse(await readFile(path.join(root, "knowledge/index.json"), "utf8"))
+  console.log(
+    `知识索引：${knowledgeIndex.objects.filter((object) => object.kind === "atom").length} 个原子；${knowledgeIndex.relations.length} 条有出处的联系。完整笔记仍为原文。`,
+  )
   await node(["scripts/prepare-assets.mjs"])
   await node([
     "quartz/bootstrap-cli.mjs",
@@ -174,6 +191,7 @@ try {
     "2",
   ])
   await node(["scripts/verify-content.mjs"])
+  await node(["scripts/verify-knowledge.mjs"])
   preview = await startPreview({ port: 0 })
   const url = preview.url + "/World/"
   console.log(`本地预览：${url}\n清单：${path.join(root, "artifacts/publication-preview.json")}`)
@@ -213,7 +231,7 @@ try {
             file,
             file === "publish-manifest.json"
               ? review.manifestHash
-              : (after.get(file.slice("content/".length)) ?? null),
+              : (reviewedKnowledge[file] ?? after.get(file.slice("content/".length)) ?? null),
           ]),
         )
         // NUL-delimited input safely handles Chinese names, spaces, and punctuation.
