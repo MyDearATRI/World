@@ -141,6 +141,53 @@ test("the Topos publication scope exactly matches the reviewed model and explici
     assert.doesNotThrow(() => assertSyncPath(file), file)
 })
 
+test("sync paths reject Windows, POSIX and UNC escapes on every runner", () => {
+  const rejected = [
+    "C:/Users/Someone/private.md",
+    "c:/Users/Someone/private.md",
+    "Z:/outside.md",
+    String.raw`C:\Users\Someone\private.md`,
+    "C:private.md",
+    "c:private.md",
+    "Z:outside/notes.md",
+    "C:",
+    "/home/someone/private.md",
+    "//server/share/private.md",
+    String.raw`\\server\share\private.md`,
+    String.raw`\\?\C:\Users\Someone\private.md`,
+    String.raw`\\?\UNC\server\share\private.md`,
+    String.raw`\private.md`,
+    String.raw`..\outside.md`,
+    String.raw`scripts\helper.mjs`,
+    String.raw`scripts/..\outside.md`,
+    String.raw`knowledge\topos\sections\group-definition.md`,
+  ]
+  // These two drive forms are not absolute POSIX paths; rejecting them must not
+  // depend on the host-specific path.isAbsolute that previously passed on Windows.
+  assert.equal(path.posix.isAbsolute(rejected[0]), false)
+  assert.equal(path.posix.isAbsolute("C:private.md"), false)
+  assert.equal(path.win32.isAbsolute("C:private.md"), false)
+  for (const file of rejected) {
+    assert.throws(() => assertSyncPath(file), /相对 POSIX 路径/, file)
+    assert.throws(
+      () => selectSyncPaths({ trackedChanges: [file], untracked: [], allowedNewFiles: [] }),
+      /相对 POSIX 路径/,
+      file,
+    )
+    assert.throws(
+      () => selectSyncPaths({ trackedChanges: [], untracked: [file], allowedNewFiles: [file] }),
+      /相对 POSIX 路径/,
+      file,
+    )
+  }
+  for (const file of [
+    "scripts/helper.mjs",
+    "docs/同步说明.md",
+    "knowledge/topos/sections/group-definition.md",
+  ])
+    assert.doesNotThrow(() => assertSyncPath(file), file)
+})
+
 test("new Topos prose does not authorize unknown notes, model weights, caches or path escapes", () => {
   for (const file of [
     "knowledge/topos/sections/not-approved.md",

@@ -176,6 +176,16 @@ export function createGit(root) {
 }
 
 export function assertSyncPath(file) {
+  // Git/config paths must have the same meaning on Windows and the Linux runner.
+  // win32.isAbsolute does not reject drive-relative paths such as C:notes.md.
+  if (
+    typeof file !== "string" ||
+    path.posix.isAbsolute(file) ||
+    path.win32.isAbsolute(file) ||
+    /^[a-z]:/i.test(file) ||
+    file.includes("\\")
+  )
+    throw new Error(`同步清单必须使用仓库内的相对 POSIX 路径：${file}`)
   contained(path.resolve("."), file)
   if (/[\x00-\x1f\x7f]/u.test(file)) throw new Error(`不支持控制字符路径：${JSON.stringify(file)}`)
   if (/^(?:content(?:\/|$)|publish-manifest\.json$)/i.test(file))
