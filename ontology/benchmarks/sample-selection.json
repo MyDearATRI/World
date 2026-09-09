@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "seed": "phase-01-2026-09-10-v1",
+  "method": "SHA256(seed + NUL + stable_id), ascending hex; ceil(10%) per primary-region/depth stratum",
+  "population_count": 70,
+  "strata": [
+    {
+      "stratum": "math.region.foundations-logic|depth-2",
+      "total": 4,
+      "required": 1,
+      "sample_ids": ["math.msc.00"]
+    },
+    {
+      "stratum": "math.region.combinatorics-discrete|depth-2",
+      "total": 1,
+      "required": 1,
+      "sample_ids": ["math.msc.05"]
+    },
+    {
+      "stratum": "math.region.algebra-representation|depth-2",
+      "total": 9,
+      "required": 1,
+      "sample_ids": ["math.msc.22"]
+    },
+    {
+      "stratum": "math.region.number-arithmetic|depth-2",
+      "total": 1,
+      "required": 1,
+      "sample_ids": ["math.msc.11"]
+    },
+    {
+      "stratum": "math.region.algebraic-geometry|depth-2",
+      "total": 1,
+      "required": 1,
+      "sample_ids": ["math.msc.14"]
+    },
+    {
+      "stratum": "math.region.categories-higher|depth-2",
+      "total": 1,
+      "required": 1,
+      "sample_ids": ["math.msc.18"]
+    },
+    {
+      "stratum": "math.region.topology-homotopy|depth-2",
+      "total": 4,
+      "required": 1,
+      "sample_ids": ["math.msc.55"]
+    },
+    {
+      "stratum": "math.region.analysis-pde|depth-2",
+      "total": 19,
+      "required": 2,
+      "sample_ids": ["math.msc.49", "math.msc.45"]
+    },
+    {
+      "stratum": "math.region.geometry|depth-2",
+      "total": 4,
+      "required": 1,
+      "sample_ids": ["math.msc.53"]
+    },
+    {
+      "stratum": "math.region.probability-statistics|depth-2",
+      "total": 2,
+      "required": 1,
+      "sample_ids": ["math.msc.60"]
+    },
+    {
+      "stratum": "math.region.applied-computational|depth-2",
+      "total": 7,
+      "required": 1,
+      "sample_ids": ["math.msc.93"]
+    },
+    {
+      "stratum": "math.region.mathematical-physics|depth-2",
+      "total": 11,
+      "required": 2,
+      "sample_ids": ["math.msc.81", "math.msc.78"]
+    },
+    {
+      "stratum": "math.region.algebra-representation|depth-3",
+      "total": 2,
+      "required": 1,
+      "sample_ids": ["math.subject.representation-theory"]
+    },
+    {
+      "stratum": "math.region.analysis-pde|depth-3",
+      "total": 2,
+      "required": 1,
+      "sample_ids": ["math.subject.spectral-theory"]
+    },
+    {
+      "stratum": "math.region.geometry|depth-3",
+      "total": 2,
+      "required": 1,
+      "sample_ids": ["math.subject.metric-geometry"]
+    }
+  ],
+  "frontier_ids": [
+    "math.frontier.inner-models",
+    "math.frontier.model-theoretic-tameness",
+    "math.frontier.higher-categorical-models",
+    "math.frontier.cubical-univalence",
+    "math.frontier.representation-categorification",
+    "math.frontier.modular-blocks",
+    "math.frontier.prismatic-cohomology",
+    "math.frontier.local-langlands-geometrization",
+    "math.frontier.birational-boundedness",
+    "math.frontier.derived-sheaf-moduli",
+    "math.frontier.chromatic-k-theory",
+    "math.frontier.floer-homotopy",
+    "math.frontier.ricci-flow-singularities",
+    "math.frontier.kahler-einstein-metrics",
+    "math.frontier.nonlinear-dispersive-long-time-dynamics",
+    "math.frontier.fluid-pde-singularities-dynamics",
+    "math.frontier.singular-stochastic-pdes",
+    "math.frontier.high-dimensional-statistical-inference",
+    "math.frontier.extremal-probabilistic-combinatorics",
+    "math.frontier.additive-combinatorics",
+    "math.frontier.tensor-network-quantum-states",
+    "math.frontier.rigorous-liouville-cft",
+    "math.frontier.inverse-problems-wave-imaging",
+    "math.frontier.geometric-numerical-integration"
+  ]
+}

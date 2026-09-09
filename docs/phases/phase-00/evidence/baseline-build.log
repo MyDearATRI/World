@@ -1,0 +1,35 @@
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +1
++
+Progress: resolved 1, reused 1, downloaded 0, added 0, done
+
+> @jackyzha0/quartz@4.5.2 prebuild
+> node scripts/prepare-assets.mjs && tsx scripts/prepare-atoms.ts --check && node scripts/prepare-semantics.mjs --check && node scripts/prepare-semantic-runtime.mjs && node scripts/prepare-graph-runtime.mjs && node scripts/prepare-topos-runtime.mjs
+
+Prepared local Noto Serif SC (202 WOFF2 files) and renderer-matched KaTeX 0.16.28; verified 178 approved pages and 1 images without reading the Vault.
+Atoms verified: 119 objects, 123 occurrences, 73 notes, 605 evidence relations; snapshot a3da43c26a99b9504b28c1bf4d09e6424a9defaa167b722314ee02de2402b2f7
+Verified 192 semantic objects, content hashes, normalized vectors, fixed model and recommendation targets without loading a model or reading the Vault.
+Prepared on-demand semantic Worker and local Transformers.js 3.8.1; no model weights copied to public assets.
+Prepared on-demand Three.js 0.185.1 and d3-force-3d 3.0.6; no model weights included.
+Prepared the Knowledge Topos reader for the approved notes and separate demonstration.
+
+> @jackyzha0/quartz@4.5.2 build
+> node quartz/bootstrap-cli.mjs build -d content -o public --concurrency 2
+
+
+ Quartz v4.5.2  
+
+(node:89744) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Cleaned output directory `public` in 218ms
+Found 178 input files from `content` in 17ms
+Parsing input files using 2 threads
+(node:89744) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:89744) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Parsed 178 Markdown files in 3s
+Filtered out 0 files in 231μs
+Emitting files
+Emitted 906 files to `public` in 5s
+Done processing 178 files in 9s

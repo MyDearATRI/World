@@ -1,0 +1,3638 @@
+{
+  "schema_version": 1,
+  "version": 1,
+  "as_of": "2026-09-10",
+  "scope": "A source-audited title map, not mathematical exposition, proof verification, or a complete enumeration of mathematics.",
+  "volumes": ["vol-1-existing", "vol-2-system", "vol-3-research"],
+  "regions": [
+    "math.region.foundations-logic",
+    "math.region.categories-higher",
+    "math.region.algebra-representation",
+    "math.region.number-arithmetic",
+    "math.region.algebraic-geometry",
+    "math.region.topology-homotopy",
+    "math.region.geometry",
+    "math.region.analysis-pde",
+    "math.region.probability-statistics",
+    "math.region.combinatorics-discrete",
+    "math.region.mathematical-physics",
+    "math.region.applied-computational"
+  ],
+  "nodes": [
+    {
+      "stable_id": "vol-1-existing",
+      "canonical_title": "Existing mathematics",
+      "title_zh": "第一卷 现有数学",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "volume",
+      "substantive": false,
+      "parent_ids": [],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      }
+    },
+    {
+      "stable_id": "vol-2-system",
+      "canonical_title": "System construction",
+      "title_zh": "第二卷 系统建设",
+      "aliases": [],
+      "volume_id": "vol-2-system",
+      "kind": "volume",
+      "substantive": false,
+      "parent_ids": [],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "PROPOSED",
+        "activity_evidence": []
+      }
+    },
+    {
+      "stable_id": "vol-3-research",
+      "canonical_title": "Proposed research",
+      "title_zh": "第三卷 拟议研究",
+      "aliases": [],
+      "volume_id": "vol-3-research",
+      "kind": "volume",
+      "substantive": false,
+      "parent_ids": [],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "PROPOSED",
+        "activity_evidence": []
+      }
+    },
+    {
+      "stable_id": "math.region.foundations-logic",
+      "canonical_title": "Foundations and logic",
+      "title_zh": "基础与逻辑",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "region",
+      "substantive": false,
+      "parent_ids": ["vol-1-existing"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.foundations-logic"
+    },
+    {
+      "stable_id": "math.region.categories-higher",
+      "canonical_title": "Categories and higher structures",
+      "title_zh": "范畴与高阶结构",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "region",
+      "substantive": false,
+      "parent_ids": ["vol-1-existing"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.categories-higher"
+    },
+    {
+      "stable_id": "math.region.algebra-representation",
+      "canonical_title": "Algebra and representation theory",
+      "title_zh": "代数与表示论",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "region",
+      "substantive": false,
+      "parent_ids": ["vol-1-existing"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.algebra-representation"
+    },
+    {
+      "stable_id": "math.region.number-arithmetic",
+      "canonical_title": "Number theory and arithmetic geometry",
+      "title_zh": "数论与算术几何",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "region",
+      "substantive": false,
+      "parent_ids": ["vol-1-existing"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.number-arithmetic"
+    },
+    {
+      "stable_id": "math.region.algebraic-geometry",
+      "canonical_title": "Algebraic geometry",
+      "title_zh": "代数几何",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "region",
+      "substantive": false,
+      "parent_ids": ["vol-1-existing"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.algebraic-geometry"
+    },
+    {
+      "stable_id": "math.region.topology-homotopy",
+      "canonical_title": "Topology and homotopy",
+      "title_zh": "拓扑与同伦",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "region",
+      "substantive": false,
+      "parent_ids": ["vol-1-existing"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.topology-homotopy"
+    },
+    {
+      "stable_id": "math.region.geometry",
+      "canonical_title": "Geometry",
+      "title_zh": "几何",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "region",
+      "substantive": false,
+      "parent_ids": ["vol-1-existing"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.geometry"
+    },
+    {
+      "stable_id": "math.region.analysis-pde",
+      "canonical_title": "Analysis and PDE",
+      "title_zh": "分析与 PDE",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "region",
+      "substantive": false,
+      "parent_ids": ["vol-1-existing"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde"
+    },
+    {
+      "stable_id": "math.region.probability-statistics",
+      "canonical_title": "Probability and statistics",
+      "title_zh": "概率与统计",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "region",
+      "substantive": false,
+      "parent_ids": ["vol-1-existing"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.probability-statistics"
+    },
+    {
+      "stable_id": "math.region.combinatorics-discrete",
+      "canonical_title": "Combinatorics and discrete mathematics",
+      "title_zh": "组合与离散数学",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "region",
+      "substantive": false,
+      "parent_ids": ["vol-1-existing"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.combinatorics-discrete"
+    },
+    {
+      "stable_id": "math.region.mathematical-physics",
+      "canonical_title": "Mathematical physics",
+      "title_zh": "数学物理",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "region",
+      "substantive": false,
+      "parent_ids": ["vol-1-existing"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.mathematical-physics"
+    },
+    {
+      "stable_id": "math.region.applied-computational",
+      "canonical_title": "Applied and computational mathematics",
+      "title_zh": "应用与计算数学",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "region",
+      "substantive": false,
+      "parent_ids": ["vol-1-existing"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.applied-computational"
+    },
+    {
+      "stable_id": "math.msc.00",
+      "canonical_title": "General and overarching topics; collections",
+      "title_zh": "一般与总览主题；文集",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.foundations-logic"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["00"],
+        "arxiv": ["math.GM", "math.HO"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.foundations-logic",
+      "source_locator": "MSC2020 00-XX",
+      "membership_role": "editorial-context",
+      "placement_note": "Placed beside foundations for navigation because the twelve requested macroregions have no separate history/education/general-overview container. This parent does not assert that history, education or collections are branches of mathematical logic."
+    },
+    {
+      "stable_id": "math.msc.01",
+      "canonical_title": "History and biography",
+      "title_zh": "数学史与传记",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.foundations-logic"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["01"],
+        "arxiv": ["math.HO"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.foundations-logic",
+      "source_locator": "MSC2020 01-XX",
+      "membership_role": "editorial-context",
+      "placement_note": "Placed beside foundations for navigation because the twelve requested macroregions have no separate history/education/general-overview container. This parent does not assert that history, education or collections are branches of mathematical logic."
+    },
+    {
+      "stable_id": "math.msc.03",
+      "canonical_title": "Mathematical logic and foundations",
+      "title_zh": "数理逻辑与基础",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.foundations-logic"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["03"],
+        "arxiv": ["math.LO"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.foundations-logic",
+      "source_locator": "MSC2020 03-XX"
+    },
+    {
+      "stable_id": "math.msc.05",
+      "canonical_title": "Combinatorics",
+      "title_zh": "组合学",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.combinatorics-discrete"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["05"],
+        "arxiv": ["math.CO"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.combinatorics-discrete",
+      "source_locator": "MSC2020 05-XX"
+    },
+    {
+      "stable_id": "math.msc.06",
+      "canonical_title": "Order, lattices, ordered algebraic structures",
+      "title_zh": "序、格与有序代数结构",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.algebra-representation"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["06"],
+        "arxiv": ["math.RA"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.algebra-representation",
+      "source_locator": "MSC2020 06-XX"
+    },
+    {
+      "stable_id": "math.msc.08",
+      "canonical_title": "General algebraic systems",
+      "title_zh": "一般代数系统",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.algebra-representation"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["08"],
+        "arxiv": ["math.RA"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.algebra-representation",
+      "source_locator": "MSC2020 08-XX"
+    },
+    {
+      "stable_id": "math.msc.11",
+      "canonical_title": "Number theory",
+      "title_zh": "数论",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.number-arithmetic"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["11"],
+        "arxiv": ["math.NT"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.number-arithmetic",
+      "source_locator": "MSC2020 11-XX"
+    },
+    {
+      "stable_id": "math.msc.12",
+      "canonical_title": "Field theory and polynomials",
+      "title_zh": "域论与多项式",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.algebra-representation"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["12"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.algebra-representation",
+      "source_locator": "MSC2020 12-XX"
+    },
+    {
+      "stable_id": "math.msc.13",
+      "canonical_title": "Commutative algebra",
+      "title_zh": "交换代数",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.algebra-representation"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["13"],
+        "arxiv": ["math.AC"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.algebra-representation",
+      "source_locator": "MSC2020 13-XX"
+    },
+    {
+      "stable_id": "math.msc.14",
+      "canonical_title": "Algebraic geometry",
+      "title_zh": "代数几何",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.algebraic-geometry"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["14"],
+        "arxiv": ["math.AG"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.algebraic-geometry",
+      "source_locator": "MSC2020 14-XX"
+    },
+    {
+      "stable_id": "math.msc.15",
+      "canonical_title": "Linear and multilinear algebra; matrix theory",
+      "title_zh": "线性与多重线性代数；矩阵理论",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.algebra-representation"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["15"],
+        "arxiv": ["math.RA"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.algebra-representation",
+      "source_locator": "MSC2020 15-XX"
+    },
+    {
+      "stable_id": "math.msc.16",
+      "canonical_title": "Associative rings and algebras",
+      "title_zh": "结合环与结合代数",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.algebra-representation"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["16"],
+        "arxiv": ["math.RA"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.algebra-representation",
+      "source_locator": "MSC2020 16-XX"
+    },
+    {
+      "stable_id": "math.msc.17",
+      "canonical_title": "Nonassociative rings and algebras",
+      "title_zh": "非结合环与非结合代数",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.algebra-representation"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["17"],
+        "arxiv": ["math.RA"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.algebra-representation",
+      "source_locator": "MSC2020 17-XX"
+    },
+    {
+      "stable_id": "math.msc.18",
+      "canonical_title": "Category theory; homological algebra",
+      "title_zh": "范畴论与同调代数",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.categories-higher"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["18"],
+        "arxiv": ["math.CT"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.categories-higher",
+      "source_locator": "MSC2020 18-XX"
+    },
+    {
+      "stable_id": "math.msc.19",
+      "canonical_title": "$K$-theory",
+      "title_zh": "K 理论",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.topology-homotopy"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["19"],
+        "arxiv": ["math.KT"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.topology-homotopy",
+      "source_locator": "MSC2020 19-XX"
+    },
+    {
+      "stable_id": "math.msc.20",
+      "canonical_title": "Group theory and generalizations",
+      "title_zh": "群论及其推广",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.algebra-representation"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["20"],
+        "arxiv": ["math.GR", "math.RA"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.algebra-representation",
+      "source_locator": "MSC2020 20-XX"
+    },
+    {
+      "stable_id": "math.msc.22",
+      "canonical_title": "Topological groups, Lie groups",
+      "title_zh": "拓扑群与 Lie 群",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.algebra-representation"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["22"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.algebra-representation",
+      "source_locator": "MSC2020 22-XX"
+    },
+    {
+      "stable_id": "math.msc.26",
+      "canonical_title": "Real functions",
+      "title_zh": "实函数",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["26"],
+        "arxiv": ["math.CA"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 26-XX"
+    },
+    {
+      "stable_id": "math.msc.28",
+      "canonical_title": "Measure and integration",
+      "title_zh": "测度与积分",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["28"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 28-XX"
+    },
+    {
+      "stable_id": "math.msc.30",
+      "canonical_title": "Functions of a complex variable",
+      "title_zh": "单复变函数",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["30"],
+        "arxiv": ["math.CV"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 30-XX"
+    },
+    {
+      "stable_id": "math.msc.31",
+      "canonical_title": "Potential theory",
+      "title_zh": "位势论",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["31"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 31-XX"
+    },
+    {
+      "stable_id": "math.msc.32",
+      "canonical_title": "Several complex variables and analytic spaces",
+      "title_zh": "多复变函数与解析空间",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["32"],
+        "arxiv": ["math.CV"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 32-XX"
+    },
+    {
+      "stable_id": "math.msc.33",
+      "canonical_title": "Special functions (33-XX deals with the properties of functions as functions)",
+      "title_zh": "特殊函数",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["33"],
+        "arxiv": ["math.CA"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 33-XX"
+    },
+    {
+      "stable_id": "math.msc.34",
+      "canonical_title": "Ordinary differential equations",
+      "title_zh": "常微分方程",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["34"],
+        "arxiv": ["math.CA"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 34-XX"
+    },
+    {
+      "stable_id": "math.msc.35",
+      "canonical_title": "Partial differential equations",
+      "title_zh": "偏微分方程",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["35"],
+        "arxiv": ["math.AP"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 35-XX"
+    },
+    {
+      "stable_id": "math.msc.37",
+      "canonical_title": "Dynamical systems and ergodic theory",
+      "title_zh": "动力系统与遍历论",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["37"],
+        "arxiv": ["math.DS"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 37-XX"
+    },
+    {
+      "stable_id": "math.msc.39",
+      "canonical_title": "Difference and functional equations",
+      "title_zh": "差分与函数方程",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["39"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 39-XX"
+    },
+    {
+      "stable_id": "math.msc.40",
+      "canonical_title": "Sequences, series, summability",
+      "title_zh": "序列、级数与可和性",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["40"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 40-XX"
+    },
+    {
+      "stable_id": "math.msc.41",
+      "canonical_title": "Approximations and expansions",
+      "title_zh": "逼近与展开",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["41"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 41-XX"
+    },
+    {
+      "stable_id": "math.msc.42",
+      "canonical_title": "Harmonic analysis on Euclidean spaces",
+      "title_zh": "Euclid 空间上的调和分析",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["42"],
+        "arxiv": ["math.CA"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 42-XX"
+    },
+    {
+      "stable_id": "math.msc.43",
+      "canonical_title": "Abstract harmonic analysis",
+      "title_zh": "抽象调和分析",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["43"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 43-XX"
+    },
+    {
+      "stable_id": "math.msc.44",
+      "canonical_title": "Integral transforms, operational calculus",
+      "title_zh": "积分变换与算子演算",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["44"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 44-XX"
+    },
+    {
+      "stable_id": "math.msc.45",
+      "canonical_title": "Integral equations",
+      "title_zh": "积分方程",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["45"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 45-XX"
+    },
+    {
+      "stable_id": "math.msc.46",
+      "canonical_title": "Functional analysis",
+      "title_zh": "泛函分析",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["46"],
+        "arxiv": ["math.FA"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 46-XX"
+    },
+    {
+      "stable_id": "math.msc.47",
+      "canonical_title": "Operator theory",
+      "title_zh": "算子理论",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["47"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 47-XX"
+    },
+    {
+      "stable_id": "math.msc.49",
+      "canonical_title": "Calculus of variations and optimal control; optimization",
+      "title_zh": "变分法、最优控制与优化",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["49"],
+        "arxiv": ["math.CA", "math.OC"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "MSC2020 49-XX"
+    },
+    {
+      "stable_id": "math.msc.51",
+      "canonical_title": "Geometry",
+      "title_zh": "几何学",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.geometry"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["51"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.geometry",
+      "source_locator": "MSC2020 51-XX"
+    },
+    {
+      "stable_id": "math.msc.52",
+      "canonical_title": "Convex and discrete geometry",
+      "title_zh": "凸几何与离散几何",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.geometry"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["52"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.geometry",
+      "source_locator": "MSC2020 52-XX"
+    },
+    {
+      "stable_id": "math.msc.53",
+      "canonical_title": "Differential geometry",
+      "title_zh": "微分几何",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.geometry"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["53"],
+        "arxiv": ["math.DG"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.geometry",
+      "source_locator": "MSC2020 53-XX"
+    },
+    {
+      "stable_id": "math.msc.54",
+      "canonical_title": "General topology",
+      "title_zh": "一般拓扑",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.topology-homotopy"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["54"],
+        "arxiv": ["math.GN"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.topology-homotopy",
+      "source_locator": "MSC2020 54-XX"
+    },
+    {
+      "stable_id": "math.msc.55",
+      "canonical_title": "Algebraic topology",
+      "title_zh": "代数拓扑",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.topology-homotopy"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["55"],
+        "arxiv": ["math.AT"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.topology-homotopy",
+      "source_locator": "MSC2020 55-XX"
+    },
+    {
+      "stable_id": "math.msc.57",
+      "canonical_title": "Manifolds and cell complexes",
+      "title_zh": "流形与胞腔复形",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.topology-homotopy"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["57"],
+        "arxiv": ["math.GT"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.topology-homotopy",
+      "source_locator": "MSC2020 57-XX"
+    },
+    {
+      "stable_id": "math.msc.58",
+      "canonical_title": "Global analysis, analysis on manifolds",
+      "title_zh": "整体分析与流形上的分析",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.geometry"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["58"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.geometry",
+      "source_locator": "MSC2020 58-XX"
+    },
+    {
+      "stable_id": "math.msc.60",
+      "canonical_title": "Probability theory and stochastic processes",
+      "title_zh": "概率论与随机过程",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.probability-statistics"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["60"],
+        "arxiv": ["math.PR"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.probability-statistics",
+      "source_locator": "MSC2020 60-XX"
+    },
+    {
+      "stable_id": "math.msc.62",
+      "canonical_title": "Statistics",
+      "title_zh": "统计学",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.probability-statistics"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["62"],
+        "arxiv": ["math.ST"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.probability-statistics",
+      "source_locator": "MSC2020 62-XX"
+    },
+    {
+      "stable_id": "math.msc.65",
+      "canonical_title": "Numerical analysis",
+      "title_zh": "数值分析",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.applied-computational"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["65"],
+        "arxiv": ["math.NA"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.applied-computational",
+      "source_locator": "MSC2020 65-XX"
+    },
+    {
+      "stable_id": "math.msc.68",
+      "canonical_title": "Computer science",
+      "title_zh": "计算机科学",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.applied-computational"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["68"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.applied-computational",
+      "source_locator": "MSC2020 68-XX"
+    },
+    {
+      "stable_id": "math.msc.70",
+      "canonical_title": "Mechanics of particles and systems",
+      "title_zh": "质点与系统力学",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.mathematical-physics"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["70"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.mathematical-physics",
+      "source_locator": "MSC2020 70-XX"
+    },
+    {
+      "stable_id": "math.msc.74",
+      "canonical_title": "Mechanics of deformable solids",
+      "title_zh": "可形变固体力学",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.mathematical-physics"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["74"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.mathematical-physics",
+      "source_locator": "MSC2020 74-XX"
+    },
+    {
+      "stable_id": "math.msc.76",
+      "canonical_title": "Fluid mechanics",
+      "title_zh": "流体力学",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.mathematical-physics"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["76"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.mathematical-physics",
+      "source_locator": "MSC2020 76-XX"
+    },
+    {
+      "stable_id": "math.msc.78",
+      "canonical_title": "Optics, electromagnetic theory",
+      "title_zh": "光学与电磁理论",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.mathematical-physics"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["78"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.mathematical-physics",
+      "source_locator": "MSC2020 78-XX"
+    },
+    {
+      "stable_id": "math.msc.80",
+      "canonical_title": "Classical thermodynamics, heat transfer",
+      "title_zh": "经典热力学与热传导",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.mathematical-physics"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["80"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.mathematical-physics",
+      "source_locator": "MSC2020 80-XX"
+    },
+    {
+      "stable_id": "math.msc.81",
+      "canonical_title": "Quantum theory",
+      "title_zh": "量子理论",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.mathematical-physics"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["81"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.mathematical-physics",
+      "source_locator": "MSC2020 81-XX"
+    },
+    {
+      "stable_id": "math.msc.82",
+      "canonical_title": "Statistical mechanics, structure of matter",
+      "title_zh": "统计力学与物质结构",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.mathematical-physics"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["82"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.mathematical-physics",
+      "source_locator": "MSC2020 82-XX"
+    },
+    {
+      "stable_id": "math.msc.83",
+      "canonical_title": "Relativity and gravitational theory",
+      "title_zh": "相对论与引力理论",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.mathematical-physics"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["83"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.mathematical-physics",
+      "source_locator": "MSC2020 83-XX"
+    },
+    {
+      "stable_id": "math.msc.85",
+      "canonical_title": "Astronomy and astrophysics",
+      "title_zh": "天文学与天体物理",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.mathematical-physics"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["85"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.mathematical-physics",
+      "source_locator": "MSC2020 85-XX"
+    },
+    {
+      "stable_id": "math.msc.86",
+      "canonical_title": "Geophysics",
+      "title_zh": "地球物理",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.mathematical-physics"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["86"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.mathematical-physics",
+      "source_locator": "MSC2020 86-XX"
+    },
+    {
+      "stable_id": "math.msc.90",
+      "canonical_title": "Operations research, mathematical programming",
+      "title_zh": "运筹学与数学规划",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.applied-computational"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["90"],
+        "arxiv": ["math.OC"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.applied-computational",
+      "source_locator": "MSC2020 90-XX"
+    },
+    {
+      "stable_id": "math.msc.91",
+      "canonical_title": "Game theory, economics, finance, and other social and behavioral sciences",
+      "title_zh": "博弈论、经济、金融及社会行为科学",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.applied-computational"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["91"],
+        "arxiv": ["math.OC"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.applied-computational",
+      "source_locator": "MSC2020 91-XX"
+    },
+    {
+      "stable_id": "math.msc.92",
+      "canonical_title": "Biology and other natural sciences",
+      "title_zh": "生物学与其他自然科学",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.applied-computational"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020"],
+      "classification_codes": {
+        "msc": ["92"],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.applied-computational",
+      "source_locator": "MSC2020 92-XX"
+    },
+    {
+      "stable_id": "math.msc.93",
+      "canonical_title": "Systems theory; control",
+      "title_zh": "系统理论与控制",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.applied-computational"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["93"],
+        "arxiv": ["math.OC"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.applied-computational",
+      "source_locator": "MSC2020 93-XX"
+    },
+    {
+      "stable_id": "math.msc.94",
+      "canonical_title": "Information and communication theory, circuits",
+      "title_zh": "信息、通信理论与电路",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.applied-computational"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["94"],
+        "arxiv": ["math.IT"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.applied-computational",
+      "source_locator": "MSC2020 94-XX"
+    },
+    {
+      "stable_id": "math.msc.97",
+      "canonical_title": "Mathematics education",
+      "title_zh": "数学教育",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.foundations-logic"],
+      "cross_memberships": [],
+      "source_ids": ["src.msc2020", "src.arxiv-math"],
+      "classification_codes": {
+        "msc": ["97"],
+        "arxiv": ["math.HO"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.foundations-logic",
+      "source_locator": "MSC2020 97-XX",
+      "membership_role": "editorial-context",
+      "placement_note": "Placed beside foundations for navigation because the twelve requested macroregions have no separate history/education/general-overview container. This parent does not assert that history, education or collections are branches of mathematical logic."
+    },
+    {
+      "stable_id": "math.subject.representation-theory",
+      "canonical_title": "Representation theory",
+      "title_zh": "表示论",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.msc.20", "math.msc.16"],
+      "cross_memberships": [
+        {
+          "parent_id": "math.msc.16",
+          "reason": "arXiv RT explicitly includes representations of algebras, providing the associative-algebra connection alongside group representations.",
+          "source_ids": ["src.arxiv-math"]
+        }
+      ],
+      "source_ids": ["src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": ["math.RT"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.algebra-representation",
+      "source_locator": "arXiv math.RT description"
+    },
+    {
+      "stable_id": "math.subject.quantum-algebra",
+      "canonical_title": "Quantum algebra",
+      "title_zh": "量子代数",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.msc.17", "math.msc.16"],
+      "cross_memberships": [
+        {
+          "parent_id": "math.msc.16",
+          "reason": "arXiv QA includes quantum groups and diagrammatic algebra; associative-algebra placement records their algebraic methods, not equality with all associative algebras.",
+          "source_ids": ["src.arxiv-math"]
+        }
+      ],
+      "source_ids": ["src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": ["math.QA"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.algebra-representation",
+      "source_locator": "arXiv math.QA description"
+    },
+    {
+      "stable_id": "math.subject.operator-algebras",
+      "canonical_title": "Operator algebras",
+      "title_zh": "算子代数",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.msc.46", "math.msc.47"],
+      "cross_memberships": [
+        {
+          "parent_id": "math.msc.47",
+          "reason": "arXiv OA studies algebras of Hilbert-space operators, supporting a connection to operator theory alongside functional analysis.",
+          "source_ids": ["src.arxiv-math"]
+        }
+      ],
+      "source_ids": ["src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": ["math.OA"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "arXiv math.OA description"
+    },
+    {
+      "stable_id": "math.subject.symplectic-geometry",
+      "canonical_title": "Symplectic geometry",
+      "title_zh": "辛几何",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.msc.53"],
+      "cross_memberships": [],
+      "source_ids": ["src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": ["math.SG"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.geometry",
+      "source_locator": "arXiv math.SG description"
+    },
+    {
+      "stable_id": "math.subject.spectral-theory",
+      "canonical_title": "Spectral theory",
+      "title_zh": "谱理论",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.msc.47"],
+      "cross_memberships": [],
+      "source_ids": ["src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": ["math.SP"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "source_locator": "arXiv math.SP description"
+    },
+    {
+      "stable_id": "math.subject.metric-geometry",
+      "canonical_title": "Metric geometry",
+      "title_zh": "度量几何",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.msc.51", "math.msc.52"],
+      "cross_memberships": [
+        {
+          "parent_id": "math.msc.52",
+          "reason": "arXiv MG explicitly includes discrete and convex geometry, supporting this additional specific geometric placement.",
+          "source_ids": ["src.arxiv-math"]
+        }
+      ],
+      "source_ids": ["src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": ["math.MG"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.geometry",
+      "source_locator": "arXiv math.MG description"
+    },
+    {
+      "stable_id": "math.subject.mathematical-physics",
+      "canonical_title": "Mathematical physics",
+      "title_zh": "数学物理",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "subject",
+      "substantive": true,
+      "parent_ids": ["math.region.mathematical-physics"],
+      "cross_memberships": [],
+      "source_ids": ["src.arxiv-math"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": ["math.MP"]
+      },
+      "frontier": {
+        "status": "ESTABLISHED",
+        "activity_evidence": []
+      },
+      "primary_region_id": "math.region.mathematical-physics",
+      "source_locator": "arXiv math.MP description"
+    },
+    {
+      "stable_id": "math.frontier.inner-models",
+      "canonical_title": "Inner models, large cardinals and determinacy",
+      "title_zh": "内模型、大基数与决定性",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.msc.03"],
+      "cross_memberships": [],
+      "source_ids": ["src.vimt2024", "src.steel-jmm2024"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.inner-models",
+        "activity_evidence": [
+          {
+            "source_id": "src.vimt2024",
+            "date": "2024-06-24",
+            "evidence_summary": "The programme explicitly covers new inner-model results, large cardinals, determinacy and forcing axioms. The two weeks are counted as one organized event group."
+          },
+          {
+            "source_id": "src.steel-jmm2024",
+            "date": "2024-01",
+            "evidence_summary": "Steel records two lectures on large cardinals, determinacy and inner models, explicitly limiting the inner-model coverage to the comparison lemma. This is a distinct JMM tutorial, not a mirror of the Vienna workshop."
+          }
+        ]
+      },
+      "primary_region_id": "math.region.foundations-logic",
+      "regional_relevance": "Inner models compare axiomatic set-theoretic universes and large-cardinal/determinacy strength; this is foundational logic, not an application-specific mathematical theory."
+    },
+    {
+      "stable_id": "math.frontier.model-theoretic-tameness",
+      "canonical_title": "Model-theoretic tameness and o-minimality",
+      "title_zh": "模型论温和性与 o-极小结构",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.msc.03"],
+      "cross_memberships": [],
+      "source_ids": ["src.mfo-model-theory2023", "src.moconja-tanovic2026"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.model-theoretic-tameness",
+        "activity_evidence": [
+          {
+            "source_id": "src.mfo-model-theory2023",
+            "date": "2023-01-08",
+            "evidence_summary": "The meeting studies model-theoretic tameness of groups and fields and related classification questions. Only this short audit summary and bibliographic metadata are redistributed; the restricted report PDF is not copied."
+          },
+          {
+            "source_id": "src.moconja-tanovic2026",
+            "date": "2026-02-21",
+            "evidence_summary": "The authors investigate invariant types and weakly o-minimal types, and apply definable shifts to counting models. The current v2, not the search engine's old v1 metadata, is registered."
+          }
+        ]
+      },
+      "primary_region_id": "math.region.foundations-logic",
+      "regional_relevance": "Tameness concerns definable sets and types in first-order structures, including o-minimal and weakly o-minimal settings; it lies within model theory."
+    },
+    {
+      "stable_id": "math.frontier.higher-categorical-models",
+      "canonical_title": "Higher categorical models and coherence",
+      "title_zh": "高阶范畴模型与协调性",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.msc.18"],
+      "cross_memberships": [],
+      "source_ids": ["src.ara-polygraphs2025", "src.rasekh-higher2024"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.higher-categorical-models",
+        "activity_evidence": [
+          {
+            "source_id": "src.ara-polygraphs2025",
+            "date": "2025-09-04",
+            "evidence_summary": "A higher-dimensional rewriting framework develops coherence calculations and a model structure for strict higher categories."
+          },
+          {
+            "source_id": "src.rasekh-higher2024",
+            "date": "2024-01-17",
+            "evidence_summary": "The article constructs higher categories through complete Segal-space fibrations and compares quasi-category constructions. It is independent of the polygraphs monograph."
+          }
+        ]
+      },
+      "primary_region_id": "math.region.categories-higher",
+      "regional_relevance": "Polygraphs and Segal-space models study higher categorical composition, coherence and homotopical presentation."
+    },
+    {
+      "stable_id": "math.frontier.cubical-univalence",
+      "canonical_title": "Cubical type theory and univalent higher structures",
+      "title_zh": "立方类型论与单价高阶结构",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.msc.18", "math.msc.03", "math.msc.55"],
+      "cross_memberships": [
+        {
+          "parent_id": "math.msc.03",
+          "reason": "Univalent and cubical type theories are formal logical foundations with identity types and computational rules.",
+          "source_ids": ["src.hott-book", "src.cubical-boundary2026"]
+        },
+        {
+          "parent_id": "math.msc.55",
+          "reason": "The HoTT source interprets types through homotopy and constructs higher inductive types; the cubical source studies their higher-dimensional boundaries.",
+          "source_ids": ["src.hott-book", "src.cubical-boundary2026"]
+        }
+      ],
+      "source_ids": ["src.hott-book", "src.cubical-boundary2026"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.cubical-univalence",
+        "activity_evidence": [
+          {
+            "source_id": "src.hott-book",
+            "date": "2013",
+            "evidence_summary": "The collaborative book supplies the established connection between identity types, homotopy, higher inductive types and univalent foundations."
+          },
+          {
+            "source_id": "src.cubical-boundary2026",
+            "date": "2026-06-11",
+            "evidence_summary": "The paper treats contortion and Kan boundary-filling algorithms for cubical type theories supporting univalence and higher inductive types. It distinguishes heuristic automation from the undecidable general Kan problem."
+          }
+        ]
+      },
+      "primary_region_id": "math.region.categories-higher",
+      "regional_relevance": "Cubical type theory models higher identity and homotopy structures; its primary placement is higher structures with cross-membership in logic and algebraic topology."
+    },
+    {
+      "stable_id": "math.frontier.representation-categorification",
+      "canonical_title": "Categorification in representation theory",
+      "title_zh": "表示论中的范畴化",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.subject.representation-theory", "math.msc.18"],
+      "cross_memberships": [
+        {
+          "parent_id": "math.msc.18",
+          "reason": "Representation invariants are categorified using module categories, functors and Grothendieck groups, making categorical structure part of the research object.",
+          "source_ids": ["src.columbia-super2023", "src.rui-song2023"]
+        }
+      ],
+      "source_ids": ["src.columbia-super2023", "src.rui-song2023"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.representation-categorification",
+        "activity_evidence": [
+          {
+            "source_id": "src.columbia-super2023",
+            "date": "2023-03-29",
+            "evidence_summary": "The programme discusses categorical representations, KLR algebras and relations between superalgebra categorifications, including research talks about subquotients of category O."
+          },
+          {
+            "source_id": "src.rui-song2023",
+            "date": "2023-07-16",
+            "evidence_summary": "Rui and Song use a Grothendieck group of filtered Brauer-category representations to categorify a highest-weight module, with explicit characteristic restrictions."
+          }
+        ]
+      },
+      "primary_region_id": "math.region.algebra-representation",
+      "regional_relevance": "Categorification replaces representation-theoretic invariants by categories, with algebra actions and Grothendieck groups linking representation theory and category theory."
+    },
+    {
+      "stable_id": "math.frontier.modular-blocks",
+      "canonical_title": "Modular representations, blocks and tensor-triangular methods",
+      "title_zh": "模表示、块与张量三角方法",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.subject.representation-theory", "math.msc.20"],
+      "cross_memberships": [
+        {
+          "parent_id": "math.msc.20",
+          "reason": "The Brauer source studies blocks and defect groups of finite groups; the finite-group structure is essential to the represented objects.",
+          "source_ids": ["src.brauer-height2024", "src.mfo-tensor2023"]
+        }
+      ],
+      "source_ids": ["src.brauer-height2024", "src.mfo-tensor2023"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.modular-blocks",
+        "activity_evidence": [
+          {
+            "source_id": "src.brauer-height2024",
+            "date": "2024-08-30",
+            "evidence_summary": "The article completes the remaining implication of Brauer's height-zero conjecture for odd primes; it supports ongoing study of finite-group blocks and defect groups, not a claim that this named conjecture remains open."
+          },
+          {
+            "source_id": "src.mfo-tensor2023",
+            "date": "2023-09-17",
+            "evidence_summary": "Research talks connect tensor-triangular methods with modular representation theory, homotopy and algebraic geometry. This organized programme is independent of the Brauer article."
+          }
+        ]
+      },
+      "primary_region_id": "math.region.algebra-representation",
+      "regional_relevance": "Blocks and defect groups are central to finite-group modular representations; tensor-triangular geometry supplies additional categorical methods."
+    },
+    {
+      "stable_id": "math.frontier.prismatic-cohomology",
+      "canonical_title": "Prismatic cohomology and integral p-adic geometry",
+      "title_zh": "棱柱上同调与整 p 进几何",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.msc.11", "math.msc.14"],
+      "cross_memberships": [
+        {
+          "parent_id": "math.msc.14",
+          "reason": "The foundational source attaches a ringed prismatic site to a p-adic formal scheme, while crystals and cohomology are geometric constructions on that site.",
+          "source_ids": ["src.bhatt-scholze2022", "src.tsuji-ias2024"]
+        }
+      ],
+      "source_ids": ["src.bhatt-scholze2022", "src.tsuji-ias2024"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.prismatic-cohomology",
+        "activity_evidence": [
+          {
+            "source_id": "src.bhatt-scholze2022",
+            "date": "2022-10-30",
+            "evidence_summary": "Prismatic sites of p-adic formal schemes unify several integral p-adic cohomology theories. The article's scope is read from its abstract, not its apparently unrelated publisher MSC field."
+          },
+          {
+            "source_id": "src.tsuji-ias2024",
+            "date": "2024-03-12",
+            "evidence_summary": "Tsuji explains a q-Higgs description of prismatic crystals and their cohomology, including Frobenius and Nygaard filtrations. This is a distinct research contribution, not the foundational paper's mirror."
+          }
+        ]
+      },
+      "primary_region_id": "math.region.number-arithmetic",
+      "regional_relevance": "Prismatic sites and crystals connect arithmetic p-adic cohomology with formal-scheme geometry, giving legitimate number-theoretic and algebraic-geometric placements."
+    },
+    {
+      "stable_id": "math.frontier.local-langlands-geometrization",
+      "canonical_title": "Geometrization of the local Langlands correspondence",
+      "title_zh": "局部 Langlands 对应的几何化",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.msc.11", "math.subject.representation-theory", "math.msc.14"],
+      "cross_memberships": [
+        {
+          "parent_id": "math.subject.representation-theory",
+          "reason": "The correspondence constructs parameters associated with representations; the geometric framework acts on sheaf categories tied to local representation theory.",
+          "source_ids": ["src.scholze-motivic2025", "src.imai-langlands2024"]
+        },
+        {
+          "parent_id": "math.msc.14",
+          "reason": "The geometric side uses stacks of bundles and motivic or l-adic sheaves; these are algebraic-geometric structures in the cited construction.",
+          "source_ids": ["src.scholze-motivic2025", "src.imai-langlands2024"]
+        }
+      ],
+      "source_ids": ["src.scholze-motivic2025", "src.imai-langlands2024"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.local-langlands-geometrization",
+        "activity_evidence": [
+          {
+            "source_id": "src.scholze-motivic2025",
+            "date": "2025-01-14",
+            "evidence_summary": "The work extends the Fargues–Scholze setting from l-adic to motivic sheaves and addresses independence of l of constructed parameters."
+          },
+          {
+            "source_id": "src.imai-langlands2024",
+            "date": "2024-08-29",
+            "evidence_summary": "Imai provides a separately authored exposition of Fargues–Scholze geometrization. It is counted as a survey source group, not as an independent proof of the correspondence."
+          }
+        ]
+      },
+      "primary_region_id": "math.region.number-arithmetic",
+      "regional_relevance": "Local Langlands geometrization studies local-field representation parameters via sheaves on geometric stacks, connecting arithmetic, representation theory and algebraic geometry."
+    },
+    {
+      "stable_id": "math.frontier.birational-boundedness",
+      "canonical_title": "Birational geometry and boundedness",
+      "title_zh": "双有理几何与有界性",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.msc.14"],
+      "cross_memberships": [],
+      "source_ids": ["src.mfo-birational2024", "src.birkar-polarised2023"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.birational-boundedness",
+        "activity_evidence": [
+          {
+            "source_id": "src.mfo-birational2024",
+            "date": "2024-03-17",
+            "evidence_summary": "The programme addresses birational methods, Cremona groups, K-moduli and mirror symmetry. This node uses its birational content; canonical metrics are a separate geometric direction."
+          },
+          {
+            "source_id": "src.birkar-polarised2023",
+            "date": "2023-02-13",
+            "evidence_summary": "Birkar studies birational boundedness for polarized projective varieties under controlled singularities and positivity hypotheses. The audit does not remove those conditions or verify the proof."
+          }
+        ]
+      },
+      "primary_region_id": "math.region.algebraic-geometry",
+      "regional_relevance": "Birational boundedness studies algebraic varieties, linear systems and controlled singularities; it is separate from the analytic construction of canonical metrics."
+    },
+    {
+      "stable_id": "math.frontier.derived-sheaf-moduli",
+      "canonical_title": "Derived moduli of sheaves and Stokes data",
+      "title_zh": "层与 Stokes 数据的导出模空间",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.msc.14", "math.msc.18"],
+      "cross_memberships": [
+        {
+          "parent_id": "math.msc.18",
+          "reason": "Derived moduli constructions use infinity-categorical coefficients, dg-categories and Hochschild homology, as stated in the two source abstracts.",
+          "source_ids": ["src.porta-teyssier2025", "src.casals-li2024"]
+        }
+      ],
+      "source_ids": ["src.porta-teyssier2025", "src.casals-li2024"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.derived-sheaf-moduli",
+        "activity_evidence": [
+          {
+            "source_id": "src.porta-teyssier2025",
+            "date": "2025-04-07",
+            "evidence_summary": "The paper constructs locally geometric derived moduli of Stokes data. It is the replacement for the derived-moduli portion split out of the older paper; the superseded title is not treated as a second independent work."
+          },
+          {
+            "source_id": "src.casals-li2024",
+            "date": "2024-09-11",
+            "evidence_summary": "Casals and Li construct functions on derived sheaf moduli with Legendrian microsupport using Hochschild homology and geometry of Lagrangian fillings."
+          }
+        ]
+      },
+      "primary_region_id": "math.region.algebraic-geometry",
+      "regional_relevance": "Derived stacks of sheaves and Stokes data belong to algebraic geometry and use higher-categorical coefficients and homotopical constructions."
+    },
+    {
+      "stable_id": "math.frontier.chromatic-k-theory",
+      "canonical_title": "Chromatic homotopy and algebraic K-theory",
+      "title_zh": "色同伦与代数 K 理论",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.msc.55", "math.msc.19"],
+      "cross_memberships": [
+        {
+          "parent_id": "math.msc.19",
+          "reason": "Both sources study algebraic K-theory and its behavior under chromatic localization; ring and category hypotheses remain distinct.",
+          "source_ids": ["src.chromatic-null2022", "src.ramzi-noshift2026"]
+        }
+      ],
+      "source_ids": ["src.chromatic-null2022", "src.ramzi-noshift2026"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.chromatic-k-theory",
+        "activity_evidence": [
+          {
+            "source_id": "src.chromatic-null2022",
+            "date": "2022-07-20",
+            "evidence_summary": "The work characterizes certain Lubin–Tate theories and obtains redshift for algebraic K-theory of E-infinity rings. Ring-spectrum hypotheses are retained in this source audit."
+          },
+          {
+            "source_id": "src.ramzi-noshift2026",
+            "date": "2026-04-02",
+            "evidence_summary": "Ramzi studies rigid symmetric-monoidal stable categories and gives counterexamples to a categorical analogue of redshift. This is not a contradiction to the differently scoped ring-spectrum theorem."
+          }
+        ]
+      },
+      "primary_region_id": "math.region.topology-homotopy",
+      "regional_relevance": "Chromatic localizations of spectra and redshift questions connect stable algebraic topology and algebraic K-theory; categorical extensions require different hypotheses."
+    },
+    {
+      "stable_id": "math.frontier.floer-homotopy",
+      "canonical_title": "Floer homotopy theory",
+      "title_zh": "Floer 同伦理论",
+      "aliases": [],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.msc.55", "math.subject.symplectic-geometry"],
+      "cross_memberships": [
+        {
+          "parent_id": "math.subject.symplectic-geometry",
+          "reason": "The lecture series derives applications to symplectic manifolds from moduli of Floer trajectories; the symplectic placement records that geometric setting.",
+          "source_ids": ["src.mit-floer2023", "src.abouzaid-princeton2023"]
+        }
+      ],
+      "source_ids": ["src.mit-floer2023", "src.abouzaid-princeton2023"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.floer-homotopy",
+        "activity_evidence": [
+          {
+            "source_id": "src.mit-floer2023",
+            "date": "2023-02-08",
+            "evidence_summary": "The seminar progresses from spectra and Morse theory to Floer homotopy, showing a concrete reading and research programme at the intersection of stable homotopy and symplectic topology."
+          },
+          {
+            "source_id": "src.abouzaid-princeton2023",
+            "date": "2023-02-02",
+            "evidence_summary": "Abouzaid discusses recovering generalized-homology information from higher-dimensional Floer solution spaces and recent technical advances, with further structures explicitly described as work in progress."
+          }
+        ]
+      },
+      "primary_region_id": "math.region.topology-homotopy",
+      "regional_relevance": "Floer homotopy extracts stable homotopical information from moduli of trajectories, connecting algebraic topology and symplectic geometry."
+    },
+    {
+      "stable_id": "math.frontier.ricci-flow-singularities",
+      "canonical_title": "Ricci flow singularities",
+      "title_zh": "Ricci 流奇性",
+      "aliases": ["Ricci flow singularity models", "Ricci 流奇性模型"],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.region.geometry"],
+      "cross_memberships": [],
+      "source_ids": ["src.ias.sesum-ricci-2024", "src.mfo.differential-geometry-2023"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.ricci-flow-singularities",
+        "activity_evidence": [
+          {
+            "source_id": "src.ias.sesum-ricci-2024",
+            "date": "2024-04-19",
+            "evidence_summary": "IAS 的 Sesum 报告介绍多重翘曲积度量中的开放初值集合，其 Ricci 流以广义柱面作为奇性模型。"
+          },
+          {
+            "source_id": "src.mfo.differential-geometry-2023",
+            "date": "2023-07-02",
+            "evidence_summary": "2023 年 Oberwolfach 微分几何研讨会将 Ricci/Kähler 流与扩张 Ricci 孤立子列为实质报告主题。"
+          }
+        ]
+      },
+      "primary_region_id": "math.region.geometry",
+      "regional_relevance": "研究几何演化在曲率集中处的局部模型、孤立子与极限几何。所选证据覆盖广义柱面奇性和 Ricci 孤立子研究，不宣称已经分类所有奇性。"
+    },
+    {
+      "stable_id": "math.frontier.kahler-einstein-metrics",
+      "canonical_title": "Kähler–Einstein metrics and canonical complex geometry",
+      "title_zh": "Kähler–Einstein 度量与典范复几何",
+      "aliases": ["Kähler-Einstein geometry", "典范 Kähler 度量"],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.region.geometry"],
+      "cross_memberships": [],
+      "source_ids": ["src.icm2022.berman-emergent-geometry", "src.mfo.differential-geometry-2023"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.kahler-einstein-metrics",
+        "activity_evidence": [
+          {
+            "source_id": "src.mfo.differential-geometry-2023",
+            "date": "2023-07-02",
+            "evidence_summary": "研讨会专门报告 Fano 簇族上的 Kähler–Einstein 度量，提供近年活动依据；ICM 章节另解释概率构造与变分观点。"
+          }
+        ]
+      },
+      "primary_region_id": "math.region.geometry",
+      "regional_relevance": "以典范度量的存在、变化及构造联系复几何、Fano 簇与概率方法。与 Ricci 流奇性保留交叉联系，但作为不同研究问题登记。"
+    },
+    {
+      "stable_id": "math.frontier.nonlinear-dispersive-long-time-dynamics",
+      "canonical_title": "Scattering and long-time dynamics of nonlinear dispersive equations",
+      "title_zh": "非线性色散方程的散射与长时间动力学",
+      "aliases": ["Nonlinear dispersive scattering", "色散 PDE 的长时间行为"],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.ias.mmt-report-2024", "src.park.inls-2023"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.nonlinear-dispersive-long-time-dynamics",
+        "activity_evidence": [
+          {
+            "source_id": "src.ias.mmt-report-2024",
+            "date": "2024-06",
+            "evidence_summary": "IAS 合作报告记录 2024 年 6 月对 MMT 模型的 Sobolev 增长研究；实线上的散射在报告中仍作为后续问题。"
+          },
+          {
+            "source_id": "src.park.inls-2023",
+            "date": "2023-07-14",
+            "evidence_summary": "Park 的论文在明确的维数与权重范围内证明径向散焦能量临界非齐次 NLS 的整体适定性和散射。"
+          }
+        ]
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "regional_relevance": "围绕非线性色散方程的长期正则性、Sobolev 范数增长和散射展开。区分已有定理与报告中的待研究问题，不将所有模型视为具有相同散射行为。"
+    },
+    {
+      "stable_id": "math.frontier.fluid-pde-singularities-dynamics",
+      "canonical_title": "Singularity formation and long-time dynamics in fluid PDEs",
+      "title_zh": "流体方程的奇性形成与长时间动力学",
+      "aliases": ["Euler dynamics and fluid singularities", "Euler 方程动力学与流体奇性"],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.region.analysis-pde"],
+      "cross_memberships": [],
+      "source_ids": ["src.ias.elgindi-euler-2023", "src.simons.wave-turbulence-2025"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.fluid-pde-singularities-dynamics",
+        "activity_evidence": [
+          {
+            "source_id": "src.ias.elgindi-euler-2023",
+            "date": "2023-10-13",
+            "evidence_summary": "Elgindi 的分析报告讨论二维 Euler 解的长期演化、扭转稳定性、细丝化与 Sobolev 增长。"
+          },
+          {
+            "source_id": "src.simons.wave-turbulence-2025",
+            "date": "2025-12-04",
+            "evidence_summary": "Buckmaster 在波湍流合作年会报告流体奇性、不稳定 PDE 解及计算辅助证明方法。"
+          }
+        ]
+      },
+      "primary_region_id": "math.region.analysis-pde",
+      "regional_relevance": "研究 Euler 等流体方程中稳定性、细丝化、范数增长及奇性机制，并连接计算辅助证明。这里不声称解决 Navier–Stokes 正则性问题。"
+    },
+    {
+      "stable_id": "math.frontier.singular-stochastic-pdes",
+      "canonical_title": "Singular stochastic partial differential equations",
+      "title_zh": "奇异随机偏微分方程",
+      "aliases": ["Singular SPDEs", "随机 PDE 的重整化"],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.region.probability-statistics"],
+      "cross_memberships": [],
+      "source_ids": ["src.slmath.spde-program-2025", "src.sissa.duch-spde-2026"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.singular-stochastic-pdes",
+        "activity_evidence": [
+          {
+            "source_id": "src.slmath.spde-program-2025",
+            "date": "2025-08-18",
+            "evidence_summary": "SLMath 研究项目聚焦 SPDE 解理论、正则性结构、仿控制方法、普适性及量子场论联系。"
+          },
+          {
+            "source_id": "src.sissa.duch-spde-2026",
+            "date": "2026-03-09",
+            "evidence_summary": "Duch 在 SISSA 的研究课程以 KPZ、随机量子化和流方程方法讲授亚临界奇异 SPDE 的重整化。"
+          }
+        ]
+      },
+      "primary_region_id": "math.region.probability-statistics",
+      "regional_relevance": "研究粗糙噪声导致的非线性乘积、解理论与重整化，并与普适性和随机量子化相连。研究课程用于证明方向活跃，不单独作为新定理证明。"
+    },
+    {
+      "stable_id": "math.frontier.high-dimensional-statistical-inference",
+      "canonical_title": "High-dimensional statistical inference",
+      "title_zh": "高维统计推断",
+      "aliases": ["High-dimensional inference", "高维推断"],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.region.probability-statistics"],
+      "cross_memberships": [],
+      "source_ids": ["src.mfo.high-dimensional-extremes-2024", "src.simons.learning-universe-2024"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.high-dimensional-statistical-inference",
+        "activity_evidence": [
+          {
+            "source_id": "src.mfo.high-dimensional-extremes-2024",
+            "date": "2024-08-18",
+            "evidence_summary": "Oberwolfach 研讨会讨论高维极值、稀疏表示及多元和时间序列的统计推断。"
+          },
+          {
+            "source_id": "src.simons.learning-universe-2024",
+            "date": "2024-09-19",
+            "evidence_summary": "Learning the Universe 年会报告利用非线性模拟进行可扩展隐式似然推断，包含大体积宇宙学数据的高维应用。"
+          }
+        ]
+      },
+      "primary_region_id": "math.region.probability-statistics",
+      "regional_relevance": "研究维数增长、稀疏结构或不可显式计算似然时的统计推断。此处选取高维极值与模拟驱动推断为两个有证据的活动切面，不把应用案例当作整个统计领域的代表。"
+    },
+    {
+      "stable_id": "math.frontier.extremal-probabilistic-combinatorics",
+      "canonical_title": "Extremal and probabilistic combinatorics",
+      "title_zh": "极值与概率组合学",
+      "aliases": ["Extremal and probabilistic graph theory", "极值与概率图论"],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.region.combinatorics-discrete"],
+      "cross_memberships": [],
+      "source_ids": ["src.ams.jmm-extremal-2025", "src.slmath.graph-theory-2025"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.extremal-probabilistic-combinatorics",
+        "activity_evidence": [
+          {
+            "source_id": "src.ams.jmm-extremal-2025",
+            "date": "2025-01-11",
+            "evidence_summary": "JMM 的 AMS 专题场次以极值和概率组合学研究报告组成，说明两个方面的具体研究对象。"
+          },
+          {
+            "source_id": "src.slmath.graph-theory-2025",
+            "date": "2025-02-10",
+            "evidence_summary": "SLMath 的图论研讨会结合极值、概率与结构方法，安排介绍性讲座及近期成果研究报告。"
+          }
+        ]
+      },
+      "primary_region_id": "math.region.combinatorics-discrete",
+      "regional_relevance": "以满足给定性质的组合对象的极端规模、典型性质及图结构为核心。两个独立研究活动都明确讨论近年问题与研究报告，而不是仅提供学科目录名称。"
+    },
+    {
+      "stable_id": "math.frontier.additive-combinatorics",
+      "canonical_title": "Quantitative structure and generalizations in additive combinatorics",
+      "title_zh": "加性组合中的定量结构与推广",
+      "aliases": ["Additive combinatorics", "加性组合学"],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.region.combinatorics-discrete"],
+      "cross_memberships": [],
+      "source_ids": ["src.ias.kelley-meka-progressions-2023", "src.stanford.pham-additive-2024"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.additive-combinatorics",
+        "activity_evidence": [
+          {
+            "source_id": "src.ias.kelley-meka-progressions-2023",
+            "date": "2023-03-21",
+            "evidence_summary": "Kelley 与 Meka 的 IAS 报告深入讨论三项等差数列问题中改进的定量界及其证明方法。"
+          },
+          {
+            "source_id": "src.stanford.pham-additive-2024",
+            "date": "2024-05-30",
+            "evidence_summary": "Pham 的 Stanford 报告介绍小倍增结构问题的图论方法，以及经典加性组合结果的非交换和组合推广。"
+          }
+        ]
+      },
+      "primary_region_id": "math.region.combinatorics-discrete",
+      "regional_relevance": "研究算术级数、小倍增集合与群外组合结构中的定量定理。三项等差数列界与小倍增结构推广是不同工作，不重复登记为两个宏区节点。"
+    },
+    {
+      "stable_id": "math.frontier.tensor-network-quantum-states",
+      "canonical_title": "Tensor-network methods for quantum many-body states",
+      "title_zh": "量子多体态的张量网络方法",
+      "aliases": ["Quantum tensor networks", "多体纠缠与张量网络"],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.region.mathematical-physics"],
+      "cross_memberships": [],
+      "source_ids": ["src.ipam.tensor-networks-2024", "src.aps.watanabe-ueda-tn-2024"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.tensor-network-quantum-states",
+        "activity_evidence": [
+          {
+            "source_id": "src.ipam.tensor-networks-2024",
+            "date": "2024-02-05",
+            "evidence_summary": "IPAM 研讨会集中讨论张量网络结构、纠缠、量子多体建模以及与量子计算的比较。"
+          },
+          {
+            "source_id": "src.aps.watanabe-ueda-tn-2024",
+            "date": "2024-09-06",
+            "evidence_summary": "Watanabe 与 Ueda 提出包含纠缠重整化的张量网络结构搜索，并在具体自旋模型中检验能量、保真度和纠缠熵。"
+          }
+        ]
+      },
+      "primary_region_id": "math.region.mathematical-physics",
+      "regional_relevance": "利用张量网络组织量子多体态与纠缠结构，并研究网络结构选择和可计算性。保留其数学物理与科学计算的交叉性，但只登记一个规范方向。"
+    },
+    {
+      "stable_id": "math.frontier.rigorous-liouville-cft",
+      "canonical_title": "Rigorous Liouville conformal field theory",
+      "title_zh": "Liouville 共形场论的严格构造",
+      "aliases": ["Probabilistic Liouville CFT", "概率方法与 Liouville 场论"],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.region.mathematical-physics"],
+      "cross_memberships": [],
+      "source_ids": ["src.ihes.guillarmou-lcft-2022", "src.ang.quantum-zipper-2023"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.rigorous-liouville-cft",
+        "activity_evidence": [
+          {
+            "source_id": "src.ihes.guillarmou-lcft-2022",
+            "date": "2022-03-14",
+            "evidence_summary": "Guillarmou 在 IHES 报告 Liouville 共形场论的数学构造及结构常数、Virasoro 共形块的分解。"
+          },
+          {
+            "source_id": "src.ang.quantum-zipper-2023",
+            "date": "2023-01-30",
+            "evidence_summary": "Ang 的论文研究 Liouville 场论曲面的量子缝合与 SLE，并证明边界 BPZ 方程。"
+          }
+        ]
+      },
+      "primary_region_id": "math.region.mathematical-physics",
+      "regional_relevance": "用概率、分析与曲面几何建立 Liouville 共形场论及其与量子曲面、SLE 的联系。登记明确的严格理论方向，不将物理启发关系自动标为证明。"
+    },
+    {
+      "stable_id": "math.frontier.inverse-problems-wave-imaging",
+      "canonical_title": "Inverse problems and wave imaging",
+      "title_zh": "反问题与波成像",
+      "aliases": ["Inverse wave scattering", "波散射反问题"],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.region.applied-computational"],
+      "cross_memberships": [],
+      "source_ids": ["src.ini.multiple-wave-scattering-2023", "src.aims.cheng-dong-elastic-2023"],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.inverse-problems-wave-imaging",
+        "activity_evidence": [
+          {
+            "source_id": "src.ini.multiple-wave-scattering-2023",
+            "date": "2023-05-31",
+            "evidence_summary": "INI 项目报告记录材料表征与波散射研究活动，并讨论多重散射成像和波速重建等反问题。"
+          },
+          {
+            "source_id": "src.aims.cheng-dong-elastic-2023",
+            "date": "2023-09",
+            "evidence_summary": "Cheng 与 Dong 的论文给出二维无相位弹性散射数据的唯一性结果及刚性障碍物形状、位置的迭代重建。"
+          }
+        ]
+      },
+      "primary_region_id": "math.region.applied-computational",
+      "regional_relevance": "研究由散射或测量数据恢复障碍物、介质及材料结构，兼顾唯一性与重建算法。波成像作为应用入口，保留问题本身的数学条件。"
+    },
+    {
+      "stable_id": "math.frontier.geometric-numerical-integration",
+      "canonical_title": "Structure-preserving geometric numerical integration",
+      "title_zh": "保持结构的几何数值积分",
+      "aliases": ["Geometric numerical integration", "几何积分方法"],
+      "volume_id": "vol-1-existing",
+      "kind": "frontier",
+      "substantive": true,
+      "parent_ids": ["math.region.applied-computational"],
+      "cross_memberships": [],
+      "source_ids": [
+        "src.cambridge.blanes-casas-murua-splitting-2024",
+        "src.munthe-kaas.symmetric-integrators-2023"
+      ],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "ACTIVE_FRONTIER",
+        "direction_id": "math.frontier.geometric-numerical-integration",
+        "activity_evidence": [
+          {
+            "source_id": "src.cambridge.blanes-casas-murua-splitting-2024",
+            "date": "2024-09-04",
+            "evidence_summary": "Acta Numerica 综述分析分裂与复合方法的阶条件、几何性质、高振荡问题及 PDE 应用，并比较具体算法。"
+          },
+          {
+            "source_id": "src.munthe-kaas.symmetric-integrators-2023",
+            "date": "2023-08-30",
+            "evidence_summary": "Munthe-Kaas 研究对称空间上的几何积分器，使用 Lie 三重系统与典范操作处理球面、Grassmann 流形等空间。"
+          }
+        ]
+      },
+      "primary_region_id": "math.region.applied-computational",
+      "regional_relevance": "研究保留几何结构的时间离散方法，当前证据覆盖分裂与复合算法以及对称空间上的积分器。不是声称整个几何积分领域首次出现于近五年。"
+    },
+    {
+      "stable_id": "system.data-contracts",
+      "canonical_title": "Versioned mathematical data contracts",
+      "title_zh": "数学数据契约与版本管理",
+      "aliases": [],
+      "volume_id": "vol-2-system",
+      "kind": "engineering",
+      "substantive": true,
+      "parent_ids": ["vol-2-system"],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "PROPOSED",
+        "activity_evidence": []
+      },
+      "proposal_basis": "PHASE_ROADMAP.md; engineering plan, not mathematical field or implemented capability"
+    },
+    {
+      "stable_id": "system.formal-evidence",
+      "canonical_title": "Formal evidence extraction",
+      "title_zh": "形式证据抽取",
+      "aliases": [],
+      "volume_id": "vol-2-system",
+      "kind": "engineering",
+      "substantive": true,
+      "parent_ids": ["vol-2-system"],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "PROPOSED",
+        "activity_evidence": []
+      },
+      "proposal_basis": "PHASE_ROADMAP.md; engineering plan, not mathematical field or implemented capability"
+    },
+    {
+      "stable_id": "system.continuous-reader",
+      "canonical_title": "Continuous knowledge-space reading",
+      "title_zh": "连续知识空间阅读",
+      "aliases": [],
+      "volume_id": "vol-2-system",
+      "kind": "engineering",
+      "substantive": true,
+      "parent_ids": ["vol-2-system"],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "PROPOSED",
+        "activity_evidence": []
+      },
+      "proposal_basis": "PHASE_ROADMAP.md; engineering plan, not mathematical field or implemented capability"
+    },
+    {
+      "stable_id": "system.proof-alignment",
+      "canonical_title": "Author–formal proof alignment",
+      "title_zh": "作者证明与形式证明对齐",
+      "aliases": [],
+      "volume_id": "vol-2-system",
+      "kind": "engineering",
+      "substantive": true,
+      "parent_ids": ["vol-2-system"],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "PROPOSED",
+        "activity_evidence": []
+      },
+      "proposal_basis": "PHASE_ROADMAP.md; engineering plan, not mathematical field or implemented capability"
+    },
+    {
+      "stable_id": "system.sandbox",
+      "canonical_title": "Isolated Lean execution",
+      "title_zh": "隔离 Lean 执行",
+      "aliases": [],
+      "volume_id": "vol-2-system",
+      "kind": "engineering",
+      "substantive": true,
+      "parent_ids": ["vol-2-system"],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "PROPOSED",
+        "activity_evidence": []
+      },
+      "proposal_basis": "PHASE_ROADMAP.md; engineering plan, not mathematical field or implemented capability"
+    },
+    {
+      "stable_id": "system.graph-proof",
+      "canonical_title": "Graph proof obligations",
+      "title_zh": "图形证明义务",
+      "aliases": [],
+      "volume_id": "vol-2-system",
+      "kind": "engineering",
+      "substantive": true,
+      "parent_ids": ["vol-2-system"],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "PROPOSED",
+        "activity_evidence": []
+      },
+      "proposal_basis": "PHASE_ROADMAP.md; engineering plan, not mathematical field or implemented capability"
+    },
+    {
+      "stable_id": "system.maintenance",
+      "canonical_title": "Evidence invalidation and maintenance",
+      "title_zh": "证据失效与维护",
+      "aliases": [],
+      "volume_id": "vol-2-system",
+      "kind": "engineering",
+      "substantive": true,
+      "parent_ids": ["vol-2-system"],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "PROPOSED",
+        "activity_evidence": []
+      },
+      "proposal_basis": "PHASE_ROADMAP.md; engineering plan, not mathematical field or implemented capability"
+    },
+    {
+      "stable_id": "research.alignment-fidelity",
+      "canonical_title": "Alignment fidelity evaluation",
+      "title_zh": "证明对齐忠实度评估",
+      "aliases": [],
+      "volume_id": "vol-3-research",
+      "kind": "proposal",
+      "substantive": true,
+      "parent_ids": ["vol-3-research"],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "PROPOSED",
+        "activity_evidence": []
+      },
+      "proposal_basis": "PHASE_ROADMAP.md; proposed evaluation, no novelty or success claim"
+    },
+    {
+      "stable_id": "research.navigability",
+      "canonical_title": "Mathematical navigation evaluation",
+      "title_zh": "数学导航效果评估",
+      "aliases": [],
+      "volume_id": "vol-3-research",
+      "kind": "proposal",
+      "substantive": true,
+      "parent_ids": ["vol-3-research"],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "PROPOSED",
+        "activity_evidence": []
+      },
+      "proposal_basis": "PHASE_ROADMAP.md; proposed evaluation, no novelty or success claim"
+    },
+    {
+      "stable_id": "research.abstraction-candidates",
+      "canonical_title": "Abstraction candidates and hypotheses",
+      "title_zh": "抽象候选与假设",
+      "aliases": [],
+      "volume_id": "vol-3-research",
+      "kind": "proposal",
+      "substantive": true,
+      "parent_ids": ["vol-3-research"],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "PROPOSED",
+        "activity_evidence": []
+      },
+      "proposal_basis": "PHASE_ROADMAP.md; proposed evaluation, no novelty or success claim"
+    },
+    {
+      "stable_id": "research.graph-roundtrip",
+      "canonical_title": "Graph-to-proof round-trip experiments",
+      "title_zh": "图形与证明往返实验",
+      "aliases": [],
+      "volume_id": "vol-3-research",
+      "kind": "proposal",
+      "substantive": true,
+      "parent_ids": ["vol-3-research"],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "PROPOSED",
+        "activity_evidence": []
+      },
+      "proposal_basis": "PHASE_ROADMAP.md; proposed evaluation, no novelty or success claim"
+    },
+    {
+      "stable_id": "research.generality",
+      "canonical_title": "Controlled generality experiments",
+      "title_zh": "受控一般化实验",
+      "aliases": [],
+      "volume_id": "vol-3-research",
+      "kind": "proposal",
+      "substantive": true,
+      "parent_ids": ["vol-3-research"],
+      "cross_memberships": [],
+      "source_ids": [],
+      "classification_codes": {
+        "msc": [],
+        "arxiv": []
+      },
+      "frontier": {
+        "status": "PROPOSED",
+        "activity_evidence": []
+      },
+      "proposal_basis": "PHASE_ROADMAP.md; proposed evaluation, no novelty or success claim"
+    }
+  ],
+  "mappings": {
+    "msc": [
+      {
+        "code": "00",
+        "target_ids": ["math.msc.00"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "01",
+        "target_ids": ["math.msc.01"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "03",
+        "target_ids": ["math.msc.03"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "05",
+        "target_ids": ["math.msc.05"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "06",
+        "target_ids": ["math.msc.06"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "08",
+        "target_ids": ["math.msc.08"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "11",
+        "target_ids": ["math.msc.11"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "12",
+        "target_ids": ["math.msc.12"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "13",
+        "target_ids": ["math.msc.13"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "14",
+        "target_ids": ["math.msc.14"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "15",
+        "target_ids": ["math.msc.15"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "16",
+        "target_ids": ["math.msc.16"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "17",
+        "target_ids": ["math.msc.17"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "18",
+        "target_ids": ["math.msc.18"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "19",
+        "target_ids": ["math.msc.19"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "20",
+        "target_ids": ["math.msc.20"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "22",
+        "target_ids": ["math.msc.22"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "26",
+        "target_ids": ["math.msc.26"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "28",
+        "target_ids": ["math.msc.28"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "30",
+        "target_ids": ["math.msc.30"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "31",
+        "target_ids": ["math.msc.31"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "32",
+        "target_ids": ["math.msc.32"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "33",
+        "target_ids": ["math.msc.33"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "34",
+        "target_ids": ["math.msc.34"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "35",
+        "target_ids": ["math.msc.35"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "37",
+        "target_ids": ["math.msc.37"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "39",
+        "target_ids": ["math.msc.39"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "40",
+        "target_ids": ["math.msc.40"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "41",
+        "target_ids": ["math.msc.41"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "42",
+        "target_ids": ["math.msc.42"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "43",
+        "target_ids": ["math.msc.43"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "44",
+        "target_ids": ["math.msc.44"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "45",
+        "target_ids": ["math.msc.45"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "46",
+        "target_ids": ["math.msc.46"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "47",
+        "target_ids": ["math.msc.47"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "49",
+        "target_ids": ["math.msc.49"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "51",
+        "target_ids": ["math.msc.51"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "52",
+        "target_ids": ["math.msc.52"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "53",
+        "target_ids": ["math.msc.53"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "54",
+        "target_ids": ["math.msc.54"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "55",
+        "target_ids": ["math.msc.55"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "57",
+        "target_ids": ["math.msc.57"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "58",
+        "target_ids": ["math.msc.58"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "60",
+        "target_ids": ["math.msc.60"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "62",
+        "target_ids": ["math.msc.62"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "65",
+        "target_ids": ["math.msc.65"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "68",
+        "target_ids": ["math.msc.68"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "70",
+        "target_ids": ["math.msc.70"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "74",
+        "target_ids": ["math.msc.74"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "76",
+        "target_ids": ["math.msc.76"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "78",
+        "target_ids": ["math.msc.78"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "80",
+        "target_ids": ["math.msc.80"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "81",
+        "target_ids": ["math.msc.81"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "82",
+        "target_ids": ["math.msc.82"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "83",
+        "target_ids": ["math.msc.83"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "85",
+        "target_ids": ["math.msc.85"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "86",
+        "target_ids": ["math.msc.86"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "90",
+        "target_ids": ["math.msc.90"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "91",
+        "target_ids": ["math.msc.91"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "92",
+        "target_ids": ["math.msc.92"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "93",
+        "target_ids": ["math.msc.93"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "94",
+        "target_ids": ["math.msc.94"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      },
+      {
+        "code": "97",
+        "target_ids": ["math.msc.97"],
+        "relation": "exact-official-subject",
+        "rationale": "Official first-level title retained as a specific canonical subject."
+      }
+    ],
+    "arxiv": [
+      {
+        "code": "math.AC",
+        "target_ids": ["math.msc.13"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.AG",
+        "target_ids": ["math.msc.14"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.AP",
+        "target_ids": ["math.msc.35"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.AT",
+        "target_ids": ["math.msc.55"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.CA",
+        "target_ids": ["math.msc.26", "math.msc.33", "math.msc.34", "math.msc.42", "math.msc.49"],
+        "relation": "scope-distributed",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.CO",
+        "target_ids": ["math.msc.05"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.CT",
+        "target_ids": ["math.msc.18"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.CV",
+        "target_ids": ["math.msc.30", "math.msc.32"],
+        "relation": "scope-distributed",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.DG",
+        "target_ids": ["math.msc.53"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.DS",
+        "target_ids": ["math.msc.37"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.FA",
+        "target_ids": ["math.msc.46"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.GM",
+        "target_ids": ["math.msc.00"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.GN",
+        "target_ids": ["math.msc.54"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.GR",
+        "target_ids": ["math.msc.20"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.GT",
+        "target_ids": ["math.msc.57"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.HO",
+        "target_ids": ["math.msc.00", "math.msc.01", "math.msc.97"],
+        "relation": "scope-distributed",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.IT",
+        "target_ids": ["math.msc.94"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.KT",
+        "target_ids": ["math.msc.19"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.LO",
+        "target_ids": ["math.msc.03"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.MG",
+        "target_ids": ["math.subject.metric-geometry"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.MP",
+        "target_ids": ["math.subject.mathematical-physics"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.NA",
+        "target_ids": ["math.msc.65"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.NT",
+        "target_ids": ["math.msc.11"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.OA",
+        "target_ids": ["math.subject.operator-algebras"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.OC",
+        "target_ids": ["math.msc.49", "math.msc.90", "math.msc.91", "math.msc.93"],
+        "relation": "scope-distributed",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.PR",
+        "target_ids": ["math.msc.60"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.QA",
+        "target_ids": ["math.subject.quantum-algebra"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.RA",
+        "target_ids": [
+          "math.msc.06",
+          "math.msc.08",
+          "math.msc.15",
+          "math.msc.16",
+          "math.msc.17",
+          "math.msc.20"
+        ],
+        "relation": "scope-distributed",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.RT",
+        "target_ids": ["math.subject.representation-theory"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.SG",
+        "target_ids": ["math.subject.symplectic-geometry"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.SP",
+        "target_ids": ["math.subject.spectral-theory"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      },
+      {
+        "code": "math.ST",
+        "target_ids": ["math.msc.62"],
+        "relation": "covered-by-specific-subject",
+        "rationale": "Mapped by the explicit official category description; broader or compound categories are distributed across specific subjects, not equated to one unrelated branch."
+      }
+    ]
+  },
+  "identity_policy": "Do not change stable_id after registration. Multiple placements refer to one identity; no hash- or title-derived renumbering.",
+  "historical_aliases": [
+    {
+      "classification": "MSC",
+      "code": "02",
+      "title": "Logic and foundations",
+      "active_years": "1940–1979",
+      "successor_ids": ["math.msc.03"],
+      "status": "HISTORICAL_NOT_COUNTED",
+      "source_url": "https://mathscinet.ams.org/mathscinet/info/docs/search-extras/search-msc"
+    },
+    {
+      "classification": "arXiv",
+      "code": "math.IT",
+      "canonical_external_code": "cs.IT",
+      "target_ids": ["math.msc.94"],
+      "status": "CURRENT_ALIAS_COUNTED_ONCE"
+    },
+    {
+      "classification": "arXiv",
+      "code": "math.MP",
+      "canonical_external_code": "math-ph",
+      "target_ids": ["math.subject.mathematical-physics"],
+      "status": "CURRENT_ALIAS_COUNTED_ONCE"
+    }
+  ]
+}

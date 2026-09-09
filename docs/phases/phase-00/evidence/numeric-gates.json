@@ -1,0 +1,441 @@
+{
+  "version": 1,
+  "roadmapHash": "2c058ae2810f628d7157d2a8e5a5a57476305ee9bacf7dbd195cee56316607d6",
+  "original_master_verified": true,
+  "status": "PASS",
+  "note": "PASS concerns source registration only; every test result below remains NOT_RUN",
+  "numericLines": [
+    {
+      "phase": 1,
+      "line": 220,
+      "text": "5. 第一卷约 600–1,000 个规范标题仅为容量规划（C），不作为必须凑满的通过条件。覆盖粒度应能落到有实际数学含义的节点，不能把所有分类笼统映射到“数学”。",
+      "explicit_labels": ["C"],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 1,
+      "line": 223,
+      "text": "8. 复核所有前沿节点，对其他数学节点按区域及层级进行至少 10% 的分层抽样（C）；保存抽样种子、原始样本、错误、修正和扩查记录。",
+      "explicit_labels": ["C"],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 1,
+      "line": 237,
+      "text": "- P01-02：MSC 与 arXiv 分别报告“映射条目数 / 已取得条目数”，目标均为 100%；同时报告“已取得条目数 / 官方完整条目数”。获取不完整时不可用前一个 100% 宣称基准已全部覆盖。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 1,
+      "line": 238,
+      "text": "- P01-03：第一卷每个实质性规范节点至少一个已实际核验、支持其含义的来源；目标可追溯率 100%。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 1,
+      "line": 240,
+      "text": "- P01-05：完成全部前沿复核与至少 10% 的其他节点分层抽样；发现实质错误须修正并扩查相同问题所在层，结果保留在审计记录中。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 1,
+      "line": 245,
+      "text": "宣称“100% 的数学”；以网址存在替代来源支持；编造前沿；仅根据模型记忆做全图；将工程愿景计入现有数学；把失效、未读来源算作核验。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 2,
+      "line": 300,
+      "text": "- P02-02：核对至少 20 个不同声明，包含定义、定理、结构、实例、归纳声明和公理类别（R）；每类证据直接对应实际环境，人工审计以真实审阅记录为准。",
+      "explicit_labels": ["R"],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 3,
+      "line": 349,
+      "text": "8. 冻结 30 条导航路径（C），覆盖焦点转移、五级缩放、三个视角、前后恢复及证据检查；建立 150 可见节点、400 可见关系的性能场景。",
+      "explicit_labels": ["C"],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 3,
+      "line": 363,
+      "text": "- P03-03：30 条冻结路径全部通过，对象身份、来源、历史和形式状态一致；切换视角不修改任何形式真值。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 3,
+      "line": 364,
+      "text": "- P03-04：在固定 150/400 场景，交互帧率中位数至少 45 FPS；焦点过渡约 1.2 秒内稳定，无持续无控制漂移，无整场空白。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 3,
+      "line": 365,
+      "text": "- P03-05：R 测量协议：记录硬件、OS、浏览器、窗口与像素比；至少 5 次各 30 秒的相同交互回放，按 1 秒窗口记录帧数并报告汇总及最差运行。固定焦点变化后，非固定节点最大位移在连续 300ms 内不超过 1 CSS 像素定义为稳定；冻结的所有焦点过渡不超过 1.2 秒，稳定后观察 3 秒无重新漂移。记录加载与预热方式，不删除慢运行。",
+      "explicit_labels": ["R"],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 3,
+      "line": 384,
+      "text": "完成五级展开、三视角、30 条导航回放和 150/400 性能测试，保留键盘与冻结布局功能。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 4,
+      "line": 404,
+      "text": "1. 冻结至少 12 个定理、4 个主题、6 种证明模式、60 个有意义数学步骤。优先选择现有环境中能可信实现的样本，列明主题和模式矩阵。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 4,
+      "line": 423,
+      "text": "- P04-01：12/4/6/60 规模全部满足，步骤经内容审阅，不按换行、标点或实现语法凑数。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 4,
+      "line": 445,
+      "text": "执行 Phase 4：构建 12 个定理、4 个主题、6 种证明模式、至少 60 个实质步骤的笔记基准。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 5,
+      "line": 473,
+      "text": "8. 运行冻结正反向导航和策略对照测试，准备至少 24 个版本修改案例（R），覆盖六类变化：仅排版、正文语义、步骤拆并、等结论换策略、陈述/假设、依赖/工具链。",
+      "explicit_labels": ["R"],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 5,
+      "line": 485,
+      "text": "- P05-01：冻结十二单元全部注册原文步骤，都返回全部预期形式单元，正向测试 100% 通过。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 5,
+      "line": 486,
+      "text": "- P05-02：全部注册形式单元返回全部预期解释，反向测试 100% 通过；多对多映射按集合比较，不用任意单个位置代替。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 5,
+      "line": 488,
+      "text": "- P05-04：24 个冻结变更案例全部符合预定影响矩阵；确定的无语义排版修改可保留映射，存在歧义时正确转为 STALE，不静默错位。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 6,
+      "line": 534,
+      "text": "7. 冻结至少 60 个真实编辑案例，覆盖有效修改、语法错误、类型错误、错误定理应用、未闭合目标、假设改变、错误重写、修复成功。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 6,
+      "line": 549,
+      "text": "- P06-01：60 个冻结编辑案例的实际展示状态与真实 Lean 行为一致率 100%；未闭合及占位不得显示发布 CHECKED。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 6,
+      "line": 552,
+      "text": "- P06-04：固定环境与固定集预热后 p50 ≤ 1.5 秒、p95 ≤ 4 秒。R 测量协议：60 个编辑案例各重复至少 5 次，固定声明的并发量与缓存模式，记录从提交到用户可见结果的端到端时间；报告全部请求、错误及超时。缓存命中测试与实际需要重检的请求分开报告。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 6,
+      "line": 572,
+      "text": "运行 60 个编辑案例、30 组乱序序列、隔离检查与预热延迟测量。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 7,
+      "line": 600,
+      "text": "9. 冻结每种操作 10 有效、8 无效案例，共 144 个；冻结至少 40 个往返工件和多尺度边界回放。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 7,
+      "line": 613,
+      "text": "- P07-01：八种操作各自 10/10 有效案例通过，总计 80/80；操作产生预期义务且预先登记的补全路线被 Lean 检查通过，不要求每次操作立即闭合整份证明。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 7,
+      "line": 614,
+      "text": "- P07-02：八种操作各自 8/8 无效案例拒绝或保持未验证，总计 64/64；不能将无效图标成形式正确。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 7,
+      "line": 615,
+      "text": "- P07-03：至少 40 个支持范围内工件往返后，陈述、局部上下文、作用域、推理依赖、分支结构、验证状态逐字段保持；比较规则冻结，变量改名可规范化，逻辑差异不可被格式归一化吞掉。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 7,
+      "line": 617,
+      "text": "- P07-05：至少 20 个折叠/展开案例（R）保持形式边界、上下文、跨区依赖、证据与可恢复性；隐藏内容不会被当成已证明的新引理。",
+      "explicit_labels": ["R"],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 7,
+      "line": 627,
+      "text": "八种操作、144 例、40 个往返、边界折叠和十二单元整合均通过；支持范围、所有局限与证据版本已发布到交接记录。此时才可声明“本路线图限定范围内的 Graph Prove MVP 完成”。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 7,
+      "line": 637,
+      "text": "运行 80 有效、64 无效、至少 40 往返工件，以及多尺度与十二单元整合验收。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 8,
+      "line": 661,
+      "text": "| 8A 依赖显微分析 | 查询类型、体、类型类、模块依赖，比较数学结构与偶然模块边界，输出中心瓶颈及出处；生成 `analysis/dependency-report.json` | 至少 20 个冻结查询与真实工件核对一致（R），未知依赖明确标记；交付查询回放即可独立结束。 |",
+      "explicit_labels": ["R"],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 8,
+      "line": 662,
+      "text": "| 8B 假设弱化 | 登记至少 10 个原定理、候选弱假设、搜索空间、预算、运行和结果；生成 `experiments/hypothesis-weakening/` | 每例都有实际运行、准确的四类结论及对应证据；未解决可按预算结案，不能写成反例或最弱假设。 |",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 8,
+      "line": 663,
+      "text": "| 8C 模式与抽象候选 | 比较签名、证明结构、通用性质、构造、依赖模式，登记至少 5 个候选（R）及原实例、已知相关抽象、检验预算；生成 `analysis/abstraction-candidates.json` | 所有登记候选按预算完成检验；接受项满足一般证明与至少三个实例要求；零接受也可如实完成该包。 |",
+      "explicit_labels": ["R"],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 8,
+      "line": 691,
+      "text": "- P08-01：真实依赖分类与 20 个查询通过，不把教学关系、语义关系或中心性指标当成形式事实。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 8,
+      "line": 692,
+      "text": "- P08-02：至少 10 个弱化实验完整执行并有准确分类；无搜索范围和预算的“最小假设”结论不得接受。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 8,
+      "line": 693,
+      "text": "- P08-03：至少 5 个候选按预定流程处理；每个接受候选都有一般陈述 + 一般证明 + 至少三个实例化证明 + 影响范围重检。未接受项保留失败或未解决原因。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 8,
+      "line": 714,
+      "text": "建立依赖分析、至少 10 个假设弱化实验、至少 5 个抽象候选和可回滚重构验证。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 9,
+      "line": 751,
+      "text": "| **9A 忠于作者的证明对齐（优先）**：检验多对多映射能否保留作者策略。 | Phase 4–6 的笔记、对齐和版本能力可用；冻结至少 60 个定理、300 个有意义的人类数学步骤，首版采用 30 开发/10 验证/20 封存测试。扩充时另立版本与划分，不能减少原测试量。至少两名有能力的人类审阅者独立标注封存集，保存各自原始标注、分歧及裁决。Codex 训练/配置候选方法并重跑基线。 | 交付标注手册、黄金标注、对齐输出和误差分析。预先定义多对多评价单位、匹配规则、空集处理及 macro 平均方式；建议按定理计算 F1 后平均。原文研究目标：封存集 macro F1 ≥ 0.90，且较最强可复现基线绝对提升 ≥ 0.05，即 5 个百分点。另报策略替换、遗漏步骤、额外假设等错误。 | 测试后改指标、调参泄露、AI 冒充人类标注、只凭同命题证明判忠实，均使有效性验收失败。人员缺失为 `BLOCKED`；完整有效实验可按双状态结案，即使未达到目标。用户获得可复测的对齐基准及可信的性能边界。 |",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 9,
+      "line": 754,
+      "text": "| **9D 反事实假设分析**：检验候选弱化能否被证实。 | Phase 8 的候选生成和正式检查可用；预先注册至少 10 个实验，逐项固定原定理、候选弱假设、搜索空间与预算。搜索、检查并保存成功和失败。 | 交付实验注册表、候选陈述、证明/反例证据及日志；每项严格使用 Phase 8 的四类科学结果：PROVED_UNDER_WEAKER_ASSUMPTIONS、COUNTEREXAMPLE_FOUND、CURRENT_PROOF_FAILED、SEARCH_BUDGET_EXHAUSTED，并解释分类依据。执行未完成时科学结果留空。不得以未搜索到证明推断假命题。 | 超预算后选择性报告、把未用假设当作不必要假设，或无证据宣称全局最小，均不通过。至少 10 项按协议执行和归档即可程序结案，不要求十项均成功。用户获得有界搜索内的已证改进与未解决清单。 |",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 9,
+      "line": 768,
+      "text": "例如 9A 的 F1 未达 0.90、提升未达 0.05，只要人员、数据、基线和评估均按协议完成，程序可以 `PASS`，研究结论仍为 `NOT_SUPPORTED` 或 `INCONCLUSIVE`。缺失必需的人类部分则整个包不能 `PASS`。当前委托的包全部结案后停止并交付，不自动启动下一个包；Phase 9 总表持续保留其余状态。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 9,
+      "line": 779,
+      "text": "对每个测试定理计算 TP、FP、FN 和 F1 = 2TP / (2TP + FP + FN)，再对 20 个封存定理等权平均。有效基准定理须有至少一个参考对应，因此该公式的分母不为零；空预测得到 F1 = 0。除边级 F1 外，报告整步完整映射率与重大策略误标数，避免大量容易边掩盖关键遗漏。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 9,
+      "line": 783,
+      "text": "通过研究目标需要同时满足 macro F1 ≥ 0.90、相对最强适用可复现基线的绝对提升 ≥ 0.05，以及按定理配对估计的改善置信区间支持正向改善（C）。R：预注册 95% 配对 bootstrap 区间、重采样次数与随机种子，目标为区间下界大于 0；小样本限制照实报告。三个目标的 actual_result 分别保存，不合并成一个自评等级。",
+      "explicit_labels": ["C"],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 10,
+      "line": 819,
+      "text": "2. 预先冻结扩展批次。R 首批内容目标：总计至少 24 个定理、8 个主题、120 个有意义步骤，沿用至少 6 种证明模式；全部新增单元遵守原有来源、忠实性和人类审阅政策。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 10,
+      "line": 822,
+      "text": "5. R：冻结三档后端规模为原真实数据基线的 1×、2×、5×，记录每档实际声明、节点与边数；数据不足时合成规模仅用于性能测试，不能计入数学覆盖。渲染仍保留可比较的 150/400 可见场景，并单独登记更大可见场景的目标。",
+      "explicit_labels": ["R"],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 10,
+      "line": 840,
+      "text": "- P10-01：新增数学内容保持来源可追溯率 100%，新增定理均完成真实审阅与当前环境检查；所有变化有版本与迁移记录。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 10,
+      "line": 841,
+      "text": "- P10-02：24 定理/8 主题/120 步的首批目标满足；若执行前明确修订 R 目标，报告原值、修订值、原因和冻结日期，不能事后改分母。",
+      "explicit_labels": ["R"],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 10,
+      "line": 843,
+      "text": "- P10-04：固定参考条件下仍达到 150/400 场景 median ≥45 FPS、约 1.2 秒稳定及 live Lean 预热 p50 ≤1.5 秒、p95 ≤4 秒；新增规模按事先冻结门槛判定，未达标不得宣称扩展完成。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 10,
+      "line": 844,
+      "text": "- P10-05：扩展的发布定理集在两个干净独立环境中 100% 重建通过；保留所有失败与环境差异。",
+      "explicit_labels": [],
+      "origin_note": "Exact Roadmap wording retained; see quantitative-origins.json for separately reviewed M/C/R attribution",
+      "actual_result": null,
+      "status": "NOT_RUN"
+    }
+  ]
+}

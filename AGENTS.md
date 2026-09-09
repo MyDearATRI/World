@@ -1,5 +1,13 @@
 # Website implementation rules
 
+## Theme sidebar and audited Phase 0 / Phase 1
+
+The latest explicit request adds a major-topic checkbox sidebar; it supersedes the earlier prohibition on a primary sidebar. The real-note field uses website-only editorial memberships in `knowledge/topos/note-topics.json`; shared occurrences inherit all themes and remain one object. An empty selection is deliberate, filters are unions, and hidden objects retain their identities and coordinates. Never rewrite source notes to implement navigation. Mobile uses an accessible topic drawer and the same reading controller.
+
+`atlas.html` is a distinct, source-audited mathematical title map derived from `ontology/math_registry.json`. Its twelve regions are navigation collections, and classification/cross-membership edges are structural assignments, not proofs or prerequisites. Existing notes and mathematics titles remain separate scopes; the second and third ontology volumes are not plotted as established mathematics. Classification-only objects expose sources and explicitly have no personal mathematical body or Lean verification. Preserve the full approved-note index and old URLs.
+
+Phase 0 and Phase 1 follow the workspace `PHASE_ROADMAP.md`. Record evidence, immutable inputs, limitations, source verification and honest phase statuses in `docs/phases/` and `ontology/`. The complete Master Prompt stays a local audit input; do not publish prompts or private diagnostics. Do not begin Phase 2 from a Phase 1 success. Run ontology and topic-output checks in addition to existing validation before synchronization.
+
 ## Published knowledge field and source-independent writing
 
 The user has now requested their actual notes in the continuous knowledge field, and permits necessary restructuring of writing rules/templates without centering one textbook. The Group prototype has completed its own acceptance; its synthetic content moves to `topos-demo.html`. The site root and `topos.html` now target the existing approved KnowledgeIndex and formally rendered source trees. `library.html` preserves the previous home exposition and book reading entry. Existing note and atom URLs remain valid.

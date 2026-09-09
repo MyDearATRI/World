@@ -1,0 +1,681 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-09-10",
+  "regions": [
+    {
+      "id": "math.region.foundations-logic",
+      "title_zh": "基础与逻辑",
+      "directions": [
+        {
+          "stable_id": "math.frontier.inner-models",
+          "canonical_title": "Inner models, large cardinals and determinacy",
+          "title_zh": "内模型、大基数与决定性",
+          "aliases": [],
+          "parent_ids": ["math.region.foundations-logic"],
+          "source_ids": ["src.vimt2024", "src.steel-jmm2024"],
+          "regional_relevance": "Inner models compare axiomatic set-theoretic universes and large-cardinal/determinacy strength; this is foundational logic, not an application-specific mathematical theory.",
+          "activity_evidence": [
+            {
+              "source_id": "src.vimt2024",
+              "date": "2024-06-24",
+              "evidence_summary": "The programme explicitly covers new inner-model results, large cardinals, determinacy and forcing axioms. The two weeks are counted as one organized event group."
+            },
+            {
+              "source_id": "src.steel-jmm2024",
+              "date": "2024-01",
+              "evidence_summary": "Steel records two lectures on large cardinals, determinacy and inner models, explicitly limiting the inner-model coverage to the comparison lemma. This is a distinct JMM tutorial, not a mirror of the Vienna workshop."
+            }
+          ]
+        },
+        {
+          "stable_id": "math.frontier.model-theoretic-tameness",
+          "canonical_title": "Model-theoretic tameness and o-minimality",
+          "title_zh": "模型论温和性与 o-极小结构",
+          "aliases": [],
+          "parent_ids": ["math.region.foundations-logic"],
+          "source_ids": ["src.mfo-model-theory2023", "src.moconja-tanovic2026"],
+          "regional_relevance": "Tameness concerns definable sets and types in first-order structures, including o-minimal and weakly o-minimal settings; it lies within model theory.",
+          "activity_evidence": [
+            {
+              "source_id": "src.mfo-model-theory2023",
+              "date": "2023-01-08",
+              "evidence_summary": "The meeting studies model-theoretic tameness of groups and fields and related classification questions. Only this short audit summary and bibliographic metadata are redistributed; the restricted report PDF is not copied."
+            },
+            {
+              "source_id": "src.moconja-tanovic2026",
+              "date": "2026-02-21",
+              "evidence_summary": "The authors investigate invariant types and weakly o-minimal types, and apply definable shifts to counting models. The current v2, not the search engine's old v1 metadata, is registered."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "math.region.categories-higher",
+      "title_zh": "范畴与高阶结构",
+      "directions": [
+        {
+          "stable_id": "math.frontier.higher-categorical-models",
+          "canonical_title": "Higher categorical models and coherence",
+          "title_zh": "高阶范畴模型与协调性",
+          "aliases": [],
+          "parent_ids": ["math.region.categories-higher"],
+          "source_ids": ["src.ara-polygraphs2025", "src.rasekh-higher2024"],
+          "regional_relevance": "Polygraphs and Segal-space models study higher categorical composition, coherence and homotopical presentation.",
+          "activity_evidence": [
+            {
+              "source_id": "src.ara-polygraphs2025",
+              "date": "2025-09-04",
+              "evidence_summary": "A higher-dimensional rewriting framework develops coherence calculations and a model structure for strict higher categories."
+            },
+            {
+              "source_id": "src.rasekh-higher2024",
+              "date": "2024-01-17",
+              "evidence_summary": "The article constructs higher categories through complete Segal-space fibrations and compares quasi-category constructions. It is independent of the polygraphs monograph."
+            }
+          ]
+        },
+        {
+          "stable_id": "math.frontier.cubical-univalence",
+          "canonical_title": "Cubical type theory and univalent higher structures",
+          "title_zh": "立方类型论与单价高阶结构",
+          "aliases": [],
+          "parent_ids": ["math.region.categories-higher"],
+          "source_ids": ["src.hott-book", "src.cubical-boundary2026"],
+          "regional_relevance": "Cubical type theory models higher identity and homotopy structures; its primary placement is higher structures with cross-membership in logic and algebraic topology.",
+          "activity_evidence": [
+            {
+              "source_id": "src.hott-book",
+              "date": "2013",
+              "evidence_summary": "The collaborative book supplies the established connection between identity types, homotopy, higher inductive types and univalent foundations."
+            },
+            {
+              "source_id": "src.cubical-boundary2026",
+              "date": "2026-06-11",
+              "evidence_summary": "The paper treats contortion and Kan boundary-filling algorithms for cubical type theories supporting univalence and higher inductive types. It distinguishes heuristic automation from the undecidable general Kan problem."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "math.region.algebra-representation",
+      "title_zh": "代数与表示论",
+      "directions": [
+        {
+          "stable_id": "math.frontier.representation-categorification",
+          "canonical_title": "Categorification in representation theory",
+          "title_zh": "表示论中的范畴化",
+          "aliases": [],
+          "parent_ids": ["math.region.algebra-representation"],
+          "source_ids": ["src.columbia-super2023", "src.rui-song2023"],
+          "regional_relevance": "Categorification replaces representation-theoretic invariants by categories, with algebra actions and Grothendieck groups linking representation theory and category theory.",
+          "activity_evidence": [
+            {
+              "source_id": "src.columbia-super2023",
+              "date": "2023-03-29",
+              "evidence_summary": "The programme discusses categorical representations, KLR algebras and relations between superalgebra categorifications, including research talks about subquotients of category O."
+            },
+            {
+              "source_id": "src.rui-song2023",
+              "date": "2023-07-16",
+              "evidence_summary": "Rui and Song use a Grothendieck group of filtered Brauer-category representations to categorify a highest-weight module, with explicit characteristic restrictions."
+            }
+          ]
+        },
+        {
+          "stable_id": "math.frontier.modular-blocks",
+          "canonical_title": "Modular representations, blocks and tensor-triangular methods",
+          "title_zh": "模表示、块与张量三角方法",
+          "aliases": [],
+          "parent_ids": ["math.region.algebra-representation"],
+          "source_ids": ["src.brauer-height2024", "src.mfo-tensor2023"],
+          "regional_relevance": "Blocks and defect groups are central to finite-group modular representations; tensor-triangular geometry supplies additional categorical methods.",
+          "activity_evidence": [
+            {
+              "source_id": "src.brauer-height2024",
+              "date": "2024-08-30",
+              "evidence_summary": "The article completes the remaining implication of Brauer's height-zero conjecture for odd primes; it supports ongoing study of finite-group blocks and defect groups, not a claim that this named conjecture remains open."
+            },
+            {
+              "source_id": "src.mfo-tensor2023",
+              "date": "2023-09-17",
+              "evidence_summary": "Research talks connect tensor-triangular methods with modular representation theory, homotopy and algebraic geometry. This organized programme is independent of the Brauer article."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "math.region.number-arithmetic",
+      "title_zh": "数论与算术几何",
+      "directions": [
+        {
+          "stable_id": "math.frontier.prismatic-cohomology",
+          "canonical_title": "Prismatic cohomology and integral p-adic geometry",
+          "title_zh": "棱柱上同调与整 p 进几何",
+          "aliases": [],
+          "parent_ids": ["math.region.number-arithmetic"],
+          "source_ids": ["src.bhatt-scholze2022", "src.tsuji-ias2024"],
+          "regional_relevance": "Prismatic sites and crystals connect arithmetic p-adic cohomology with formal-scheme geometry, giving legitimate number-theoretic and algebraic-geometric placements.",
+          "activity_evidence": [
+            {
+              "source_id": "src.bhatt-scholze2022",
+              "date": "2022-10-30",
+              "evidence_summary": "Prismatic sites of p-adic formal schemes unify several integral p-adic cohomology theories. The article's scope is read from its abstract, not its apparently unrelated publisher MSC field."
+            },
+            {
+              "source_id": "src.tsuji-ias2024",
+              "date": "2024-03-12",
+              "evidence_summary": "Tsuji explains a q-Higgs description of prismatic crystals and their cohomology, including Frobenius and Nygaard filtrations. This is a distinct research contribution, not the foundational paper's mirror."
+            }
+          ]
+        },
+        {
+          "stable_id": "math.frontier.local-langlands-geometrization",
+          "canonical_title": "Geometrization of the local Langlands correspondence",
+          "title_zh": "局部 Langlands 对应的几何化",
+          "aliases": [],
+          "parent_ids": ["math.region.number-arithmetic"],
+          "source_ids": ["src.scholze-motivic2025", "src.imai-langlands2024"],
+          "regional_relevance": "Local Langlands geometrization studies local-field representation parameters via sheaves on geometric stacks, connecting arithmetic, representation theory and algebraic geometry.",
+          "activity_evidence": [
+            {
+              "source_id": "src.scholze-motivic2025",
+              "date": "2025-01-14",
+              "evidence_summary": "The work extends the Fargues–Scholze setting from l-adic to motivic sheaves and addresses independence of l of constructed parameters."
+            },
+            {
+              "source_id": "src.imai-langlands2024",
+              "date": "2024-08-29",
+              "evidence_summary": "Imai provides a separately authored exposition of Fargues–Scholze geometrization. It is counted as a survey source group, not as an independent proof of the correspondence."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "math.region.algebraic-geometry",
+      "title_zh": "代数几何",
+      "directions": [
+        {
+          "stable_id": "math.frontier.birational-boundedness",
+          "canonical_title": "Birational geometry and boundedness",
+          "title_zh": "双有理几何与有界性",
+          "aliases": [],
+          "parent_ids": ["math.region.algebraic-geometry"],
+          "source_ids": ["src.mfo-birational2024", "src.birkar-polarised2023"],
+          "regional_relevance": "Birational boundedness studies algebraic varieties, linear systems and controlled singularities; it is separate from the analytic construction of canonical metrics.",
+          "activity_evidence": [
+            {
+              "source_id": "src.mfo-birational2024",
+              "date": "2024-03-17",
+              "evidence_summary": "The programme addresses birational methods, Cremona groups, K-moduli and mirror symmetry. This node uses its birational content; canonical metrics are a separate geometric direction."
+            },
+            {
+              "source_id": "src.birkar-polarised2023",
+              "date": "2023-02-13",
+              "evidence_summary": "Birkar studies birational boundedness for polarized projective varieties under controlled singularities and positivity hypotheses. The audit does not remove those conditions or verify the proof."
+            }
+          ]
+        },
+        {
+          "stable_id": "math.frontier.derived-sheaf-moduli",
+          "canonical_title": "Derived moduli of sheaves and Stokes data",
+          "title_zh": "层与 Stokes 数据的导出模空间",
+          "aliases": [],
+          "parent_ids": ["math.region.algebraic-geometry"],
+          "source_ids": ["src.porta-teyssier2025", "src.casals-li2024"],
+          "regional_relevance": "Derived stacks of sheaves and Stokes data belong to algebraic geometry and use higher-categorical coefficients and homotopical constructions.",
+          "activity_evidence": [
+            {
+              "source_id": "src.porta-teyssier2025",
+              "date": "2025-04-07",
+              "evidence_summary": "The paper constructs locally geometric derived moduli of Stokes data. It is the replacement for the derived-moduli portion split out of the older paper; the superseded title is not treated as a second independent work."
+            },
+            {
+              "source_id": "src.casals-li2024",
+              "date": "2024-09-11",
+              "evidence_summary": "Casals and Li construct functions on derived sheaf moduli with Legendrian microsupport using Hochschild homology and geometry of Lagrangian fillings."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "math.region.topology-homotopy",
+      "title_zh": "拓扑与同伦",
+      "directions": [
+        {
+          "stable_id": "math.frontier.chromatic-k-theory",
+          "canonical_title": "Chromatic homotopy and algebraic K-theory",
+          "title_zh": "色同伦与代数 K 理论",
+          "aliases": [],
+          "parent_ids": ["math.region.topology-homotopy"],
+          "source_ids": ["src.chromatic-null2022", "src.ramzi-noshift2026"],
+          "regional_relevance": "Chromatic localizations of spectra and redshift questions connect stable algebraic topology and algebraic K-theory; categorical extensions require different hypotheses.",
+          "activity_evidence": [
+            {
+              "source_id": "src.chromatic-null2022",
+              "date": "2022-07-20",
+              "evidence_summary": "The work characterizes certain Lubin–Tate theories and obtains redshift for algebraic K-theory of E-infinity rings. Ring-spectrum hypotheses are retained in this source audit."
+            },
+            {
+              "source_id": "src.ramzi-noshift2026",
+              "date": "2026-04-02",
+              "evidence_summary": "Ramzi studies rigid symmetric-monoidal stable categories and gives counterexamples to a categorical analogue of redshift. This is not a contradiction to the differently scoped ring-spectrum theorem."
+            }
+          ]
+        },
+        {
+          "stable_id": "math.frontier.floer-homotopy",
+          "canonical_title": "Floer homotopy theory",
+          "title_zh": "Floer 同伦理论",
+          "aliases": [],
+          "parent_ids": ["math.region.topology-homotopy"],
+          "source_ids": ["src.mit-floer2023", "src.abouzaid-princeton2023"],
+          "regional_relevance": "Floer homotopy extracts stable homotopical information from moduli of trajectories, connecting algebraic topology and symplectic geometry.",
+          "activity_evidence": [
+            {
+              "source_id": "src.mit-floer2023",
+              "date": "2023-02-08",
+              "evidence_summary": "The seminar progresses from spectra and Morse theory to Floer homotopy, showing a concrete reading and research programme at the intersection of stable homotopy and symplectic topology."
+            },
+            {
+              "source_id": "src.abouzaid-princeton2023",
+              "date": "2023-02-02",
+              "evidence_summary": "Abouzaid discusses recovering generalized-homology information from higher-dimensional Floer solution spaces and recent technical advances, with further structures explicitly described as work in progress."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "src.vimt2024",
+      "source_id": "src.vimt2024",
+      "title": "Vienna Inner Model Theory 2024",
+      "url": "https://vimt2024.conf.tuwien.ac.at/",
+      "source_group": "event.vimt2024",
+      "kind": "research-workshop",
+      "published_date": null,
+      "recent_activity_date": "2024-06-24",
+      "accessed_date": "2026-09-10",
+      "locator": "Overview: June 24–28 at ESI, July 1–5 at TU Wien",
+      "support_summary": "The programme explicitly covers new inner-model results, large cardinals, determinacy and forcing axioms. The two weeks are counted as one organized event group.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.steel-jmm2024",
+      "source_id": "src.steel-jmm2024",
+      "title": "John Steel: Large cardinals, determinacy, and inner models",
+      "url": "https://math.berkeley.edu/~steel/talks/Lectures.html",
+      "source_group": "lecture.steel-jmm2024",
+      "kind": "author-lecture-record",
+      "published_date": null,
+      "recent_activity_date": "2024-01",
+      "accessed_date": "2026-09-10",
+      "locator": "Recent Talks: January 2024 Joint Mathematics Meeting tutorial",
+      "support_summary": "Steel records two lectures on large cardinals, determinacy and inner models, explicitly limiting the inner-model coverage to the comparison lemma. This is a distinct JMM tutorial, not a mirror of the Vienna workshop.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.mfo-model-theory2023",
+      "source_id": "src.mfo-model-theory2023",
+      "title": "Model Theory: Combinatorics, Groups, Valued Fields and Neostability",
+      "url": "https://publications.mfo.de/handle/mfo/4040",
+      "source_group": "event.mfo2302",
+      "kind": "research-workshop-report",
+      "published_date": null,
+      "recent_activity_date": "2023-01-08",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract and period, 8–14 January 2023",
+      "support_summary": "The meeting studies model-theoretic tameness of groups and fields and related classification questions. Only this short audit summary and bibliographic metadata are redistributed; the restricted report PDF is not copied.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.moconja-tanovic2026",
+      "source_id": "src.moconja-tanovic2026",
+      "title": "Countable models of weakly quasi-o-minimal theories I",
+      "url": "https://arxiv.org/abs/2412.20589v2",
+      "source_group": "work.moconja-tanovic-2412.20589",
+      "kind": "research-preprint",
+      "published_date": "2026-02-21",
+      "recent_activity_date": "2026-02-21",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract and v2 submission history; MSC 03C15, 03C64",
+      "support_summary": "The authors investigate invariant types and weakly o-minimal types, and apply definable shifts to counting models. The current v2, not the search engine's old v1 metadata, is registered.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.ara-polygraphs2025",
+      "source_id": "src.ara-polygraphs2025",
+      "title": "Polygraphs: From Rewriting to Higher Categories",
+      "url": "https://arxiv.org/abs/2312.00429v2",
+      "source_group": "work.ara-burroni-guiraud-malbos-metayer-mimram",
+      "kind": "research-monograph",
+      "published_date": "2025-09-04",
+      "recent_activity_date": "2025-09-04",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract, v2 history, MSC 18N30/18N40",
+      "support_summary": "A higher-dimensional rewriting framework develops coherence calculations and a model structure for strict higher categories.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.rasekh-higher2024",
+      "source_id": "src.rasekh-higher2024",
+      "title": "A Model for the Higher Category of Higher Categories",
+      "url": "https://tac.mta.ca/tac/volumes/41/2/41-02abs.html",
+      "source_group": "work.rasekh-higher-category",
+      "kind": "research-article",
+      "published_date": "2024-01-17",
+      "recent_activity_date": "2024-01-17",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract; Theory and Applications of Categories 41(2), 21–70",
+      "support_summary": "The article constructs higher categories through complete Segal-space fibrations and compares quasi-category constructions. It is independent of the polygraphs monograph.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.hott-book",
+      "source_id": "src.hott-book",
+      "title": "Homotopy Type Theory: Univalent Foundations of Mathematics",
+      "url": "https://homotopytypetheory.org/book/",
+      "source_group": "work.univalent-foundations-book",
+      "kind": "author-book",
+      "published_date": "2013",
+      "recent_activity_date": "2013",
+      "accessed_date": "2026-09-10",
+      "locator": "Book description and chapters",
+      "support_summary": "The collaborative book supplies the established connection between identity types, homotopy, higher inductive types and univalent foundations.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.cubical-boundary2026",
+      "source_id": "src.cubical-boundary2026",
+      "title": "Automating Boundary Filling in Cubical Type Theories",
+      "url": "https://arxiv.org/abs/2402.12169v5",
+      "source_group": "work.dore-cavallo-mortberg-boundary",
+      "kind": "research-article",
+      "published_date": "2026-06-11",
+      "recent_activity_date": "2026-06-11",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract, v5 history and LMCS 22(2):28 journal reference",
+      "support_summary": "The paper treats contortion and Kan boundary-filling algorithms for cubical type theories supporting univalence and higher inductive types. It distinguishes heuristic automation from the undecidable general Kan problem.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.columbia-super2023",
+      "source_id": "src.columbia-super2023",
+      "title": "Lie Superalgebras and Categorification",
+      "url": "https://www.math.columbia.edu/~martinez/seminarsuper2023.html",
+      "source_group": "event.columbia-super2023",
+      "kind": "research-learning-seminar",
+      "published_date": null,
+      "recent_activity_date": "2023-03-29",
+      "accessed_date": "2026-09-10",
+      "locator": "Programme, April 12 and April 26 abstracts",
+      "support_summary": "The programme discusses categorical representations, KLR algebras and relations between superalgebra categorifications, including research talks about subquotients of category O.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.rui-song2023",
+      "source_id": "src.rui-song2023",
+      "title": "Representations of Brauer category and categorification",
+      "url": "https://arxiv.org/abs/2307.10238",
+      "source_group": "work.rui-song-brauer",
+      "kind": "research-preprint",
+      "published_date": "2023-07-16",
+      "recent_activity_date": "2023-07-16",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract",
+      "support_summary": "Rui and Song use a Grothendieck group of filtered Brauer-category representations to categorify a highest-weight module, with explicit characteristic restrictions.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.brauer-height2024",
+      "source_id": "src.brauer-height2024",
+      "title": "Brauer’s Height Zero Conjecture",
+      "url": "https://annals.math.princeton.edu/2024/200-2/p04",
+      "source_group": "work.malle-navarro-schaeffer-fry-tiep",
+      "kind": "research-article",
+      "published_date": "2024-08-30",
+      "recent_activity_date": "2024-08-30",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract, keywords and publication milestone",
+      "support_summary": "The article completes the remaining implication of Brauer's height-zero conjecture for odd primes; it supports ongoing study of finite-group blocks and defect groups, not a claim that this named conjecture remains open.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.mfo-tensor2023",
+      "source_id": "src.mfo-tensor2023",
+      "title": "Tensor-Triangular Geometry and Interactions",
+      "url": "https://publications.mfo.de/handle/mfo/4102",
+      "source_group": "event.mfo2338a",
+      "kind": "research-workshop-report",
+      "published_date": null,
+      "recent_activity_date": "2023-09-17",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract and period",
+      "support_summary": "Research talks connect tensor-triangular methods with modular representation theory, homotopy and algebraic geometry. This organized programme is independent of the Brauer article.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.bhatt-scholze2022",
+      "source_id": "src.bhatt-scholze2022",
+      "title": "Prisms and prismatic cohomology",
+      "url": "https://annals.math.princeton.edu/2022/196-3/p05",
+      "source_group": "work.bhatt-scholze-prisms",
+      "kind": "research-article",
+      "published_date": "2022-10-30",
+      "recent_activity_date": "2022-10-30",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract and publication milestones; page's anomalous MSC metadata is not used",
+      "support_summary": "Prismatic sites of p-adic formal schemes unify several integral p-adic cohomology theories. The article's scope is read from its abstract, not its apparently unrelated publisher MSC field.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.tsuji-ias2024",
+      "source_id": "src.tsuji-ias2024",
+      "title": "Prismatic Crystals, q-Higgs Modules, and their Cohomology",
+      "url": "https://www.ias.edu/math/events/special-year-workshop-p-adic-arithmetic-geometry-21",
+      "source_group": "work.tsuji-q-higgs",
+      "kind": "research-talk",
+      "published_date": null,
+      "recent_activity_date": "2024-03-12",
+      "accessed_date": "2026-09-10",
+      "locator": "Talk abstract and dated event",
+      "support_summary": "Tsuji explains a q-Higgs description of prismatic crystals and their cohomology, including Frobenius and Nygaard filtrations. This is a distinct research contribution, not the foundational paper's mirror.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.scholze-motivic2025",
+      "source_id": "src.scholze-motivic2025",
+      "title": "Geometrization of the local Langlands correspondence, motivically",
+      "url": "https://arxiv.org/abs/2501.07944",
+      "source_group": "work.scholze-motivic-langlands",
+      "kind": "research-preprint",
+      "published_date": "2025-01-14",
+      "recent_activity_date": "2025-01-14",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract and submission history",
+      "support_summary": "The work extends the Fargues–Scholze setting from l-adic to motivic sheaves and addresses independence of l of constructed parameters.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.imai-langlands2024",
+      "source_id": "src.imai-langlands2024",
+      "title": "On the geometrization of the local Langlands correspondence",
+      "url": "https://arxiv.org/abs/2408.16571",
+      "source_group": "work.imai-langlands-survey",
+      "kind": "independent-research-survey",
+      "published_date": "2024-08-29",
+      "recent_activity_date": "2024-08-29",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract and author",
+      "support_summary": "Imai provides a separately authored exposition of Fargues–Scholze geometrization. It is counted as a survey source group, not as an independent proof of the correspondence.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.mfo-birational2024",
+      "source_id": "src.mfo-birational2024",
+      "title": "K-Stability, Birational Geometry and Mirror Symmetry",
+      "url": "https://publications.mfo.de/handle/mfo/4142",
+      "source_group": "event.mfo2412b",
+      "kind": "research-workshop-report",
+      "published_date": null,
+      "recent_activity_date": "2024-03-17",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract and report introduction, 17–22 March",
+      "support_summary": "The programme addresses birational methods, Cremona groups, K-moduli and mirror symmetry. This node uses its birational content; canonical metrics are a separate geometric direction.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.birkar-polarised2023",
+      "source_id": "src.birkar-polarised2023",
+      "title": "Geometry of polarised varieties",
+      "url": "https://link.springer.com/article/10.1007/s10240-022-00136-w",
+      "source_group": "work.birkar-polarised",
+      "kind": "research-article",
+      "published_date": "2023-02-13",
+      "recent_activity_date": "2023-02-13",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract, Publications mathématiques de l’IHÉS 137",
+      "support_summary": "Birkar studies birational boundedness for polarized projective varieties under controlled singularities and positivity hypotheses. The audit does not remove those conditions or verify the proof.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.porta-teyssier2025",
+      "source_id": "src.porta-teyssier2025",
+      "title": "The derived moduli of Stokes data",
+      "url": "https://arxiv.org/abs/2504.05360",
+      "source_group": "work.porta-teyssier-stokes-moduli",
+      "kind": "research-preprint",
+      "published_date": "2025-04-07",
+      "recent_activity_date": "2025-04-07",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract and note separating it from arXiv:2401.12335",
+      "support_summary": "The paper constructs locally geometric derived moduli of Stokes data. It is the replacement for the derived-moduli portion split out of the older paper; the superseded title is not treated as a second independent work.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.casals-li2024",
+      "source_id": "src.casals-li2024",
+      "title": "Positive microlocal holonomies are globally regular",
+      "url": "https://arxiv.org/abs/2409.07435",
+      "source_group": "work.casals-li-microlocal",
+      "kind": "research-preprint",
+      "published_date": "2024-09-11",
+      "recent_activity_date": "2024-09-11",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract",
+      "support_summary": "Casals and Li construct functions on derived sheaf moduli with Legendrian microsupport using Hochschild homology and geometry of Lagrangian fillings.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.chromatic-null2022",
+      "source_id": "src.chromatic-null2022",
+      "title": "The Chromatic Nullstellensatz",
+      "url": "https://arxiv.org/abs/2207.09929",
+      "source_group": "work.burklund-schlank-yuan-nullstellensatz",
+      "kind": "research-preprint",
+      "published_date": "2022-07-20",
+      "recent_activity_date": "2022-07-20",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract",
+      "support_summary": "The work characterizes certain Lubin–Tate theories and obtains redshift for algebraic K-theory of E-infinity rings. Ring-spectrum hypotheses are retained in this source audit.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.ramzi-noshift2026",
+      "source_id": "src.ramzi-noshift2026",
+      "title": "Chromatic Noshift",
+      "url": "https://arxiv.org/abs/2604.01863",
+      "source_group": "work.ramzi-noshift",
+      "kind": "research-preprint",
+      "published_date": "2026-04-02",
+      "recent_activity_date": "2026-04-02",
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract",
+      "support_summary": "Ramzi studies rigid symmetric-monoidal stable categories and gives counterexamples to a categorical analogue of redshift. This is not a contradiction to the differently scoped ring-spectrum theorem.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.mit-floer2023",
+      "source_id": "src.mit-floer2023",
+      "title": "Juvitop: Floer Homotopy Theory",
+      "url": "https://math.mit.edu/juvitop/",
+      "source_group": "event.mit-juvitop2023",
+      "kind": "research-learning-seminar",
+      "published_date": null,
+      "recent_activity_date": "2023-02-08",
+      "accessed_date": "2026-09-10",
+      "locator": "Spring 2023 programme and talk abstracts",
+      "support_summary": "The seminar progresses from spectra and Morse theory to Floer homotopy, showing a concrete reading and research programme at the intersection of stable homotopy and symplectic topology.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "id": "src.abouzaid-princeton2023",
+      "source_id": "src.abouzaid-princeton2023",
+      "title": "Floer homotopy: theory and practice",
+      "url": "https://www.math.princeton.edu/events/floer-homotopy-theory-and-practice-2023-02-02t213000",
+      "source_group": "event.princeton-minerva2023",
+      "kind": "research-lecture",
+      "published_date": null,
+      "recent_activity_date": "2023-02-02",
+      "accessed_date": "2026-09-10",
+      "locator": "Lecture-series abstract and date",
+      "support_summary": "Abouzaid discusses recovering generalized-homology information from higher-dimensional Floer solution spaces and recent technical advances, with further structures explicitly described as work in progress.",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    }
+  ],
+  "gaps": []
+}

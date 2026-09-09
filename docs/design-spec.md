@@ -1,5 +1,11 @@
 # Design specification
 
+## Theme navigation
+
+The latest explicit sidebar request supersedes the historical sidebar prohibition. A 272px warm-gray rail (235px at intermediate desktop widths) contains six actual-note themes or twelve atlas regions, using stable colors, readable names, native checkboxes and counts. Color is not the sole state signal. Multi-selection is a union, shared objects occur once, and an empty selection has guidance. The selected-node directory can filter names and provides access to every identity.
+
+At 760px and below, the rail becomes a native modal drawer. Closing returns focus; choosing a result enters its existing reader. Canvas bounds, pointer coordinates and annotations account for the remaining desktop viewport. Preserve calm 2.5D movement, reduced-motion handling, the 720px reading maximum and KaTeX typography. Atlas objects disclose taxonomy provenance and verification limits; their structural links never imply mathematical proof.
+
 ## Default field of the author's published mathematics
 
 The actual-note follow-up uses the same continuous 2.5D field at `/` and `topos.html`. Focus, type, provenance and proof status identify the active object. Local search supports the actual titles, aliases, bilingual prose and literal LaTeX, without a mandatory book selection. The context model uses actual relationships; books and chapters do not determine positions or communities. Lens captions describe their real filtering/weighting purpose for these notes rather than reusing group-theory-specific names.

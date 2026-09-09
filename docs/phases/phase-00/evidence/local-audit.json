@@ -1,0 +1,1136 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-09T18:59:57.217Z",
+  "project": "World website",
+  "scope": "Explicit website files and named input attachments only; no fresh Vault export or toolchain installation",
+  "sourceRevision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+  "sourceManifestSha256": "734cfcb8c5128e73b79461ac5da961677da61108dd36d625aeeae5375fa39010",
+  "sourceManifestScope": {
+    "roots": [".github/", "quartz/", "scripts/", "tests/", "knowledge/", "ontology/", "content/"],
+    "topLevel": [
+      "package.json",
+      "package-lock.json",
+      ".node-version",
+      ".npmrc",
+      ".gitattributes",
+      ".gitignore",
+      ".prettierrc",
+      ".prettierignore",
+      "globals.d.ts",
+      "index.d.ts",
+      "tsconfig.json",
+      "quartz.config.ts",
+      "quartz.layout.ts",
+      "reader.config.ts",
+      "publish.config.json",
+      "publish-manifest.json"
+    ],
+    "excludes": "docs,README,site-sync.config and audit evidence are separately reviewed delivery records; artifacts/public/node_modules are derived or local resources"
+  },
+  "dependencyLock": {
+    "path": "package-lock.json",
+    "bytes": 328869,
+    "sha256": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef"
+  },
+  "roadmap": {
+    "path": "../PHASE_ROADMAP.md",
+    "bytes": 80573,
+    "sha256": "2c058ae2810f628d7157d2a8e5a5a57476305ee9bacf7dbd195cee56316607d6"
+  },
+  "inputs": [
+    {
+      "name": "project/docs/MASTER_PROMPT.md",
+      "exists": false,
+      "error": "ENOENT"
+    },
+    {
+      "name": "vault/docs/MASTER_PROMPT.md",
+      "exists": false,
+      "error": "ENOENT"
+    },
+    {
+      "name": "vault/MASTER_PROMPT.md",
+      "exists": false,
+      "error": "ENOENT"
+    },
+    {
+      "name": "provided-interaction-spec",
+      "exists": true,
+      "bytes": 9254,
+      "sha256": "de84b5eec0fc21af7f9e587d66d782681a2fd4838e8ebea35aa6a741251f0210",
+      "firstLine": "# KNOWLEDGE TOPOS — INTERACTION AND ARCHITECTURE SPECIFICATION",
+      "containsMasterTitle": false,
+      "headingCount": 14
+    },
+    {
+      "name": "provided-graph-blog-spec",
+      "exists": true,
+      "bytes": 6276,
+      "sha256": "84170b5356f3382e027d2736944e158b2c8e3ff86576032ba9cc528b92d42dc8",
+      "firstLine": "Design and build a graph-native atomic research blog / digital knowledge garden.",
+      "containsMasterTitle": false,
+      "headingCount": 0
+    }
+  ],
+  "dirty": " M .github/workflows/pages.yml\n M AGENTS.md\n M README.md\n M docs/acceptance.md\n M docs/content-contract.md\n M docs/design-spec.md\n M docs/project-brief.md\n M docs/validation.md\n M package.json\n M quartz/components/scripts/topos/main.ts\n M quartz/components/scripts/topos/renderer.ts\n M quartz/components/styles/topos.css\n M quartz/plugins/emitters/topos.ts\n M quartz/util/topos/field.ts\n M quartz/util/topos/types.ts\n M scripts/lib/site-sync-core.mjs\n M scripts/preview.mjs\n M scripts/publish.mjs\n M scripts/site-sync.test.mjs\n M scripts/sync-site.mjs\n M scripts/verify-content.mjs\n M site-sync.config.json\n?? docs/acceptance-criteria.md\n?? docs/adr/0001-reuse-and-evidence-boundaries.md\n?? docs/adr/0002-tool-candidates.md\n?? docs/adr/0003-static-lean-boundary.md\n?? docs/architecture-plan.md\n?? docs/assumptions.md\n?? docs/benchmarks/environment.json\n?? docs/current-state.md\n?? docs/phase-status.json\n?? docs/phases/phase-00/acceptance.json\n?? docs/phases/phase-00/evidence/audit-local.mjs\n?? docs/phases/phase-00/evidence/audit-official.mjs\n?? docs/phases/phase-00/evidence/baseline-build.log\n?? docs/phases/phase-00/evidence/baseline-checks.json\n?? docs/phases/phase-00/evidence/baseline-content-checks.log\n?? docs/phases/phase-00/evidence/baseline-knowledge-checks.log\n?? docs/phases/phase-00/evidence/baseline-types.log\n?? docs/phases/phase-00/evidence/baseline-unit-tests.log\n?? docs/phases/phase-00/evidence/baseline-upstream.log\n?? docs/phases/phase-00/evidence/catalog-tools.mjs\n?? docs/phases/phase-00/evidence/evidence-sha256.json\n?? docs/phases/phase-00/evidence/finalize-report.mjs\n?? docs/phases/phase-00/evidence/future-criteria.json\n?? docs/phases/phase-00/evidence/input-resolution.json\n?? docs/phases/phase-00/evidence/local-audit.json\n?? docs/phases/phase-00/evidence/master-mapping-review.json\n?? docs/phases/phase-00/evidence/master-review.mjs\n?? docs/phases/phase-00/evidence/numeric-gates.json\n?? docs/phases/phase-00/evidence/official-research.json\n?? docs/phases/phase-00/evidence/quantitative-origins.json\n?? docs/phases/phase-00/evidence/register-contract.mjs\n?? docs/phases/phase-00/evidence/register-quantities.mjs\n?? docs/phases/phase-00/evidence/source-file-hashes.json\n?? docs/phases/phase-00/evidence/tool-candidates.json\n?? docs/phases/phase-00/evidence/validate-phase-zero.mjs\n?? docs/phases/phase-00/evidence/validation-report.json\n?? docs/phases/phase-00/handoff.md\n?? docs/phases/phase-01/acceptance.json\n?? docs/phases/phase-01/evidence/ontology-format.txt\n?? docs/phases/phase-01/evidence/ontology-tests.txt\n?? docs/phases/phase-01/evidence/ontology-validation.txt\n?? docs/phases/phase-01/evidence/run-report.json\n?? docs/phases/phase-01/handoff.md\n?? docs/requirements-traceability.csv\n?? knowledge/topos/note-topics.json\n?? ontology/audit.json\n?? ontology/benchmarks/README.md\n?? ontology/benchmarks/arxiv-math.json\n?? ontology/benchmarks/assemble.mjs\n?? ontology/benchmarks/msc2020-level1.json\n?? ontology/benchmarks/record-audit.mjs\n?? ontology/benchmarks/regions-07-12-verification.json\n?? ontology/benchmarks/research-regions-01-06.mjs\n?? ontology/benchmarks/retrieval-regions-01-06.json\n?? ontology/benchmarks/review-records.json\n?? ontology/benchmarks/run-acceptance.mjs\n?? ontology/benchmarks/sample-selection.json\n?? ontology/benchmarks/schema-contract.json\n?? ontology/math_outline.md\n?? ontology/math_registry.json\n?? ontology/research-regions-01-06.json\n?? ontology/research-regions-07-12.json\n?? ontology/sources.json\n?? quartz/components/scripts/topos/sidebar.ts\n?? quartz/util/topos/atlas.ts\n?? quartz/util/topos/topics.test.ts\n?? quartz/util/topos/topics.ts\n?? scripts/define-note-topics.mjs\n?? scripts/ontology.test.mjs\n?? scripts/validate-ontology.mjs\n?? scripts/verify-topic-browser.mjs\n?? scripts/verify-topic-interactions.mjs\n?? scripts/verify-topic-map.mjs\n",
+  "environment": {
+    "platform": "win32",
+    "release": "10.0.26200",
+    "architecture": "x64",
+    "node": "v24.19.0",
+    "cpus": ["Intel(R) Core(TM) Ultra 9 275HX"],
+    "logicalCpuCount": 24,
+    "totalMemoryBytes": 33752997888,
+    "edgeVersion": "152.0.4191.66",
+    "gpuDriver": null,
+    "gpuDriverLimitation": "CIM read attempt returned Access denied; no escalation for hardware metadata",
+    "tools": [
+      {
+        "name": "node",
+        "found": true,
+        "path": "<USERPROFILE>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe"
+      },
+      {
+        "name": "npm",
+        "found": false,
+        "path": null
+      },
+      {
+        "name": "npx",
+        "found": false,
+        "path": null
+      },
+      {
+        "name": "pnpm",
+        "found": true,
+        "path": "<USERPROFILE>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback\\pnpm.cmd"
+      },
+      {
+        "name": "git",
+        "found": true,
+        "path": "C:\\Program Files\\Git\\cmd\\git.exe"
+      },
+      {
+        "name": "lean",
+        "found": true,
+        "path": "<USERPROFILE>\\.elan\\bin\\lean.exe"
+      },
+      {
+        "name": "lake",
+        "found": true,
+        "path": "<USERPROFILE>\\.elan\\bin\\lake.exe"
+      },
+      {
+        "name": "elan",
+        "found": true,
+        "path": "<USERPROFILE>\\.elan\\bin\\elan.exe"
+      },
+      {
+        "name": "docker",
+        "found": false,
+        "path": null
+      },
+      {
+        "name": "wsl",
+        "found": true,
+        "path": "C:\\Windows\\system32\\wsl.exe"
+      }
+    ],
+    "wsl": {
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "未安装适用于 Linux 的 Windows 子系统。可通过运行 “wsl.exe --install” 进行安装。\r\r\n有关详细信息，请访问 https://aka.ms/wslinstall\r\r\n"
+    }
+  },
+  "repository": {
+    "trackedFiles": 560,
+    "topLevel": [
+      ".cache",
+      ".git",
+      ".gitattributes",
+      ".github",
+      ".gitignore",
+      ".node-version",
+      ".npmrc",
+      ".prettierignore",
+      ".prettierrc",
+      ".quartz-cache",
+      "AGENTS.md",
+      "artifacts",
+      "content",
+      "docs",
+      "globals.d.ts",
+      "index.d.ts",
+      "knowledge",
+      "LICENSE.txt",
+      "node_modules",
+      "ontology",
+      "package-lock.json",
+      "package.json",
+      "public",
+      "publish-manifest.json",
+      "publish.config.json",
+      "quartz",
+      "quartz.config.ts",
+      "quartz.layout.ts",
+      "reader.config.ts",
+      "README.md",
+      "scripts",
+      "site-sync.config.json",
+      "tests",
+      "tsconfig.json",
+      "tsconfig.tsbuildinfo",
+      "发布博客.cmd",
+      "同步到GitHub.cmd",
+      "预览博客.cmd"
+    ],
+    "leanProjectFiles": [],
+    "package": {
+      "name": "@jackyzha0/quartz",
+      "version": "4.5.2",
+      "engines": {
+        "npm": ">=10.9.2",
+        "node": ">=22"
+      },
+      "scripts": {
+        "quartz": "./quartz/bootstrap-cli.mjs",
+        "check": "tsc --noEmit && prettier . --check",
+        "format": "npx prettier . --write",
+        "test": "tsx --test",
+        "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1",
+        "predev": "node scripts/prepare-assets.mjs && tsx scripts/prepare-atoms.ts --check && node scripts/prepare-semantics.mjs --check && node scripts/prepare-semantic-runtime.mjs && node scripts/prepare-graph-runtime.mjs && node scripts/prepare-topos-runtime.mjs",
+        "dev": "node quartz/bootstrap-cli.mjs build -d content -o public --serve --port 8080 --concurrency 2",
+        "prebuild": "node scripts/prepare-assets.mjs && tsx scripts/prepare-atoms.ts --check && node scripts/prepare-semantics.mjs --check && node scripts/prepare-semantic-runtime.mjs && node scripts/prepare-graph-runtime.mjs && node scripts/prepare-topos-runtime.mjs",
+        "build": "node quartz/bootstrap-cli.mjs build -d content -o public --concurrency 2",
+        "test:content": "node scripts/verify-content.mjs",
+        "test:browser": "node scripts/verify-browser.mjs",
+        "test:graph": "node scripts/verify-graph.mjs",
+        "test:search": "node scripts/verify-search.mjs",
+        "test:reader": "node scripts/verify-reader.mjs",
+        "test:navigation": "node scripts/verify-navigation.mjs",
+        "test:interface": "node scripts/verify-interface.mjs",
+        "prepare:atoms": "tsx scripts/prepare-atoms.ts",
+        "check:atoms": "tsx scripts/prepare-atoms.ts --check",
+        "prepare:knowledge": "node scripts/prepare-knowledge.mjs",
+        "prepare:semantics": "node --use-env-proxy scripts/prepare-semantics.mjs",
+        "check:semantics": "node scripts/prepare-semantics.mjs --check",
+        "test:semantics": "node scripts/verify-semantics.mjs",
+        "prepare:semantic-runtime": "node scripts/prepare-semantic-runtime.mjs",
+        "test:knowledge": "node scripts/verify-knowledge.mjs",
+        "test:spatial": "node scripts/verify-spatial.mjs",
+        "test:knowledge-graph": "node scripts/verify-knowledge-graph.mjs",
+        "export": "node scripts/export-vault.mjs",
+        "publish:preview": "node scripts/publish.mjs --preview-only",
+        "publish:notes": "node scripts/publish.mjs",
+        "preview": "node scripts/preview.mjs",
+        "test:upstream": "node scripts/verify-upstream.mjs",
+        "prepare:graph-runtime": "node scripts/prepare-graph-runtime.mjs",
+        "test:three": "node scripts/verify-three.mjs",
+        "sync:site": "node scripts/sync-site.mjs",
+        "sync:preview": "node scripts/sync-site.mjs --preview-only",
+        "prepare:topos-runtime": "node scripts/prepare-topos-runtime.mjs",
+        "test:topos": "node scripts/verify-topos.mjs",
+        "test:topos-published": "node scripts/verify-topos-published.mjs",
+        "check:ontology": "node scripts/validate-ontology.mjs",
+        "test:topic-map": "node scripts/verify-topic-map.mjs",
+        "test:topics": "node scripts/verify-topic-browser.mjs",
+        "test:topic-interactions": "node scripts/verify-topic-interactions.mjs"
+      }
+    },
+    "dependencies": [
+      {
+        "name": "@clack/prompts",
+        "declared": "^0.11.0",
+        "locked": "0.11.0",
+        "installed": "0.11.0",
+        "license": "MIT",
+        "integrity": "sha512-pMN5FcrEw9hUkZA4f+zLlzivQSeQf5dRGJjSUbvVYDLvpKCdQx5OaknvKzgbtXOizhP+SJJJjqEbOe55uKKfAw=="
+      },
+      {
+        "name": "@floating-ui/dom",
+        "declared": "^1.7.4",
+        "locked": "1.7.4",
+        "installed": "1.7.4",
+        "license": "MIT",
+        "integrity": "sha512-OOchDgh4F2CchOX94cRVqhvy7b3AFb+/rQXyswmzmGakRfkMgoWVjfnLWkRirfLEfuD4ysVW16eXzwt3jHIzKA=="
+      },
+      {
+        "name": "@fontsource/noto-serif-sc",
+        "declared": "^5.3.0",
+        "locked": "5.3.0",
+        "installed": "5.3.0",
+        "license": "OFL-1.1",
+        "integrity": "sha512-0/zaEFkidiWldE62rTeD74x8ygUsQvejiSNtO0LQxQk3qpaHnlMZ3w4C7yH80B4KTIg8VKeFP4oSgwWMchY9+g=="
+      },
+      {
+        "name": "@huggingface/transformers",
+        "declared": "3.8.1",
+        "locked": "3.8.1",
+        "installed": "3.8.1",
+        "license": "Apache-2.0",
+        "integrity": "sha512-tsTk4zVjImqdqjS8/AOZg2yNLd1z9S5v+7oUPpXaasDRwEDhB+xnglK1k5cad26lL5/ZIaeREgWWy0bs9y9pPA=="
+      },
+      {
+        "name": "@myriaddreamin/rehype-typst",
+        "declared": "^0.6.0",
+        "locked": "0.6.0",
+        "installed": "0.6.0",
+        "license": "MIT",
+        "integrity": "sha512-WQpr2j7OYtyc2Q1WOqi1wzYrBaeuAWT1Cn1Ki6VPsKoWH7O86/+zKOqltdgMpYdkav1uXYs3RfO5Ir8h0WkZyQ=="
+      },
+      {
+        "name": "@napi-rs/simple-git",
+        "declared": "0.1.22",
+        "locked": "0.1.22",
+        "installed": "0.1.22",
+        "license": "MIT",
+        "integrity": "sha512-bMVoAKhpjTOPHkW/lprDPwv5aD4R4C3Irt8vn+SKA9wudLe9COLxOhurrKRsxmZccUbWXRF7vukNeGUAj5P8kA=="
+      },
+      {
+        "name": "@tweenjs/tween.js",
+        "declared": "^25.0.0",
+        "locked": "25.0.0",
+        "installed": "25.0.0",
+        "license": "MIT",
+        "integrity": "sha512-XKLA6syeBUaPzx4j3qwMqzzq+V4uo72BnlbOjmuljLrRqdsd3qnzvZZoxvMHZ23ndsRS4aufU6JOZYpCbU6T1A=="
+      },
+      {
+        "name": "ansi-truncate",
+        "declared": "^1.4.0",
+        "locked": "1.4.0",
+        "installed": "1.4.0",
+        "license": "MIT",
+        "integrity": "sha512-p6d2MrNs/mbpdXFT08fGabIg4pbgnUbbhrsoFfxWV5L3zFKw7tUkYUxGY3xCGJUPohENM80Q4sWkl/VDEN3pZg=="
+      },
+      {
+        "name": "async-mutex",
+        "declared": "^0.5.0",
+        "locked": "0.5.0",
+        "installed": "0.5.0",
+        "license": null,
+        "integrity": "sha512-1A94B18jkJ3DYq284ohPxoXbfTA5HsQ7/Mf4DEhcyLx3Bz27Rh59iScbB6EPiP+B+joue6YCxcMXSbFC1tZKwA=="
+      },
+      {
+        "name": "chokidar",
+        "declared": "^5.0.0",
+        "locked": "5.0.0",
+        "installed": "5.0.0",
+        "license": "MIT",
+        "integrity": "sha512-TQMmc3w+5AxjpL8iIiwebF73dRDF4fBIieAqGn9RGCWaEVwQ6Fb2cGe31Yns0RRIzii5goJ1Y7xbMwo1TxMplw=="
+      },
+      {
+        "name": "cli-spinner",
+        "declared": "^0.2.10",
+        "locked": "0.2.10",
+        "installed": "0.2.10",
+        "license": null,
+        "integrity": "sha512-U0sSQ+JJvSLi1pAYuJykwiA8Dsr15uHEy85iCJ6A+0DjVxivr3d+N2Wjvodeg89uP5K6TswFkKBfAD7B3YSn/Q=="
+      },
+      {
+        "name": "d3",
+        "declared": "^7.9.0",
+        "locked": "7.9.0",
+        "installed": "7.9.0",
+        "license": null,
+        "integrity": "sha512-e1U46jVP+w7Iut8Jt8ri1YsPOvFpg46k+K8TpCb0P+zjCkjkPnV7WzfDJzMHy1LnA+wj5pLT1wjO901gLXeEhA=="
+      },
+      {
+        "name": "d3-force-3d",
+        "declared": "3.0.6",
+        "locked": "3.0.6",
+        "installed": "3.0.6",
+        "license": "MIT",
+        "integrity": "sha512-4tsKHUPLOVkyfEffZo1v6sFHvGFwAIIjt/W8IThbp08DYAsXZck+2pSHEG5W1+gQgEvFLdZkYvmJAbRM2EzMnA=="
+      },
+      {
+        "name": "esbuild-sass-plugin",
+        "declared": "^3.6.0",
+        "locked": "3.6.0",
+        "installed": "3.6.0",
+        "license": "MIT",
+        "integrity": "sha512-lzPJQSEXcnj5amBPPib5lBjsDNPzvdMnX+1Rf7eha9BIpLSM5Ad2pi+Rqg5CAlWMduCgLntS2hLAqG7v1fxWGw=="
+      },
+      {
+        "name": "flexsearch",
+        "declared": "^0.8.205",
+        "locked": "0.8.205",
+        "installed": "0.8.205",
+        "license": "Apache-2.0",
+        "integrity": "sha512-REFjMqy86DKkCTJ4gIE42c9MVm9t1vUWfEub/8taixYuhvyu4jd4XmFALk5VuKW4GH4VLav8A4BJboTsslHF1w=="
+      },
+      {
+        "name": "github-slugger",
+        "declared": "^2.0.0",
+        "locked": "2.0.0",
+        "installed": "2.0.0",
+        "license": null,
+        "integrity": "sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw=="
+      },
+      {
+        "name": "globby",
+        "declared": "^16.1.0",
+        "locked": "16.1.0",
+        "installed": "16.1.0",
+        "license": "MIT",
+        "integrity": "sha512-+A4Hq7m7Ze592k9gZRy4gJ27DrXRNnC1vPjxTt1qQxEY8RxagBkBxivkCwg7FxSTG0iLLEMaUx13oOr0R2/qcQ=="
+      },
+      {
+        "name": "gray-matter",
+        "declared": "^4.0.3",
+        "locked": "4.0.3",
+        "installed": "4.0.3",
+        "license": null,
+        "integrity": "sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q=="
+      },
+      {
+        "name": "hast-util-to-html",
+        "declared": "^9.0.5",
+        "locked": "9.0.5",
+        "installed": "9.0.5",
+        "license": "MIT",
+        "integrity": "sha512-OguPdidb+fbHQSU4Q4ZiLKnzWo8Wwsf5bZfbvu7//a9oTYoqD/fWpe96NuHkoS9h0ccGOTe0C4NGXdtS0iObOw=="
+      },
+      {
+        "name": "hast-util-to-jsx-runtime",
+        "declared": "^2.3.6",
+        "locked": "2.3.6",
+        "installed": "2.3.6",
+        "license": "MIT",
+        "integrity": "sha512-zl6s8LwNyo1P9uw+XJGvZtdFF1GdAkOg8ujOw+4Pyb76874fLps4ueHXDhXWdk6YHQ6OgUtinliG7RsYvCbbBg=="
+      },
+      {
+        "name": "hast-util-to-string",
+        "declared": "^3.0.1",
+        "locked": "3.0.1",
+        "installed": "3.0.1",
+        "license": null,
+        "integrity": "sha512-XelQVTDWvqcl3axRfI0xSeoVKzyIFPwsAGSLIsKdJKQMXDYJS4WYrBNF/8J7RdhIcFI2BOHgAifggsvsxp/3+A=="
+      },
+      {
+        "name": "is-absolute-url",
+        "declared": "^5.0.0",
+        "locked": "5.0.0",
+        "installed": "5.0.0",
+        "license": "MIT",
+        "integrity": "sha512-sdJyNpBnQHuVnBunfzjAecOhZr2+A30ywfFvu3EnxtKLUWfwGgyWUmqHbGZiU6vTfHpCPm5GvLe4BAvlU9n8VQ=="
+      },
+      {
+        "name": "js-yaml",
+        "declared": "^4.1.1",
+        "locked": "4.3.2",
+        "installed": "4.3.2",
+        "license": "MIT",
+        "integrity": "sha512-SFNOvSJ+Dgf/9An904Yx+CgSlIPCkIpao4qo51lpee25TIRejdH3rhR4EZMGoNx3/TP3O+wzWuiTFl4sqbltzA=="
+      },
+      {
+        "name": "katex",
+        "declared": "^0.16.28",
+        "locked": "0.16.28",
+        "installed": "0.16.28",
+        "license": "MIT",
+        "integrity": "sha512-YHzO7721WbmAL6Ov1uzN/l5mY5WWWhJBSW+jq4tkfZfsxmo1hu6frS0EOswvjBUnWE6NtjEs48SFn5CQESRLZg=="
+      },
+      {
+        "name": "lightningcss",
+        "declared": "^1.31.1",
+        "locked": "1.31.1",
+        "installed": "1.31.1",
+        "license": "MPL-2.0",
+        "integrity": "sha512-l51N2r93WmGUye3WuFoN5k10zyvrVs0qfKBhyC5ogUQ6Ew6JUSswh78mbSO+IU3nTWsyOArqPCcShdQSadghBQ=="
+      },
+      {
+        "name": "mdast-util-find-and-replace",
+        "declared": "^3.0.2",
+        "locked": "3.0.2",
+        "installed": "3.0.2",
+        "license": null,
+        "integrity": "sha512-Tmd1Vg/m3Xz43afeNxDIhWRtFZgM2VLyaf4vSTYwudTyeuTneoL3qtWMA5jeLyz/O1vDJmmV4QuScFCA2tBPwg=="
+      },
+      {
+        "name": "mdast-util-to-hast",
+        "declared": "^13.2.1",
+        "locked": "13.2.1",
+        "installed": "13.2.1",
+        "license": "MIT",
+        "integrity": "sha512-cctsq2wp5vTsLIcaymblUriiTcZd0CwWtCbLvrOzYCDZoWyMNV8sZ7krj09FSnsiJi3WVsHLM4k6Dq/yaPyCXA=="
+      },
+      {
+        "name": "mdast-util-to-string",
+        "declared": "^4.0.0",
+        "locked": "4.0.0",
+        "installed": "4.0.0",
+        "license": null,
+        "integrity": "sha512-0H44vDimn51F0YwvxSJSm0eCDOJTRlmN0R1yBh4HLj9wiV1Dn0QoXGbvFAWj2hSItVTlCmBF1hqKlIyUBVFLPg=="
+      },
+      {
+        "name": "micromorph",
+        "declared": "^0.4.5",
+        "locked": "0.4.5",
+        "installed": "0.4.5",
+        "license": null,
+        "integrity": "sha512-Erasr0xiDvDeEhh7B/k7RFTwwfaAX10D7BMorNpokkwDh6XsRLYWDPaWF1m5JQeMSkGdqlEtQ8s68NcdDWuGgw=="
+      },
+      {
+        "name": "minimatch",
+        "declared": "^10.1.1",
+        "locked": "10.2.6",
+        "installed": "10.2.6",
+        "license": "BlueOak-1.0.0",
+        "integrity": "sha512-vpLQEs+VLCr1nU0BXS07maYoFwlDAH0gngQuuttxIwutDFEMHq2blX+8vpgxDdK3J1PwjCJiep77OitTZ4Ll1A=="
+      },
+      {
+        "name": "pixi.js",
+        "declared": "^8.15.0",
+        "locked": "8.15.0",
+        "installed": "8.15.0",
+        "license": "MIT",
+        "integrity": "sha512-J/Ghze/K9fjHRlfwC2EMZ7vnMIhGo4ByKCsKMcS0AB12iT79nf9zzWKUTzMJ8QAQFqQfDOl5ULwmHMUdeih2zQ=="
+      },
+      {
+        "name": "preact",
+        "declared": "^10.28.2",
+        "locked": "10.28.2",
+        "installed": "10.28.2",
+        "license": "MIT",
+        "integrity": "sha512-lbteaWGzGHdlIuiJ0l2Jq454m6kcpI1zNje6d8MlGAFlYvP2GO4ibnat7P74Esfz4sPTdM6UxtTwh/d3pwM9JA=="
+      },
+      {
+        "name": "preact-render-to-string",
+        "declared": "^6.6.5",
+        "locked": "6.6.5",
+        "installed": "6.6.5",
+        "license": "MIT",
+        "integrity": "sha512-O6MHzYNIKYaiSX3bOw0gGZfEbOmlIDtDfWwN1JJdc/T3ihzRT6tGGSEWE088dWrEDGa1u7101q+6fzQnO9XCPA=="
+      },
+      {
+        "name": "pretty-bytes",
+        "declared": "^7.1.0",
+        "locked": "7.1.0",
+        "installed": "7.1.0",
+        "license": "MIT",
+        "integrity": "sha512-nODzvTiYVRGRqAOvE84Vk5JDPyyxsVk0/fbA/bq7RqlnhksGpset09XTxbpvLTIjoaF7K8Z8DG8yHtKGTPSYRw=="
+      },
+      {
+        "name": "pretty-time",
+        "declared": "^1.1.0",
+        "locked": "1.1.0",
+        "installed": "1.1.0",
+        "license": null,
+        "integrity": "sha512-28iF6xPQrP8Oa6uxE6a1biz+lWeTOAPKggvjB8HAs6nVMKZwf5bG++632Dx614hIWgUPkgivRfG+a8uAXGTIbA=="
+      },
+      {
+        "name": "reading-time",
+        "declared": "^1.5.0",
+        "locked": "1.5.0",
+        "installed": "1.5.0",
+        "license": null,
+        "integrity": "sha512-onYyVhBNr4CmAxFsKS7bz+uTLRakypIe4R+5A824vBSkQy/hB3fZepoVEf8OVAxzLvK+H/jm9TzpI3ETSm64Kg=="
+      },
+      {
+        "name": "rehype-autolink-headings",
+        "declared": "^7.1.0",
+        "locked": "7.1.0",
+        "installed": "7.1.0",
+        "license": null,
+        "integrity": "sha512-rItO/pSdvnvsP4QRB1pmPiNHUskikqtPojZKJPPPAVx9Hj8i8TwMBhofrrAYRhYOOBZH9tgmG5lPqDLuIWPWmw=="
+      },
+      {
+        "name": "rehype-citation",
+        "declared": "^2.3.1",
+        "locked": "2.3.1",
+        "installed": "2.3.1",
+        "license": "MIT",
+        "integrity": "sha512-bwSuB5SMilyS/vT7K7ByTxjeKda4GWJin6dHKKZyp5O2z+uLk2ySG7a5/IOmuGovoajN9AcYxTRE4kUiVTk51g=="
+      },
+      {
+        "name": "rehype-katex",
+        "declared": "^7.0.1",
+        "locked": "7.0.1",
+        "installed": "7.0.1",
+        "license": null,
+        "integrity": "sha512-OiM2wrZ/wuhKkigASodFoo8wimG3H12LWQaH8qSPVJn9apWKFSH3YOCtbKpBorTVw/eI7cuT21XBbvwEswbIOA=="
+      },
+      {
+        "name": "rehype-mathjax",
+        "declared": "^7.1.0",
+        "locked": "7.1.0",
+        "installed": "7.1.0",
+        "license": "MIT",
+        "integrity": "sha512-mJHNpoqCC5UZ24OKx0wNjlzV18qeJz/Q/LtEjxXzt8vqrZ1Z3GxQnVrHcF5/PogcXUK8cWwJ4U/LWOQWEiABHw=="
+      },
+      {
+        "name": "rehype-pretty-code",
+        "declared": "^0.14.1",
+        "locked": "0.14.1",
+        "installed": "0.14.1",
+        "license": "MIT",
+        "integrity": "sha512-IpG4OL0iYlbx78muVldsK86hdfNoht0z63AP7sekQNW2QOTmjxB7RbTO+rhIYNGRljgHxgVZoPwUl6bIC9SbjA=="
+      },
+      {
+        "name": "rehype-raw",
+        "declared": "^7.0.0",
+        "locked": "7.0.0",
+        "installed": "7.0.0",
+        "license": null,
+        "integrity": "sha512-/aE8hCfKlQeA8LmyeyQvQF3eBiLRGNlfBJEvWH7ivp9sBqs7TNqBL5X3v157rM4IFETqDnIOO+z5M/biZbo9Ww=="
+      },
+      {
+        "name": "rehype-slug",
+        "declared": "^6.0.0",
+        "locked": "6.0.0",
+        "installed": "6.0.0",
+        "license": null,
+        "integrity": "sha512-lWyvf/jwu+oS5+hL5eClVd3hNdmwM1kAC0BUvEGD19pajQMIzcNUd/k9GsfQ+FfECvX+JE+e9/btsKH0EjJT6A=="
+      },
+      {
+        "name": "remark",
+        "declared": "^15.0.1",
+        "locked": "15.0.1",
+        "installed": "15.0.1",
+        "license": null,
+        "integrity": "sha512-Eht5w30ruCXgFmxVUSlNWQ9iiimq07URKeFS3hNc8cUWy1llX4KDWfyEDZRycMc+znsN9Ux5/tJ/BFdgdOwA3A=="
+      },
+      {
+        "name": "remark-breaks",
+        "declared": "^4.0.0",
+        "locked": "4.0.0",
+        "installed": "4.0.0",
+        "license": null,
+        "integrity": "sha512-IjEjJOkH4FuJvHZVIW0QCDWxcG96kCq7An/KVH2NfJe6rKZU2AsHeB3OEjPNRxi4QC34Xdx7I2KGYn6IpT7gxQ=="
+      },
+      {
+        "name": "remark-frontmatter",
+        "declared": "^5.0.0",
+        "locked": "5.0.0",
+        "installed": "5.0.0",
+        "license": null,
+        "integrity": "sha512-XTFYvNASMe5iPN0719nPrdItC9aU0ssC4v14mH1BCi1u0n1gAocqcujWUrByftZTbLhRtiKRyjYTSIOcr69UVQ=="
+      },
+      {
+        "name": "remark-gfm",
+        "declared": "^4.0.1",
+        "locked": "4.0.1",
+        "installed": "4.0.1",
+        "license": "MIT",
+        "integrity": "sha512-1quofZ2RQ9EWdeN34S79+KExV1764+wCUGop5CPL1WGdD0ocPpu91lzPGbwWMECpEpd42kJGQwzRfyov9j4yNg=="
+      },
+      {
+        "name": "remark-math",
+        "declared": "^6.0.0",
+        "locked": "6.0.0",
+        "installed": "6.0.0",
+        "license": null,
+        "integrity": "sha512-MMqgnP74Igy+S3WwnhQ7kqGlEerTETXMvJhrUzDikVZ2/uogJCb+WHUg97hK9/jcfc0dkD73s3LN8zU49cTEtA=="
+      },
+      {
+        "name": "remark-parse",
+        "declared": "^11.0.0",
+        "locked": "11.0.0",
+        "installed": "11.0.0",
+        "license": null,
+        "integrity": "sha512-FCxlKLNGknS5ba/1lmpYijMUzX2esxW5xQqjWxw2eHFfS2MSdaHVINFmhjo+qN1WhZhNimq0dZATN9pH0IDrpA=="
+      },
+      {
+        "name": "remark-rehype",
+        "declared": "^11.1.2",
+        "locked": "11.1.2",
+        "installed": "11.1.2",
+        "license": "MIT",
+        "integrity": "sha512-Dh7l57ianaEoIpzbp0PC9UKAdCSVklD8E5Rpw7ETfbTl3FqcOOgq5q2LVDhgGCkaBv7p24JXikPdvhhmHvKMsw=="
+      },
+      {
+        "name": "remark-smartypants",
+        "declared": "^3.0.2",
+        "locked": "3.0.2",
+        "installed": "3.0.2",
+        "license": null,
+        "integrity": "sha512-ILTWeOriIluwEvPjv67v7Blgrcx+LZOkAUVtKI3putuhlZm84FnqDORNXPPm+HY3NdZOMhyDwZ1E+eZB/Df5dA=="
+      },
+      {
+        "name": "rfdc",
+        "declared": "^1.4.1",
+        "locked": "1.4.1",
+        "installed": "1.4.1",
+        "license": null,
+        "integrity": "sha512-q1b3N5QkRUWUl7iyylaaj3kOpIT0N2i9MqIEQXP73GVsN9cw3fdx8X63cEmWhJGi2PPCF23Ijp7ktmd39rawIA=="
+      },
+      {
+        "name": "satori",
+        "declared": "^0.19.1",
+        "locked": "0.19.1",
+        "installed": "0.19.1",
+        "license": "MPL-2.0",
+        "integrity": "sha512-/XaT/JiWLfNlgjlQdde4wXB1/6F+FEze9c3OW2QIH0ywsfOrY57YOetgESWyOFHW3JfEQ6dJAo2U9Xwb7+DDAw=="
+      },
+      {
+        "name": "serve-handler",
+        "declared": "^6.1.6",
+        "locked": "6.1.7",
+        "installed": "6.1.7",
+        "license": "MIT",
+        "integrity": "sha512-CinAq1xWb0vR3twAv9evEU8cNWkXCb9kd5ePAHUKJBkOsUpR1wt/CvGdeca7vqumL1U5cSaeVQ6zZMxiJ3yWsg=="
+      },
+      {
+        "name": "sharp",
+        "declared": "0.35.4",
+        "locked": "0.35.4",
+        "installed": "0.35.4",
+        "license": "Apache-2.0",
+        "integrity": "sha512-n++8XWcj+jCOr2IOl7h8LbKnGBDY4aPbmprMONBNFdn0ImXqpGVv5zliDs0V9HbmbCQLpbuo2ej9rAoOQTvMDA=="
+      },
+      {
+        "name": "shiki",
+        "declared": "^1.26.2",
+        "locked": "1.26.2",
+        "installed": "1.26.2",
+        "license": null,
+        "integrity": "sha512-iP7u2NA9A6JwRRCkIUREEX2cMhlYV5EBmbbSlfSRvPThwca8HBRbVkWuNWW+kw9+i6BSUZqqG6YeUs5dC2SjZw=="
+      },
+      {
+        "name": "source-map-support",
+        "declared": "^0.5.21",
+        "locked": "0.5.21",
+        "installed": "0.5.21",
+        "license": null,
+        "integrity": "sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w=="
+      },
+      {
+        "name": "three",
+        "declared": "0.185.1",
+        "locked": "0.185.1",
+        "installed": "0.185.1",
+        "license": "MIT",
+        "integrity": "sha512-5aojFCXKwnjBRZvUnt3WFfEcvUJgkN5LlijRFN95hMy8WVkG4I0QNcJE+OuWvuJ0bOdStrbfXn0pkd6/QyiAlg=="
+      },
+      {
+        "name": "to-vfile",
+        "declared": "^8.0.0",
+        "locked": "8.0.0",
+        "installed": "8.0.0",
+        "license": null,
+        "integrity": "sha512-IcmH1xB5576MJc9qcfEC/m/nQCFt3fzMHz45sSlgJyTWjRbKW1HAkJpuf3DgE57YzIlZcwcBZA5ENQbBo4aLkg=="
+      },
+      {
+        "name": "toml",
+        "declared": "4.2.0",
+        "locked": "4.2.0",
+        "installed": "4.2.0",
+        "license": "MIT",
+        "integrity": "sha512-TvAJjbHZlYmI323+srtqHQFyJsoWy6mI09ppkuj9+iRsqsVKG9fvTcOP7FHF2UCb0QSYtjEavffrKzdd0XgClg=="
+      },
+      {
+        "name": "unified",
+        "declared": "^11.0.5",
+        "locked": "11.0.5",
+        "installed": "11.0.5",
+        "license": null,
+        "integrity": "sha512-xKvGhPWw3k84Qjh8bI3ZeJjqnyadK+GEFtazSfZv/rKeTkTjOJho6mFqh2SM96iIcZokxiOpg78GazTSg8+KHA=="
+      },
+      {
+        "name": "unist-util-visit",
+        "declared": "^5.1.0",
+        "locked": "5.1.0",
+        "installed": "5.1.0",
+        "license": "MIT",
+        "integrity": "sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg=="
+      },
+      {
+        "name": "vfile",
+        "declared": "^6.0.3",
+        "locked": "6.0.3",
+        "installed": "6.0.3",
+        "license": null,
+        "integrity": "sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q=="
+      },
+      {
+        "name": "workerpool",
+        "declared": "^10.0.1",
+        "locked": "10.0.1",
+        "installed": "10.0.1",
+        "license": "Apache-2.0",
+        "integrity": "sha512-NAnKwZJxWlj/U1cp6ZkEtPE+GQY1S6KtOS3AlCiPfPFLxV3m64giSp7g2LsNJxzYCocDT7TSl+7T0sgrDp3KoQ=="
+      },
+      {
+        "name": "ws",
+        "declared": "^8.19.0",
+        "locked": "8.21.3",
+        "installed": "8.21.3",
+        "license": "MIT",
+        "integrity": "sha512-201TZ/kPWxoPr/OKWjquZR1SWKXcvxdH+e1xrx89b3YbmzLMFCLfnaG1HFIgWzJOEWZ7MvpK++odZufgYR50Rw=="
+      },
+      {
+        "name": "yargs",
+        "declared": "^18.0.0",
+        "locked": "18.0.0",
+        "installed": "18.0.0",
+        "license": "MIT",
+        "integrity": "sha512-4UEqdc2RYGHZc7Doyqkrqiln3p9X2DZVxaGbwhn2pi7MrRagKaOcIKe8L3OxYcbhXLgLFUS3zAYuQjKBQgmuNg=="
+      },
+      {
+        "name": "@types/d3",
+        "declared": "^7.4.3",
+        "locked": "7.4.3",
+        "installed": "7.4.3",
+        "license": null,
+        "integrity": "sha512-lZXZ9ckh5R8uiFVt8ogUNf+pIrK4EsWrx2Np75WvF/eTpJ0FMHNhjXk8CKEx/+gpHbNQyJWehbFaTvqmHWB3ww=="
+      },
+      {
+        "name": "@types/hast",
+        "declared": "^3.0.4",
+        "locked": "3.0.4",
+        "installed": "3.0.4",
+        "license": null,
+        "integrity": "sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ=="
+      },
+      {
+        "name": "@types/js-yaml",
+        "declared": "^4.0.9",
+        "locked": "4.0.9",
+        "installed": "4.0.9",
+        "license": null,
+        "integrity": "sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg=="
+      },
+      {
+        "name": "@types/node",
+        "declared": "^25.0.10",
+        "locked": "25.0.10",
+        "installed": "25.0.10",
+        "license": "MIT",
+        "integrity": "sha512-zWW5KPngR/yvakJgGOmZ5vTBemDoSqF3AcV/LrO5u5wTWyEAVVh+IT39G4gtyAkh3CtTZs8aX/yRM82OfzHJRg=="
+      },
+      {
+        "name": "@types/pretty-time",
+        "declared": "^1.1.5",
+        "locked": "1.1.5",
+        "installed": "1.1.5",
+        "license": null,
+        "integrity": "sha512-5yl+BYwmnRWZb783W8YYoHXvPY8q/rp7ctHBVaGBB9RxlzGpHNJ72tGQMK7TrUSnxzl1dbDcBDuBCSbtfnSQGg=="
+      },
+      {
+        "name": "@types/source-map-support",
+        "declared": "^0.5.10",
+        "locked": "0.5.10",
+        "installed": "0.5.10",
+        "license": null,
+        "integrity": "sha512-tgVP2H469x9zq34Z0m/fgPewGhg/MLClalNOiPIzQlXrSS2YrKu/xCdSCKnEDwkFha51VKEKB6A9wW26/ZNwzA=="
+      },
+      {
+        "name": "@types/three",
+        "declared": "0.185.0",
+        "locked": "0.185.0",
+        "installed": "0.185.0",
+        "license": "MIT",
+        "integrity": "sha512-O2Uy8Cj4Nonr8dWUUbifMdPe8B0Mq7EdOHb89S4+kjUw/KhbjTZrUuYlrQ1bpUKG+EP9QJnN7qNxbHGlGoLHMA=="
+      },
+      {
+        "name": "@types/ws",
+        "declared": "^8.18.1",
+        "locked": "8.18.1",
+        "installed": "8.18.1",
+        "license": "MIT",
+        "integrity": "sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg=="
+      },
+      {
+        "name": "@types/yargs",
+        "declared": "^17.0.35",
+        "locked": "17.0.35",
+        "installed": "17.0.35",
+        "license": "MIT",
+        "integrity": "sha512-qUHkeCyQFxMXg79wQfTtfndEC+N9ZZg76HJftDJp+qH2tV7Gj4OJi7l+PiWwJ+pWtW8GwSmqsDj/oymhrTWXjg=="
+      },
+      {
+        "name": "esbuild",
+        "declared": "^0.27.2",
+        "locked": "0.27.2",
+        "installed": "0.27.2",
+        "license": "MIT",
+        "integrity": "sha512-HyNQImnsOC7X9PMNaCIeAm4ISCQXs5a5YasTXVliKv4uuBo1dKrG0A+uQS8M5eXjVMnLg3WgXaKvprHlFJQffw=="
+      },
+      {
+        "name": "playwright",
+        "declared": "^1.62.1",
+        "locked": "1.62.1",
+        "installed": "1.62.1",
+        "license": "Apache-2.0",
+        "integrity": "sha512-0M+L3LAD8/nm554LOla9Ayx0j0tmFZ0FBcoQ7F1VuVHpM/XpiC8RcDzBQB8W5+hA8L22THxELzeF+2WcUzvcLg=="
+      },
+      {
+        "name": "prettier",
+        "declared": "^3.8.1",
+        "locked": "3.8.1",
+        "installed": "3.8.1",
+        "license": "MIT",
+        "integrity": "sha512-UOnG6LftzbdaHZcKoPFtOcCKztrQ57WkHDeRD9t/PTQtmT0NHSeWWepj6pS0z/N7+08BHFDQVUrfmfMRcZwbMg=="
+      },
+      {
+        "name": "tsx",
+        "declared": "^4.21.0",
+        "locked": "4.21.0",
+        "installed": "4.21.0",
+        "license": "MIT",
+        "integrity": "sha512-5C1sg4USs1lfG0GFb2RLXsdpXqBSEhAaA/0kPL01wxzpMqLILNxIxIOKiILz+cdg/pLnOUxFYOR5yhHU666wbw=="
+      },
+      {
+        "name": "typescript",
+        "declared": "^5.9.3",
+        "locked": "5.9.3",
+        "installed": "5.9.3",
+        "license": "Apache-2.0",
+        "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="
+      }
+    ]
+  },
+  "content": {
+    "snapshotHash": "a3da43c26a99b9504b28c1bf4d09e6424a9defaa167b722314ee02de2402b2f7",
+    "objects": 192,
+    "objectKinds": {
+      "note": 73,
+      "atom": 119
+    },
+    "mathTypes": {
+      "exercise": 3,
+      "knowledge": 38,
+      "reading": 24,
+      "connection": 8,
+      "question": 1,
+      "definition-group": 26,
+      "theorem": 41,
+      "observation": 27,
+      "definition": 7,
+      "proof": 13,
+      "proposition": 4
+    },
+    "relations": 605,
+    "relationTypes": {
+      "references": 323,
+      "appears-in": 123,
+      "appears-in-section": 149,
+      "proves": 10
+    },
+    "provenance": {
+      "reference": 323,
+      "structure": 272,
+      "authored": 10
+    },
+    "manifestNotes": 178,
+    "manifestAssets": 1
+  },
+  "directNetwork": [
+    {
+      "url": "https://api.github.com/repos/leanprover/lean4/releases/latest",
+      "start": "2026-09-09T18:59:57.128Z",
+      "status": null,
+      "error": "fetch failed",
+      "cause": "EACCES"
+    },
+    {
+      "url": "https://registry.npmjs.org/katex/latest",
+      "start": "2026-09-09T18:59:57.177Z",
+      "status": null,
+      "error": "fetch failed",
+      "cause": "EACCES"
+    },
+    {
+      "url": "https://mydearatri.github.io/World/",
+      "start": "2026-09-09T18:59:57.192Z",
+      "status": null,
+      "error": "fetch failed",
+      "cause": "EACCES"
+    }
+  ],
+  "previewChecks": [
+    {
+      "route": "/",
+      "status": 200,
+      "bytes": 3462,
+      "sha256": "dc708e98c7bd38ae2a18390122e7c8a372bb6b32867d6a4f7c1dff4d62899afb",
+      "mathML": false
+    },
+    {
+      "route": "/World/",
+      "status": 200,
+      "bytes": 3462,
+      "sha256": "dc708e98c7bd38ae2a18390122e7c8a372bb6b32867d6a4f7c1dff4d62899afb",
+      "mathML": false
+    },
+    {
+      "route": "/World/atoms/a-000067.html",
+      "status": 200,
+      "bytes": 94236,
+      "sha256": "5936c31c103f3fe78ea59adca7f359328b669587b44a629dfe0eac273d242324",
+      "mathML": true
+    },
+    {
+      "route": "/World/library.html",
+      "status": 200,
+      "bytes": 15854,
+      "sha256": "05d9e51aae71c1446d003e62731d6bdc6a6d653fee7d67ffb9fe91d0a2526966",
+      "mathML": false
+    }
+  ],
+  "commands": [
+    {
+      "program": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        "$names='node','npm','npx','pnpm','git','lean','lake','elan','docker','wsl'; $items=foreach($name in $names){$c=Get-Command $name -ErrorAction SilentlyContinue; [pscustomobject]@{name=$name;found=[bool]$c;path=if($c){$c.Source}else{$null}}}; ConvertTo-Json -InputObject @($items)"
+      ],
+      "startedAt": "2026-09-09T18:59:54.635Z",
+      "finishedAt": "2026-09-09T18:59:55.471Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "[\r\n    {\r\n        \"name\":  \"node\",\r\n        \"found\":  true,\r\n        \"path\":  \"<USERPROFILE>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\node\\\\bin\\\\node.exe\"\r\n    },\r\n    {\r\n        \"name\":  \"npm\",\r\n        \"found\":  false,\r\n        \"path\":  null\r\n    },\r\n    {\r\n        \"name\":  \"npx\",\r\n        \"found\":  false,\r\n        \"path\":  null\r\n    },\r\n    {\r\n        \"name\":  \"pnpm\",\r\n        \"found\":  true,\r\n        \"path\":  \"<USERPROFILE>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\bin\\\\fallback\\\\pnpm.cmd\"\r\n    },\r\n    {\r\n        \"name\":  \"git\",\r\n        \"found\":  true,\r\n        \"path\":  \"C:\\\\Program Files\\\\Git\\\\cmd\\\\git.exe\"\r\n    },\r\n    {\r\n        \"name\":  \"lean\",\r\n        \"found\":  true,\r\n        \"path\":  \"<USERPROFILE>\\\\.elan\\\\bin\\\\lean.exe\"\r\n    },\r\n    {\r\n        \"name\":  \"lake\",\r\n        \"found\":  true,\r\n        \"path\":  \"<USERPROFILE>\\\\.elan\\\\bin\\\\lake.exe\"\r\n    },\r\n    {\r\n        \"name\":  \"elan\",\r\n        \"found\":  true,\r\n        \"path\":  \"<USERPROFILE>\\\\.elan\\\\bin\\\\elan.exe\"\r\n    },\r\n    {\r\n        \"name\":  \"docker\",\r\n        \"found\":  false,\r\n        \"path\":  null\r\n    },\r\n    {\r\n        \"name\":  \"wsl\",\r\n        \"found\":  true,\r\n        \"path\":  \"C:\\\\Windows\\\\system32\\\\wsl.exe\"\r\n    }\r\n]\r\n",
+      "stderr": ""
+    },
+    {
+      "program": "<USERPROFILE>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+      "args": ["--version"],
+      "startedAt": "2026-09-09T18:59:55.471Z",
+      "finishedAt": "2026-09-09T18:59:55.522Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "v24.19.0\r\n",
+      "stderr": ""
+    },
+    {
+      "program": "powershell.exe",
+      "args": ["-NoProfile", "-NonInteractive", "-Command", "pnpm --version"],
+      "startedAt": "2026-09-09T18:59:55.522Z",
+      "finishedAt": "2026-09-09T18:59:56.058Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "11.19.0\n",
+      "stderr": ""
+    },
+    {
+      "program": "git",
+      "args": ["--version"],
+      "startedAt": "2026-09-09T18:59:56.058Z",
+      "finishedAt": "2026-09-09T18:59:56.104Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "git version 2.53.0.windows.2\n",
+      "stderr": ""
+    },
+    {
+      "program": "git",
+      "args": ["rev-parse", "HEAD"],
+      "startedAt": "2026-09-09T18:59:56.104Z",
+      "finishedAt": "2026-09-09T18:59:56.155Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72\n",
+      "stderr": ""
+    },
+    {
+      "program": "git",
+      "args": ["status", "--porcelain=v1", "--untracked-files=all"],
+      "startedAt": "2026-09-09T18:59:56.155Z",
+      "finishedAt": "2026-09-09T18:59:56.217Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": " M .github/workflows/pages.yml\n M AGENTS.md\n M README.md\n M docs/acceptance.md\n M docs/content-contract.md\n M docs/design-spec.md\n M docs/project-brief.md\n M docs/validation.md\n M package.json\n M quartz/components/scripts/topos/main.ts\n M quartz/components/scripts/topos/renderer.ts\n M quartz/components/styles/topos.css\n M quartz/plugins/emitters/topos.ts\n M quartz/util/topos/field.ts\n M quartz/util/topos/types.ts\n M scripts/lib/site-sync-core.mjs\n M scripts/preview.mjs\n M scripts/publish.mjs\n M scripts/site-sync.test.mjs\n M scripts/sync-site.mjs\n M scripts/verify-content.mjs\n M site-sync.config.json\n?? docs/acceptance-criteria.md\n?? docs/adr/0001-reuse-and-evidence-boundaries.md\n?? docs/adr/0002-tool-candidates.md\n?? docs/adr/0003-static-lean-boundary.md\n?? docs/architecture-plan.md\n?? docs/assumptions.md\n?? docs/benchmarks/environment.json\n?? docs/current-state.md\n?? docs/phase-status.json\n?? docs/phases/phase-00/acceptance.json\n?? docs/phases/phase-00/evidence/audit-local.mjs\n?? docs/phases/phase-00/evidence/audit-official.mjs\n?? docs/phases/phase-00/evidence/baseline-build.log\n?? docs/phases/phase-00/evidence/baseline-checks.json\n?? docs/phases/phase-00/evidence/baseline-content-checks.log\n?? docs/phases/phase-00/evidence/baseline-knowledge-checks.log\n?? docs/phases/phase-00/evidence/baseline-types.log\n?? docs/phases/phase-00/evidence/baseline-unit-tests.log\n?? docs/phases/phase-00/evidence/baseline-upstream.log\n?? docs/phases/phase-00/evidence/catalog-tools.mjs\n?? docs/phases/phase-00/evidence/evidence-sha256.json\n?? docs/phases/phase-00/evidence/finalize-report.mjs\n?? docs/phases/phase-00/evidence/future-criteria.json\n?? docs/phases/phase-00/evidence/input-resolution.json\n?? docs/phases/phase-00/evidence/local-audit.json\n?? docs/phases/phase-00/evidence/master-mapping-review.json\n?? docs/phases/phase-00/evidence/master-review.mjs\n?? docs/phases/phase-00/evidence/numeric-gates.json\n?? docs/phases/phase-00/evidence/official-research.json\n?? docs/phases/phase-00/evidence/quantitative-origins.json\n?? docs/phases/phase-00/evidence/register-contract.mjs\n?? docs/phases/phase-00/evidence/register-quantities.mjs\n?? docs/phases/phase-00/evidence/source-file-hashes.json\n?? docs/phases/phase-00/evidence/tool-candidates.json\n?? docs/phases/phase-00/evidence/validate-phase-zero.mjs\n?? docs/phases/phase-00/evidence/validation-report.json\n?? docs/phases/phase-00/handoff.md\n?? docs/phases/phase-01/acceptance.json\n?? docs/phases/phase-01/evidence/ontology-format.txt\n?? docs/phases/phase-01/evidence/ontology-tests.txt\n?? docs/phases/phase-01/evidence/ontology-validation.txt\n?? docs/phases/phase-01/evidence/run-report.json\n?? docs/phases/phase-01/handoff.md\n?? docs/requirements-traceability.csv\n?? knowledge/topos/note-topics.json\n?? ontology/audit.json\n?? ontology/benchmarks/README.md\n?? ontology/benchmarks/arxiv-math.json\n?? ontology/benchmarks/assemble.mjs\n?? ontology/benchmarks/msc2020-level1.json\n?? ontology/benchmarks/record-audit.mjs\n?? ontology/benchmarks/regions-07-12-verification.json\n?? ontology/benchmarks/research-regions-01-06.mjs\n?? ontology/benchmarks/retrieval-regions-01-06.json\n?? ontology/benchmarks/review-records.json\n?? ontology/benchmarks/run-acceptance.mjs\n?? ontology/benchmarks/sample-selection.json\n?? ontology/benchmarks/schema-contract.json\n?? ontology/math_outline.md\n?? ontology/math_registry.json\n?? ontology/research-regions-01-06.json\n?? ontology/research-regions-07-12.json\n?? ontology/sources.json\n?? quartz/components/scripts/topos/sidebar.ts\n?? quartz/util/topos/atlas.ts\n?? quartz/util/topos/topics.test.ts\n?? quartz/util/topos/topics.ts\n?? scripts/define-note-topics.mjs\n?? scripts/ontology.test.mjs\n?? scripts/validate-ontology.mjs\n?? scripts/verify-topic-browser.mjs\n?? scripts/verify-topic-interactions.mjs\n?? scripts/verify-topic-map.mjs\n",
+      "stderr": ""
+    },
+    {
+      "program": "git",
+      "args": ["ls-files", "-z"],
+      "startedAt": "2026-09-09T18:59:56.217Z",
+      "finishedAt": "2026-09-09T18:59:56.269Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": ".gitattributes\u0000.github/workflows/pages.yml\u0000.gitignore\u0000.node-version\u0000.npmrc\u0000.prettierignore\u0000.prettierrc\u0000AGENTS.md\u0000LICENSE.txt\u0000README.md\u0000content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/Examples/从最佳逼近走向投影测量.md\u0000content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/Examples/概率规则能否仅由最佳逼近推出.md\u0000content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/Examples/正交投影.md\u0000content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/Examples/正交投影在最小二乘与量子测量中的不同角色.md\u0000content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/Examples/理想投影测量.md\u0000content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/Examples/线性最小二乘.md\u0000content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/Examples/非闭子空间为什么可能没有最佳逼近.md\u0000content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/开始阅读.md\u0000content/assets/259d46efe9ec476dfb59.svg\u0000content/index.md\u0000content/maps/Simon - Planning Map-107623f4.md\u0000content/maps/前三章关系图-6db33b5d.md\u0000content/maps/模板示范关系图-ec20d5e6.md\u0000content/maps/第一章关系图-408f620b.md\u0000content/maps/第三章关系图-c6306643.md\u0000content/maps/第二章关系图-79f99f7a.md\u0000content/模板示范站.md\u0000content/知识主干.md\u0000content/笔记主体/书籍/Simon实分析/Simon - Real Analysis - Contents.md\u0000content/笔记主体/书籍/Simon实分析/Simon - Real Analysis.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Simon - Topic Index.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Simon - Writing Plan.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Absolute Continuity and Densities.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Borel Cantelli and Repeated Events.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Box Counts and Fractal Comparison.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Cantor Geometry and Singular Functions.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Category and Generic Behavior.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Characteristic Functions and Gaussian Limits.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Compact Moment Sequences.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Convergence in Measure and Almost Uniform Convergence.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Convex Functions and Jensen Inequalities.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Dense Function Classes and Lusin Approximation.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Differential Equations and Stability.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Differentiation in Normed Spaces.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Distributional Derivatives and Convolution.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Duality of Lebesgue Spaces.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Energy and Equilibrium Measures.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Expectation and Fluctuation Bounds.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Extension of Linear Functionals.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Extreme Points and Convex Representation.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Fixed Points and Compact Maps.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Fourier Decay and Integrability.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Fourier Inversion and Plancherel.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Fourier Multipliers and Constant Coefficient Equations.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Gaussian Processes and Brownian Paths.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Hausdorff Scales and Dimension.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Hermite Basis and the Harmonic Oscillator.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Hölder and Minkowski Estimates.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Independence and Product Models.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Inductive Limits and Test Function Topology.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Infinite Product Measures.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Interpolation and Convolution Bounds.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Inverse and Implicit Functions.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Kernel Representations of Bilinear Forms.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Large Numbers and Logarithmic Fluctuations.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Lebesgue Spaces and Function Classes.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Local Distributions and Support.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Markov Evolution and Perron Frobenius.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Mass Bounds and Rogers Taylor.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Measurability and Null Sets.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Metric Outer Measures.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Modes of Stochastic Convergence.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Modular Functions and Group Integration.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Monotone and Dominated Convergence.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Normed Spaces and Linear Quotients.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Open Mapping and Closed Graph.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Order and Banach Lattices.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Outer Measures and the Carathéodory Criterion.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Periodic Distributions and Coefficients.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Poisson Limits and Counting Processes.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Poisson Summation and Sampling.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Polish Spaces, Tightness, and Weak Limits.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Positive Definite Transforms.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Positive Functionals and Integral Construction.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Power Kernels and Energy Uniqueness.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Product Integration and Fubini.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Random Variables and Laws.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Real Line Moments and Positivity.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Regular Measures and Representation.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Riesz Products and Singular Measures.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Schwartz Decay and Tempered Duality.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Seminorms and Fréchet Spaces.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Separation by Hyperplanes.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Signed and Complex Measures.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Translation Invariant Measures.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Uniform Boundedness.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Uniform Convexity and Reflexivity.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/01 Foundations and Calculus.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/02 Topology and Approximation.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/03 Linear Algebra and Hilbert Geometry.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/04 Measures and Integration.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/05 Function Spaces and Convergence.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/06 Convexity and Functional Analysis.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/07 Fourier Analysis and Distributions.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/08 Probability and Stochastic Processes.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/09 Geometric Measure and Dimension.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/10 Moment Problems, Potential Theory and Groups.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Variation and Stieltjes Integration.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Vector-Valued Integration.md\u0000content/笔记主体/书籍/Simon实分析/写作规划/Topics/Weak Star Compactness.md\u0000content/笔记主体/书籍/Simon实分析/第一章/习题与原书核校.md\u0000content/笔记主体/书籍/Simon实分析/第一章/知识/Cauchy 序列与度量完备化.md\u0000content/笔记主体/书籍/Simon实分析/第一章/知识/Taylor 余项与误差估计.md\u0000content/笔记主体/书籍/Simon实分析/第一章/知识/偏序、链与 Zorn 引理.md\u0000content/笔记主体/书籍/Simon实分析/第一章/知识/光滑截断与有限单位分解.md\u0000content/笔记主体/书籍/Simon实分析/第一章/知识/内积、自伴算子与有限维谱定理.md\u0000content/笔记主体/书籍/Simon实分析/第一章/知识/可数性与两种对角线方法.md\u0000content/笔记主体/书籍/Simon实分析/第一章/知识/实数构造与上确界性质.md\u0000content/笔记主体/书籍/Simon实分析/第一章/知识/度量拓扑与连续性的三种刻画.md\u0000content/笔记主体/书籍/Simon实分析/第一章/知识/投影、直和与不变子空间.md\u0000content/笔记主体/书籍/Simon实分析/第一章/知识/最小多项式与 Jordan 分解.md\u0000content/笔记主体/书籍/Simon实分析/第一章/知识/等价关系与商构造.md\u0000content/笔记主体/书籍/Simon实分析/第一章/知识/线性基、维数与代数补空间.md\u0000content/笔记主体/书籍/Simon实分析/第一章/研读/1.1 记号与术语.md\u0000content/笔记主体/书籍/Simon实分析/第一章/研读/1.2 度量空间.md\u0000content/笔记主体/书籍/Simon实分析/第一章/研读/1.3 实数.md\u0000content/笔记主体/书籍/Simon实分析/第一章/研读/1.4 序.md\u0000content/笔记主体/书籍/Simon实分析/第一章/研读/1.5 选择公理与 Zorn 引理.md\u0000content/笔记主体/书籍/Simon实分析/第一章/研读/1.6 可数性.md\u0000content/笔记主体/书籍/Simon实分析/第一章/研读/1.7 线性代数.md\u0000content/笔记主体/书籍/Simon实分析/第一章/研读/1.8 微积分.md\u0000content/笔记主体/书籍/Simon实分析/第一章/第一章 预备知识.md\u0000content/笔记主体/书籍/Simon实分析/第一章/联系/从代数投影到正交谱分解.md\u0000content/笔记主体/书籍/Simon实分析/第一章/联系/从商构造到完备化与实数.md\u0000content/笔记主体/书籍/Simon实分析/第一章/联系/可数递进与极大性存在证明.md\u0000content/笔记主体/书籍/Simon实分析/第三章/知识/Dirichlet Kernels and Dini Convergence.md\u0000content/笔记主体/书籍/Simon实分析/第三章/知识/Fourier Series and Summation Kernels.md\u0000content/笔记主体/书籍/Simon实分析/第三章/知识/Hilbert Completeness and Norm Identities.md\u0000content/笔记主体/书籍/Simon实分析/第三章/知识/Hilbert Sums and Tensor Products.md\u0000content/笔记主体/书籍/Simon实分析/第三章/知识/Lacunary Fourier Series and Roughness.md\u0000content/笔记主体/书籍/Simon实分析/第三章/知识/Linear Functionals as Vectors.md\u0000content/笔记主体/书籍/Simon实分析/第三章/知识/Nearest Points in Convex Sets.md\u0000content/笔记主体/书籍/Simon实分析/第三章/知识/Operators, Adjoints, and Operator Topologies.md\u0000content/笔记主体/书籍/Simon实分析/第三章/知识/Orthonormal Expansions.md\u0000content/笔记主体/书籍/Simon实分析/第三章/知识/Pointwise Fourier Convergence and Jumps.md\u0000content/笔记主体/书籍/Simon实分析/第三章/知识/Trigonometric Density and L2 Fourier Expansion.md\u0000content/笔记主体/书籍/Simon实分析/第三章/知识/Weak Topologies and Dual Pairings.md\u0000content/笔记主体/书籍/Simon实分析/第三章/研读/3.1 Basic Inequalities.md\u0000content/笔记主体/书籍/Simon实分析/第三章/研读/3.2 Convex Sets, Minima, and Orthogonal Complements.md\u0000content/笔记主体/书籍/Simon实分析/第三章/研读/3.3 Dual Spaces and the Riesz Representation Theorem.md\u0000content/笔记主体/书籍/Simon实分析/第三章/研读/3.4 Orthonormal Bases, Abstract Fourier Expansions, and Gram–Schmidt.md\u0000content/笔记主体/书籍/Simon实分析/第三章/研读/3.5 Classical Fourier Series.md\u0000content/笔记主体/书籍/Simon实分析/第三章/研读/3.6 The Weak Topology.md\u0000content/笔记主体/书籍/Simon实分析/第三章/研读/3.7 A First Look at Operators.md\u0000content/笔记主体/书籍/Simon实分析/第三章/研读/3.8 Direct Sums and Tensor Products of Hilbert Spaces.md\u0000content/笔记主体/书籍/Simon实分析/第三章/第三章 Hilbert Spaces and Fourier Series.md\u0000content/笔记主体/书籍/Simon实分析/第三章/第三章 习题与原书核校.md\u0000content/笔记主体/书籍/Simon实分析/第三章/联系/From Algebraic Projections to Hilbert Best Approximation.md\u0000content/笔记主体/书籍/Simon实分析/第三章/联系/From Coordinate Tests to Weak Compactness.md\u0000content/笔记主体/书籍/Simon实分析/第三章/联系/From Uniform Approximation to Fourier Expansions.md\u0000content/笔记主体/书籍/Simon实分析/第二章/知识/Algebras, Lattices, and Uniform Approximation.md\u0000content/笔记主体/书籍/Simon实分析/第二章/知识/Bases and Countability Conditions.md\u0000content/笔记主体/书籍/Simon实分析/第二章/知识/Compactness and Total Boundedness.md\u0000content/笔记主体/书籍/Simon实分析/第二章/知识/Connectedness and Components.md\u0000content/笔记主体/书籍/Simon实分析/第二章/知识/Equicontinuity and Compact Families.md\u0000content/笔记主体/书籍/Simon实分析/第二章/知识/Local Compactness and Compactification.md\u0000content/笔记主体/书籍/Simon实分析/第二章/知识/Metrization and the Hilbert Cube.md\u0000content/笔记主体/书籍/Simon实分析/第二章/知识/Nets and General Convergence.md\u0000content/笔记主体/书籍/Simon实分析/第二章/知识/Open Sets, Closure, and Continuity.md\u0000content/笔记主体/书籍/Simon实分析/第二章/知识/Positive Approximation and Bernstein Polynomials.md\u0000content/笔记主体/书籍/Simon实分析/第二章/知识/Products and Compactness.md\u0000content/笔记主体/书籍/Simon实分析/第二章/知识/Quotient Topologies.md\u0000content/笔记主体/书籍/Simon实分析/第二章/知识/Semicontinuity, Extrema, and Continuous Partitions.md\u0000content/笔记主体/书籍/Simon实分析/第二章/知识/Separation and Continuous Extension.md\u0000content/笔记主体/书籍/Simon实分析/第二章/研读/2.1 Lots of Definitions.md\u0000content/笔记主体/书籍/Simon实分析/第二章/研读/2.2 Countability and Separation Properties.md\u0000content/笔记主体/书籍/Simon实分析/第二章/研读/2.3 Compact Spaces.md\u0000content/笔记主体/书籍/Simon实分析/第二章/研读/2.4 The Weierstrass Approximation Theorem and Bernstein Polynomials.md\u0000content/笔记主体/书籍/Simon实分析/第二章/研读/2.5 The Stone–Weierstrass Theorem.md\u0000content/笔记主体/书籍/Simon实分析/第二章/研读/2.6 Nets.md\u0000content/笔记主体/书籍/Simon实分析/第二章/研读/2.7 Product Topologies and Tychonoff’s Theorem.md\u0000content/笔记主体/书籍/Simon实分析/第二章/研读/2.8 Quotient Topologies.md\u0000content/笔记主体/书籍/Simon实分析/第二章/第二章 Topological Spaces.md\u0000content/笔记主体/书籍/Simon实分析/第二章/第二章 习题与原书核校.md\u0000content/笔记主体/书籍/Simon实分析/第二章/联系/From Compactness to Uniform Control.md\u0000content/笔记主体/书籍/Simon实分析/第二章/联系/From Metric Sequences to Topological Nets.md\u0000content/笔记主体/发现归档.md\u0000content/笔记主体/笔记主体.md\u0000content/笔记科学与逻辑.md\u0000docs/acceptance.md\u0000docs/content-contract.md\u0000docs/design-spec.md\u0000docs/github.md\u0000docs/project-brief.md\u0000docs/topos-acceptance.md\u0000docs/validation.md\u0000globals.d.ts\u0000index.d.ts\u0000knowledge/ONNX-LICENSE.txt\u0000knowledge/SEMANTIC-MODEL.md\u0000knowledge/index.json\u0000knowledge/model-manifest.json\u0000knowledge/overrides.json\u0000knowledge/registry.json\u0000knowledge/semantic.json\u0000knowledge/topos/README.md\u0000knowledge/topos/prototype.json\u0000knowledge/topos/sections/action-definition.md\u0000knowledge/topos/sections/action-example.md\u0000knowledge/topos/sections/action-overview.md\u0000knowledge/topos/sections/character-definition.md\u0000knowledge/topos/sections/character-example.md\u0000knowledge/topos/sections/character-overview.md\u0000knowledge/topos/sections/general-linear-group-definition.md\u0000knowledge/topos/sections/general-linear-group-example.md\u0000knowledge/topos/sections/general-linear-group-overview.md\u0000knowledge/topos/sections/group-algebra-definition.md\u0000knowledge/topos/sections/group-algebra-example.md\u0000knowledge/topos/sections/group-algebra-overview.md\u0000knowledge/topos/sections/group-associativity.md\u0000knowledge/topos/sections/group-definition.md\u0000knowledge/topos/sections/group-example.md\u0000knowledge/topos/sections/group-overview.md\u0000knowledge/topos/sections/homomorphism-definition.md\u0000knowledge/topos/sections/homomorphism-example.md\u0000knowledge/topos/sections/homomorphism-overview.md\u0000knowledge/topos/sections/intertwiner-definition.md\u0000knowledge/topos/sections/intertwiner-example.md\u0000knowledge/topos/sections/intertwiner-overview.md\u0000knowledge/topos/sections/invariant-subspace-definition.md\u0000knowledge/topos/sections/invariant-subspace-example.md\u0000knowledge/topos/sections/invariant-subspace-overview.md\u0000knowledge/topos/sections/irreducible-representation-definition.md\u0000knowledge/topos/sections/irreducible-representation-example.md\u0000knowledge/topos/sections/irreducible-representation-overview.md\u0000knowledge/topos/sections/linear-map-definition.md\u0000knowledge/topos/sections/linear-map-example.md\u0000knowledge/topos/sections/linear-map-overview.md\u0000knowledge/topos/sections/module-definition.md\u0000knowledge/topos/sections/module-example.md\u0000knowledge/topos/sections/module-overview.md\u0000knowledge/topos/sections/normal-subgroup-definition.md\u0000knowledge/topos/sections/normal-subgroup-example.md\u0000knowledge/topos/sections/normal-subgroup-overview.md\u0000knowledge/topos/sections/orbit-definition.md\u0000knowledge/topos/sections/orbit-example.md\u0000knowledge/topos/sections/orbit-overview.md\u0000knowledge/topos/sections/permutation-group-definition.md\u0000knowledge/topos/sections/permutation-group-example.md\u0000knowledge/topos/sections/permutation-group-overview.md\u0000knowledge/topos/sections/permutation-representation-definition.md\u0000knowledge/topos/sections/permutation-representation-example.md\u0000knowledge/topos/sections/permutation-representation-overview.md\u0000knowledge/topos/sections/quotient-definition.md\u0000knowledge/topos/sections/quotient-example.md\u0000knowledge/topos/sections/quotient-overview.md\u0000knowledge/topos/sections/representation-definition.md\u0000knowledge/topos/sections/representation-example.md\u0000knowledge/topos/sections/representation-overview.md\u0000knowledge/topos/sections/representation-theory-definition.md\u0000knowledge/topos/sections/representation-theory-example.md\u0000knowledge/topos/sections/representation-theory-overview.md\u0000knowledge/topos/sections/stabilizer-definition.md\u0000knowledge/topos/sections/stabilizer-example.md\u0000knowledge/topos/sections/stabilizer-overview.md\u0000knowledge/topos/sections/subgroup-definition.md\u0000knowledge/topos/sections/subgroup-example.md\u0000knowledge/topos/sections/subgroup-overview.md\u0000knowledge/topos/sections/symmetry-definition.md\u0000knowledge/topos/sections/symmetry-example.md\u0000knowledge/topos/sections/symmetry-overview.md\u0000knowledge/topos/sections/vector-space-definition.md\u0000knowledge/topos/sections/vector-space-example.md\u0000knowledge/topos/sections/vector-space-overview.md\u0000package-lock.json\u0000package.json\u0000publish-manifest.json\u0000publish.config.json\u0000quartz.config.ts\u0000quartz.layout.ts\u0000quartz/bootstrap-cli.mjs\u0000quartz/bootstrap-worker.mjs\u0000quartz/build.ts\u0000quartz/cfg.ts\u0000quartz/cli/args.js\u0000quartz/cli/constants.js\u0000quartz/cli/handlers.js\u0000quartz/cli/helpers.js\u0000quartz/components/ArticleTitle.tsx\u0000quartz/components/Backlinks.tsx\u0000quartz/components/Body.tsx\u0000quartz/components/BookSearch.tsx\u0000quartz/components/Breadcrumbs.tsx\u0000quartz/components/Comments.tsx\u0000quartz/components/ConditionalRender.tsx\u0000quartz/components/ContentMeta.tsx\u0000quartz/components/Darkmode.tsx\u0000quartz/components/Date.tsx\u0000quartz/components/DesktopOnly.tsx\u0000quartz/components/Explorer.tsx\u0000quartz/components/Flex.tsx\u0000quartz/components/Footer.tsx\u0000quartz/components/Graph.tsx\u0000quartz/components/Head.tsx\u0000quartz/components/Header.tsx\u0000quartz/components/KnowledgeReader.tsx\u0000quartz/components/MobileOnly.tsx\u0000quartz/components/NoteGraph.tsx\u0000quartz/components/OverflowList.tsx\u0000quartz/components/PageList.tsx\u0000quartz/components/PageTitle.tsx\u0000quartz/components/ReaderMode.tsx\u0000quartz/components/Reading.tsx\u0000quartz/components/RecentNotes.tsx\u0000quartz/components/Search.tsx\u0000quartz/components/Spacer.tsx\u0000quartz/components/SpatialReading.tsx\u0000quartz/components/TableOfContents.tsx\u0000quartz/components/TagList.tsx\u0000quartz/components/index.ts\u0000quartz/components/pages/404.tsx\u0000quartz/components/pages/Content.tsx\u0000quartz/components/pages/FolderContent.tsx\u0000quartz/components/pages/TagContent.tsx\u0000quartz/components/renderPage.tsx\u0000quartz/components/scripts/bookSearch.inline.ts\u0000quartz/components/scripts/callout.inline.ts\u0000quartz/components/scripts/checkbox.inline.ts\u0000quartz/components/scripts/clipboard.inline.ts\u0000quartz/components/scripts/comments.inline.ts\u0000quartz/components/scripts/darkmode.inline.ts\u0000quartz/components/scripts/explorer.inline.ts\u0000quartz/components/scripts/graph.inline.ts\u0000quartz/components/scripts/interfaceMotion.inline.ts\u0000quartz/components/scripts/knowledgeGraph.ts\u0000quartz/components/scripts/knowledgeGraph3d.ts\u0000quartz/components/scripts/knowledgeReader.inline.ts\u0000quartz/components/scripts/mermaid.inline.ts\u0000quartz/components/scripts/noteGraph.inline.ts\u0000quartz/components/scripts/popover.inline.ts\u0000quartz/components/scripts/readermode.inline.ts\u0000quartz/components/scripts/reading.inline.ts\u0000quartz/components/scripts/search.inline.ts\u0000quartz/components/scripts/search.test.ts\u0000quartz/components/scripts/semanticWorker.ts\u0000quartz/components/scripts/spa.inline.ts\u0000quartz/components/scripts/spatialReading.inline.ts\u0000quartz/components/scripts/toc.inline.ts\u0000quartz/components/scripts/topos/main.ts\u0000quartz/components/scripts/topos/renderer.ts\u0000quartz/components/scripts/util.ts\u0000quartz/components/styles/backlinks.scss\u0000quartz/components/styles/bookSearch.scss\u0000quartz/components/styles/breadcrumbs.scss\u0000quartz/components/styles/clipboard.scss\u0000quartz/components/styles/contentMeta.scss\u0000quartz/components/styles/darkmode.scss\u0000quartz/components/styles/explorer.scss\u0000quartz/components/styles/footer.scss\u0000quartz/components/styles/graph.scss\u0000quartz/components/styles/knowledgeReader.scss\u0000quartz/components/styles/legacyToc.scss\u0000quartz/components/styles/listPage.scss\u0000quartz/components/styles/mermaid.inline.scss\u0000quartz/components/styles/noteGraph.scss\u0000quartz/components/styles/popover.scss\u0000quartz/components/styles/readermode.scss\u0000quartz/components/styles/recentNotes.scss\u0000quartz/components/styles/search.scss\u0000quartz/components/styles/spatialReading.scss\u0000quartz/components/styles/toc.scss\u0000quartz/components/styles/topos.css\u0000quartz/components/types.ts\u0000quartz/i18n/index.ts\u0000quartz/i18n/locales/ar-SA.ts\u0000quartz/i18n/locales/ca-ES.ts\u0000quartz/i18n/locales/cs-CZ.ts\u0000quartz/i18n/locales/de-DE.ts\u0000quartz/i18n/locales/definition.ts\u0000quartz/i18n/locales/en-GB.ts\u0000quartz/i18n/locales/en-US.ts\u0000quartz/i18n/locales/es-ES.ts\u0000quartz/i18n/locales/fa-IR.ts\u0000quartz/i18n/locales/fi-FI.ts\u0000quartz/i18n/locales/fr-FR.ts\u0000quartz/i18n/locales/he-IL.ts\u0000quartz/i18n/locales/hu-HU.ts\u0000quartz/i18n/locales/id-ID.ts\u0000quartz/i18n/locales/it-IT.ts\u0000quartz/i18n/locales/ja-JP.ts\u0000quartz/i18n/locales/kk-KZ.ts\u0000quartz/i18n/locales/ko-KR.ts\u0000quartz/i18n/locales/lt-LT.ts\u0000quartz/i18n/locales/nb-NO.ts\u0000quartz/i18n/locales/nl-NL.ts\u0000quartz/i18n/locales/pl-PL.ts\u0000quartz/i18n/locales/pt-BR.ts\u0000quartz/i18n/locales/ro-RO.ts\u0000quartz/i18n/locales/ru-RU.ts\u0000quartz/i18n/locales/th-TH.ts\u0000quartz/i18n/locales/tr-TR.ts\u0000quartz/i18n/locales/uk-UA.ts\u0000quartz/i18n/locales/vi-VN.ts\u0000quartz/i18n/locales/zh-CN.ts\u0000quartz/i18n/locales/zh-TW.ts\u0000quartz/plugins/emitters/404.tsx\u0000quartz/plugins/emitters/aliases.ts\u0000quartz/plugins/emitters/approvedAssets.ts\u0000quartz/plugins/emitters/assets.ts\u0000quartz/plugins/emitters/bookIndex.ts\u0000quartz/plugins/emitters/cname.ts\u0000quartz/plugins/emitters/componentResources.ts\u0000quartz/plugins/emitters/contentIndex.tsx\u0000quartz/plugins/emitters/contentPage.tsx\u0000quartz/plugins/emitters/favicon.ts\u0000quartz/plugins/emitters/folderPage.tsx\u0000quartz/plugins/emitters/helpers.ts\u0000quartz/plugins/emitters/index.ts\u0000quartz/plugins/emitters/knowledge.ts\u0000quartz/plugins/emitters/ogImage.tsx\u0000quartz/plugins/emitters/static.ts\u0000quartz/plugins/emitters/tagPage.tsx\u0000quartz/plugins/emitters/topos.ts\u0000quartz/plugins/filters/draft.ts\u0000quartz/plugins/filters/explicit.ts\u0000quartz/plugins/filters/index.ts\u0000quartz/plugins/index.ts\u0000quartz/plugins/transformers/atoms.ts\u0000quartz/plugins/transformers/citations.ts\u0000quartz/plugins/transformers/description.ts\u0000quartz/plugins/transformers/frontmatter.ts\u0000quartz/plugins/transformers/gfm.ts\u0000quartz/plugins/transformers/index.ts\u0000quartz/plugins/transformers/lastmod.ts\u0000quartz/plugins/transformers/latex.ts\u0000quartz/plugins/transformers/linebreaks.ts\u0000quartz/plugins/transformers/links.ts\u0000quartz/plugins/transformers/localMath.ts\u0000quartz/plugins/transformers/ofm.ts\u0000quartz/plugins/transformers/oxhugofm.ts\u0000quartz/plugins/transformers/readerMetadata.ts\u0000quartz/plugins/transformers/roam.ts\u0000quartz/plugins/transformers/semanticBlocks.test.ts\u0000quartz/plugins/transformers/semanticBlocks.ts\u0000quartz/plugins/transformers/syntax.ts\u0000quartz/plugins/transformers/toc.ts\u0000quartz/plugins/types.ts\u0000quartz/plugins/vfile.ts\u0000quartz/processors/emit.ts\u0000quartz/processors/filter.ts\u0000quartz/processors/parse.ts\u0000quartz/styles/base.scss\u0000quartz/styles/book.scss\u0000quartz/styles/callouts.scss\u0000quartz/styles/custom.scss\u0000quartz/styles/interface.scss\u0000quartz/styles/knowledgeGraph.scss\u0000quartz/styles/knowledgeGraph3d.scss\u0000quartz/styles/reader.scss\u0000quartz/styles/syntax.scss\u0000quartz/styles/variables.scss\u0000quartz/util/atomHast.test.ts\u0000quartz/util/atomHast.ts\u0000quartz/util/bookNavigation.ts\u0000quartz/util/bookSearch.test.ts\u0000quartz/util/bookSearch.ts\u0000quartz/util/clone.ts\u0000quartz/util/ctx.ts\u0000quartz/util/d3-force-3d.d.ts\u0000quartz/util/emoji.ts\u0000quartz/util/emojimap.json\u0000quartz/util/escape.ts\u0000quartz/util/fileTrie.test.ts\u0000quartz/util/fileTrie.ts\u0000quartz/util/glob.ts\u0000quartz/util/jsx.tsx\u0000quartz/util/knowledge.ts\u0000quartz/util/knowledgeGraph.test.ts\u0000quartz/util/knowledgeGraph.ts\u0000quartz/util/knowledgeScene.test.ts\u0000quartz/util/knowledgeScene.ts\u0000quartz/util/lang.ts\u0000quartz/util/log.ts\u0000quartz/util/noteGraph.test.ts\u0000quartz/util/noteGraph.ts\u0000quartz/util/og.tsx\u0000quartz/util/path.test.ts\u0000quartz/util/path.ts\u0000quartz/util/perf.ts\u0000quartz/util/random.ts\u0000quartz/util/readerCatalog.test.ts\u0000quartz/util/readerCatalog.ts\u0000quartz/util/resources.tsx\u0000quartz/util/semantic.test.ts\u0000quartz/util/semantic.ts\u0000quartz/util/sourcemap.ts\u0000quartz/util/spatialSearch.test.ts\u0000quartz/util/spatialSearch.ts\u0000quartz/util/theme.ts\u0000quartz/util/topos/annotations.test.ts\u0000quartz/util/topos/annotations.ts\u0000quartz/util/topos/context.ts\u0000quartz/util/topos/field.ts\u0000quartz/util/topos/published.test.ts\u0000quartz/util/topos/published.ts\u0000quartz/util/topos/topos.test.ts\u0000quartz/util/topos/types.ts\u0000quartz/util/trace.ts\u0000quartz/util/transcludes.test.ts\u0000quartz/util/transcludes.ts\u0000quartz/worker.ts\u0000reader.config.ts\u0000scripts/atomSource.test.ts\u0000scripts/export-vault.mjs\u0000scripts/export-vault.test.ts\u0000scripts/github-status.mjs\u0000scripts/lib/atomSource.ts\u0000scripts/lib/export-boundary.mjs\u0000scripts/lib/export-canvas.mjs\u0000scripts/lib/export-markdown.mjs\u0000scripts/lib/publication-review.mjs\u0000scripts/lib/site-sync-core.mjs\u0000scripts/lib/verify-topos-output.mjs\u0000scripts/prepare-assets.mjs\u0000scripts/prepare-atoms.test.ts\u0000scripts/prepare-atoms.ts\u0000scripts/prepare-graph-runtime.mjs\u0000scripts/prepare-knowledge.mjs\u0000scripts/prepare-semantic-runtime.mjs\u0000scripts/prepare-semantics.mjs\u0000scripts/prepare-topos-runtime.mjs\u0000scripts/preview.mjs\u0000scripts/publication-review.test.mjs\u0000scripts/publish.mjs\u0000scripts/site-sync.test.mjs\u0000scripts/sync-site.mjs\u0000scripts/topos-content.test.ts\u0000scripts/verify-browser.mjs\u0000scripts/verify-content.mjs\u0000scripts/verify-graph.mjs\u0000scripts/verify-interface.mjs\u0000scripts/verify-knowledge-graph.mjs\u0000scripts/verify-knowledge.mjs\u0000scripts/verify-navigation.mjs\u0000scripts/verify-reader.mjs\u0000scripts/verify-search.mjs\u0000scripts/verify-semantics.mjs\u0000scripts/verify-spatial.mjs\u0000scripts/verify-three.mjs\u0000scripts/verify-topos-published.mjs\u0000scripts/verify-topos.mjs\u0000scripts/verify-upstream.mjs\u0000site-sync.config.json\u0000tests/fixtures/build-locale.mjs\u0000tests/fixtures/synthetic/index.md\u0000tests/fixtures/synthetic/notes/complete-metric-spaces.md\u0000tsconfig.json\u0000发布博客.cmd\u0000同步到GitHub.cmd\u0000预览博客.cmd\u0000",
+      "stderr": ""
+    },
+    {
+      "program": "git",
+      "args": ["ls-files", "--others", "--exclude-standard", "-z"],
+      "startedAt": "2026-09-09T18:59:56.269Z",
+      "finishedAt": "2026-09-09T18:59:56.331Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "docs/acceptance-criteria.md\u0000docs/adr/0001-reuse-and-evidence-boundaries.md\u0000docs/adr/0002-tool-candidates.md\u0000docs/adr/0003-static-lean-boundary.md\u0000docs/architecture-plan.md\u0000docs/assumptions.md\u0000docs/benchmarks/environment.json\u0000docs/current-state.md\u0000docs/phase-status.json\u0000docs/phases/phase-00/acceptance.json\u0000docs/phases/phase-00/evidence/audit-local.mjs\u0000docs/phases/phase-00/evidence/audit-official.mjs\u0000docs/phases/phase-00/evidence/baseline-build.log\u0000docs/phases/phase-00/evidence/baseline-checks.json\u0000docs/phases/phase-00/evidence/baseline-content-checks.log\u0000docs/phases/phase-00/evidence/baseline-knowledge-checks.log\u0000docs/phases/phase-00/evidence/baseline-types.log\u0000docs/phases/phase-00/evidence/baseline-unit-tests.log\u0000docs/phases/phase-00/evidence/baseline-upstream.log\u0000docs/phases/phase-00/evidence/catalog-tools.mjs\u0000docs/phases/phase-00/evidence/evidence-sha256.json\u0000docs/phases/phase-00/evidence/finalize-report.mjs\u0000docs/phases/phase-00/evidence/future-criteria.json\u0000docs/phases/phase-00/evidence/input-resolution.json\u0000docs/phases/phase-00/evidence/local-audit.json\u0000docs/phases/phase-00/evidence/master-mapping-review.json\u0000docs/phases/phase-00/evidence/master-review.mjs\u0000docs/phases/phase-00/evidence/numeric-gates.json\u0000docs/phases/phase-00/evidence/official-research.json\u0000docs/phases/phase-00/evidence/quantitative-origins.json\u0000docs/phases/phase-00/evidence/register-contract.mjs\u0000docs/phases/phase-00/evidence/register-quantities.mjs\u0000docs/phases/phase-00/evidence/source-file-hashes.json\u0000docs/phases/phase-00/evidence/tool-candidates.json\u0000docs/phases/phase-00/evidence/validate-phase-zero.mjs\u0000docs/phases/phase-00/evidence/validation-report.json\u0000docs/phases/phase-00/handoff.md\u0000docs/phases/phase-01/acceptance.json\u0000docs/phases/phase-01/evidence/ontology-format.txt\u0000docs/phases/phase-01/evidence/ontology-tests.txt\u0000docs/phases/phase-01/evidence/ontology-validation.txt\u0000docs/phases/phase-01/evidence/run-report.json\u0000docs/phases/phase-01/handoff.md\u0000docs/requirements-traceability.csv\u0000knowledge/topos/note-topics.json\u0000ontology/audit.json\u0000ontology/benchmarks/README.md\u0000ontology/benchmarks/arxiv-math.json\u0000ontology/benchmarks/assemble.mjs\u0000ontology/benchmarks/msc2020-level1.json\u0000ontology/benchmarks/record-audit.mjs\u0000ontology/benchmarks/regions-07-12-verification.json\u0000ontology/benchmarks/research-regions-01-06.mjs\u0000ontology/benchmarks/retrieval-regions-01-06.json\u0000ontology/benchmarks/review-records.json\u0000ontology/benchmarks/run-acceptance.mjs\u0000ontology/benchmarks/sample-selection.json\u0000ontology/benchmarks/schema-contract.json\u0000ontology/math_outline.md\u0000ontology/math_registry.json\u0000ontology/research-regions-01-06.json\u0000ontology/research-regions-07-12.json\u0000ontology/sources.json\u0000quartz/components/scripts/topos/sidebar.ts\u0000quartz/util/topos/atlas.ts\u0000quartz/util/topos/topics.test.ts\u0000quartz/util/topos/topics.ts\u0000scripts/define-note-topics.mjs\u0000scripts/ontology.test.mjs\u0000scripts/validate-ontology.mjs\u0000scripts/verify-topic-browser.mjs\u0000scripts/verify-topic-interactions.mjs\u0000scripts/verify-topic-map.mjs\u0000",
+      "stderr": ""
+    },
+    {
+      "program": "git",
+      "args": ["remote", "get-url", "origin"],
+      "startedAt": "2026-09-09T18:59:56.331Z",
+      "finishedAt": "2026-09-09T18:59:56.382Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "https://github.com/MyDearATRI/World.git\n",
+      "stderr": ""
+    },
+    {
+      "program": "powershell.exe",
+      "args": ["-NoProfile", "-NonInteractive", "-Command", "elan --version; elan toolchain list"],
+      "startedAt": "2026-09-09T18:59:56.382Z",
+      "finishedAt": "2026-09-09T18:59:56.637Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "elan 4.2.1 (3d5138e15 2026-03-18)\nno installed toolchains\n",
+      "stderr": ""
+    },
+    {
+      "program": "wsl.exe",
+      "args": ["--list", "--quiet"],
+      "startedAt": "2026-09-09T18:59:56.637Z",
+      "finishedAt": "2026-09-09T18:59:56.672Z",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "未安装适用于 Linux 的 Windows 子系统。可通过运行 “wsl.exe --install” 进行安装。\r\r\n有关详细信息，请访问 https://aka.ms/wslinstall\r\r\n",
+      "error": null
+    },
+    {
+      "program": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        "$p='C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'; if(Test-Path -LiteralPath $p){(Get-Item -LiteralPath $p).VersionInfo.ProductVersion}else{'NOT_DISCOVERED'}"
+      ],
+      "startedAt": "2026-09-09T18:59:56.672Z",
+      "finishedAt": "2026-09-09T18:59:56.910Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "152.0.4191.66\r\n",
+      "stderr": ""
+    },
+    {
+      "program": "<USERPROFILE>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+      "args": ["--check", "scripts/preview.mjs"],
+      "startedAt": "2026-09-09T18:59:56.910Z",
+      "finishedAt": "2026-09-09T18:59:56.978Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "program": "<USERPROFILE>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+      "args": ["--check", "quartz/bootstrap-cli.mjs"],
+      "startedAt": "2026-09-09T18:59:56.978Z",
+      "finishedAt": "2026-09-09T18:59:57.048Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

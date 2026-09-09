@@ -193,6 +193,8 @@ try {
   ])
   await node(["scripts/verify-content.mjs"])
   await node(["scripts/verify-knowledge.mjs"])
+  await node(["scripts/validate-ontology.mjs"])
+  await node(["scripts/verify-topic-map.mjs"])
   preview = await startPreview({ port: 0 })
   const url = preview.url + "/World/"
   console.log(`本地预览：${url}\n清单：${path.join(root, "artifacts/publication-preview.json")}`)

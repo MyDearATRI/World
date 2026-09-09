@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "phase": 0,
+  "status": "PASS",
+  "recordedAt": "2026-09-09T19:00:02.880Z",
+  "scope": "Repository and capability audit only; does not certify formal mathematics or future phases",
+  "originalMasterSha256": "e3ff6b57f67b198f81cb8234aa835c9e5bf1c12c4c6a5a3763a8c60074141619",
+  "roadmapSha256": "2c058ae2810f628d7157d2a8e5a5a57476305ee9bacf7dbd195cee56316607d6",
+  "sourceRevision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+  "sourceManifestSha256": "734cfcb8c5128e73b79461ac5da961677da61108dd36d625aeeae5375fa39010",
+  "criteria": [
+    {
+      "criterion_id": "P00-01",
+      "objective": "Retain all original requirements and non-goals",
+      "user_task": "A new task follows each original section to its phase and artifacts",
+      "artifact": ["docs/requirements-traceability.csv", "docs/acceptance-criteria.md"],
+      "metric": "Original numbered sections manually read/mapped",
+      "threshold": "77/77, no unexplained omission",
+      "requirement_origin": "M / C / R",
+      "test_environment": {
+        "source_revision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+        "source_manifest_sha256": "734cfcb8c5128e73b79461ac5da961677da61108dd36d625aeeae5375fa39010",
+        "dependency_lock": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef",
+        "platform": "win32/10.0.26200/x64;Nodev24.19.0",
+        "benchmark_version": "phase-00-audit-v1"
+      },
+      "actual_result": {
+        "mapped": 77,
+        "total": 77,
+        "masterSha256": "e3ff6b57f67b198f81cb8234aa835c9e5bf1c12c4c6a5a3763a8c60074141619",
+        "missingInputResolved": true
+      },
+      "evidence": [
+        "docs/phases/phase-00/evidence/master-mapping-review.json",
+        "docs/phases/phase-00/evidence/input-resolution.json"
+      ],
+      "known_limitations": [
+        "Mapping PASS does not grant any future implementation PASS or human mathematical review",
+        "C-UI current topic-sidebar request supplements M64; continuous focus remains required"
+      ],
+      "human_reviewer": null,
+      "status": "PASS"
+    },
+    {
+      "criterion_id": "P00-02",
+      "objective": "Know actual repository/data/environment capability",
+      "user_task": "Inspect the existing site before deciding any replacement",
+      "artifact": ["docs/current-state.md", "docs/benchmarks/environment.json"],
+      "metric": "Capability categories with real observation or reason unavailable",
+      "threshold": "8/8 with existing basic checks and known failures retained",
+      "requirement_origin": "M / C / R",
+      "test_environment": {
+        "source_revision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+        "source_manifest_sha256": "734cfcb8c5128e73b79461ac5da961677da61108dd36d625aeeae5375fa39010",
+        "dependency_lock": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef",
+        "platform": "win32/10.0.26200/x64;Nodev24.19.0",
+        "benchmark_version": "phase-00-audit-v1"
+      },
+      "actual_result": {
+        "categories": [
+          "repository/frontend",
+          "Lean/Lake",
+          "approved-notes/data",
+          "build/package-manager",
+          "tests/browser",
+          "CI/deployment",
+          "external-access",
+          "host/isolation"
+        ],
+        "observed": 8,
+        "total": 8,
+        "objects": 192,
+        "relations": 605,
+        "leanToolchains": 0,
+        "existingUnitTests": {
+          "pass": 230,
+          "fail": 0
+        }
+      },
+      "evidence": [
+        "docs/phases/phase-00/evidence/local-audit.json",
+        "docs/phases/phase-00/evidence/baseline-checks.json",
+        "docs/phases/phase-00/evidence/source-file-hashes.json",
+        "docs/phases/phase-00/evidence/official-research.json"
+      ],
+      "known_limitations": [
+        "No Lean toolchain/project or usable production sandbox; this is an observed gap, not a successful Lean test",
+        "Final code/lock/data source manifest excludes closing documentation and this report to avoid self-reference; Phase1 acceptance has separate ownership",
+        "GPU CIM metadata access denied"
+      ],
+      "human_reviewer": null,
+      "status": "PASS"
+    },
+    {
+      "criterion_id": "P00-03",
+      "objective": "Choose tools from evidence, not memory",
+      "user_task": "Compare existing stack and Lean/graph candidates with actual versions",
+      "artifact": [
+        "docs/architecture-plan.md",
+        "docs/adr/0001-reuse-and-evidence-boundaries.md",
+        "docs/adr/0002-tool-candidates.md",
+        "docs/adr/0003-static-lean-boundary.md"
+      ],
+      "metric": "Candidate decisions with version/license/maintenance/reason/alternative/performance/boundary/failure/phase",
+      "threshold": "Every recorded tool has these fields; no installation or untested compatibility claims",
+      "requirement_origin": "M / C / R",
+      "test_environment": {
+        "source_revision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+        "source_manifest_sha256": "734cfcb8c5128e73b79461ac5da961677da61108dd36d625aeeae5375fa39010",
+        "dependency_lock": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef",
+        "platform": "win32/10.0.26200/x64;Nodev24.19.0",
+        "benchmark_version": "phase-00-audit-v1"
+      },
+      "actual_result": {
+        "completeRecords": 22,
+        "total": 22,
+        "installedCandidates": 0
+      },
+      "evidence": [
+        "docs/phases/phase-00/evidence/tool-candidates.json",
+        "docs/phases/phase-00/evidence/official-research.json"
+      ],
+      "known_limitations": [
+        "Lean/browser integration requires real Phase2/6 slices",
+        "LeanBlueprint PyPI MIT classifier disagrees with inspected Apache2 LICENSE; distribution license unresolved and package not selected",
+        "Raw GitHub3requests reset; alternate official sources were actually read, failures retained"
+      ],
+      "human_reviewer": null,
+      "status": "PASS"
+    },
+    {
+      "criterion_id": "P00-04",
+      "objective": "Keep targets/provenance separate from results",
+      "user_task": "Look up every future numerical gate and its original or supplemental source",
+      "artifact": ["docs/acceptance-criteria.md", "docs/phase-status.json"],
+      "metric": "Registered quantitative requirements with M/C/R and future null results",
+      "threshold": "All registered future results NOT_RUN; no result fabricated",
+      "requirement_origin": "M / C / R",
+      "test_environment": {
+        "source_revision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+        "source_manifest_sha256": "734cfcb8c5128e73b79461ac5da961677da61108dd36d625aeeae5375fa39010",
+        "dependency_lock": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef",
+        "platform": "win32/10.0.26200/x64;Nodev24.19.0",
+        "benchmark_version": "phase-00-audit-v1"
+      },
+      "actual_result": {
+        "quantities": 40,
+        "numericSourceLines": 48,
+        "futureCriteria": 64,
+        "originalMasterVerified": true,
+        "futureActualResults": null
+      },
+      "evidence": [
+        "docs/phases/phase-00/evidence/quantitative-origins.json",
+        "docs/phases/phase-00/evidence/numeric-gates.json",
+        "docs/phases/phase-00/evidence/future-criteria.json"
+      ],
+      "known_limitations": [
+        "Phase1 separately authorized and will update its own report; future-criteria is a registration snapshot",
+        "C labels cite the user-provided Roadmap supplement, not the original Master",
+        "Unspecified sample/concurrency/bootstrap budgets remain null until preregistration"
+      ],
+      "human_reviewer": null,
+      "status": "PASS"
+    },
+    {
+      "criterion_id": "P00-05",
+      "objective": "Reproduce current input and minimal startup",
+      "user_task": "A new local task runs the audited syntax checks and static preview without Vault export",
+      "artifact": ["docs/phases/phase-00/handoff.md", "docs/current-state.md"],
+      "metric": "Documented actual syntax and loopback preview results",
+      "threshold": "2 syntax checks exit0;4 static paths HTTP200; source/lock/evidence pointers exist",
+      "requirement_origin": "M / C / R",
+      "test_environment": {
+        "source_revision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+        "source_manifest_sha256": "734cfcb8c5128e73b79461ac5da961677da61108dd36d625aeeae5375fa39010",
+        "dependency_lock": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef",
+        "platform": "win32/10.0.26200/x64;Nodev24.19.0",
+        "benchmark_version": "phase-00-audit-v1"
+      },
+      "actual_result": {
+        "syntaxChecks": [
+          {
+            "command": "node --check scripts/preview.mjs",
+            "exitCode": 0
+          },
+          {
+            "command": "node --check quartz/bootstrap-cli.mjs",
+            "exitCode": 0
+          }
+        ],
+        "preview": [
+          {
+            "route": "/",
+            "status": 200,
+            "bytes": 3462,
+            "sha256": "dc708e98c7bd38ae2a18390122e7c8a372bb6b32867d6a4f7c1dff4d62899afb",
+            "mathML": false
+          },
+          {
+            "route": "/World/",
+            "status": 200,
+            "bytes": 3462,
+            "sha256": "dc708e98c7bd38ae2a18390122e7c8a372bb6b32867d6a4f7c1dff4d62899afb",
+            "mathML": false
+          },
+          {
+            "route": "/World/atoms/a-000067.html",
+            "status": 200,
+            "bytes": 94236,
+            "sha256": "5936c31c103f3fe78ea59adca7f359328b669587b44a629dfe0eac273d242324",
+            "mathML": true
+          },
+          {
+            "route": "/World/library.html",
+            "status": 200,
+            "bytes": 15854,
+            "sha256": "05d9e51aae71c1446d003e62731d6bdc6a6d653fee7d67ffb9fe91d0a2526966",
+            "mathML": false
+          }
+        ]
+      },
+      "evidence": [
+        "docs/phases/phase-00/evidence/audit-local.mjs",
+        "docs/phases/phase-00/evidence/local-audit.json",
+        "docs/phases/phase-00/evidence/input-resolution.json"
+      ],
+      "known_limitations": [
+        "No fresh dependency installation performed; npm not onPATH, documented pnpm/npm route may need network/cache",
+        "Static HTTP smoke is not a new visual/a11y/FPS or Lean test",
+        "Original Master is an intentionally local ignored input; another machine needs the approved original attachment with matching hash"
+      ],
+      "human_reviewer": null,
+      "status": "PASS"
+    }
+  ],
+  "nextPhase": {
+    "phase": 1,
+    "automaticallyAuthorizedByThisReport": false,
+    "note": "The user separately authorized Phase1 this turn; root owns its actual results"
+  },
+  "deployment": {
+    "status": "NOT_RUN",
+    "observedExistingRun": {
+      "id": 34388429032,
+      "name": "Build and deploy mathematical notes",
+      "headSha": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-09-09T18:20:48Z",
+      "updatedAt": "2026-09-09T18:22:24Z",
+      "htmlUrl": "https://github.com/MyDearATRI/World/actions/runs/34388429032"
+    }
+  },
+  "humanReview": {
+    "reviewer": null,
+    "status": "NOT_RUN"
+  }
+}

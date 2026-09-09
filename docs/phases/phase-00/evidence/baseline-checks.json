@@ -1,0 +1,72 @@
+{
+  "recordedAt": "2026-09-09T19:00:02.878Z",
+  "scope": "Existing website engineering baseline; not Lean or future formal-phase acceptance",
+  "checks": [
+    {
+      "command": "node --import tsx --test",
+      "performedBy": "root agent, same authorized Phase0/1 turn",
+      "exitCode": 0,
+      "source": "artifacts/phase-01/unit-tests.log",
+      "sourceSha256": "faf6d6613fe5269b801938e3924aef9237190d81b97e18b92264bef51aef21e4",
+      "completedAt": "2026-09-09T18:59:42.306Z",
+      "copiedEvidence": "docs/phases/phase-00/evidence/baseline-unit-tests.log",
+      "copiedSha256": "faf6d6613fe5269b801938e3924aef9237190d81b97e18b92264bef51aef21e4",
+      "note": "Root explicitly reported exit0; audit agent inspected and copied the existing log. These are dated baseline runs; later edits require final refresh. Empty output alone does not establish an exit code."
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --noEmit",
+      "performedBy": "root agent, same authorized Phase0/1 turn",
+      "exitCode": 0,
+      "source": "artifacts/phase-01/types.log",
+      "sourceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "completedAt": "2026-09-09T18:52:54.224Z",
+      "copiedEvidence": "docs/phases/phase-00/evidence/baseline-types.log",
+      "copiedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "note": "Root explicitly reported exit0; audit agent inspected and copied the existing log. These are dated baseline runs; later edits require final refresh. Empty output alone does not establish an exit code."
+    },
+    {
+      "command": "npm run build (existing isolated npm10.9.2 entry)",
+      "performedBy": "root agent, same authorized Phase0/1 turn",
+      "exitCode": 0,
+      "source": "artifacts/phase-01/build.log",
+      "sourceSha256": "62b7f04c5ca27848a6b25e2b5358687e9a9b17355418b56a9e32334b8958788a",
+      "completedAt": "2026-09-09T18:52:27.346Z",
+      "copiedEvidence": "docs/phases/phase-00/evidence/baseline-build.log",
+      "copiedSha256": "62b7f04c5ca27848a6b25e2b5358687e9a9b17355418b56a9e32334b8958788a",
+      "note": "Root explicitly reported exit0; audit agent inspected and copied the existing log. These are dated baseline runs; later edits require final refresh. Empty output alone does not establish an exit code."
+    },
+    {
+      "command": "node scripts/verify-content.mjs",
+      "performedBy": "root agent, same authorized Phase0/1 turn",
+      "exitCode": 0,
+      "source": "artifacts/phase-01/content-checks.log",
+      "sourceSha256": "850e8380c820f73b3349e5cedb80e8d5444053841aa1d4bf3e07b744cabeee9c",
+      "completedAt": "2026-09-09T18:54:06.976Z",
+      "copiedEvidence": "docs/phases/phase-00/evidence/baseline-content-checks.log",
+      "copiedSha256": "850e8380c820f73b3349e5cedb80e8d5444053841aa1d4bf3e07b744cabeee9c",
+      "note": "Root explicitly reported exit0; audit agent inspected and copied the existing log. These are dated baseline runs; later edits require final refresh. Empty output alone does not establish an exit code."
+    },
+    {
+      "command": "node scripts/verify-knowledge.mjs",
+      "performedBy": "root agent, same authorized Phase0/1 turn",
+      "exitCode": 0,
+      "source": "artifacts/phase-01/knowledge-checks.log",
+      "sourceSha256": "7b10b82a8658490bce52d2f32e181b9fd2b20631fb88bdf55395236dcf4736ba",
+      "completedAt": "2026-09-09T18:47:23.968Z",
+      "copiedEvidence": "docs/phases/phase-00/evidence/baseline-knowledge-checks.log",
+      "copiedSha256": "7b10b82a8658490bce52d2f32e181b9fd2b20631fb88bdf55395236dcf4736ba",
+      "note": "Root explicitly reported exit0; audit agent inspected and copied the existing log. These are dated baseline runs; later edits require final refresh. Empty output alone does not establish an exit code."
+    },
+    {
+      "command": "node scripts/verify-upstream.mjs",
+      "performedBy": "root agent, same authorized Phase0/1 turn",
+      "exitCode": 0,
+      "source": "artifacts/phase-01/upstream.log",
+      "sourceSha256": "cda5147c8a3ae05f132bda5b4264bde388f29cbdc18d9d3ef43b9f255385d9d3",
+      "completedAt": "2026-09-09T18:50:59.450Z",
+      "copiedEvidence": "docs/phases/phase-00/evidence/baseline-upstream.log",
+      "copiedSha256": "cda5147c8a3ae05f132bda5b4264bde388f29cbdc18d9d3ef43b9f255385d9d3",
+      "note": "Root explicitly reported exit0; audit agent inspected and copied the existing log. These are dated baseline runs; later edits require final refresh. Empty output alone does not establish an exit code."
+    }
+  ]
+}

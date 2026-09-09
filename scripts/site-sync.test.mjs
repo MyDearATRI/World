@@ -120,10 +120,11 @@ test("the Topos publication scope exactly matches the reviewed model and explici
   const expected = [
     "knowledge/topos/prototype.json",
     "knowledge/topos/README.md",
+    "knowledge/topos/note-topics.json",
     ...model.sections.map((section) => `knowledge/topos/${section.markdown}`),
   ].sort()
   assert.equal(model.sections.length, 67)
-  assert.equal(toposSyncFiles.length, 69)
+  assert.equal(toposSyncFiles.length, 70)
   assert.deepEqual([...toposSyncFiles].sort(), expected)
   assert.deepEqual(
     config.newFiles.filter((file) => file.startsWith("knowledge/topos/")).sort(),

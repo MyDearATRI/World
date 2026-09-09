@@ -1,5 +1,11 @@
 # Website acceptance
 
+## Theme sidebar and Phase 0 / Phase 1
+
+Phase completion is recorded in `docs/phases/phase-00/acceptance.json`, `docs/phases/phase-01/acceptance.json` and `docs/phase-status.json`. UI checks cannot substitute for missing contract or mathematical-source evidence. Later-phase results remain NOT_RUN.
+
+New UI acceptance covers exact checkbox membership, multi-theme union, both edge endpoints, deliberate empty state, keyboard operation, mobile modal focus, original mathematical reading, source disclosure, static deep URLs and history. Run `npm run test:topics` at 1440×1000, 1024×900 and 390×844 and inspect actual screenshots. `npm run check:ontology` validates frozen evidence/structure; `npm run test:topic-map` compares website artifacts with the audited ontology and approved notes. Existing type, format, unit, build, content and knowledge checks remain required. Results, limitations and unrun checks belong in the validation record.
+
 ## Actual-note field follow-up
 
 Verify the default root/Topos model exactly covers the committed eligible KnowledgeIndex: all canonical atoms and complete mathematical notes, all typed relationships, and every note without extracted objects. Confirm source snapshot hashes remain unchanged. Compare source HAST prose, mathematics, prerequisites, proof qualifications, citations and local targets against the field's actual rendered explanations. Books/chapters cannot be the grouping or positioning input. The independent demo remains available and outside default search.

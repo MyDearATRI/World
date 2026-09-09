@@ -14,6 +14,7 @@ export const derivedSyncFiles = [
 // permission from a directory glob or from a newly edited model's file list.
 export const toposSyncFiles = Object.freeze([
   "knowledge/topos/README.md",
+  "knowledge/topos/note-topics.json",
   "knowledge/topos/prototype.json",
   "knowledge/topos/sections/action-definition.md",
   "knowledge/topos/sections/action-example.md",

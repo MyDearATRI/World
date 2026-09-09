@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "arxiv-math",
+  "version": "live taxonomy snapshot 2026-09-10",
+  "accessed_date": "2026-09-10",
+  "source_url": "https://arxiv.org/category_taxonomy",
+  "official_total": 32,
+  "official_total_method": "Counted complete official list in this actual HTTP 200 response; not an independent publisher-stated count",
+  "acquired_total": 32,
+  "response_sha256": "b68362abee9154e329c56febfc6838748b128c3aebf5fc392849b2411301a931",
+  "locator": "Complete Mathematics h4 math.* list",
+  "entries": [
+    {
+      "code": "math.AC",
+      "title": "Commutative Algebra"
+    },
+    {
+      "code": "math.AG",
+      "title": "Algebraic Geometry"
+    },
+    {
+      "code": "math.AP",
+      "title": "Analysis of PDEs"
+    },
+    {
+      "code": "math.AT",
+      "title": "Algebraic Topology"
+    },
+    {
+      "code": "math.CA",
+      "title": "Classical Analysis and ODEs"
+    },
+    {
+      "code": "math.CO",
+      "title": "Combinatorics"
+    },
+    {
+      "code": "math.CT",
+      "title": "Category Theory"
+    },
+    {
+      "code": "math.CV",
+      "title": "Complex Variables"
+    },
+    {
+      "code": "math.DG",
+      "title": "Differential Geometry"
+    },
+    {
+      "code": "math.DS",
+      "title": "Dynamical Systems"
+    },
+    {
+      "code": "math.FA",
+      "title": "Functional Analysis"
+    },
+    {
+      "code": "math.GM",
+      "title": "General Mathematics"
+    },
+    {
+      "code": "math.GN",
+      "title": "General Topology"
+    },
+    {
+      "code": "math.GR",
+      "title": "Group Theory"
+    },
+    {
+      "code": "math.GT",
+      "title": "Geometric Topology"
+    },
+    {
+      "code": "math.HO",
+      "title": "History and Overview"
+    },
+    {
+      "code": "math.IT",
+      "title": "Information Theory"
+    },
+    {
+      "code": "math.KT",
+      "title": "K-Theory and Homology"
+    },
+    {
+      "code": "math.LO",
+      "title": "Logic"
+    },
+    {
+      "code": "math.MG",
+      "title": "Metric Geometry"
+    },
+    {
+      "code": "math.MP",
+      "title": "Mathematical Physics"
+    },
+    {
+      "code": "math.NA",
+      "title": "Numerical Analysis"
+    },
+    {
+      "code": "math.NT",
+      "title": "Number Theory"
+    },
+    {
+      "code": "math.OA",
+      "title": "Operator Algebras"
+    },
+    {
+      "code": "math.OC",
+      "title": "Optimization and Control"
+    },
+    {
+      "code": "math.PR",
+      "title": "Probability"
+    },
+    {
+      "code": "math.QA",
+      "title": "Quantum Algebra"
+    },
+    {
+      "code": "math.RA",
+      "title": "Rings and Algebras"
+    },
+    {
+      "code": "math.RT",
+      "title": "Representation Theory"
+    },
+    {
+      "code": "math.SG",
+      "title": "Symplectic Geometry"
+    },
+    {
+      "code": "math.SP",
+      "title": "Spectral Theory"
+    },
+    {
+      "code": "math.ST",
+      "title": "Statistics Theory"
+    }
+  ]
+}

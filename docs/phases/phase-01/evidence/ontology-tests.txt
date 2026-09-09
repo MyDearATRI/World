@@ -1,0 +1,25 @@
+✔ complete registry and all reviewed frozen classifications pass (8.7966ms)
+✔ classification omission cannot hide behind a smaller denominator (3.3317ms)
+✔ duplicate classification mapping cannot replace a missing category (2.3693ms)
+✔ broad root or engineering node is not mathematics coverage (5.8752ms)
+✔ unresolved source and unverified metadata do not count (3.1086ms)
+✔ same research group on two URLs is only one independent source (1.8791ms)
+✔ stale or future activity does not meet the recent-activity rule (3.8924ms)
+✔ unrelated event source cannot supply the frontier date (1.7052ms)
+✔ duplicate ID and parent cycle are rejected (3.3809ms)
+✔ multi-parent membership is one canonical identity (0.2342ms)
+✔ prose and references cannot leak into the title-only outline (5.227ms)
+✔ unreviewed frontier and sampled nodes fail even with sources (3.4083ms)
+✔ sample is deterministic and cannot be substituted after results (2.4202ms)
+✔ AI review must not be presented as a human signature (1.7272ms)
+✔ edited mathematics invalidates the recorded topic review (2.1891ms)
+✔ heading-only text cannot silently omit a registered subject (1.8031ms)
+✔ edited source evidence invalidates its scope/independence review (1.6756ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 150.7836

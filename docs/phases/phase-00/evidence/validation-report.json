@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "command": "node docs/phases/phase-00/evidence/validate-phase-zero.mjs",
+  "recordedAt": "2026-09-09T19:00:13.977Z",
+  "sourceManifestSha256": "734cfcb8c5128e73b79461ac5da961677da61108dd36d625aeeae5375fa39010",
+  "scope": "Audit provenance, evidence integrity and recorded startup checks; not future feature tests or human review",
+  "passed": 12,
+  "failed": 0,
+  "results": [
+    {
+      "name": "Original input and roadmap match the reviewed whole-file hashes",
+      "status": "PASS",
+      "detail": {
+        "masterBytes": 51992,
+        "masterHash": "e3ff6b57f67b198f81cb8234aa835c9e5bf1c12c4c6a5a3763a8c60074141619",
+        "roadmapHash": "2c058ae2810f628d7157d2a8e5a5a57476305ee9bacf7dbd195cee56316607d6"
+      }
+    },
+    {
+      "name": "All 77 original sections retain exact boundaries, headings and hashes",
+      "status": "PASS",
+      "detail": { "reviewedSections": 77, "scopeOverrides": [64, 76] }
+    },
+    {
+      "name": "CSV is a lossless public view of the reviewed mapping",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "Private original is ignored and not tracked or copied to public",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "Future gates keep actual results and human reviews empty",
+      "status": "PASS",
+      "detail": { "criteria": 64, "numericalSourceLines": 48 }
+    },
+    {
+      "name": "Every numerical requirement has M/C/R provenance and known criterion IDs",
+      "status": "PASS",
+      "detail": { "M": 19, "C": 6, "R": 15 }
+    },
+    {
+      "name": "All 22 candidate records include actual decision and compatibility boundaries",
+      "status": "PASS",
+      "detail": { "records": 22, "installationPerformed": false }
+    },
+    {
+      "name": "Recorded minimal startup actually succeeded and retained MathML",
+      "status": "PASS",
+      "detail": { "syntax": 2, "http": 4, "leanInvoked": false }
+    },
+    {
+      "name": "Current lock and every code/data/build file match the frozen source manifest",
+      "status": "PASS",
+      "detail": {
+        "files": 575,
+        "sourceManifestHash": "734cfcb8c5128e73b79461ac5da961677da61108dd36d625aeeae5375fa39010"
+      }
+    },
+    {
+      "name": "Baseline log copies retain the exact recorded checks and sanitized hashes",
+      "status": "PASS",
+      "detail": {
+        "copiedLogs": 6,
+        "exitCodeSource": "root explicitly reported; not inferred from empty output"
+      }
+    },
+    {
+      "name": "Phase0 report contains all required evidence and does not approve later phases",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "Report files do not leak the absolute local home path",
+      "status": "PASS",
+      "detail": null
+    }
+  ]
+}

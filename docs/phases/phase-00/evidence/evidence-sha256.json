@@ -1,0 +1,190 @@
+{
+  "recordedAt": "2026-09-09T19:00:13.977Z",
+  "excludes": [
+    "this manifest (self reference)",
+    "docs/phase-status.json (shared phase index, Phase0 semantics checked above)",
+    "ignored artifacts and private Master"
+  ],
+  "files": [
+    {
+      "path": "docs/acceptance-criteria.md",
+      "bytes": 8119,
+      "sha256": "d7ab0fd110e87f93ef170da006a0c2627455751a36d108f694a1e7b16dadfd17"
+    },
+    {
+      "path": "docs/adr/0001-reuse-and-evidence-boundaries.md",
+      "bytes": 2239,
+      "sha256": "863b6d9fd14cce98b356effc423f82eb797b0a3792eb01c9a76dcffb63f6a6fe"
+    },
+    {
+      "path": "docs/adr/0002-tool-candidates.md",
+      "bytes": 24208,
+      "sha256": "53aede0a7dd0506b93079252256bcc87ccc77521245ea6b9c7680f60b31ec2b5"
+    },
+    {
+      "path": "docs/adr/0003-static-lean-boundary.md",
+      "bytes": 2059,
+      "sha256": "f33e3187d554d141e64d338d1b89a664a8268ea63cbf9da1ec5bb074e6f633b7"
+    },
+    {
+      "path": "docs/architecture-plan.md",
+      "bytes": 6497,
+      "sha256": "e9b6ada61945da633f4cf0d9e3a50960505547d7f95b9c7418622ec7be8f0707"
+    },
+    {
+      "path": "docs/assumptions.md",
+      "bytes": 7557,
+      "sha256": "0ce4cc2039ec74e6ffe15057de8ee96ad1190e94298e678e7931782a927f0858"
+    },
+    {
+      "path": "docs/benchmarks/environment.json",
+      "bytes": 4045,
+      "sha256": "cef96dd7f0590f694ac9193c12a35543ac841f3261b2afc393f532b6116a24e4"
+    },
+    {
+      "path": "docs/current-state.md",
+      "bytes": 9287,
+      "sha256": "4380b49c35b01daec223bdf2053a254ddb8eb04873d648d9c8b9486b2418af1b"
+    },
+    {
+      "path": "docs/phases/phase-00/acceptance.json",
+      "bytes": 11195,
+      "sha256": "060c9929681aa0732654d218dbccccac4e93f68d373f970a499ee7480bc3db23"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/audit-local.mjs",
+      "bytes": 11230,
+      "sha256": "6130ffb86b7171f8a2c2b80455a91b800577a4778749817202bdbcc8f9ad4c19"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/audit-official.mjs",
+      "bytes": 6389,
+      "sha256": "8bd4efef1bf9d568864c71beff62b4bba919ad7d7f6d9482560e88c5ce498670"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/baseline-build.log",
+      "bytes": 2182,
+      "sha256": "62b7f04c5ca27848a6b25e2b5358687e9a9b17355418b56a9e32334b8958788a"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/baseline-checks.json",
+      "bytes": 4577,
+      "sha256": "eb4794484591cc66b8a1fb78f62e93404d3b6123fef3cb736a65faf53696a5dc"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/baseline-content-checks.log",
+      "bytes": 245,
+      "sha256": "850e8380c820f73b3349e5cedb80e8d5444053841aa1d4bf3e07b744cabeee9c"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/baseline-knowledge-checks.log",
+      "bytes": 74,
+      "sha256": "7b10b82a8658490bce52d2f32e181b9fd2b20631fb88bdf55395236dcf4736ba"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/baseline-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/baseline-unit-tests.log",
+      "bytes": 19856,
+      "sha256": "faf6d6613fe5269b801938e3924aef9237190d81b97e18b92264bef51aef21e4"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/baseline-upstream.log",
+      "bytes": 364,
+      "sha256": "cda5147c8a3ae05f132bda5b4264bde388f29cbdc18d9d3ef43b9f255385d9d3"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/catalog-tools.mjs",
+      "bytes": 17032,
+      "sha256": "bd00de36661db1cb4911108940d67f03be257bc5177c0a58a22875d1ce4c6a5e"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/finalize-report.mjs",
+      "bytes": 15480,
+      "sha256": "12ea4d07cde387d5c9314941ad8844d8adbc972a55f6dc9ed772c02554b77561"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/future-criteria.json",
+      "bytes": 65659,
+      "sha256": "687f01c7076fe3253372da88a824ca56b74dfd2d9bcb8ba2e54849eeb8f3f7ec"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/input-resolution.json",
+      "bytes": 881,
+      "sha256": "146b60c983e696c29266d9c3078270e76aa5d168ed2c2570376d1205fcfda314"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/local-audit.json",
+      "bytes": 84100,
+      "sha256": "f111619b81f17d1599f76abbc4fb3b90869ecadd2bb9d395babae237b7f0745d"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/master-mapping-review.json",
+      "bytes": 87458,
+      "sha256": "1459292bf4bfd644ab06104fe15f6f9f426ae1f9bfb70e334e908ddd74f19b5e"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/master-review.mjs",
+      "bytes": 18073,
+      "sha256": "d11f668327f0a613f5f93620f96487e2b3b67f4f6129388efed8938863ac8dfd"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/numeric-gates.json",
+      "bytes": 25009,
+      "sha256": "cb4931f375fd4a8b05bd379686f2f6538b376f9ca702025ba7ac985f60375b6b"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/official-research.json",
+      "bytes": 42919,
+      "sha256": "29447cacdf8fb3aeb693bd8529780e7ca488fef20bc3ba19a03a8749c8b43557"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/quantitative-origins.json",
+      "bytes": 28270,
+      "sha256": "27e19f89a51cd2836193fbd3758387538830d14eec22de9a98982d6e16e664c1"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/register-contract.mjs",
+      "bytes": 8328,
+      "sha256": "2d555f943da71e5fa4bc095ffce98d614031d5a00d0a7873a31272ad934e59cd"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/register-quantities.mjs",
+      "bytes": 10041,
+      "sha256": "feae803883739623a7445987ff7dd828e405e87624fed48b5bc24a834741ec78"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/source-file-hashes.json",
+      "bytes": 101932,
+      "sha256": "5af7b682eb0df7a3109d9a94a376a5af612b31d56b1620a8d94ec1af942911ea"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/tool-candidates.json",
+      "bytes": 30440,
+      "sha256": "4df0ceda67aad57ee939b62ae12c232dcb3a67dc8f079f506e07b1243800d3ba"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/validate-phase-zero.mjs",
+      "bytes": 13655,
+      "sha256": "2670332ed85f2fc1fe1fbb7ffbcafd0fefb13ee09f0d47ea50c86d8bce33142a"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/validation-report.json",
+      "bytes": 2776,
+      "sha256": "625f4b442bc605239f7b07fb9525dcc3bb51289b00251b88790645b24483cb16"
+    },
+    {
+      "path": "docs/phases/phase-00/handoff.md",
+      "bytes": 6577,
+      "sha256": "744da3f2eddf8325df0f829569620ad948d09cc258f20bcc09bb6b1b8567ac01"
+    },
+    {
+      "path": "docs/requirements-traceability.csv",
+      "bytes": 54258,
+      "sha256": "91b60c0036da3b9be7e4afd8928a798f3d282d357786ebeca60adb75fb122858"
+    }
+  ]
+}

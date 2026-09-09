@@ -1,0 +1,650 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-09-10",
+  "status": "PASS",
+  "classification_acquisition": {
+    "msc": {
+      "official_total": 63,
+      "acquired": 63,
+      "mapped": 63,
+      "snapshot": "ontology/benchmarks/msc2020-level1.json"
+    },
+    "arxiv": {
+      "official_total": 32,
+      "acquired": 32,
+      "mapped": 32,
+      "snapshot": "ontology/benchmarks/arxiv-math.json"
+    }
+  },
+  "counts": {
+    "canonical_nodes": 121,
+    "volume_one_substantive": 94,
+    "frontiers_unique": 24,
+    "source_records": 49,
+    "outline_placements": 138
+  },
+  "source_coverage": {
+    "verified_nodes": 94,
+    "total": 94
+  },
+  "frontier_audit": [
+    {
+      "stable_id": "math.frontier.inner-models",
+      "region": "math.region.foundations-logic",
+      "source_ids": ["src.vimt2024", "src.steel-jmm2024"],
+      "source_groups": ["event.vimt2024", "lecture.steel-jmm2024"],
+      "node_sha256": "f79619af3f2eca3bf9f9f196c8a1421ca29c0c3ad01ad5a531c9216e4c7a5f74",
+      "findings": "Vienna is a dedicated 2024 research workshop; Steel's separately recorded JMM tutorial is a second activity group. Both explicitly concern inner models/large cardinals. Tutorial content is evidence of an active direction, not an independently verified new theorem.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "ontology integration agent",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.model-theoretic-tameness",
+      "region": "math.region.foundations-logic",
+      "source_ids": ["src.mfo-model-theory2023", "src.moconja-tanovic2026"],
+      "source_groups": ["event.mfo2302", "work.moconja-tanovic-2412.20589"],
+      "node_sha256": "32d6255000426f9734633029e8fc2540b173a153c229d2c4b98001af9ee8a41f",
+      "findings": "The MFO programme and the independently authored Moconja–Tanović v2 paper concern model-theoretic tameness. The 2026 revision is read as an actual revised research item, not a crawler timestamp.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "ontology integration agent",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.higher-categorical-models",
+      "region": "math.region.categories-higher",
+      "source_ids": ["src.ara-polygraphs2025", "src.rasekh-higher2024"],
+      "source_groups": [
+        "work.ara-burroni-guiraud-malbos-metayer-mimram",
+        "work.rasekh-higher-category"
+      ],
+      "node_sha256": "5fc831aa106dbf6d4d6b91257c0df2a5af196e18474d54c0525985031737b544",
+      "findings": "The polygraphs monograph and Rasekh's published construction are separate author groups. They study different models/coherence questions within higher-category theory; the title intentionally does not equate strict and weak higher categories.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "ontology integration agent",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.cubical-univalence",
+      "region": "math.region.categories-higher",
+      "source_ids": ["src.hott-book", "src.cubical-boundary2026"],
+      "source_groups": ["work.univalent-foundations-book", "work.dore-cavallo-mortberg-boundary"],
+      "node_sha256": "e4229ed33f2b1fbf996ef0b0a828c5db1881fa68242ba02580e5a896102c48fc",
+      "findings": "The HoTT book is the established conceptual source; the 2026 cubical boundary-filling paper supplies recent research. Higher structures and univalence justify cross-placement in categories, logic and topology. Undecidable general Kan solving is not presented as solved.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "ontology integration agent",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.representation-categorification",
+      "region": "math.region.algebra-representation",
+      "source_ids": ["src.columbia-super2023", "src.rui-song2023"],
+      "source_groups": ["event.columbia-super2023", "work.rui-song-brauer"],
+      "node_sha256": "eda7c2e7412aea549397ab9f4bed2eeae00b88ed2e3478b3ee79d6be175b63e0",
+      "findings": "The Columbia programme and Rui–Song paper are separate contributions. They explicitly use representation categories and categorification; characteristic restrictions in the paper are retained in its summary.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "ontology integration agent",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.modular-blocks",
+      "region": "math.region.algebra-representation",
+      "source_ids": ["src.brauer-height2024", "src.mfo-tensor2023"],
+      "source_groups": ["work.malle-navarro-schaeffer-fry-tiep", "event.mfo2338a"],
+      "node_sha256": "b5f8541021b4f41065e98f59220a6099ee1ea20f5de5b5d4bac24df78c356e19",
+      "findings": "The Brauer article and independent tensor-triangular workshop support modular representation research. Brauer's Height Zero Conjecture is completed in the cited result, so the direction is blocks/methods rather than an allegedly still-open named conjecture.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "ontology integration agent",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.prismatic-cohomology",
+      "region": "math.region.number-arithmetic",
+      "source_ids": ["src.bhatt-scholze2022", "src.tsuji-ias2024"],
+      "source_groups": ["work.bhatt-scholze-prisms", "work.tsuji-q-higgs"],
+      "node_sha256": "8e73794bc0827bc95ee45ffd56fc763dd8ba76c4194632aa20ac7877a4ce5531",
+      "findings": "The foundational published paper and Tsuji's distinct q-Higgs/crystal work have independent research content. The IAS abstract was actually read even though a later optional raw-HTTP corroboration returned403. Publisher MSC metadata on the Annals page appears unrelated and was deliberately not used.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "ontology integration agent",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.local-langlands-geometrization",
+      "region": "math.region.number-arithmetic",
+      "source_ids": ["src.scholze-motivic2025", "src.imai-langlands2024"],
+      "source_groups": ["work.scholze-motivic-langlands", "work.imai-langlands-survey"],
+      "node_sha256": "860367bbbb67f88bf6898b0f7f887a4a283a036e78543d7841eea3846b4f564d",
+      "findings": "Scholze's motivic extension and Imai's independent exposition provide two source groups. The direction is local Langlands geometrization; this is not a claim to have independently verified or universally completed all Langlands correspondences.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "ontology integration agent",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.birational-boundedness",
+      "region": "math.region.algebraic-geometry",
+      "source_ids": ["src.mfo-birational2024", "src.birkar-polarised2023"],
+      "source_groups": ["event.mfo2412b", "work.birkar-polarised"],
+      "node_sha256": "f8a8fbb654392b12d847a63631f0fadbe151ea4e580a841c0e509a814a407e9b",
+      "findings": "The MFO research programme and Birkar's paper independently support birational geometry/boundedness. Hypotheses concerning singularities and positivity are preserved in the summary; the direction is not merged into canonical-metric geometry.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "ontology integration agent",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.derived-sheaf-moduli",
+      "region": "math.region.algebraic-geometry",
+      "source_ids": ["src.porta-teyssier2025", "src.casals-li2024"],
+      "source_groups": ["work.porta-teyssier-stokes-moduli", "work.casals-li-microlocal"],
+      "node_sha256": "572acd49726681f2bbce13c0839e21afe01bfd849189056bfec6509ffbc1654e",
+      "findings": "Porta–Teyssier and Casals–Li are separate author groups studying derived sheaf-related moduli. The Stokes paper split was checked against the current version; only the correct successor provides derived-moduli evidence.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "ontology integration agent",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.chromatic-k-theory",
+      "region": "math.region.topology-homotopy",
+      "source_ids": ["src.chromatic-null2022", "src.ramzi-noshift2026"],
+      "source_groups": ["work.burklund-schlank-yuan-nullstellensatz", "work.ramzi-noshift"],
+      "node_sha256": "bb7735380f9fc617b7a9587f20ce933cb1584ca88734107630c833263b54be7a",
+      "findings": "The Nullstellensatz/redshift and Ramzi's categorical noshift paper are distinct contributions. The difference between E-infinity rings and rigid stable categories is explicit, preventing a false claim of contradiction or a universal redshift theorem.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "ontology integration agent",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.floer-homotopy",
+      "region": "math.region.topology-homotopy",
+      "source_ids": ["src.mit-floer2023", "src.abouzaid-princeton2023"],
+      "source_groups": ["event.mit-juvitop2023", "event.princeton-minerva2023"],
+      "node_sha256": "1cb426fad2599998ed6308dadcc5a269546e1cf48755f71005fc1d2bbfcac1a2",
+      "findings": "MIT's programme and Princeton's Minerva lectures are separately organized activities. Both explicitly connect Floer theory and generalized/stable homotopy; work in progress in the lecture abstract is not relabelled complete.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "ontology integration agent",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.ricci-flow-singularities",
+      "region": "math.region.geometry",
+      "source_ids": ["src.ias.sesum-ricci-2024", "src.mfo.differential-geometry-2023"],
+      "source_groups": [
+        "institute-for-advanced-study",
+        "mathematisches-forschungsinstitut-oberwolfach"
+      ],
+      "node_sha256": "3d1fcd7eec62dece14fd2ec82db5ea9e1713b2df188f7d2cc523709b6f582d9e",
+      "findings": "研究几何演化在曲率集中处的局部模型、孤立子与极限几何。所选证据覆盖广义柱面奇性和 Ricci 孤立子研究，不宣称已经分类所有奇性。 Independent originating source groups and dated scientific activity were reviewed by the delegated source-research agent; integrating agent cross-checked the submitted source locators, scopes and group identities.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "delegated source-research agent; integrating metadata audit",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.kahler-einstein-metrics",
+      "region": "math.region.geometry",
+      "source_ids": ["src.icm2022.berman-emergent-geometry", "src.mfo.differential-geometry-2023"],
+      "source_groups": [
+        "icm2022-berman-emergent-complex-geometry",
+        "mathematisches-forschungsinstitut-oberwolfach"
+      ],
+      "node_sha256": "a8a5448f740719280d3107e2c2c4c812a1a8d9771b42dcaee76ee9a3ebeca25f",
+      "findings": "以典范度量的存在、变化及构造联系复几何、Fano 簇与概率方法。与 Ricci 流奇性保留交叉联系，但作为不同研究问题登记。 Independent originating source groups and dated scientific activity were reviewed by the delegated source-research agent; integrating agent cross-checked the submitted source locators, scopes and group identities.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "delegated source-research agent; integrating metadata audit",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.nonlinear-dispersive-long-time-dynamics",
+      "region": "math.region.analysis-pde",
+      "source_ids": ["src.ias.mmt-report-2024", "src.park.inls-2023"],
+      "source_groups": ["institute-for-advanced-study", "park-inls-arxiv-2307.07204"],
+      "node_sha256": "f5688966d6e20abd99a2011b0ed705950e8a263c6d104dfc9274a3b6b88ae7b6",
+      "findings": "围绕非线性色散方程的长期正则性、Sobolev 范数增长和散射展开。区分已有定理与报告中的待研究问题，不将所有模型视为具有相同散射行为。 Independent originating source groups and dated scientific activity were reviewed by the delegated source-research agent; integrating agent cross-checked the submitted source locators, scopes and group identities.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "delegated source-research agent; integrating metadata audit",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.fluid-pde-singularities-dynamics",
+      "region": "math.region.analysis-pde",
+      "source_ids": ["src.ias.elgindi-euler-2023", "src.simons.wave-turbulence-2025"],
+      "source_groups": ["institute-for-advanced-study", "simons-foundation"],
+      "node_sha256": "aaf4088897c1548aea84340a9f352ea95767ff82e8685fd9f8b06481c8393465",
+      "findings": "研究 Euler 等流体方程中稳定性、细丝化、范数增长及奇性机制，并连接计算辅助证明。这里不声称解决 Navier–Stokes 正则性问题。 Independent originating source groups and dated scientific activity were reviewed by the delegated source-research agent; integrating agent cross-checked the submitted source locators, scopes and group identities.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "delegated source-research agent; integrating metadata audit",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.singular-stochastic-pdes",
+      "region": "math.region.probability-statistics",
+      "source_ids": ["src.slmath.spde-program-2025", "src.sissa.duch-spde-2026"],
+      "source_groups": ["slmath-spde-program-2025", "sissa-epfl-duch-course-2026"],
+      "node_sha256": "8a05e8bfe93aae93b2672f5cb588fb4b2e47621ff6d7837dd3b7183ef7db106e",
+      "findings": "研究粗糙噪声导致的非线性乘积、解理论与重整化，并与普适性和随机量子化相连。研究课程用于证明方向活跃，不单独作为新定理证明。 Independent originating source groups and dated scientific activity were reviewed by the delegated source-research agent; integrating agent cross-checked the submitted source locators, scopes and group identities.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "delegated source-research agent; integrating metadata audit",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.high-dimensional-statistical-inference",
+      "region": "math.region.probability-statistics",
+      "source_ids": ["src.mfo.high-dimensional-extremes-2024", "src.simons.learning-universe-2024"],
+      "source_groups": ["mathematisches-forschungsinstitut-oberwolfach", "simons-foundation"],
+      "node_sha256": "93e4490c07ba874e3aff289c0dd87f5b16b66ca63213112320a454036d340ef2",
+      "findings": "研究维数增长、稀疏结构或不可显式计算似然时的统计推断。此处选取高维极值与模拟驱动推断为两个有证据的活动切面，不把应用案例当作整个统计领域的代表。 Independent originating source groups and dated scientific activity were reviewed by the delegated source-research agent; integrating agent cross-checked the submitted source locators, scopes and group identities.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "delegated source-research agent; integrating metadata audit",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.extremal-probabilistic-combinatorics",
+      "region": "math.region.combinatorics-discrete",
+      "source_ids": ["src.ams.jmm-extremal-2025", "src.slmath.graph-theory-2025"],
+      "source_groups": ["american-mathematical-society-jmm", "slmath-extremal-combinatorics-2025"],
+      "node_sha256": "933e493c9f30c2939466429f57a07cb28b2867aacae01ce31ee2c3b5d2b8d48d",
+      "findings": "以满足给定性质的组合对象的极端规模、典型性质及图结构为核心。两个独立研究活动都明确讨论近年问题与研究报告，而不是仅提供学科目录名称。 Independent originating source groups and dated scientific activity were reviewed by the delegated source-research agent; integrating agent cross-checked the submitted source locators, scopes and group identities.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "delegated source-research agent; integrating metadata audit",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.additive-combinatorics",
+      "region": "math.region.combinatorics-discrete",
+      "source_ids": ["src.ias.kelley-meka-progressions-2023", "src.stanford.pham-additive-2024"],
+      "source_groups": ["institute-for-advanced-study", "stanford-mathematics"],
+      "node_sha256": "eaa61886924f587886c83f6885c8ce618b1453d250dc4de23d6527ea2beef11d",
+      "findings": "研究算术级数、小倍增集合与群外组合结构中的定量定理。三项等差数列界与小倍增结构推广是不同工作，不重复登记为两个宏区节点。 Independent originating source groups and dated scientific activity were reviewed by the delegated source-research agent; integrating agent cross-checked the submitted source locators, scopes and group identities.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "delegated source-research agent; integrating metadata audit",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.tensor-network-quantum-states",
+      "region": "math.region.mathematical-physics",
+      "source_ids": ["src.ipam.tensor-networks-2024", "src.aps.watanabe-ueda-tn-2024"],
+      "source_groups": ["ipam-ucla", "watanabe-ueda-tensor-network-2024"],
+      "node_sha256": "d123ff4d7c3d4dd27de3966e9bb4fa106eff8077a0a70ad6931e7574fd742601",
+      "findings": "利用张量网络组织量子多体态与纠缠结构，并研究网络结构选择和可计算性。保留其数学物理与科学计算的交叉性，但只登记一个规范方向。 Independent originating source groups and dated scientific activity were reviewed by the delegated source-research agent; integrating agent cross-checked the submitted source locators, scopes and group identities.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "delegated source-research agent; integrating metadata audit",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.rigorous-liouville-cft",
+      "region": "math.region.mathematical-physics",
+      "source_ids": ["src.ihes.guillarmou-lcft-2022", "src.ang.quantum-zipper-2023"],
+      "source_groups": [
+        "institut-hautes-etudes-scientifiques",
+        "ang-quantum-zipper-arxiv-2301.13200"
+      ],
+      "node_sha256": "bd341cea95bf92d27bda401c35d6c97ed57a1d729226da7adcbb19ffa466efef",
+      "findings": "用概率、分析与曲面几何建立 Liouville 共形场论及其与量子曲面、SLE 的联系。登记明确的严格理论方向，不将物理启发关系自动标为证明。 Independent originating source groups and dated scientific activity were reviewed by the delegated source-research agent; integrating agent cross-checked the submitted source locators, scopes and group identities.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "delegated source-research agent; integrating metadata audit",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.inverse-problems-wave-imaging",
+      "region": "math.region.applied-computational",
+      "source_ids": ["src.ini.multiple-wave-scattering-2023", "src.aims.cheng-dong-elastic-2023"],
+      "source_groups": ["isaac-newton-institute", "cheng-dong-jilin-elastic-inverse-scattering"],
+      "node_sha256": "07ff66b864b78ed3957eba95ebb6a5cc72254d312dbaafddd9c39505e9aa3ce8",
+      "findings": "研究由散射或测量数据恢复障碍物、介质及材料结构，兼顾唯一性与重建算法。波成像作为应用入口，保留问题本身的数学条件。 Independent originating source groups and dated scientific activity were reviewed by the delegated source-research agent; integrating agent cross-checked the submitted source locators, scopes and group identities.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "delegated source-research agent; integrating metadata audit",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    },
+    {
+      "stable_id": "math.frontier.geometric-numerical-integration",
+      "region": "math.region.applied-computational",
+      "source_ids": [
+        "src.cambridge.blanes-casas-murua-splitting-2024",
+        "src.munthe-kaas.symmetric-integrators-2023"
+      ],
+      "source_groups": [
+        "blanes-casas-murua-splitting-methods",
+        "munthe-kaas-symmetric-space-integrators"
+      ],
+      "node_sha256": "7fb3cb9ede474344b6b3be7ed99c2069d380fc76e012bc13db004153862f6c15",
+      "findings": "研究保留几何结构的时间离散方法，当前证据覆盖分裂与复合算法以及对称空间上的积分器。不是声称整个几何积分领域首次出现于近五年。 Independent originating source groups and dated scientific activity were reviewed by the delegated source-research agent; integrating agent cross-checked the submitted source locators, scopes and group identities.",
+      "status": "PASS",
+      "reviewer_type": "AI",
+      "reviewer_role": "delegated source-research agent; integrating metadata audit",
+      "human_reviewer": null,
+      "reviewed_date": "2026-09-10"
+    }
+  ],
+  "sampling": {
+    "selection": "ontology/benchmarks/sample-selection.json",
+    "seed": "phase-01-2026-09-10-v1",
+    "population_count": 70,
+    "sampled_count": 17,
+    "sampled_fraction": 0.24285714285714285,
+    "status": "PASS",
+    "reviews": [
+      {
+        "stable_id": "math.msc.00",
+        "stratum": "math.region.foundations-logic|depth-2",
+        "source_ids": ["src.msc2020", "src.arxiv-math"],
+        "node_sha256": "aa72b92c01975550e5db8a31a14899c1332365949180d11741471d12968991ef",
+        "findings": "Official MSC 00 explicitly includes overarching topics and collections; arXiv GM maps here as general-interest material. This remains an explicitly general subject and not a catch-all destination for other codes. Its primary macroregion is an editorial placement, not a claim that all collections are logic.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.msc.05",
+        "stratum": "math.region.combinatorics-discrete|depth-2",
+        "source_ids": ["src.msc2020", "src.arxiv-math"],
+        "node_sha256": "1f5a41f5bdcb4790e26fb19145830ba814b49c5479e2ed5ba01a41e2509dddb4",
+        "findings": "The MSC title is Combinatorics. arXiv CO names graphs, enumeration, Ramsey theory and discrete mathematics. The single canonical node covers these at classification granularity; frontiers are distinct children.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.msc.22",
+        "stratum": "math.region.algebra-representation|depth-2",
+        "source_ids": ["src.msc2020"],
+        "node_sha256": "313831dbdc07d7b0cf760742a54eabcc43a3f0962693104fe289d4ddb17ec607",
+        "findings": "Official MSC 22 is topological groups and Lie groups. The Chinese title preserves both. It is not renamed Lie algebras or merged with all abstract group theory; macroregion placement under algebra is navigational.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.msc.11",
+        "stratum": "math.region.number-arithmetic|depth-2",
+        "source_ids": ["src.msc2020", "src.arxiv-math"],
+        "node_sha256": "af1ddb200abb3822114f5c84ea1e7e979b416017cdb0d99feed52fdda0bdd8dc",
+        "findings": "MSC 11 and arXiv NT agree on number-theoretic scope; the arXiv description explicitly includes arithmetic geometry. Arithmetic frontiers therefore have a specific number-theory parent without becoming book-based categories.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.msc.14",
+        "stratum": "math.region.algebraic-geometry|depth-2",
+        "source_ids": ["src.msc2020", "src.arxiv-math"],
+        "node_sha256": "4a416f258f9bb06525ebd4457ffa4bbde9616835b6d9d139f3da32130c705c45",
+        "findings": "MSC 14 and arXiv AG identify algebraic geometry. arXiv explicitly mentions schemes, stacks and moduli, supporting the derived-moduli child as a mathematical topic, without claiming all derived geometry is contained in classical schemes.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.msc.18",
+        "stratum": "math.region.categories-higher|depth-2",
+        "source_ids": ["src.msc2020", "src.arxiv-math"],
+        "node_sha256": "eec9bb35625108cd375f4b4b00ad2cfd959a295be64ca9cb24fcb8d76c1fbab2",
+        "findings": "The MSC heading contains both category theory and homological algebra; the canonical Chinese heading retains both. arXiv CT is mapped by coverage rather than an exact equivalence of two taxonomies.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.msc.55",
+        "stratum": "math.region.topology-homotopy|depth-2",
+        "source_ids": ["src.msc2020", "src.arxiv-math"],
+        "node_sha256": "d5974a06e6e45ccea2fa5d2c37f6b49c14e60f49c4fbe7dd0067191d8c118e3e",
+        "findings": "MSC 55 is algebraic topology; arXiv AT explicitly includes homotopy theory. It is distinct from MSC 54 general topology and MSC 57 manifolds/cell complexes. Chromatic and Floer homotopy source relations do not assert prerequisite order.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.msc.49",
+        "stratum": "math.region.analysis-pde|depth-2",
+        "source_ids": ["src.msc2020", "src.arxiv-math"],
+        "node_sha256": "f90127f28e9b8833f7c10e230050ef075dd2eef3c1f0f6561d72db94645f87ab",
+        "findings": "The full MSC label includes calculus of variations, optimal control and optimization. arXiv OC is distributed across this node, MSC 90, MSC 91 and MSC 93, retaining operations research, game theory and systems/control scope.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.msc.45",
+        "stratum": "math.region.analysis-pde|depth-2",
+        "source_ids": ["src.msc2020"],
+        "node_sha256": "31c7265a365025d508d45e534928b37003bccd02ca46e2e6c824b38c25c0ed17",
+        "findings": "The official heading is integral equations, preserved separately from integral transforms (44), ordinary differential equations (34) and PDE (35). No unsupported identification was introduced.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.msc.53",
+        "stratum": "math.region.geometry|depth-2",
+        "source_ids": ["src.msc2020", "src.arxiv-math"],
+        "node_sha256": "87fda643ed4188de2d0eae7d76a0195ec6bc5c171cc70ed0269e4d107ba04822",
+        "findings": "Differential geometry is an official MSC and arXiv DG heading. The geometric region is an editorial container; the symplectic geometry subtopic is supported independently by arXiv SG.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.msc.60",
+        "stratum": "math.region.probability-statistics|depth-2",
+        "source_ids": ["src.msc2020", "src.arxiv-math"],
+        "node_sha256": "641c8d845229991529a633f787c6114f58439b0fa149f57d1a62ebcbdda8de0f",
+        "findings": "Probability and stochastic processes are both retained from MSC 60. arXiv PR explicitly lists probability and stochastic models. Statistics (62) remains a separate node, rather than a synonym.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.msc.93",
+        "stratum": "math.region.applied-computational|depth-2",
+        "source_ids": ["src.msc2020", "src.arxiv-math"],
+        "node_sha256": "a799812beb046e39fbd9547f3c4f0f0cd20600ce736c846709b4db6f762e2104",
+        "findings": "Systems theory and control are retained exactly in scope from MSC 93. The arXiv OC mapping includes this specific target alongside optimization and mathematical programming; the source does not imply one universal control theorem.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.msc.81",
+        "stratum": "math.region.mathematical-physics|depth-2",
+        "source_ids": ["src.msc2020"],
+        "node_sha256": "4935388da22c4dea1b6d7ed7cc6811a22f13c5162fe98341c295f67f755ef33f",
+        "findings": "The official subject is quantum theory, not quantum computing alone. It remains a mathematics-classification subject under mathematical physics, with no claim that all physical descriptions are rigorous proofs.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.msc.78",
+        "stratum": "math.region.mathematical-physics|depth-2",
+        "source_ids": ["src.msc2020"],
+        "node_sha256": "26b6e84b692ff4885153ae240d4452e669a99bc8ceb3ba41a4b79eb1c81ebe48",
+        "findings": "The MSC heading jointly names optics and electromagnetic theory; neither portion is omitted by the Chinese heading. It is retained in the mathematics classification because MSC includes it, not because it is a purely mathematical field.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.subject.representation-theory",
+        "stratum": "math.region.algebra-representation|depth-3",
+        "source_ids": ["src.arxiv-math"],
+        "node_sha256": "5b30768c73a2fc57794196f7f6671b8d70d728a166424bc2f48c88f7d39ff34b",
+        "findings": "arXiv RT explicitly covers linear representations of groups/algebras and Lie theory. Group and algebra parent placements identify one subject; repeated outline placements never create a second identity.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.subject.spectral-theory",
+        "stratum": "math.region.analysis-pde|depth-3",
+        "source_ids": ["src.arxiv-math"],
+        "node_sha256": "ea1f680cc1aa6ae395044492a9dd28bfaac69a186a3b05afd3ece17e9848613a",
+        "findings": "arXiv SP describes differential, integral, discrete and random operators. Placement under operator theory is justified; this is not limited to matrix eigenvalues or quantum mechanics alone.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      },
+      {
+        "stable_id": "math.subject.metric-geometry",
+        "stratum": "math.region.geometry|depth-3",
+        "source_ids": ["src.arxiv-math"],
+        "node_sha256": "01e52777239ba945c9690a615947604fd687f56930d1545ec601714ccdc2f166",
+        "findings": "arXiv MG includes Euclidean, hyperbolic, convex, coarse and comparison geometry. The metric-geometry node is supported by that label and is not silently substituted for the different notion of a metric-space definition.",
+        "status": "PASS",
+        "reviewer_type": "AI",
+        "reviewer_role": "ontology integration agent",
+        "human_reviewer": null,
+        "reviewed_date": "2026-09-10"
+      }
+    ]
+  },
+  "deduplication": [
+    {
+      "case": "MSC and arXiv overlap",
+      "decision": "Official classifications map to one subject identity where scopes agree; compound scopes may map to several subjects. The mapping is not an assertion of equality.",
+      "retired_ids": []
+    },
+    {
+      "case": "arXiv current aliases",
+      "decision": "math.IT and math.MP stay in the 32-category denominator, while cs.IT and math-ph are not duplicate nodes."
+    },
+    {
+      "case": "Stokes paper split",
+      "decision": "Use arXiv:2504.05360 for derived moduli; do not count old 2401.12335v1 and its successor as independent works."
+    }
+  ],
+  "gaps": [
+    {
+      "code": "GRANULARITY_BOUNDARY",
+      "detail": "MSC first-level and arXiv category coverage is complete for the frozen lists; this is not coverage of every MSC lower-level code or every mathematical topic."
+    },
+    {
+      "code": "NO_HUMAN_REVIEW",
+      "detail": "All present source/label review is AI; no mathematical proof or human expert review is claimed."
+    }
+  ],
+  "prior_audit_preserved": {
+    "status": "PARTIAL"
+  },
+  "errors_and_corrections": [
+    {
+      "id": "cross-membership-specificity",
+      "stage": "independent AI integration review",
+      "original_issue": "Early cross-membership explanations used a generic primary-region sentence rather than explaining each target parent.",
+      "correction": "Replace each secondary placement with a target-specific mathematical explanation, including the four multi-parent arXiv subjects.",
+      "expanded_review": "Rechecked every secondary parent across all current multi-parent nodes against its official category description or frontier abstract; no source or title removed from the sample.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "compound-arxiv-scopes",
+      "stage": "independent AI classification review",
+      "original_issue": "Initial math.OC mapping omitted game theory; math.RA mapping omitted explicit lattice, linear-algebra and semigroup scope.",
+      "correction": "Add MSC91 to OC and MSC06/15/20 to RA; add general-overview scope to HO. Clarify mapping as distribution across related specific subjects, not taxonomy equality.",
+      "expanded_review": "Re-read all32 official Mathematics category headings/descriptions, and inspect all compound mappings CA, CV, HO, OC and RA. Preserve the original denominator32 and all failures in this record.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "editorial-context-placement",
+      "stage": "independent AI classification review",
+      "original_issue": "MSC00/01/97 under the foundations navigation region could imply that collections, history and education are branches of logic.",
+      "correction": "Explicitly mark all3 as editorial-context placements with a note denying a mathematical-subdiscipline assertion. No13th required macroregion is invented.",
+      "expanded_review": "Inspect all12 regional placements and preserve official names. Region membership is editorial navigation; detailed node identity remains source-defined.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "source-version-stokes",
+      "stage": "source-candidate review",
+      "original_issue": "Search results retained the old combined title of arXiv:2401.12335, although v2 moved derived moduli to a separate paper.",
+      "correction": "Read current page and successor arXiv:2504.05360; use only successor for derived-moduli evidence, preserving source split as a deduplication decision.",
+      "expanded_review": "Re-read title/version/history for all 10 arXiv primary-source items in the first-six-region pack, plus the superseded Stokes source; the cubical paper's title/version is likewise updated to v5.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "publisher-msc-prisms",
+      "stage": "source-metadata review",
+      "original_issue": "Annals prismatic-cohomology page displays MSC 58C40/35P99, unrelated to the actual abstract.",
+      "correction": "Do not infer mathematical classification from this anomalous metadata; use the official MSC taxonomy and the article's explicit p-adic/formal-scheme abstract.",
+      "expanded_review": "All three publisher-research article scopes in the first-six-region pack were checked using their abstracts rather than blind MSC import (Prisms, Brauer, polarised varieties).",
+      "status": "RESOLVED"
+    }
+  ],
+  "review_scope": "AI audit of topic identity, bilingual labels, classification placement, source independence, publication/activity dates and source scope. No paper's complete proof was audited, no human sign-off exists, and no Lean check ran.",
+  "phase_exit_status": "PARTIAL",
+  "phase_exit_reason": "Data-specific criteria pass independently. The original Master Prompt has now been recovered; final Phase1 exit awaits the current Phase0 acceptance, recorded separately in the phase handoff.",
+  "reviewed_sources_sha256": "45028eb4ca8cd529006f46c46bd7d2fb5f7e4f51a0bc3f4553360af69080e951"
+}

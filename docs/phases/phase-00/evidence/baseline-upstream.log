@@ -1,0 +1,5 @@
+PASS sharp converts an SVG buffer to WebP with Quartz's quality option
+PASS sharp resizes a PNG buffer to a 48 by 48 PNG favicon
+PASS TOML frontmatter parses through Quartz's gray-matter engine interface
+PASS TOML rejects short input beyond an explicit nesting limit with a parse error
+Verified 4 upstream compatibility smoke checks; no files were generated.

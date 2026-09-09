@@ -1,5 +1,9 @@
 # Project brief
 
+## Topic selection and Phase 0 / Phase 1
+
+The current request adds a colored theme checkbox sidebar to the continuous reader. Multi-selection displays a union of unique objects and actual links; the searchable in-scope directory retains access to labels that cannot fit spatially. On phones the controls use a native modal drawer. The separate `atlas.html` scope renders the source-audited mathematical title registry and twelve macroregions, without fabricating personal exposition. Only volume one counts as mathematics; the system/research volumes remain plans. Phase 0 audits capabilities and the 77-section contract, and Phase 1 records official classifications, sources, frontier activity, duplication and review. Their acceptance files govern completion; this UI does not execute later Lean phases.
+
 ## Actual notes in a continuous knowledge field
 
 The current follow-up connects the approved mathematical notes to Topos rather than retaining an isolated demonstration as the main experience. The root and `topos.html` expose existing mathematical objects and complete source notes. Book-independent context and relationship exploration become the default; books remain useful provenance and optional reading routes under `library.html`. The Group demonstration remains separately available at `topos-demo.html`.

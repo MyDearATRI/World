@@ -76,6 +76,7 @@ try {
     "explore.html",
     "topos.html",
     "topos-demo.html",
+    "atlas.html",
     ...knowledge.objects.filter((object) => object.kind === "atom").map((object) => object.href),
     ...(knowledge.aliases ?? []).map((alias) => alias.href),
   ])
@@ -112,6 +113,11 @@ try {
     "static/topos/topos.css",
     "static/topos/index.json",
     "static/topos/demo.json",
+    "static/topos/atlas.json",
+    "static/ontology/math_registry.json",
+    "static/ontology/math_outline.md",
+    "static/ontology/sources.json",
+    "static/ontology/audit.json",
     "static/topos/three-LICENSE.txt",
   ])
   check(

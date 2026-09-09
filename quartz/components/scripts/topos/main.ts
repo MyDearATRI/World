@@ -1,6 +1,7 @@
 import { createRenderer, type CameraState } from "./renderer"
 import { createField, type FieldSnapshot } from "../../../util/topos/field"
-import { deriveContext } from "../../../util/topos/context"
+import { topicContext as deriveContext, topicIDs } from "../../../util/topos/topics"
+import { createTopicSidebar } from "./sidebar"
 import { computeAnnotations, type AnnotationPlacement } from "../../../util/topos/annotations"
 import type { Concept, KnowledgeModel, Lens, Section, ViewState } from "../../../util/topos/types"
 import "../../styles/topos.css"
@@ -65,8 +66,9 @@ async function start() {
   }
   const concepts = new Map(model.concepts.map((c) => [c.id, c])),
     sections = new Map(model.sections.map((s) => [s.id, s]))
-  const published = model.mode === "published"
-  world.dataset.mode = published ? "published" : "demo"
+  const atlas = model.mode === "atlas"
+  const published = model.mode !== "demo"
+  world.dataset.mode = model.mode ?? "demo"
   const siteRoot = new URL("./", location.href)
   const sourceURL = (href: string) => new URL(href, siteRoot).href
   const pendingSections = new Map<string, Promise<void>>()
@@ -95,6 +97,8 @@ async function start() {
     observation: "观察",
     question: "问题",
     concept: "概念",
+    classification: "分类标题",
+    frontier: "前沿方向",
   }
   const typeLabel = (c: Concept) =>
     c.objectKind === "note" ? "完整笔记" : (typeNames[c.mathType ?? c.kind] ?? c.mathType ?? c.kind)
@@ -104,7 +108,9 @@ async function start() {
       : r.provenance === "reference"
         ? "正文引用"
         : r.provenance === "structure"
-          ? "出处关联"
+          ? atlas
+            ? "分类归属"
+            : "出处关联"
           : "原文关系"
   if (model.lenses) {
     const lenses = $(".topos-lenses")
@@ -134,6 +140,13 @@ async function start() {
         : 1,
       trail: [],
       unfolded,
+      topics: hash.has("topics")
+        ? (hash.get("topics") ?? "")
+            .split(",")
+            .filter((id) => model.topics?.some((t) => t.id === id))
+        : atlas
+          ? (concepts.get(focus)?.topicIDs ?? model.topics?.slice(0, 1).map((t) => t.id))
+          : undefined,
     } as ViewState
   }
   let state: ViewState = fromHash(),
@@ -148,6 +161,9 @@ async function start() {
       lens: ["structural", "action", "linear"].includes(view?.lens) ? view.lens : "structural",
       scale: Number.isFinite(view?.scale) ? clamp(view.scale, 0, 3) : 1,
       trail: Array.isArray(view?.trail) ? view.trail.filter((id) => concepts.has(id)) : [],
+      topics: Array.isArray(view?.topics)
+        ? view.topics.filter((id) => model.topics?.some((t) => t.id === id))
+        : undefined,
       unfolded: Array.isArray(view?.unfolded)
         ? view.unfolded
             .filter((u) => sections.has(u.section))
@@ -240,6 +256,37 @@ async function start() {
   const readingScroll = new Map<string, number>(Object.entries(saved?.readingScroll ?? {}))
   const restoringScroll = new Set<string>()
   let pendingAnchor: { concept: string; anchor: string } | undefined
+  const empty = element("section", "topos-topics-empty")
+  empty.append(
+    element("h2", undefined, "选一个主题，开始探索"),
+    element("p", undefined, "从主题栏勾选感兴趣的领域，节点和它们已有的联系会在这里展开。"),
+  )
+  world.append(empty)
+  const sidebar = createTopicSidebar(model, {
+    select(ids) {
+      const visible = topicIDs(model, ids)
+      const added = atlas ? ids.find((id) => !state.topics?.includes(id)) : undefined
+      const nextFocus =
+        added && visible.has(added)
+          ? added
+          : visible.has(state.focus)
+            ? state.focus
+            : ([...visible][0] ?? state.focus)
+      commit({
+        ...state,
+        topics: ids,
+        focus: nextFocus,
+        scale: nextFocus === state.focus ? state.scale : 1,
+        unfolded: state.unfolded.filter((u) => visible.has(u.concept)),
+      })
+    },
+    focus(id) {
+      focus(id)
+      zoom(2.1)
+      labelNodes.get(id)?.focus({ preventScroll: true })
+    },
+  })
+  const isVisible = (id: string) => !context.visibleIDs || context.visibleIDs.includes(id)
 
   const snapshot = () => ({
     time: performance.now(),
@@ -254,13 +301,15 @@ async function start() {
     mode: model.mode ?? "demo",
     objectCount: model.concepts.length,
     modelStats: model.stats,
+    topics: state.topics,
+    visibleIDs: context.visibleIDs ?? model.concepts.map((n) => n.id),
     camera: { ...renderer.view },
     modelSignature,
     nodes: field.nodes.map((n) => ({
       ...n,
       ...renderer.appearance(n, context),
-      screenX: renderer.project(n).x,
-      screenY: renderer.project(n).y,
+      screenX: renderer.project(n).x + world.getBoundingClientRect().left,
+      screenY: renderer.project(n).y + world.getBoundingClientRect().top,
     })),
     relations: context.relations.map((r) => ({
       id: r.id,
@@ -301,6 +350,7 @@ async function start() {
       depth: state.scale.toFixed(2),
     })
     if (state.unfolded.length) params.set("open", state.unfolded.map((u) => u.section).join(","))
+    if (state.topics !== undefined) params.set("topics", state.topics.join(","))
     return `#${params}`
   }
   function remember() {
@@ -326,7 +376,7 @@ async function start() {
     state = next
     context = deriveContext(model, state)
     field.setContext(context)
-    if (push) history.pushState({ topos: serialize() }, "", hash())
+    if (push) history.pushState({ topos: serialize(), toposCanBack: true }, "", hash())
     update()
     wake()
   }
@@ -335,7 +385,7 @@ async function start() {
     pendingAnchor = anchor
       ? { concept: id, anchor: decodeAnchor(anchor.replace(/^#/, "")) }
       : undefined
-    if (id === state.focus) {
+    if (id === state.focus && isVisible(id)) {
       zoom(Math.min(3, state.scale + 0.65))
       return
     }
@@ -345,13 +395,17 @@ async function start() {
       {
         ...state,
         focus: id,
+        topics:
+          state.topics !== undefined && !isVisible(id)
+            ? [...new Set([...state.topics, ...(concepts.get(id)?.topicIDs ?? [])])]
+            : state.topics,
         trail: [...state.trail.filter((x) => x !== id), state.focus].slice(-8),
       },
       true,
     )
     document.title = `${concepts.get(id)!.title} · Knowledge Topos`
     guide.textContent = published
-      ? `${typeLabel(concepts.get(id)!)} · 点击当前对象展开原文，或查找另一个知识点。`
+      ? `${typeLabel(concepts.get(id)!)} · 点击当前对象${atlas ? "查看分类与来源" : "展开原文"}，或查找另一个知识点。`
       : `${concepts.get(id)!.zh}成为当前语境。观察邻域变化，或向内展开解释。`
   }
   function zoom(value: number, push = false) {
@@ -408,11 +462,16 @@ async function start() {
     const a = element("a", "topos-concept")
     a.href = published && concept.href ? sourceURL(concept.href) : `#focus=${concept.id}&depth=1`
     a.dataset.concept = concept.id
+    if (concept.color) a.style.setProperty("--topic-color", concept.color)
     a.setAttribute("aria-label", `${concept.title} · ${concept.zh}`)
     const small = element("span", "concept-zh", published ? typeLabel(concept) : concept.zh),
       title = element("span", "concept-title", concept.title),
       summary = element("span", "concept-summary", concept.summary)
-    const action = element("span", "concept-unfold", published ? "展开原文 ↘" : "展开含义 ↘")
+    const action = element(
+      "span",
+      "concept-unfold",
+      atlas ? "查看来源 ↘" : published ? "展开原文 ↘" : "展开含义 ↘",
+    )
     a.append(small, title, summary, action)
     a.addEventListener("click", (e) => {
       if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return
@@ -434,16 +493,22 @@ async function start() {
     searchFilter = element("select"),
     searchTrigger = element("button", "topos-search-trigger", "查找知识点")
   searchInput.type = "search"
-  searchInput.placeholder = "名称、别名、正文或 LaTeX"
+  searchInput.placeholder = atlas ? "分类名称、英文术语或别名" : "名称、别名、正文或 LaTeX"
   searchInput.setAttribute("aria-label", "搜索公开数学内容")
   searchInput.autocomplete = "off"
   searchInput.dataset.toposSearchInput = "true"
   searchFilter.setAttribute("aria-label", "搜索对象类型")
-  for (const [value, label] of [
-    ["all", "全部对象"],
-    ["atom", "知识点"],
-    ["note", "完整笔记"],
-  ]) {
+  for (const [value, label] of atlas
+    ? [
+        ["all", "全部标题"],
+        ["classification", "分类标题"],
+        ["frontier", "前沿方向"],
+      ]
+    : [
+        ["all", "全部对象"],
+        ["atom", "知识点"],
+        ["note", "完整笔记"],
+      ]) {
     const option = element("option", undefined, label)
     option.value = value
     searchFilter.append(option)
@@ -496,7 +561,9 @@ async function start() {
       terms = query.split(" ").filter(Boolean)
     const matches = searchIndex
       .filter(
-        ({ concept }) => searchFilter.value === "all" || concept.objectKind === searchFilter.value,
+        ({ concept }) =>
+          searchFilter.value === "all" ||
+          (atlas ? concept.mathType : concept.objectKind) === searchFilter.value,
       )
       .map((entry) => ({
         ...entry,
@@ -786,7 +853,7 @@ async function start() {
     })
     header.append(label, close)
     root.append(header)
-    if (published) {
+    if (published && !atlas) {
       const meta = element("div", "topos-source-meta")
       meta.dataset.objectType = concept.mathType ?? concept.kind
       if (concept.sourceStatus)
@@ -867,7 +934,7 @@ async function start() {
       const open = element(
         "button",
         "topos-unfold-button",
-        published ? "展开完整原文" : "展开正式定义",
+        atlas ? "查看标题与来源" : published ? "展开完整原文" : "展开正式定义",
       )
       open.dataset.openSection = formal.id
       open.type = "button"
@@ -876,7 +943,13 @@ async function start() {
     }
     if (state.scale >= 2.7) {
       const related = element("div", "topos-recursive-options")
-      related.append(element("p", undefined, published ? "原文中的联系" : "继续展开相关构造"))
+      related.append(
+        element(
+          "p",
+          undefined,
+          atlas ? "分类与跨区归属" : published ? "原文中的联系" : "继续展开相关构造",
+        ),
+      )
       const targets = context.relations
         .filter((r) => r.source === concept.id || r.target === concept.id)
         .slice(0, 4)
@@ -1027,6 +1100,8 @@ async function start() {
     }
   })
   function update() {
+    sidebar?.update(state.topics, state.focus)
+    empty.hidden = !context.visibleIDs || context.visibleIDs.length > 0
     world.dataset.focus = state.focus
     world.dataset.lens = state.lens
     world.dataset.depth = String(Math.floor(state.scale))
@@ -1040,7 +1115,9 @@ async function start() {
           ? "概念与关系"
           : state.scale < 2.7
             ? published
-              ? "原文与公式"
+              ? atlas
+                ? "标题与来源"
+                : "原文与公式"
               : "定义与公式"
             : "递归展开"
     targetZoom = innerWidth < 600 ? 0.45 + state.scale * 0.065 : 0.79 + state.scale * 0.09
@@ -1072,6 +1149,7 @@ async function start() {
       const candidates = field.nodes
         .filter(
           (n) =>
+            isVisible(n.id) &&
             n.relevance > 0.3 &&
             n.id !== state.focus &&
             (state.scale >= 0.75 || renderer.appearance(n, context).major),
@@ -1081,7 +1159,7 @@ async function start() {
             (b.id === state.focus ? 100 : b.id === context.previous ? 90 : b.relevance) -
             (a.id === state.focus ? 100 : a.id === context.previous ? 90 : a.relevance),
         )
-        .slice(0, mobileReading ? 0 : innerWidth < 600 && showUnfold ? 4 : 12)
+        .slice(0, mobileReading ? 0 : innerWidth < 600 ? (showUnfold ? 4 : 6) : 12)
       const focused = field.nodes.find((n) => n.id === state.focus)!
       const focusedPoint = renderer.project(focused),
         focusedLabel = labelNodes.get(state.focus)!
@@ -1159,7 +1237,7 @@ async function start() {
       let x = clamp(p.x + 18, 8, renderer.size.width - labelWidth - 8)
       let y = p.y - (isFocus ? 40 : 13)
       if (isFocus && showUnfold) y = p.y - 78
-      const box = annotationTargets.get(n.id)
+      const box = isVisible(n.id) ? annotationTargets.get(n.id) : undefined
       if (box) {
         const previous = annotationPositions.get(n.id) ?? { x: box.x, y: box.y }
         previous.x += (box.x - previous.x) * (reduce.matches ? 1 : 0.18)
@@ -1174,7 +1252,7 @@ async function start() {
       const appearance = renderer.appearance(n, context)
       const farVisibility = appearance.major ? 1 : clamp((state.scale - 0.45) / 0.65, 0, 1)
       a.style.opacity = String(
-        labelsHidden
+        labelsHidden || !isVisible(n.id)
           ? 0
           : farVisibility *
               (box
@@ -1201,8 +1279,8 @@ async function start() {
       leader.style.opacity = labelsHidden || !box ? "0" : String(n.relevance * 0.28 * farVisibility)
       const root = unfoldings.get(n.id)
       if (root) {
-        const active = isFocus && showUnfold,
-          memory = n.id === context.previous && showUnfold
+        const active = isVisible(n.id) && isFocus && showUnfold,
+          memory = isVisible(n.id) && n.id === context.previous && showUnfold
         root.style.opacity = active
           ? "1"
           : memory && !mobileReading
@@ -1261,8 +1339,8 @@ async function start() {
       {
         left: 14,
         top: 100,
-        right: innerWidth - 14,
-        bottom: innerHeight - (innerWidth < 600 ? 167 : 110),
+        right: renderer.size.width - 14,
+        bottom: renderer.size.height - (innerWidth < 600 ? 167 : 110),
       },
       [...annotationTargets.values()],
     )
@@ -1428,8 +1506,11 @@ async function start() {
     world.dataset.settled = String(idle)
   }
   function hit(x: number, y: number) {
+    const bounds = world.getBoundingClientRect()
+    x -= bounds.left
+    y -= bounds.top
     return field.nodes
-      .filter((n) => n.relevance > 0.18)
+      .filter((n) => isVisible(n.id) && n.relevance > 0.18)
       .map((n) => ({ n, p: renderer.project(n) }))
       .filter(({ p }) => Math.hypot(p.x - x, p.y - y) < 24)
       .sort((a, b) => b.n.relevance - a.n.relevance)[0]?.n.id
@@ -1500,7 +1581,8 @@ async function start() {
     )
     if (drag.distance > 5) {
       if (drag.id) {
-        const p = renderer.unproject(e.clientX, e.clientY)
+        const bounds = world.getBoundingClientRect()
+        const p = renderer.unproject(e.clientX - bounds.left, e.clientY - bounds.top)
         field.drag(drag.id, p.x, p.y)
       } else {
         pan.x += (e.clientX - drag.x) / renderer.view.zoom
@@ -1563,7 +1645,7 @@ async function start() {
     )
   depth.addEventListener("input", () => zoom(Number(depth.value)))
   $("[data-back]").addEventListener("click", () => {
-    if (state.trail.length) history.back()
+    if (state.trail.length || history.state?.toposCanBack) history.back()
     else {
       pan = { x: 0, y: 0 }
       zoom(1)
@@ -1580,6 +1662,8 @@ async function start() {
     wake()
   })
   document.addEventListener("keydown", (e) => {
+    // Modal navigation owns its keys; Escape must not fold the reading underneath.
+    if (document.querySelector(".topos-topic-sidebar:modal")) return
     if (published && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
       e.preventDefault()
       if (search.open) search.close()
@@ -1652,6 +1736,11 @@ async function start() {
     update()
     wake()
   })
+  new ResizeObserver(() => {
+    renderer.resize()
+    update()
+    wake()
+  }).observe(world)
   reduce.addEventListener("change", wake)
   // Re-measure real text bounds when fonts or the title-size transition finish.
   document.fonts.ready.then(() => {

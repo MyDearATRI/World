@@ -1,0 +1,1129 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-09T18:38:58.706Z",
+  "method": "Read-only unauthenticated official HTTPS metadata using approved network access; public package names only",
+  "repositories": [
+    {
+      "repo": "leanprover/lean4",
+      "url": "https://github.com/leanprover/lean4",
+      "license": "Apache-2.0",
+      "archived": false,
+      "defaultBranch": "master",
+      "pushedAt": "2026-09-09T16:10:55Z",
+      "commit": "11636539d4150daeabe43cbc5cc5826b06f1e3ce",
+      "commitDate": "2026-09-09T14:19:38Z",
+      "release": {
+        "tag": "v4.34.0-rc2",
+        "prerelease": true,
+        "publishedAt": "2026-08-21T11:42:29Z",
+        "url": "https://github.com/leanprover/lean4/releases/tag/v4.34.0-rc2"
+      },
+      "toolchain": "build/release/stage1\n",
+      "readmeEvidence": null
+    },
+    {
+      "repo": "leanprover/verso",
+      "url": "https://github.com/leanprover/verso",
+      "license": "Apache-2.0",
+      "archived": false,
+      "defaultBranch": "main",
+      "pushedAt": "2026-09-09T15:34:13Z",
+      "commit": "a20c785be9fae260bd53b83a53f75055a49627b9",
+      "commitDate": "2026-08-31T06:35:55Z",
+      "release": {
+        "tag": "latest",
+        "prerelease": true,
+        "publishedAt": "2026-08-31T07:03:33Z",
+        "url": "https://github.com/leanprover/verso/releases/tag/latest"
+      },
+      "toolchain": "leanprover/lean4:v4.34.0-rc2\n",
+      "readmeEvidence": null,
+      "licenseEvidence": {
+        "url": "https://raw.githubusercontent.com/leanprover/verso/a20c785be9fae260bd53b83a53f75055a49627b9/LICENSE",
+        "sha256": "8b28515ffffc5c0fe2807d8ae3735b00b324d9b7ce807dd63ff6ac8922fbce7e",
+        "firstLines": [
+          "Apache License 2.0 (Apache)",
+          "Apache License",
+          "Version 2.0, January 2004",
+          "http://www.apache.org/licenses/"
+        ]
+      }
+    },
+    {
+      "repo": "leanprover/subverso",
+      "url": "https://github.com/leanprover/subverso",
+      "license": "Apache-2.0",
+      "archived": false,
+      "defaultBranch": "main",
+      "pushedAt": "2026-09-04T15:49:15Z",
+      "commit": "9b90b7f938d6169246325df002351014f49945ef",
+      "commitDate": "2026-09-04T15:49:04Z",
+      "release": null,
+      "toolchain": "leanprover/lean4:v4.29.0-rc7\n",
+      "readmeEvidence": {
+        "url": "https://raw.githubusercontent.com/leanprover/subverso/9b90b7f938d6169246325df002351014f49945ef/README.md",
+        "sha256": "acce787d33fc70f40e54452e36242871c542e55f83f941d20566048a02a5d49a",
+        "headings": [
+          "# SubVerso - Verso's Library for Subprocesses",
+          "## Versions and Compatibility",
+          "## Module System",
+          "## Features",
+          "### Code Examples",
+          "### Module Extraction",
+          "### Helper Process"
+        ]
+      },
+      "licenseEvidence": {
+        "url": "https://raw.githubusercontent.com/leanprover/subverso/9b90b7f938d6169246325df002351014f49945ef/LICENSE",
+        "sha256": "8b28515ffffc5c0fe2807d8ae3735b00b324d9b7ce807dd63ff6ac8922fbce7e",
+        "firstLines": [
+          "Apache License 2.0 (Apache)",
+          "Apache License",
+          "Version 2.0, January 2004",
+          "http://www.apache.org/licenses/"
+        ]
+      }
+    },
+    {
+      "repo": "leanprover/vscode-lean4",
+      "url": "https://github.com/leanprover/vscode-lean4",
+      "license": "Apache-2.0",
+      "archived": false,
+      "defaultBranch": "master",
+      "pushedAt": "2026-07-29T08:34:27Z",
+      "commit": "5a25e6abb2e973b4c89a053acc74c479c0bb2e9f",
+      "commitDate": "2026-07-29T08:34:24Z",
+      "release": {
+        "tag": "v0.0.239",
+        "prerelease": false,
+        "publishedAt": "2026-07-29T08:37:04Z",
+        "url": "https://github.com/leanprover/vscode-lean4/releases/tag/v0.0.239"
+      },
+      "readmeEvidence": {
+        "url": "https://raw.githubusercontent.com/leanprover/vscode-lean4/5a25e6abb2e973b4c89a053acc74c479c0bb2e9f/README.md",
+        "sha256": "d9d366c3a068f1fec167b99b99a99d2bbbe091d6efdd3ae54059c4d8886c2c4e",
+        "headings": [
+          "# Lean 4 VS Code Extension",
+          "## Installing Lean 4",
+          "## Using this extension",
+          "## Developing the Lean 4 VS Code extension"
+        ]
+      },
+      "licenseEvidence": {
+        "url": "https://raw.githubusercontent.com/leanprover/vscode-lean4/5a25e6abb2e973b4c89a053acc74c479c0bb2e9f/LICENSE",
+        "sha256": "69849221bfb90053de2134ef5e6d540287b4b98062326492f1f96f5da685524b",
+        "firstLines": [
+          "                                 Apache License",
+          "                           Version 2.0, January 2004",
+          "                        http://www.apache.org/licenses/",
+          ""
+        ]
+      }
+    },
+    {
+      "repo": "hhu-adam/lean4monaco",
+      "url": "https://github.com/hhu-adam/lean4monaco",
+      "license": "Apache-2.0",
+      "archived": false,
+      "defaultBranch": "main",
+      "pushedAt": "2026-08-21T20:55:04Z",
+      "commit": "f1828e854f85fc5f958cc3018ce4155af3e3f755",
+      "commitDate": "2026-08-21T20:55:02Z",
+      "release": null,
+      "readmeEvidence": {
+        "url": "https://raw.githubusercontent.com/hhu-adam/lean4monaco/f1828e854f85fc5f958cc3018ce4155af3e3f755/README.md",
+        "sha256": "d4095587c1e633ea199966c7ff615d0ca324f68f09e89497315c44c8012f21ff",
+        "headings": [
+          "# Lean 4 Monaco",
+          "## Usage",
+          "### Configure vite",
+          "## Demo",
+          "## Troubleshooting",
+          "### Warnings on `npm install`",
+          "## Development",
+          "### Beware of the Git Submodule",
+          "### Testing",
+          "### Merge upstream changes from the VSCode extension",
+          "### Publishing",
+          "### Docker image"
+        ]
+      },
+      "licenseEvidence": {
+        "url": "https://raw.githubusercontent.com/hhu-adam/lean4monaco/f1828e854f85fc5f958cc3018ce4155af3e3f755/LICENSE",
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "firstLines": [
+          "                                 Apache License",
+          "                           Version 2.0, January 2004",
+          "                        http://www.apache.org/licenses/",
+          ""
+        ]
+      }
+    },
+    {
+      "repo": "leanprover-community/lean4web",
+      "url": "https://github.com/leanprover-community/lean4web",
+      "license": "Apache-2.0",
+      "archived": false,
+      "defaultBranch": "main",
+      "pushedAt": "2026-08-30T12:53:29Z",
+      "commit": "27e95901718055152e6d5468e251ca34c13d0b4a",
+      "commitDate": "2026-08-30T12:53:27Z",
+      "release": {
+        "tag": "v0.2.2",
+        "prerelease": false,
+        "publishedAt": "2026-05-26T17:10:14Z",
+        "url": "https://github.com/leanprover-community/lean4web/releases/tag/v0.2.2"
+      },
+      "readmeEvidence": {
+        "url": "https://raw.githubusercontent.com/leanprover-community/lean4web/27e95901718055152e6d5468e251ca34c13d0b4a/README.md",
+        "sha256": "e60f549ff116a8b2b5752bc61da288d26031cd9b460e1fdab2a1d02a0fca1bb5",
+        "headings": ["# Lean Web", "## Scope of Lean Web", "## Contribution", "## Documentation"]
+      },
+      "licenseEvidence": {
+        "url": "https://raw.githubusercontent.com/leanprover-community/lean4web/27e95901718055152e6d5468e251ca34c13d0b4a/LICENSE",
+        "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+        "firstLines": [
+          "                                 Apache License",
+          "                           Version 2.0, January 2004",
+          "                        http://www.apache.org/licenses/",
+          ""
+        ]
+      }
+    },
+    {
+      "repo": "leanprover-community/ProofWidgets4",
+      "url": "https://github.com/leanprover-community/ProofWidgets4",
+      "license": "Apache-2.0",
+      "archived": false,
+      "defaultBranch": "main",
+      "pushedAt": "2026-08-21T12:17:07Z",
+      "commit": "a8acbfd87375ff4abe14ce09db5b7664d383bc7f",
+      "commitDate": "2026-08-21T12:03:02Z",
+      "release": {
+        "tag": "v0.0.110",
+        "prerelease": false,
+        "publishedAt": "2026-08-21T12:17:52Z",
+        "url": "https://github.com/leanprover-community/ProofWidgets4/releases/tag/v0.0.110"
+      },
+      "toolchain": "leanprover/lean4:v4.34.0-rc2\n",
+      "readmeEvidence": {
+        "url": "https://raw.githubusercontent.com/leanprover-community/ProofWidgets4/a8acbfd87375ff4abe14ce09db5b7664d383bc7f/README.md",
+        "sha256": "bae1aa71aa516c9db5f641a7c2db323f3d54bba100800a632182233942b0fe65",
+        "headings": [
+          "# ProofWidgets",
+          "### How does ProofWidgets relate to user widgets?",
+          "## Usage",
+          "### Viewing the demos",
+          "### Using ProofWidgets as a dependency",
+          "## Features",
+          "### JSX-like syntax",
+          "### Support for libraries",
+          "### Custom `Expr` displays",
+          "### Multi-stage interactions",
+          "### Animated HTML",
+          "## Developing ProofWidgets",
+          "## Cite"
+        ]
+      },
+      "licenseEvidence": {
+        "url": "https://raw.githubusercontent.com/leanprover-community/ProofWidgets4/a8acbfd87375ff4abe14ce09db5b7664d383bc7f/LICENSE",
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "firstLines": [
+          "                                 Apache License",
+          "                           Version 2.0, January 2004",
+          "                        http://www.apache.org/licenses/",
+          ""
+        ]
+      }
+    },
+    {
+      "repo": "PatrickMassot/leanblueprint",
+      "url": "https://github.com/PatrickMassot/leanblueprint",
+      "license": "Apache-2.0",
+      "archived": false,
+      "defaultBranch": "master",
+      "pushedAt": "2025-12-23T15:57:08Z",
+      "commit": "56e066d30fb7b608a63f4241fee80982d7eae3ef",
+      "commitDate": "2025-12-23T15:55:53Z",
+      "release": null,
+      "readmeEvidence": {
+        "url": "https://raw.githubusercontent.com/PatrickMassot/leanblueprint/56e066d30fb7b608a63f4241fee80982d7eae3ef/README.md",
+        "sha256": "bcda8d018bf403111622198da52519f5f7cff5a4b026315bf88317fad300bc88",
+        "headings": [
+          "# Lean blueprints",
+          "## Installation",
+          "## Upgrading",
+          "## Starting a blueprint",
+          "## Local compilation",
+          "## Editing the blueprint",
+          "## Blueprint configuration",
+          "## Acknowledgments"
+        ]
+      },
+      "licenseEvidence": {
+        "url": "https://raw.githubusercontent.com/PatrickMassot/leanblueprint/56e066d30fb7b608a63f4241fee80982d7eae3ef/LICENSE",
+        "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+        "firstLines": [
+          "                                 Apache License",
+          "                           Version 2.0, January 2004",
+          "                        http://www.apache.org/licenses/",
+          ""
+        ]
+      }
+    },
+    {
+      "repo": "leanprover-community/mathlib4",
+      "url": "https://github.com/leanprover-community/mathlib4",
+      "license": "Apache-2.0",
+      "archived": false,
+      "defaultBranch": "master",
+      "pushedAt": "2026-09-09T17:56:49Z",
+      "commit": "e37d88a26f3791ed5a93daa1f949af1021b8d103",
+      "commitDate": "2026-09-09T16:59:49Z",
+      "release": {
+        "tag": "v4.34.0-rc2",
+        "prerelease": true,
+        "publishedAt": "2026-08-21T21:33:02Z",
+        "url": "https://github.com/leanprover-community/mathlib4/releases/tag/v4.34.0-rc2"
+      },
+      "toolchain": "leanprover/lean4:v4.34.0-rc2\n",
+      "readmeEvidence": {
+        "url": "https://raw.githubusercontent.com/leanprover-community/mathlib4/e37d88a26f3791ed5a93daa1f949af1021b8d103/README.md",
+        "sha256": "005b55c217bb8e9c97ad1a9a4395ee57540bb58233b63f925a041d473741aee2",
+        "headings": [
+          "# mathlib4",
+          "## Installation",
+          "## Using `mathlib4` as a dependency",
+          "## Experimenting",
+          "## Documentation",
+          "## Contributing",
+          "### Guidelines",
+          "### Downloading cached build files",
+          "### Building HTML documentation",
+          "## Transitioning from Lean 3",
+          "### Dependencies",
+          "## Maintainers:",
+          "## Past maintainers:"
+        ]
+      },
+      "licenseEvidence": {
+        "url": "https://raw.githubusercontent.com/leanprover-community/mathlib4/e37d88a26f3791ed5a93daa1f949af1021b8d103/LICENSE",
+        "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+        "firstLines": [
+          "                                 Apache License",
+          "                           Version 2.0, January 2004",
+          "                        http://www.apache.org/licenses/",
+          ""
+        ]
+      }
+    },
+    {
+      "repo": "leanprover/doc-gen4",
+      "url": "https://github.com/leanprover/doc-gen4",
+      "license": "Apache-2.0",
+      "archived": false,
+      "defaultBranch": "main",
+      "pushedAt": "2026-09-03T12:01:46Z",
+      "commit": "97d4ecdfc8e09e7f511724c25e303d448de6a3db",
+      "commitDate": "2026-08-21T13:12:10Z",
+      "release": null,
+      "toolchain": "leanprover/lean4:v4.34.0-rc2\n",
+      "readmeEvidence": {
+        "url": "https://raw.githubusercontent.com/leanprover/doc-gen4/97d4ecdfc8e09e7f511724c25e303d448de6a3db/README.md",
+        "sha256": "f2125f5f99e57f4659aa5467dbb1e7af2c938afa6029693a9ad8b61d7ae40903",
+        "headings": [
+          "# `doc-gen4`",
+          "## Usage",
+          "# If you are developing against a release candidate or a stable version `v4.x`, replace `main` below by `v4.x`.",
+          "# If you do not use `main` keep in mind to update this field as you update your Lean version.",
+          "## Requirements to run `doc-gen4`",
+          "## Source locations",
+          "## Disabling equations",
+          "## How does `docs#Nat.add` from the Lean Zulip work?",
+          "## Development of doc-gen4"
+        ]
+      },
+      "licenseEvidence": {
+        "url": "https://raw.githubusercontent.com/leanprover/doc-gen4/97d4ecdfc8e09e7f511724c25e303d448de6a3db/LICENSE",
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "firstLines": [
+          "                                 Apache License",
+          "                           Version 2.0, January 2004",
+          "                        http://www.apache.org/licenses/",
+          ""
+        ]
+      }
+    }
+  ],
+  "packages": [
+    {
+      "name": "@leanprover/infoview",
+      "version": "0.13.0",
+      "publishedAt": "2026-04-13T12:37:17.195Z",
+      "license": "Apache-2.0",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/leanprover/vscode-lean4.git"
+      },
+      "engines": null,
+      "peerDependencies": null,
+      "integrity": "sha512-H/nocA4VMbFPd/8dLZd9eXUsDvhRoUFycocmFIbqAoMJzKR/FkHrChfx6jhnCae4zcoBmTSqmAFUfEzaXFszkQ==",
+      "status": "OBSERVED"
+    },
+    {
+      "name": "lean4monaco",
+      "version": "1.1.16",
+      "publishedAt": "2026-08-21T21:00:07.685Z",
+      "license": "Apache-2.0",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/hhu-adam/lean4monaco.git"
+      },
+      "engines": null,
+      "peerDependencies": null,
+      "integrity": "sha512-zEJON+SiBKo4ITBbXhxhHKT+GqmQKuxeFJE5kmdvSiU1/X8laGi6HdTLlYFqtQY1nPRa0pE24VN+g7dLztaQrw==",
+      "status": "OBSERVED"
+    },
+    {
+      "name": "pixi.js",
+      "version": "8.20.1",
+      "publishedAt": "2026-08-26T15:11:35.469Z",
+      "license": "MIT",
+      "repository": {
+        "url": "git+https://github.com/pixijs/pixijs.git",
+        "type": "git"
+      },
+      "engines": null,
+      "peerDependencies": null,
+      "integrity": "sha512-akLVBMLvQbaEViqsmVraK0Njer1q4Q4lm4iNKuzvBiFrV8q+6/+HluJN3sWIwO663IBeQtUUS/CaXFJZs6ffXQ==",
+      "status": "OBSERVED"
+    },
+    {
+      "name": "sigma",
+      "version": "3.0.3",
+      "publishedAt": "2026-04-30T13:04:02.520Z",
+      "license": "MIT",
+      "repository": {
+        "url": "http://github.com/jacomyal/sigma.js.git",
+        "type": "git"
+      },
+      "engines": null,
+      "peerDependencies": null,
+      "integrity": "sha512-5H0zFlx6/NTQpqBg4Rm569ZOpnBOXMaS25UQThIWMU3XyzI5AhmorK/gnl87BvJBLhQd0tW4C0LIp3enWzMoNw==",
+      "status": "OBSERVED"
+    },
+    {
+      "name": "graphology",
+      "version": "0.26.0",
+      "publishedAt": "2025-01-26T10:25:05.589Z",
+      "license": "MIT",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/graphology/graphology.git"
+      },
+      "engines": null,
+      "peerDependencies": {
+        "graphology-types": ">=0.24.0"
+      },
+      "integrity": "sha512-8SSImzgUUYC89Z042s+0r/vMibY7GX/Emz4LDO5e7jYXhuoWfHISPFJYjpRLUSJGq6UQ6xlenvX1p/hJdfXuXg==",
+      "status": "OBSERVED"
+    },
+    {
+      "name": "d3-force",
+      "version": "3.0.0",
+      "publishedAt": "2021-06-05T19:11:01.836Z",
+      "license": "ISC",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/d3/d3-force.git"
+      },
+      "engines": {
+        "node": ">=12"
+      },
+      "peerDependencies": null,
+      "integrity": "sha512-zxV/SsA+U4yte8051P4ECydjD/S+qeYtnaIyAs9tgHCqfguma/aAQDjo85A9Z6EKhBirHRJHXIgJUlffT4wdLg==",
+      "status": "OBSERVED"
+    },
+    {
+      "name": "d3-force-3d",
+      "version": "3.0.6",
+      "publishedAt": "2025-04-09T19:05:37.836Z",
+      "license": "MIT",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/vasturiano/d3-force-3d.git"
+      },
+      "engines": {
+        "node": ">=12"
+      },
+      "peerDependencies": null,
+      "integrity": "sha512-4tsKHUPLOVkyfEffZo1v6sFHvGFwAIIjt/W8IThbp08DYAsXZck+2pSHEG5W1+gQgEvFLdZkYvmJAbRM2EzMnA==",
+      "status": "OBSERVED"
+    },
+    {
+      "name": "three",
+      "version": "0.186.0",
+      "publishedAt": "2026-09-08T19:25:22.027Z",
+      "license": "MIT",
+      "repository": {
+        "url": "git+https://github.com/mrdoob/three.js.git",
+        "type": "git"
+      },
+      "engines": null,
+      "peerDependencies": null,
+      "integrity": "sha512-cr/fIM2ddMSVbYVgkfD4jLJv7Fh/8ZTjvo+7gQeSVGUZHxpx9FDwoL5iC7hUz/LiRA8wMbqfnb90xKfm1/HHkQ==",
+      "status": "OBSERVED"
+    },
+    {
+      "name": "react",
+      "version": "19.3.0",
+      "publishedAt": "2026-09-09T17:21:30.071Z",
+      "license": "MIT",
+      "repository": {
+        "url": "git+https://github.com/react/react.git",
+        "type": "git",
+        "directory": "packages/react"
+      },
+      "engines": {
+        "node": ">=0.10.0"
+      },
+      "peerDependencies": null,
+      "integrity": "sha512-E8LUcbtBWt20bbl2YoHfx4ZDBdxVTfOKtCZn9cDSJ4l6/nuoApcpIBcj47t2wZoVX8g2ZHuMHbiShgCR1T5Sog==",
+      "status": "OBSERVED"
+    },
+    {
+      "name": "motion",
+      "version": "13.2.0",
+      "publishedAt": "2026-09-02T15:25:47.792Z",
+      "license": "MIT",
+      "repository": {
+        "url": "git+https://github.com/motiondivision/motion.git",
+        "type": "git"
+      },
+      "engines": null,
+      "peerDependencies": {
+        "react": "^18.0.0 || ^19.0.0",
+        "react-dom": "^18.0.0 || ^19.0.0"
+      },
+      "integrity": "sha512-4Hrb5vD6HhjFstLUiCmWvtpsw+WTpP4R+QXfSDYZBz7+uxE/LrRg3aV0ReJxHrTRffHhbIE6svEqnotngXvesQ==",
+      "status": "OBSERVED"
+    },
+    {
+      "name": "katex",
+      "version": "0.18.7",
+      "publishedAt": "2026-09-06T17:47:14.402Z",
+      "license": "MIT",
+      "repository": {
+        "url": "git+https://github.com/KaTeX/KaTeX.git",
+        "type": "git"
+      },
+      "engines": null,
+      "peerDependencies": null,
+      "integrity": "sha512-h+UCwkZ+4Jz8WQ7MLGfj7UVFrRCizGb912fwF4luGdYsC5paYG1vx+jy+KRcC/XkpjGva/P7nAWuxNnPzRvzHw==",
+      "status": "OBSERVED"
+    },
+    {
+      "name": "preact",
+      "version": "10.29.8",
+      "publishedAt": "2026-08-01T09:59:54.572Z",
+      "license": "MIT",
+      "repository": {
+        "url": "git+https://github.com/preactjs/preact.git",
+        "type": "git"
+      },
+      "engines": null,
+      "peerDependencies": {
+        "preact-render-to-string": ">=5"
+      },
+      "integrity": "sha512-ej2aVZ+vZ8WO7tvlQWRM9N63A0KzF9q4mWJfDUHgYaIofWY9hu74QdnQrjoPMmZi2/nZ5gN0bJCQF49xQqx09Q==",
+      "status": "OBSERVED"
+    },
+    {
+      "name": "npm",
+      "version": "12.0.2",
+      "publishedAt": "2026-07-29T21:06:31.421Z",
+      "license": "Artistic-2.0",
+      "repository": {
+        "url": "git+https://github.com/npm/cli.git",
+        "type": "git"
+      },
+      "engines": {
+        "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+      },
+      "peerDependencies": null,
+      "integrity": "sha512-uIXokLlBj6FpNUTQX1PmT5pz7BlIN9QlixX+zdaSNHsd0qUXsbDLr50xzY6Sw7cJVr0uzHKDOle0swmPW/p5Qw==",
+      "status": "OBSERVED"
+    }
+  ],
+  "pypi": {
+    "name": "leanblueprint",
+    "version": "0.0.20",
+    "license": null,
+    "classifiers": ["License :: OSI Approved :: MIT License"],
+    "publishedAt": "2025-12-23T15:56:52.733271Z",
+    "fileDigests": [
+      {
+        "filename": "leanblueprint-0.0.20-py3-none-any.whl",
+        "sha256": "9973ec7c72b4ac125bdf3146955076bcaa57897f1997f39b4b99eb50567cc2a8"
+      },
+      {
+        "filename": "leanblueprint-0.0.20.tar.gz",
+        "sha256": "5e6a704519f2a58ce744870a01141bd768eff9718a1cb4ee0f77747ec7d4590f"
+      }
+    ]
+  },
+  "leanStable": {
+    "tag": "v4.33.1",
+    "publishedAt": "2026-08-21T12:02:41Z",
+    "url": "https://github.com/leanprover/lean4/releases/tag/v4.33.1"
+  },
+  "ciRuns": [
+    {
+      "id": 34388429032,
+      "name": "Build and deploy mathematical notes",
+      "headSha": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-09-09T18:20:48Z",
+      "updatedAt": "2026-09-09T18:22:24Z",
+      "htmlUrl": "https://github.com/MyDearATRI/World/actions/runs/34388429032"
+    },
+    {
+      "id": 34382849767,
+      "name": "Build and deploy mathematical notes",
+      "headSha": "35e42b072c179bcfdd87213125dbe412c42e067c",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-09-09T17:25:48Z",
+      "updatedAt": "2026-09-09T17:27:16Z",
+      "htmlUrl": "https://github.com/MyDearATRI/World/actions/runs/34382849767"
+    },
+    {
+      "id": 34382339732,
+      "name": "Build and deploy mathematical notes",
+      "headSha": "6c4a88505a5a0e684953d7e30d15a698d1ab59f7",
+      "status": "completed",
+      "conclusion": "failure",
+      "createdAt": "2026-09-09T17:20:49Z",
+      "updatedAt": "2026-09-09T17:21:37Z",
+      "htmlUrl": "https://github.com/MyDearATRI/World/actions/runs/34382339732"
+    }
+  ],
+  "onlineHome": {
+    "sha256": "1a06b12c2873bdeb0539b61fb93a2dd5b54a8ea29e38a9817bda66910ab8a1e5",
+    "bytes": 3456
+  },
+  "records": [
+    {
+      "url": "https://api.github.com/repos/leanprover/lean4",
+      "startedAt": "2026-09-09T18:37:30.803Z",
+      "status": 200,
+      "bytes": 6252,
+      "sha256": "5c2287786c6f2a5a039a3fbb4dbd2387d4dab9a4adf284464eac07890c75b7d3"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/lean4/commits?per_page=1",
+      "startedAt": "2026-09-09T18:37:31.518Z",
+      "status": 200,
+      "bytes": 5833,
+      "sha256": "95f68c4b95df241e40bd8facb7ebd23d6c2fbfaafbfe39972f01c31da0345843"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/lean4/releases?per_page=1",
+      "startedAt": "2026-09-09T18:37:31.518Z",
+      "status": 200,
+      "bytes": 18952,
+      "sha256": "feb703da9e60c5c8b1510166f45092ce36ecbb244c29ccec9991658001f5bec3"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/lean4/11636539d4150daeabe43cbc5cc5826b06f1e3ce/lean-toolchain",
+      "startedAt": "2026-09-09T18:37:32.152Z",
+      "status": 200,
+      "bytes": 21,
+      "sha256": "f2b21527ab474ed073d8da57aa075e92dc809951251d67d527abd2957e7061c4"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/lean4/11636539d4150daeabe43cbc5cc5826b06f1e3ce/README.md",
+      "startedAt": "2026-09-09T18:37:32.920Z",
+      "status": null,
+      "error": "fetch failed",
+      "cause": "ECONNRESET"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/lean4/11636539d4150daeabe43cbc5cc5826b06f1e3ce/LICENSE",
+      "startedAt": "2026-09-09T18:37:52.112Z",
+      "status": null,
+      "error": "fetch failed",
+      "cause": "ECONNRESET"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/verso",
+      "startedAt": "2026-09-09T18:38:11.724Z",
+      "status": 200,
+      "bytes": 6201,
+      "sha256": "1a719a94ca9d988a379c6753e49c563e57d1181479474e4943ca4a5589f5f3b4"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/verso/commits?per_page=1",
+      "startedAt": "2026-09-09T18:38:12.365Z",
+      "status": 200,
+      "bytes": 4685,
+      "sha256": "1fb3c87e39d9b7a02d7fcefc6074e10fd9c33e731099ffd4a31b36d962db43e4"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/verso/releases?per_page=1",
+      "startedAt": "2026-09-09T18:38:12.366Z",
+      "status": 200,
+      "bytes": 5413,
+      "sha256": "e8aec30effe57498dc1a57e8c8de53af9a5e9f85d120bcca6fd722f12b6e255d"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/verso/a20c785be9fae260bd53b83a53f75055a49627b9/lean-toolchain",
+      "startedAt": "2026-09-09T18:38:12.979Z",
+      "status": 200,
+      "bytes": 29,
+      "sha256": "8190e75a201741065fe508b28955dd64dd72d090babe5f70ce6848879d68ae88"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/verso/a20c785be9fae260bd53b83a53f75055a49627b9/README.md",
+      "startedAt": "2026-09-09T18:38:13.846Z",
+      "status": null,
+      "error": "fetch failed",
+      "cause": "ECONNRESET"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/verso/a20c785be9fae260bd53b83a53f75055a49627b9/LICENSE",
+      "startedAt": "2026-09-09T18:38:33.050Z",
+      "status": 200,
+      "bytes": 9160,
+      "sha256": "8b28515ffffc5c0fe2807d8ae3735b00b324d9b7ce807dd63ff6ac8922fbce7e"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/subverso",
+      "startedAt": "2026-09-09T18:38:34.029Z",
+      "status": 200,
+      "bytes": 6262,
+      "sha256": "613306ac9a5aa97c94826606f2de6651ad30b085b5922514d2ff9dbb54864e01"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/subverso/commits?per_page=1",
+      "startedAt": "2026-09-09T18:38:34.641Z",
+      "status": 200,
+      "bytes": 4618,
+      "sha256": "a7d3c2d3db377bca06c5d9a74eff2b898ce4bcf3976a5a8d30f52f624c1e2f68"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/subverso/releases?per_page=1",
+      "startedAt": "2026-09-09T18:38:34.641Z",
+      "status": 200,
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/subverso/9b90b7f938d6169246325df002351014f49945ef/lean-toolchain",
+      "startedAt": "2026-09-09T18:38:35.304Z",
+      "status": 200,
+      "bytes": 29,
+      "sha256": "514aa09a6897630d4184dfb5cf51ea20cff8f05bc32bc5b75ff36c318fad68d5"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/subverso/9b90b7f938d6169246325df002351014f49945ef/README.md",
+      "startedAt": "2026-09-09T18:38:35.820Z",
+      "status": 200,
+      "bytes": 4241,
+      "sha256": "acce787d33fc70f40e54452e36242871c542e55f83f941d20566048a02a5d49a"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/subverso/9b90b7f938d6169246325df002351014f49945ef/LICENSE",
+      "startedAt": "2026-09-09T18:38:36.689Z",
+      "status": 200,
+      "bytes": 9160,
+      "sha256": "8b28515ffffc5c0fe2807d8ae3735b00b324d9b7ce807dd63ff6ac8922fbce7e"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/vscode-lean4",
+      "startedAt": "2026-09-09T18:38:36.997Z",
+      "status": 200,
+      "bytes": 6584,
+      "sha256": "f0e8c746a737c9f38d673d909447b3a53542ae2f0edd72a8df889d8cf545bd4a"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/vscode-lean4/releases?per_page=1",
+      "startedAt": "2026-09-09T18:38:37.395Z",
+      "status": 200,
+      "bytes": 4092,
+      "sha256": "e4f46a1ceb8436d9fe166cb8cc4e7815846558a9698c2892e7fd6d338f260596"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/vscode-lean4/commits?per_page=1",
+      "startedAt": "2026-09-09T18:38:37.395Z",
+      "status": 200,
+      "bytes": 3679,
+      "sha256": "cb94b27cb459cf25d8ee7722226c31bc3aad795d2a2fd8a4b3bd44f65dfecfae"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/vscode-lean4/5a25e6abb2e973b4c89a053acc74c479c0bb2e9f/README.md",
+      "startedAt": "2026-09-09T18:38:37.873Z",
+      "status": 200,
+      "bytes": 1274,
+      "sha256": "d9d366c3a068f1fec167b99b99a99d2bbbe091d6efdd3ae54059c4d8886c2c4e"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/vscode-lean4/5a25e6abb2e973b4c89a053acc74c479c0bb2e9f/LICENSE",
+      "startedAt": "2026-09-09T18:38:38.540Z",
+      "status": 200,
+      "bytes": 10174,
+      "sha256": "69849221bfb90053de2134ef5e6d540287b4b98062326492f1f96f5da685524b"
+    },
+    {
+      "url": "https://api.github.com/repos/hhu-adam/lean4monaco",
+      "startedAt": "2026-09-09T18:38:39.337Z",
+      "status": 200,
+      "bytes": 6321,
+      "sha256": "81bcb27db8a7a3e345eb4e1cfbd71f2635d95eaf03f5f136522554a1c2a34bd7"
+    },
+    {
+      "url": "https://api.github.com/repos/hhu-adam/lean4monaco/releases?per_page=1",
+      "startedAt": "2026-09-09T18:38:39.854Z",
+      "status": 200,
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "url": "https://api.github.com/repos/hhu-adam/lean4monaco/commits?per_page=1",
+      "startedAt": "2026-09-09T18:38:39.854Z",
+      "status": 200,
+      "bytes": 4395,
+      "sha256": "e8c08c8fe5ecbc1b81a04114beee255da3f55ac164d7c810aa6937e7316e1490"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hhu-adam/lean4monaco/f1828e854f85fc5f958cc3018ce4155af3e3f755/README.md",
+      "startedAt": "2026-09-09T18:38:40.364Z",
+      "status": 200,
+      "bytes": 8091,
+      "sha256": "d4095587c1e633ea199966c7ff615d0ca324f68f09e89497315c44c8012f21ff"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hhu-adam/lean4monaco/f1828e854f85fc5f958cc3018ce4155af3e3f755/LICENSE",
+      "startedAt": "2026-09-09T18:38:40.704Z",
+      "status": 200,
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover-community/lean4web",
+      "startedAt": "2026-09-09T18:38:41.002Z",
+      "status": 200,
+      "bytes": 6997,
+      "sha256": "25fb2bee787f3d6fb73132deb4bafe8009c9d658743ad349fcc7174bf3eb6de6"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover-community/lean4web/commits?per_page=1",
+      "startedAt": "2026-09-09T18:38:41.432Z",
+      "status": 200,
+      "bytes": 4396,
+      "sha256": "ff2139ec123fbe31c0a4f2a762601c1062147280f094a4178f809bde0250f60f"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover-community/lean4web/releases?per_page=1",
+      "startedAt": "2026-09-09T18:38:41.432Z",
+      "status": 200,
+      "bytes": 2081,
+      "sha256": "33d5c31c2477fdcf467ee4be57c42ad171958be92a598d42b13e2d52efcc8f52"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover-community/lean4web/27e95901718055152e6d5468e251ca34c13d0b4a/README.md",
+      "startedAt": "2026-09-09T18:38:42.038Z",
+      "status": 200,
+      "bytes": 2473,
+      "sha256": "e60f549ff116a8b2b5752bc61da288d26031cd9b460e1fdab2a1d02a0fca1bb5"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover-community/lean4web/27e95901718055152e6d5468e251ca34c13d0b4a/LICENSE",
+      "startedAt": "2026-09-09T18:38:42.372Z",
+      "status": 200,
+      "bytes": 11357,
+      "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover-community/ProofWidgets4",
+      "startedAt": "2026-09-09T18:38:42.667Z",
+      "status": 200,
+      "bytes": 7245,
+      "sha256": "5394de3f3403bca24e1164e28f78d707e326a8ce8e6e3f64a82d286a57d41a04"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover-community/ProofWidgets4/commits?per_page=1",
+      "startedAt": "2026-09-09T18:38:43.048Z",
+      "status": 200,
+      "bytes": 4469,
+      "sha256": "a77d9683302d87a1046bb1e9a9e4665a649fe6f8a423decc0e7fa5fc87dcaa82"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover-community/ProofWidgets4/releases?per_page=1",
+      "startedAt": "2026-09-09T18:38:43.048Z",
+      "status": 200,
+      "bytes": 2014,
+      "sha256": "9a47d3bc8b9fe38cd69877a65f53b382d58a05081f130f0790ac147b1bcd8d96"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover-community/ProofWidgets4/a8acbfd87375ff4abe14ce09db5b7664d383bc7f/lean-toolchain",
+      "startedAt": "2026-09-09T18:38:43.681Z",
+      "status": 200,
+      "bytes": 29,
+      "sha256": "8190e75a201741065fe508b28955dd64dd72d090babe5f70ce6848879d68ae88"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover-community/ProofWidgets4/a8acbfd87375ff4abe14ce09db5b7664d383bc7f/README.md",
+      "startedAt": "2026-09-09T18:38:43.950Z",
+      "status": 200,
+      "bytes": 6870,
+      "sha256": "bae1aa71aa516c9db5f641a7c2db323f3d54bba100800a632182233942b0fe65"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover-community/ProofWidgets4/a8acbfd87375ff4abe14ce09db5b7664d383bc7f/LICENSE",
+      "startedAt": "2026-09-09T18:38:44.239Z",
+      "status": 200,
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "url": "https://api.github.com/repos/PatrickMassot/leanblueprint",
+      "startedAt": "2026-09-09T18:38:45.254Z",
+      "status": 200,
+      "bytes": 5693,
+      "sha256": "68639dda4032616c5cb864845eb93bd1824ff91dba212dcf1a70ff13d8a89b2d"
+    },
+    {
+      "url": "https://api.github.com/repos/PatrickMassot/leanblueprint/releases?per_page=1",
+      "startedAt": "2026-09-09T18:38:45.637Z",
+      "status": 200,
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "url": "https://api.github.com/repos/PatrickMassot/leanblueprint/commits?per_page=1",
+      "startedAt": "2026-09-09T18:38:45.637Z",
+      "status": 200,
+      "bytes": 3437,
+      "sha256": "92e2af9dbf67cf99d559b5206f4e40c9cc084a9b16702d688c17efae7f8983f9"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PatrickMassot/leanblueprint/56e066d30fb7b608a63f4241fee80982d7eae3ef/README.md",
+      "startedAt": "2026-09-09T18:38:46.066Z",
+      "status": 200,
+      "bytes": 13152,
+      "sha256": "bcda8d018bf403111622198da52519f5f7cff5a4b026315bf88317fad300bc88"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PatrickMassot/leanblueprint/56e066d30fb7b608a63f4241fee80982d7eae3ef/LICENSE",
+      "startedAt": "2026-09-09T18:38:46.464Z",
+      "status": 200,
+      "bytes": 11357,
+      "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover-community/mathlib4",
+      "startedAt": "2026-09-09T18:38:46.735Z",
+      "status": 200,
+      "bytes": 7063,
+      "sha256": "f8dfd481035766989579407e02e2570cd418d5e2dc64406e9b511d1566b4a408"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover-community/mathlib4/commits?per_page=1",
+      "startedAt": "2026-09-09T18:38:47.142Z",
+      "status": 200,
+      "bytes": 4208,
+      "sha256": "7de8ca5d67087a4cdce96d12d3320f6473b1d887b5e5048e2df88005e13b0b87"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover-community/mathlib4/releases?per_page=1",
+      "startedAt": "2026-09-09T18:38:47.142Z",
+      "status": 200,
+      "bytes": 2000,
+      "sha256": "39bfcfd97ced573a85a1a3091c45e0c89f120be4c82538471f8f16cf13012b95"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover-community/mathlib4/e37d88a26f3791ed5a93daa1f949af1021b8d103/lean-toolchain",
+      "startedAt": "2026-09-09T18:38:47.607Z",
+      "status": 200,
+      "bytes": 29,
+      "sha256": "8190e75a201741065fe508b28955dd64dd72d090babe5f70ce6848879d68ae88"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover-community/mathlib4/e37d88a26f3791ed5a93daa1f949af1021b8d103/README.md",
+      "startedAt": "2026-09-09T18:38:48.145Z",
+      "status": 200,
+      "bytes": 8936,
+      "sha256": "005b55c217bb8e9c97ad1a9a4395ee57540bb58233b63f925a041d473741aee2"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover-community/mathlib4/e37d88a26f3791ed5a93daa1f949af1021b8d103/LICENSE",
+      "startedAt": "2026-09-09T18:38:48.449Z",
+      "status": 200,
+      "bytes": 11357,
+      "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/doc-gen4",
+      "startedAt": "2026-09-09T18:38:48.808Z",
+      "status": 200,
+      "bytes": 6303,
+      "sha256": "7830b5194edd8bb6c0dc7a055c36e848609bf2d8dc4a10d7d321e805bbd8d489"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/doc-gen4/commits?per_page=1",
+      "startedAt": "2026-09-09T18:38:49.265Z",
+      "status": 200,
+      "bytes": 4364,
+      "sha256": "66d87e71c80ccd221bdfbce415ef0537164de353b23660bf1070d6d0d708aa15"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/doc-gen4/releases?per_page=1",
+      "startedAt": "2026-09-09T18:38:49.265Z",
+      "status": 200,
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/doc-gen4/97d4ecdfc8e09e7f511724c25e303d448de6a3db/lean-toolchain",
+      "startedAt": "2026-09-09T18:38:49.779Z",
+      "status": 200,
+      "bytes": 29,
+      "sha256": "8190e75a201741065fe508b28955dd64dd72d090babe5f70ce6848879d68ae88"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/doc-gen4/97d4ecdfc8e09e7f511724c25e303d448de6a3db/README.md",
+      "startedAt": "2026-09-09T18:38:50.067Z",
+      "status": 200,
+      "bytes": 5585,
+      "sha256": "f2125f5f99e57f4659aa5467dbb1e7af2c938afa6029693a9ad8b61d7ae40903"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/doc-gen4/97d4ecdfc8e09e7f511724c25e303d448de6a3db/LICENSE",
+      "startedAt": "2026-09-09T18:38:50.341Z",
+      "status": 200,
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "url": "https://registry.npmjs.org/%40leanprover%2Finfoview",
+      "startedAt": "2026-09-09T18:38:50.656Z",
+      "status": 200,
+      "bytes": 95382,
+      "sha256": "3adb7c99504d3b0a68b53d04dcb4a59e1b8e89150053ab0a98c5e654d47be6f0"
+    },
+    {
+      "url": "https://registry.npmjs.org/lean4monaco",
+      "startedAt": "2026-09-09T18:38:51.611Z",
+      "status": 200,
+      "bytes": 194264,
+      "sha256": "693f0490d8a7d3dd9226ba0848cdd0e2416d46828f042225d395a64ad8af86c1"
+    },
+    {
+      "url": "https://registry.npmjs.org/pixi.js",
+      "startedAt": "2026-09-09T18:38:51.924Z",
+      "status": 200,
+      "bytes": 6524836,
+      "sha256": "5817f295001a2a9940715893ff7c919751b94d8a97c5f7c9458abf1626ea7b09"
+    },
+    {
+      "url": "https://registry.npmjs.org/sigma",
+      "startedAt": "2026-09-09T18:38:52.621Z",
+      "status": 200,
+      "bytes": 484996,
+      "sha256": "eed69a3a48ecd67116cb69b245cb9af81fa9fde506e0b3cca742dcd159d83d85"
+    },
+    {
+      "url": "https://registry.npmjs.org/graphology",
+      "startedAt": "2026-09-09T18:38:52.851Z",
+      "status": 200,
+      "bytes": 208366,
+      "sha256": "4b9919ac964da45d473228d85e3129ca27d6d9bf0070822d38f9ead3ae81a1cb"
+    },
+    {
+      "url": "https://registry.npmjs.org/d3-force",
+      "startedAt": "2026-09-09T18:38:53.040Z",
+      "status": 200,
+      "bytes": 277462,
+      "sha256": "e245e5ec20479978a86c17ab85d1b1868674108d0c7576bbed4ec5599802e787"
+    },
+    {
+      "url": "https://registry.npmjs.org/d3-force-3d",
+      "startedAt": "2026-09-09T18:38:53.238Z",
+      "status": 200,
+      "bytes": 107239,
+      "sha256": "7c8c23acc96ebb9066b4f221b9df5db8f18b06dbd86c1f85d948b9b11cff9dc3"
+    },
+    {
+      "url": "https://registry.npmjs.org/three",
+      "startedAt": "2026-09-09T18:38:53.446Z",
+      "status": 200,
+      "bytes": 937724,
+      "sha256": "78659b6f6a90c308afdea1536e42738d93cb0ab4dd6dbe21e1c345bc66ac522e"
+    },
+    {
+      "url": "https://registry.npmjs.org/react",
+      "startedAt": "2026-09-09T18:38:53.681Z",
+      "status": 200,
+      "bytes": 6969173,
+      "sha256": "8792e7bd94c6f5f5a2fceddaf5d7af025e96c53f26d053d1d3a2069cfd0800b5"
+    },
+    {
+      "url": "https://registry.npmjs.org/motion",
+      "startedAt": "2026-09-09T18:38:54.356Z",
+      "status": 200,
+      "bytes": 1424262,
+      "sha256": "2e924aa46158fb0e131a72a80e99f12f8d97d5ce1ef0f6169636d830e066cdaa"
+    },
+    {
+      "url": "https://registry.npmjs.org/katex",
+      "startedAt": "2026-09-09T18:38:54.571Z",
+      "status": 200,
+      "bytes": 689490,
+      "sha256": "0ba53335b00dc13d2019da759b4cf03dc528ff01c7f6251f7368434e18bc5d31"
+    },
+    {
+      "url": "https://registry.npmjs.org/preact",
+      "startedAt": "2026-09-09T18:38:54.756Z",
+      "status": 200,
+      "bytes": 1891336,
+      "sha256": "7e5a4783b164c3d7c5471e0466a481a2559273c2170e1b7ca4552a09044512eb"
+    },
+    {
+      "url": "https://registry.npmjs.org/npm",
+      "startedAt": "2026-09-09T18:38:54.964Z",
+      "status": 200,
+      "bytes": 25538273,
+      "sha256": "faf6d958024b631cb39ad52dd3a26c801b852ad8773ab8569c9417ffecf657a3"
+    },
+    {
+      "url": "https://pypi.org/pypi/leanblueprint/json",
+      "startedAt": "2026-09-09T18:38:56.834Z",
+      "status": 200,
+      "bytes": 42820,
+      "sha256": "4758af542b8fa1f413f788c1256317537c517dabb34639c296814bf16ef4bb19"
+    },
+    {
+      "url": "https://api.github.com/repos/leanprover/lean4/releases/latest",
+      "startedAt": "2026-09-09T18:38:57.199Z",
+      "status": 200,
+      "bytes": 18794,
+      "sha256": "f79ccce05cddfc0f986a7d46999198e1894f342527c1dd777fe036e4793fee36"
+    },
+    {
+      "url": "https://api.github.com/repos/MyDearATRI/World/actions/runs?per_page=3",
+      "startedAt": "2026-09-09T18:38:57.794Z",
+      "status": 200,
+      "bytes": 35681,
+      "sha256": "5fb2b935e83b664810f788762fb4632fff19057866bdf6eb9027e305bf3b8e13"
+    },
+    {
+      "url": "https://mydearatri.github.io/World/",
+      "startedAt": "2026-09-09T18:38:58.319Z",
+      "status": 200,
+      "bytes": 3456,
+      "sha256": "1a06b12c2873bdeb0539b61fb93a2dd5b54a8ea29e38a9817bda66910ab8a1e5"
+    }
+  ]
+}

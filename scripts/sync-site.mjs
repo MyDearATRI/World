@@ -74,6 +74,7 @@ async function topology(pending) {
 }
 async function runChecks() {
   const commands = [
+    ["数学地图来源与结构检查", ["scripts/validate-ontology.mjs"]],
     ["类型检查", ["node_modules/typescript/bin/tsc", "--noEmit"]],
     ["格式检查", ["node_modules/prettier/bin/prettier.cjs", ".", "--check"]],
     ["单元测试", ["--import", "tsx", "--test"]],
@@ -83,13 +84,14 @@ async function runChecks() {
     ["已准备向量检查", ["scripts/prepare-semantics.mjs", "--check"]],
     ["本地运行资源准备", ["scripts/prepare-semantic-runtime.mjs"]],
     ["关系图运行资源准备", ["scripts/prepare-graph-runtime.mjs"]],
-    ["Topos 原型运行资源准备", ["scripts/prepare-topos-runtime.mjs"]],
+    ["Topos 运行资源准备", ["scripts/prepare-topos-runtime.mjs"]],
     [
       "正式构建",
       ["quartz/bootstrap-cli.mjs", "build", "-d", "content", "-o", "public", "--concurrency", "2"],
     ],
     ["全量内容检查", ["scripts/verify-content.mjs"]],
     ["原子页面与链接检查", ["scripts/verify-knowledge.mjs"]],
+    ["主题地图产物检查", ["scripts/verify-topic-map.mjs"]],
   ]
   // Use the already installed Node and project dependencies; no global npm configuration is required.
   for (const [label, command] of commands) {

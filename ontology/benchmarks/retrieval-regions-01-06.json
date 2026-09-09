@@ -1,0 +1,245 @@
+{
+  "as_of": "2026-09-10",
+  "results": [
+    {
+      "source_id": "src.abouzaid-princeton2023",
+      "url": "https://www.math.princeton.edu/events/floer-homotopy-theory-and-practice-2023-02-02t213000",
+      "checked_at": "2026-09-09T18:37:08.009Z",
+      "status": 200,
+      "bytes": 30105,
+      "sha256": "11c8aaae61eaa23846b26f6be3c88dc06f855547777f8d8f09102fcd71e6809b",
+      "title": "Floer homotopy: theory and practice | Math",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.ara-polygraphs2025",
+      "url": "https://arxiv.org/abs/2312.00429v2",
+      "checked_at": "2026-09-09T18:37:01.449Z",
+      "status": 200,
+      "bytes": 42804,
+      "sha256": "ed5f3ad33155a26ff3caf78f72a0670ce6daa01e9698e67ce4207310222918e6",
+      "title": "[2312.00429v2] Polygraphs: From Rewriting to Higher Categories",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.bhatt-scholze2022",
+      "url": "https://annals.math.princeton.edu/2022/196-3/p05",
+      "checked_at": "2026-09-09T18:37:02.786Z",
+      "status": 200,
+      "bytes": 76972,
+      "sha256": "2aac3e5b3abe3761727462792925893e9044f93ae1a0200c8fbf176f87e052f7",
+      "title": "Prisms and prismatic cohomology | Annals of Mathematics",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.birkar-polarised2023",
+      "url": "https://link.springer.com/article/10.1007/s10240-022-00136-w",
+      "checked_at": "2026-09-09T18:37:06.769Z",
+      "status": 200,
+      "bytes": 291127,
+      "sha256": "8e35922e50aefbd99093937d126a738328da0e28fbeefa22e2cdc14fa5f920d5",
+      "title": "Geometry of polarised varieties | Publications mathématiques de l&#x27;IHÉS | Springer Nature Link",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.brauer-height2024",
+      "url": "https://annals.math.princeton.edu/2024/200-2/p04",
+      "checked_at": "2026-09-09T18:37:02.057Z",
+      "status": 200,
+      "bytes": 76887,
+      "sha256": "8695eed365fcb55a0abcf230e88ef1c7e4e0be2f8e113e12ae46042a7f1c6d62",
+      "title": "Brauer&#8217;s Height Zero Conjecture | Annals of Mathematics",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.casals-li2024",
+      "url": "https://arxiv.org/abs/2409.07435",
+      "checked_at": "2026-09-09T18:37:05.784Z",
+      "status": 200,
+      "bytes": 39945,
+      "sha256": "e0f40e2d1a1d318b92632f239def53bdf00d483a33dc3cd2883a079253ffe3da",
+      "title": "[2409.07435] Positive microlocal holonomies are globally regular",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.chromatic-null2022",
+      "url": "https://arxiv.org/abs/2207.09929",
+      "checked_at": "2026-09-09T18:37:06.239Z",
+      "status": 200,
+      "bytes": 40036,
+      "sha256": "e382365954ddd056518bba6fbfb8343aebe0a8a71b45de0bc322a47333b2fad6",
+      "title": "[2207.09929] The Chromatic Nullstellensatz",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.columbia-super2023",
+      "url": "https://www.math.columbia.edu/~martinez/seminarsuper2023.html",
+      "checked_at": "2026-09-09T18:36:58.983Z",
+      "status": 200,
+      "bytes": 11251,
+      "sha256": "662ee3ba24d420d3a3d83e2b3802100b647ebb12cc90dea3df55738ab089fc8e",
+      "title": "Alvaro Martinez",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.cubical-boundary2026",
+      "url": "https://arxiv.org/abs/2402.12169v5",
+      "checked_at": "2026-09-09T18:36:59.849Z",
+      "status": 200,
+      "bytes": 45201,
+      "sha256": "1c54393ad74a5782769b293b97f9b45e7e74a4ab391d4bae47e2b94dd7691d78",
+      "title": "[2402.12169v5] Automating Boundary Filling in Cubical Type Theories",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.hott-book",
+      "url": "https://homotopytypetheory.org/book/",
+      "checked_at": "2026-09-09T18:36:57.781Z",
+      "status": 200,
+      "bytes": 171022,
+      "sha256": "081e69d4cb39afcdd373e98964ea8ef6da7b112c094b76a7718186a519a3e185",
+      "title": " The HoTT Book | Homotopy Type Theory",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.imai-langlands2024",
+      "url": "https://arxiv.org/abs/2408.16571",
+      "checked_at": "2026-09-09T18:37:03.813Z",
+      "status": 200,
+      "bytes": 37645,
+      "sha256": "8f02cc909a344eaa41fae1b7ae599c1d34837f320594a0d97867e72daf7b5410",
+      "title": "[2408.16571] On the geometrization of the local Langlands correspondence",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.mfo-birational2024",
+      "url": "https://publications.mfo.de/handle/mfo/4142",
+      "checked_at": "2026-09-09T18:37:02.580Z",
+      "status": 200,
+      "bytes": 22106,
+      "sha256": "0e67063a495f812371d572828a24e2231e445b1b2fab24fa3cd5a5ac88ece809",
+      "title": "K-Stability, Birational Geometry and Mirror Symmetry",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.mfo-model-theory2023",
+      "url": "https://publications.mfo.de/handle/mfo/4040",
+      "checked_at": "2026-09-09T18:36:56.899Z",
+      "status": 200,
+      "bytes": 22265,
+      "sha256": "174786574d5288736a12c5ee7058789002b87adc4c18faca270c19f24af2da33",
+      "title": "Model Theory: Combinatorics, Groups, Valued Fields and Neostability",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.mfo-tensor2023",
+      "url": "https://publications.mfo.de/handle/mfo/4102",
+      "checked_at": "2026-09-09T18:37:00.966Z",
+      "status": 200,
+      "bytes": 22139,
+      "sha256": "f2cef7d8e836b87808714f8481fdb6c64d11a60a0b389fb7f691a0a7398f3593",
+      "title": "Tensor-Triangular Geometry and Interactions",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.mit-floer2023",
+      "url": "https://math.mit.edu/juvitop/",
+      "checked_at": "2026-09-09T18:37:06.668Z",
+      "status": 200,
+      "bytes": 21654,
+      "sha256": "d20e9a6913aedeeb0f0f9d96766481fc4bb6f7fbcc170bbe21dbdf0024cb6bf2",
+      "title": "Juvitop Seminar",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.moconja-tanovic2026",
+      "url": "https://arxiv.org/abs/2412.20589v2",
+      "checked_at": "2026-09-09T18:37:01.331Z",
+      "status": 200,
+      "bytes": 40242,
+      "sha256": "91561ccd482fe35acc51fa719e79a30ef913d3c998b660383fbccaaff703848a",
+      "title": "[2412.20589v2] Countable models of weakly quasi-o-minimal theories I",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.porta-teyssier2025",
+      "url": "https://arxiv.org/abs/2504.05360",
+      "checked_at": "2026-09-09T18:37:05.285Z",
+      "status": 200,
+      "bytes": 38802,
+      "sha256": "9e3bcd0be9f887a61404bf90dbd25f6ac28428a1d745e2f3ec4669217d4ea7ab",
+      "title": "[2504.05360] The derived moduli of Stokes data",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.ramzi-noshift2026",
+      "url": "https://arxiv.org/abs/2604.01863",
+      "checked_at": "2026-09-09T18:37:07.996Z",
+      "status": 200,
+      "bytes": 39683,
+      "sha256": "820afe78d8003b47374662058940d90d0d03f8fedb701d8c22bd2c27cee1000b",
+      "title": "[2604.01863] Chromatic Noshift",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.rasekh-higher2024",
+      "url": "https://tac.mta.ca/tac/volumes/41/2/41-02abs.html",
+      "checked_at": "2026-09-09T18:36:57.901Z",
+      "status": 200,
+      "bytes": 2256,
+      "sha256": "09994ed01b0378ae403649bbd9034f75980cd9aa9c8f9838654f16d9697c4d58",
+      "title": " A Model for the Higher Category of Higher Categories ",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.rui-song2023",
+      "url": "https://arxiv.org/abs/2307.10238",
+      "checked_at": "2026-09-09T18:37:00.471Z",
+      "status": 200,
+      "bytes": 40696,
+      "sha256": "12f1af5ef16e4da12f6b3aa27eba475e50815bfddd366f92f48e2ccd528a588a",
+      "title": "[2307.10238] Representations of Brauer category and categorification",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.scholze-motivic2025",
+      "url": "https://arxiv.org/abs/2501.07944",
+      "checked_at": "2026-09-09T18:37:05.107Z",
+      "status": 200,
+      "bytes": 38748,
+      "sha256": "7430e5b600bb5a0d6d49d4662e780b402fc735c1ac4a3cba975bc9e7b995124c",
+      "title": "[2501.07944] Geometrization of the local Langlands correspondence, motivically",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.steel-jmm2024",
+      "url": "https://math.berkeley.edu/~steel/talks/Lectures.html",
+      "checked_at": "2026-09-09T18:36:55.879Z",
+      "status": 200,
+      "bytes": 4561,
+      "sha256": "14da18ed51cf3c71d737ceff7fc4c91dc65ded1dde0c9268dd3e92a45a6307b6",
+      "title": "John R. Steel: Recent lectures",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.tsuji-ias2024",
+      "url": "https://www.ias.edu/math/events/special-year-workshop-p-adic-arithmetic-geometry-21",
+      "checked_at": "2026-09-09T18:37:02.037Z",
+      "status": 403,
+      "bytes": 5719,
+      "sha256": "d29f880ca3865b3756d2d9e055feb340394caf9cd3afb9080b1bc15138abddb4",
+      "title": "Just a moment...",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    },
+    {
+      "source_id": "src.vimt2024",
+      "url": "https://vimt2024.conf.tuwien.ac.at/",
+      "checked_at": "2026-09-09T18:36:57.331Z",
+      "status": 200,
+      "bytes": 62431,
+      "sha256": "bc652a383b5b59f32a81d3a1bf51beaeba03e06273471030d1a918498c82874f",
+      "title": "VIMT2024",
+      "verification_method": "HTTP response corroboration; mathematical scope separately AI reviewed from the actual web page abstract/programme"
+    }
+  ]
+}

@@ -111,6 +111,11 @@ export function createField(model: KnowledgeModel, initial: Context) {
       n.mass = r.role === "focus" ? 4 : 1
     }
     links = model.relations.flatMap((edge) => {
+      if (
+        context.visibleIDs &&
+        (!context.visibleIDs.includes(edge.source) || !context.visibleIDs.includes(edge.target))
+      )
+        return []
       const source = byId.get(edge.source),
         target = byId.get(edge.target)
       if (!source || !target || source === target) return []
@@ -152,6 +157,7 @@ export function createField(model: KnowledgeModel, initial: Context) {
     for (const n of nodes) {
       const t = targets.get(n.id)!,
         f = force.get(n.id)!
+      if (context.visibleIDs && !context.visibleIDs.includes(n.id)) continue
       const attraction =
         t.role === "focus" ? 36 : t.role === "previous" ? 9 : t.role === "neighbor" ? 9 : 5.5
       if (t.role === "focus" || t.role === "previous") {
@@ -188,6 +194,11 @@ export function createField(model: KnowledgeModel, initial: Context) {
           dx = b.x - a.x,
           dy = b.y - a.y,
           d = Math.hypot(dx, dy)
+        if (
+          context.visibleIDs &&
+          (!context.visibleIDs.includes(a.id) || !context.visibleIDs.includes(b.id))
+        )
+          continue
         const angle = d < 0.01 ? seed(`${a.id}:${b.id}`) * Math.PI * 2 : 0,
           ux = d < 0.01 ? Math.cos(angle) : dx / d,
           uy = d < 0.01 ? Math.sin(angle) : dy / d
@@ -240,6 +251,11 @@ export function createField(model: KnowledgeModel, initial: Context) {
     for (const n of nodes) {
       const f = force.get(n.id)!,
         pin = pinned.get(n.id)
+      if (context.visibleIDs && !context.visibleIDs.includes(n.id)) {
+        n.vx = n.vy = n.vz = 0
+        n.relevance = 0
+        continue
+      }
       if (pin) {
         n.x = pin.x
         n.y = pin.y

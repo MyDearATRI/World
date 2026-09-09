@@ -1,0 +1,2877 @@
+[
+  {
+    "path": ".gitattributes",
+    "bytes": 62,
+    "sha256": "cb7a630c9f4ec91eeee1f0bd3523fc4365c2519916c3dcb477f6b942dd00f06b"
+  },
+  {
+    "path": ".github/workflows/pages.yml",
+    "bytes": 1346,
+    "sha256": "40a16f90d8cff689ecf062157a5a5224173e75fd3e3b1f84e55b3cae75c4a1a1"
+  },
+  {
+    "path": ".gitignore",
+    "bytes": 417,
+    "sha256": "cfa42748d3cec4c50aefc43280c9f7c2e6d06138a7d23b49ee0125f661b7c008"
+  },
+  {
+    "path": ".node-version",
+    "bytes": 9,
+    "sha256": "b7677d3ec37ee1897ba07dc2cfe8292fe421c9ac93396cca5bbece486d1a2a41"
+  },
+  {
+    "path": ".npmrc",
+    "bytes": 19,
+    "sha256": "7151cf397def0c2cb0ab65643701d27d335a72c90f775675b5f826bc7005818a"
+  },
+  {
+    "path": ".prettierignore",
+    "bytes": 236,
+    "sha256": "fffc4134a2c99a143863905e8ef766c3e726facd64344cfc825fa7265bf116d7"
+  },
+  {
+    "path": ".prettierrc",
+    "bytes": 113,
+    "sha256": "cfeb4d8b178fbf423fdf12e9fcc7780332d227a3263f41723d76c3464062b047"
+  },
+  {
+    "path": "content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/Examples/从最佳逼近走向投影测量.md",
+    "bytes": 2459,
+    "sha256": "54805176e562dca0f695dea49bb8147b7f02b9815bcbb7398ee087e78371efff"
+  },
+  {
+    "path": "content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/Examples/概率规则能否仅由最佳逼近推出.md",
+    "bytes": 3400,
+    "sha256": "510c1d65da2965a35896e06b547ef4a17987108a89bc718aba99b87eb1873bb2"
+  },
+  {
+    "path": "content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/Examples/正交投影.md",
+    "bytes": 4031,
+    "sha256": "f704dcf1a238dc3278d10f2de1406211f83d207770dd6ac257399745b8fb31c2"
+  },
+  {
+    "path": "content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/Examples/正交投影在最小二乘与量子测量中的不同角色.md",
+    "bytes": 4358,
+    "sha256": "e6d258bef93ea1daac4a9b8a3c4be3efa785f4572b552756c3c6d1aafc86baec"
+  },
+  {
+    "path": "content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/Examples/理想投影测量.md",
+    "bytes": 3720,
+    "sha256": "8df27448192e039f386a32cf03a6d787276088b46105195beec4f727a15ac7bc"
+  },
+  {
+    "path": "content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/Examples/线性最小二乘.md",
+    "bytes": 3263,
+    "sha256": "b0233e01be8e66028617ce2aff2794f5067f1c865ade0021aff1e1c98bf171ce"
+  },
+  {
+    "path": "content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/Examples/非闭子空间为什么可能没有最佳逼近.md",
+    "bytes": 2795,
+    "sha256": "99058afc825c6897da8d32c3a1a52bf9f0a5e167e6e69efa66928636183ecf33"
+  },
+  {
+    "path": "content/Haru_Math_Physics_Obsidian/Haru_Math_Physics_Obsidian/开始阅读.md",
+    "bytes": 6641,
+    "sha256": "080c71b34893363693f2221a18b8579baddf41c2bb918cf29ab5751d474369bb"
+  },
+  {
+    "path": "content/assets/259d46efe9ec476dfb59.svg",
+    "bytes": 2572,
+    "sha256": "31b215efd2a3703092f178d5ddbf161e605d53ecf903b2a06cc9c4bacef60de0"
+  },
+  {
+    "path": "content/index.md",
+    "bytes": 2170,
+    "sha256": "5d637fb9ea23c8cb19301ff32b1be08813f03b8faf52d03dfc63ecb832d94ae2"
+  },
+  {
+    "path": "content/maps/Simon - Planning Map-107623f4.md",
+    "bytes": 13281,
+    "sha256": "662859b525d90f1816b0fe30fe97977af6d5409e4866b5efb698e8fd052ba6df"
+  },
+  {
+    "path": "content/maps/前三章关系图-6db33b5d.md",
+    "bytes": 21048,
+    "sha256": "8def590692fa60f2f0d7050e96ebd6cf9b897393b0425a0644be31b86fb19fc1"
+  },
+  {
+    "path": "content/maps/模板示范关系图-ec20d5e6.md",
+    "bytes": 12684,
+    "sha256": "89b6ac9b3f79c3be2af2a522962f4f7133ce15f6655862d3ed5a08b3458d35f9"
+  },
+  {
+    "path": "content/maps/第一章关系图-408f620b.md",
+    "bytes": 22576,
+    "sha256": "67a0c4b0930a9c84fd14d7313574fcf9d233c645ddc0964e2d969a994d402558"
+  },
+  {
+    "path": "content/maps/第三章关系图-c6306643.md",
+    "bytes": 28354,
+    "sha256": "5c4de71a121bf9a503ee10686612986077d32d68ed0c37c077a2d99050721a5c"
+  },
+  {
+    "path": "content/maps/第二章关系图-79f99f7a.md",
+    "bytes": 27989,
+    "sha256": "bb40716cbe9b94b8f563b9f1854840b385056d6e57747a7d44a7c08171e8d65d"
+  },
+  {
+    "path": "content/模板示范站.md",
+    "bytes": 3752,
+    "sha256": "89b5c9e1497b2ba576dcd3bb93566ae74ac7fe20a855637c4beeb933ba3b87e6"
+  },
+  {
+    "path": "content/知识主干.md",
+    "bytes": 2594,
+    "sha256": "2594af198286be7054498f0d1ff411494baf179dd9f2a7b6b34784736743e17d"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/Simon - Real Analysis - Contents.md",
+    "bytes": 39559,
+    "sha256": "f489e71f90008637ee3a0f3c467cbd9b6b12e623eb31d953840e9aa483f93dfe"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/Simon - Real Analysis.md",
+    "bytes": 4556,
+    "sha256": "8bd7706fe02ac47d5f97097e117d4f18c9996e546e3ac40eec27b877a5a97497"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Simon - Topic Index.md",
+    "bytes": 21916,
+    "sha256": "1d031548583f1a7e66ff535fc7c477343166cced9bc3a342d50af3b1ddf3508c"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Simon - Writing Plan.md",
+    "bytes": 31996,
+    "sha256": "3ce62add2837f765e80de0035758190f7916c7cf2aa67cfe4a4b6d136dd4aa4e"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Absolute Continuity and Densities.md",
+    "bytes": 1254,
+    "sha256": "f9e0d2b7d5b25850bfb366c1f3ccf5d787865c738619abc2984065895e76b080"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Borel Cantelli and Repeated Events.md",
+    "bytes": 1145,
+    "sha256": "8f61d85b0d2cf23e9e0ac41340e807ca459b52a7aeec75b9b4d2a02425ed5414"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Box Counts and Fractal Comparison.md",
+    "bytes": 981,
+    "sha256": "a87b23e90fa8ac0cdaf8838302ed760a2328565e5eb672e18ba4c4206056ce02"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Cantor Geometry and Singular Functions.md",
+    "bytes": 1528,
+    "sha256": "6991f8360ae3595b87dde2a4c034178e1607505f73c63c05062824a4fed64563"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Category and Generic Behavior.md",
+    "bytes": 1007,
+    "sha256": "061583b61419d148955df2e435820de0d32338ea31c2d38db1bac392857288c9"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Characteristic Functions and Gaussian Limits.md",
+    "bytes": 1402,
+    "sha256": "1d45e29b1c294e0e513b8761efc17d02d0e46fde291edc6b07b1960fadd442ce"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Compact Moment Sequences.md",
+    "bytes": 1446,
+    "sha256": "22d8752078318af239004329e738efc274d1bffdb011f1b1dd2f20d0d2a29cd2"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Convergence in Measure and Almost Uniform Convergence.md",
+    "bytes": 1235,
+    "sha256": "915da057d09b69adf56d4deea6afa723881a32ad583b7896f0b13f47706d7902"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Convex Functions and Jensen Inequalities.md",
+    "bytes": 1258,
+    "sha256": "398b483adf56de3dafe42dc890fb734480c43ae94c8c2472681a1c0e66405776"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Dense Function Classes and Lusin Approximation.md",
+    "bytes": 1077,
+    "sha256": "d37ca078edd78af0d834debd1854a267213a83574cfca4ddafb2c05bc1ef43eb"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Differential Equations and Stability.md",
+    "bytes": 1040,
+    "sha256": "c0106e1182e2fe044b02df7af76243a1e4de28987c5ade8186e3c35fa09f1c40"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Differentiation in Normed Spaces.md",
+    "bytes": 1226,
+    "sha256": "dbc41730f2570621cbcab498a59aaf211278749964c25e5e381a419b7bc5141f"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Distributional Derivatives and Convolution.md",
+    "bytes": 1361,
+    "sha256": "3b937059160d5cfc331b98437704f77770065da6c93f881e214dc0571c4779da"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Duality of Lebesgue Spaces.md",
+    "bytes": 1011,
+    "sha256": "21716a235ab84a8c1e2424f5bde1789bca30c6a378ecf8d0c948c1ebe4513669"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Energy and Equilibrium Measures.md",
+    "bytes": 1402,
+    "sha256": "97d9cb5bcd63c43d78e037171d23bb48c748811829300eaf53768d5cfc2f43c9"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Expectation and Fluctuation Bounds.md",
+    "bytes": 1367,
+    "sha256": "0ed73a88a815c9712ce1b54c68ea868311f339e60325e6f2f2bf48457ddfc2d5"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Extension of Linear Functionals.md",
+    "bytes": 1016,
+    "sha256": "2fc0b9cf16010002f386b82d0a22ca89e0978bf0f31a10765533b50490962f6a"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Extreme Points and Convex Representation.md",
+    "bytes": 1043,
+    "sha256": "0182102bcd82509074a0f8ca14bdb385aa27100fdd4b48199f842abdfd65cc15"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Fixed Points and Compact Maps.md",
+    "bytes": 1090,
+    "sha256": "37fe7852e698361020b9ef158e921d85dab8d867343178355fc992c85193996e"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Fourier Decay and Integrability.md",
+    "bytes": 1280,
+    "sha256": "7119c3cc4c772b54ccd32e302cd8791e91064a55e21ebf67b2b671d7d4fb8140"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Fourier Inversion and Plancherel.md",
+    "bytes": 1315,
+    "sha256": "b1de13095a680984f545f5630f3e1a113af6bb4c4bbc7242479fe3a8f8c0e567"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Fourier Multipliers and Constant Coefficient Equations.md",
+    "bytes": 1103,
+    "sha256": "8ad1b58e934159f611321da4caede71a16bb65a5bbd21bbb50624eaf56334d80"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Gaussian Processes and Brownian Paths.md",
+    "bytes": 1563,
+    "sha256": "9176bd7262120d1be7cd514c9068181995b3a1553223d1bf41e7e3fc09c8e322"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Hausdorff Scales and Dimension.md",
+    "bytes": 1019,
+    "sha256": "1c8c0a3c915f8e52a3cb467b4350aa4940dfb020cb2a862a87fa63c21e4c4af5"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Hermite Basis and the Harmonic Oscillator.md",
+    "bytes": 1016,
+    "sha256": "00ab7ee1e7ed2960dfab23ac3766bff0056aefbd920344ba0b5fafcd21a2b9d3"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Hölder and Minkowski Estimates.md",
+    "bytes": 1316,
+    "sha256": "ab36fa0879fa70f40f47be74e2044d3820a442d9e4ceab33029a15518ebc5e65"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Independence and Product Models.md",
+    "bytes": 1296,
+    "sha256": "563468c3c3a59c09da33dcd4d60d51da19bcb1772e23fdf5531d1cea64b7ab27"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Inductive Limits and Test Function Topology.md",
+    "bytes": 1344,
+    "sha256": "13192a45b7f4fec5dee2406f40b243624011e1b4c023b62f37577a087bf0981c"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Infinite Product Measures.md",
+    "bytes": 1334,
+    "sha256": "bbe10bae4c3088e8de49d12611cbefd2762bb37ff7e495d4f0d55e81532058e2"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Interpolation and Convolution Bounds.md",
+    "bytes": 1053,
+    "sha256": "0211c62bceb603a6f0c52a2a197b80bb76673d25b768a243c46925cb14e6d89a"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Inverse and Implicit Functions.md",
+    "bytes": 1034,
+    "sha256": "33b224f684ea1f52124590497ebb117a0befd7114899e6cb09c42759a98f7aac"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Kernel Representations of Bilinear Forms.md",
+    "bytes": 1029,
+    "sha256": "b1207c4ba49a2ac71d90c143da1b2a4a70476152491d8ebd396a38eae098843a"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Large Numbers and Logarithmic Fluctuations.md",
+    "bytes": 1165,
+    "sha256": "44f4dca328e4232b18676483ada47857eb6963c1dc6e69b01129b982aafcca91"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Lebesgue Spaces and Function Classes.md",
+    "bytes": 1718,
+    "sha256": "453a26afa3254272bbc2e55b076a2a8464e31b48658012e033b5026791bfee1d"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Local Distributions and Support.md",
+    "bytes": 1386,
+    "sha256": "70c31635ed3b5e1f3d700c739a0e61bd8601d9350b7f1566c42851cfa3f49c52"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Markov Evolution and Perron Frobenius.md",
+    "bytes": 1028,
+    "sha256": "c3e135752d5b72cf008a34960f814493a8a62397f9457ab30748578d652aba1f"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Mass Bounds and Rogers Taylor.md",
+    "bytes": 1018,
+    "sha256": "a198a294595801dc4beff3d3ae9f0d8eaf5bc60146f0f20aa86ce43514bf83c1"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Measurability and Null Sets.md",
+    "bytes": 1385,
+    "sha256": "8487dce42c50366fef9cca0b0af67d95488ae7edc7877c7edd34a3059ddcc2e9"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Metric Outer Measures.md",
+    "bytes": 1012,
+    "sha256": "22ac56942fc8f2817c09c91ca148db3166a9ad3dd7359b36c35fe0a5a0354bd1"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Modes of Stochastic Convergence.md",
+    "bytes": 1557,
+    "sha256": "5d59956a344369998091878e51e9397149f22f76b2d580efb4d52c6d330d247d"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Modular Functions and Group Integration.md",
+    "bytes": 1130,
+    "sha256": "e49405c3c96c71fda31198f6569f8daa2d1b2553c528979585b4beaae620275e"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Monotone and Dominated Convergence.md",
+    "bytes": 1299,
+    "sha256": "40257d3afd241333cd68afbdc86549d62bc22c85cb91c6c37ee4104c94f5b556"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Normed Spaces and Linear Quotients.md",
+    "bytes": 1015,
+    "sha256": "d8fc03263129ecee114871b4838e2563731ab6940c839751515df671b73a4b84"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Open Mapping and Closed Graph.md",
+    "bytes": 1050,
+    "sha256": "15091c93235abcaa8f6d359b181c101b6dd1499c81a29ca214d5a3d8ecffb0fa"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Order and Banach Lattices.md",
+    "bytes": 1080,
+    "sha256": "2da66d552c41cdd795ff98b6b3c075f1a90efabd072b4b3d5d6fad94c13fa468"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Outer Measures and the Carathéodory Criterion.md",
+    "bytes": 992,
+    "sha256": "1962d4dcaeaf651a600968a17535b842f596e2591665dae1bef7ce0301b6bc3d"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Periodic Distributions and Coefficients.md",
+    "bytes": 1014,
+    "sha256": "0a4c97d44e0dc16e1d70615be834bfca838c8b05f677b7498ab2b1508b41128a"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Poisson Limits and Counting Processes.md",
+    "bytes": 1064,
+    "sha256": "b4fd351eadff379a2d7f887a79cd9e15777ccc82646f95371c4fa0970352e77c"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Poisson Summation and Sampling.md",
+    "bytes": 1027,
+    "sha256": "be366045517c6a6a00a1e061bc2db15bf79d6daa9ce3870b143a5a7c369bc4d8"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Polish Spaces, Tightness, and Weak Limits.md",
+    "bytes": 1509,
+    "sha256": "60d0c3d6781d54cb2b063bec697ec0bf3136a62d83353b56999439c3c6239610"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Positive Definite Transforms.md",
+    "bytes": 1348,
+    "sha256": "351e7a8b161f0fa43817e087ea2fc018949ab26dcbdeeaa4b040d2887fc9b5c0"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Positive Functionals and Integral Construction.md",
+    "bytes": 1265,
+    "sha256": "58816b200413cb16a953edba32873ad147ab924c8f79245942d6301f9081899e"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Power Kernels and Energy Uniqueness.md",
+    "bytes": 1196,
+    "sha256": "bf776da0cc827482d24597c2ebeac8771770c8a885791a3d068e9cc7ebbc9d39"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Product Integration and Fubini.md",
+    "bytes": 1017,
+    "sha256": "110c54241796ea968c1e3cef89699eb84a0c1afe87b298be83d0801b6fca6115"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Random Variables and Laws.md",
+    "bytes": 999,
+    "sha256": "e35f65bc07403de5b74574414b8bed3bf7b00ead059f2f1a7426ac64c60ced0e"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Real Line Moments and Positivity.md",
+    "bytes": 1365,
+    "sha256": "3e33d8c630dbbe39e41524b31bb125f06cd49cdd8dbbc3d2b65df4c4820561eb"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Regular Measures and Representation.md",
+    "bytes": 1546,
+    "sha256": "fd377ef3e8ab2be7ca2c4be662392bef7baaab64bd832c28fb790fb932ba432d"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Riesz Products and Singular Measures.md",
+    "bytes": 1300,
+    "sha256": "893459967282b5e61f7747f1c430e3a2314a19a5b87e8f3e53fc2a55d6b0caab"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Schwartz Decay and Tempered Duality.md",
+    "bytes": 1290,
+    "sha256": "c4e7715b900e34dd09ba1ada79095e271ab492ed0e52637b793e800c6e03b5d4"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Seminorms and Fréchet Spaces.md",
+    "bytes": 1250,
+    "sha256": "13f27e6ed48b75245528e43d5611cb283b2034983139e8bdc242ea388e5fecb5"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Separation by Hyperplanes.md",
+    "bytes": 1222,
+    "sha256": "1af960e6da812565c564f0261c7a98c5198f83352910f6ee84f526c303e8dee8"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Signed and Complex Measures.md",
+    "bytes": 1064,
+    "sha256": "b02d9ed8c04cb7df9006fef1e13bbe2142bcb3339559f55eb203dd7be8c3a12c"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Translation Invariant Measures.md",
+    "bytes": 1107,
+    "sha256": "de7de4415a440737d51bf9949d4b8a2bbf3f678f3657a9942cf10a6b44b0b34f"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Uniform Boundedness.md",
+    "bytes": 1028,
+    "sha256": "8023089fb60287dbca7977314048251bad5d6b5c6a02d4464e3654e0857492ab"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Uniform Convexity and Reflexivity.md",
+    "bytes": 1058,
+    "sha256": "ab8c219513ea6298aeac5f7199e5689a6a71c6154ca9ad4f8296c009abfce122"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/01 Foundations and Calculus.md",
+    "bytes": 3771,
+    "sha256": "3fb40d96ac673984bd7299bec6022c1e3bea6fd9864cd19c6b03fa446e77f95b"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/02 Topology and Approximation.md",
+    "bytes": 6191,
+    "sha256": "2f55ddbee74e2785fc0d7d3d4dd577a1a3fa5b32d9f6760b67c617075d8e104d"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/03 Linear Algebra and Hilbert Geometry.md",
+    "bytes": 4883,
+    "sha256": "4bed4d320a6d4d9b202c5cc603286c7ca24aad05f08cba67b65500b16913f67c"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/04 Measures and Integration.md",
+    "bytes": 5049,
+    "sha256": "72409f34b43578946867319aed825924a52d7eb503b56b30b1a3b8512d8bc1ff"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/05 Function Spaces and Convergence.md",
+    "bytes": 4537,
+    "sha256": "6909de03b8c65efcd4451d0d83972cacf77fb7ed35915d615c6e13ea0e70c647"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/06 Convexity and Functional Analysis.md",
+    "bytes": 4462,
+    "sha256": "73730c8502201b29e98546cdc52ee1367a4a24e54220c773451c85c806330dbc"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/07 Fourier Analysis and Distributions.md",
+    "bytes": 6272,
+    "sha256": "a2d46483fafba7563a0b1cb44d8b9bf65761362f61834f54516960a7672613fc"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/08 Probability and Stochastic Processes.md",
+    "bytes": 4234,
+    "sha256": "86d595a318a6d9cc851b184c1c3d664afc290244e8859e2dd154216b8d15ae84"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/09 Geometric Measure and Dimension.md",
+    "bytes": 2314,
+    "sha256": "681cacb8dd94016d712c38395a759c3baad99d9438ead87223a35b1ccb9a1bcf"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Units/10 Moment Problems, Potential Theory and Groups.md",
+    "bytes": 3084,
+    "sha256": "c59c06a7585ac6c1199066da9491445ff73356aa92ac5436de9621e7bfc22586"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Variation and Stieltjes Integration.md",
+    "bytes": 1219,
+    "sha256": "4a960ca849742211e13393f7bb4a045962bf30e09e06a3b0db9afcb0a9f52ba1"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Vector-Valued Integration.md",
+    "bytes": 1066,
+    "sha256": "711bfe92de584ed11b0563798aeb024371eeb66b6c595ec8a056b697e566709a"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/写作规划/Topics/Weak Star Compactness.md",
+    "bytes": 1563,
+    "sha256": "1e0b5e67ace1b98b35501b963472bc0b0a7c5498d0cd1df7cc4431971c487499"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/习题与原书核校.md",
+    "bytes": 11144,
+    "sha256": "06d1b5c6dce3fb6336094d3b4e81321ba9198fe483378a496cc5b171d4edf84a"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/知识/Cauchy 序列与度量完备化.md",
+    "bytes": 7071,
+    "sha256": "a6e6ef82894024333e2ad11afe1f63d614ae56f4d4e2a61e041f92a8dc6d0619"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/知识/Taylor 余项与误差估计.md",
+    "bytes": 7791,
+    "sha256": "1ed7b6de30bc8426db94ac751012309c96163e1a42790f04be0481e0b1ca9c18"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/知识/偏序、链与 Zorn 引理.md",
+    "bytes": 7054,
+    "sha256": "5f3213bae0c157d7a9264a8570464cdd619f2a61f9b024139a43309030643e76"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/知识/光滑截断与有限单位分解.md",
+    "bytes": 7696,
+    "sha256": "34af56acbd9a064176586dd6f6efaab85c9771f0c24ce043d483896de8bd1c6a"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/知识/内积、自伴算子与有限维谱定理.md",
+    "bytes": 6485,
+    "sha256": "dd83b1de0b7bcd6f5e6a7dc31ad2f47495a1f3e78829633bb751fdbdfdc6a49e"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/知识/可数性与两种对角线方法.md",
+    "bytes": 8376,
+    "sha256": "7de6bb1cd11b91dae346f22db09062eebe6ddbce8218acef9a9aabb6856c1a23"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/知识/实数构造与上确界性质.md",
+    "bytes": 8066,
+    "sha256": "2ac6203317a49c2d8f0c9897069d4f4b0d3f5ceca286f030d1a9ebb2dbdbb789"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/知识/度量拓扑与连续性的三种刻画.md",
+    "bytes": 7647,
+    "sha256": "3a72ac2f77e530d45094bedb26f73e5883718d1e658e2ba5fac9959249c4e29a"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/知识/投影、直和与不变子空间.md",
+    "bytes": 6409,
+    "sha256": "aea4eef8424c4581e177ce8ad2c9f22170bca0452002deef458c36d186c8fc15"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/知识/最小多项式与 Jordan 分解.md",
+    "bytes": 7793,
+    "sha256": "c11eb69c6613353bd36c8aa97c70dd0432ec4c8c39b6029fe84649114dcc639b"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/知识/等价关系与商构造.md",
+    "bytes": 5055,
+    "sha256": "eaebe25cf42f4ec377d01683c69f140df8b377a152cf2ae0ceb578e85e286984"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/知识/线性基、维数与代数补空间.md",
+    "bytes": 7208,
+    "sha256": "ca9b2331261856031d153c23f8bc091e5d37933d9f0dd86b8a1d842a67b7bb0c"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/研读/1.1 记号与术语.md",
+    "bytes": 5200,
+    "sha256": "2f621b30864125039b9bdd96d5a61646d146bd35c0c675c05f64298b349e5403"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/研读/1.2 度量空间.md",
+    "bytes": 6496,
+    "sha256": "336c482489a78c69489bdd0062a496240fbda5159c2782650096d37f9c78c0b2"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/研读/1.3 实数.md",
+    "bytes": 6171,
+    "sha256": "52da79178e373665c50d252f52586a55be1ffeaf1dbd2f98f5d1db93589e0a35"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/研读/1.4 序.md",
+    "bytes": 4891,
+    "sha256": "1b05f4a1af39464cd45776adab0bf6e9768afc21f7de47eab4060cc29983c5fa"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/研读/1.5 选择公理与 Zorn 引理.md",
+    "bytes": 5620,
+    "sha256": "bdfa09416b6208026ddf67f06b476ab810456100b09c89e666bd1024a22c4f46"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/研读/1.6 可数性.md",
+    "bytes": 6069,
+    "sha256": "102be4556bbeb1c97c900e7ff6dfd4df7fc2edda7b1d5c5258a384cf663bef25"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/研读/1.7 线性代数.md",
+    "bytes": 7353,
+    "sha256": "a9bf543781c55d6e21956c6be36f864ebb23e4e4d7f16d4d5bc349fbb393a13c"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/研读/1.8 微积分.md",
+    "bytes": 6597,
+    "sha256": "2757f36ad89b0f4e2742300845fa75f1f5dee4678fd678e4a73f5042d9c9a6ac"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/第一章 预备知识.md",
+    "bytes": 6544,
+    "sha256": "83c027045714a25d558278f84041fee03635bddb50f01caf3e6a41784ecba195"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/联系/从代数投影到正交谱分解.md",
+    "bytes": 6344,
+    "sha256": "5e2b133bca158ee89550480b6d33d200c1e9daa45bc0d62df64c03ffe92cb6ad"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/联系/从商构造到完备化与实数.md",
+    "bytes": 7126,
+    "sha256": "14ea3037fdcf07d0d80d2404942de33d53b21f8962af66e04843092dd1300778"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第一章/联系/可数递进与极大性存在证明.md",
+    "bytes": 5854,
+    "sha256": "045f9ed74a021c4a1b305f6ba652ee65f2e84a7d83bd090515e27fcc75fe1c6d"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/知识/Dirichlet Kernels and Dini Convergence.md",
+    "bytes": 6028,
+    "sha256": "a8dfd4d1d20311df39c1d6108bfc72f1fb7e7f639821cf1f5faaf82820766f59"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/知识/Fourier Series and Summation Kernels.md",
+    "bytes": 5668,
+    "sha256": "d4743df8d75f4bdf6cce70a936297993c76dda4b7012a9c5ed51b87a09001522"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/知识/Hilbert Completeness and Norm Identities.md",
+    "bytes": 7524,
+    "sha256": "30ffb096a2b29d891d0fc7ac8940674550b04523f32a4fd1655cc04c4f3a6246"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/知识/Hilbert Sums and Tensor Products.md",
+    "bytes": 9245,
+    "sha256": "a6fdf48bb97caaecf49fc372a5feb473113b1cbfbeb02da44a7d5c217ebfafb2"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/知识/Lacunary Fourier Series and Roughness.md",
+    "bytes": 5130,
+    "sha256": "c2099008a4a1d3262cf0c534bb796aeea8693cad8758461600aeeb4fa8c3f809"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/知识/Linear Functionals as Vectors.md",
+    "bytes": 6117,
+    "sha256": "26bb1672c13115a6eaf4b255b4ebb9b9e261835667e421d45b317ddbb51f55f2"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/知识/Nearest Points in Convex Sets.md",
+    "bytes": 5547,
+    "sha256": "063a98dad9f88a71426b569a822b80e4edba20a8d7900320131012b22ee32a52"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/知识/Operators, Adjoints, and Operator Topologies.md",
+    "bytes": 6675,
+    "sha256": "4e8a719532ac8b31e9b04ebd78ac414bb1a7fbc6e159ada49f080a1ae338323a"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/知识/Orthonormal Expansions.md",
+    "bytes": 5945,
+    "sha256": "a428b6085b65ace65a2032829a820bb42e2eb6258fa3ea8ea41e013827e3b7a9"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/知识/Pointwise Fourier Convergence and Jumps.md",
+    "bytes": 6190,
+    "sha256": "4d35b1e3dbc0f268027f82154059278ee61ca0326196a3df809d0fb49d6a3454"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/知识/Trigonometric Density and L2 Fourier Expansion.md",
+    "bytes": 6414,
+    "sha256": "2d1c99de3fb82a1e361c83314f5d5fc087b592f999f4332124c9880b970f2122"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/知识/Weak Topologies and Dual Pairings.md",
+    "bytes": 7627,
+    "sha256": "6ff36ed01c6a22b92a6de6ac50e5a347292ce90f9924fd44043bda1e5cafb4e5"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/研读/3.1 Basic Inequalities.md",
+    "bytes": 4501,
+    "sha256": "c11cd2bd874274f8f39c0761a81d3998d2db47189638b48855469c4d32dfaa10"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/研读/3.2 Convex Sets, Minima, and Orthogonal Complements.md",
+    "bytes": 3953,
+    "sha256": "7c7033e14b609f86fe72159462eac753f8d8a46d90a932d9a5bfd8622d3a58ff"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/研读/3.3 Dual Spaces and the Riesz Representation Theorem.md",
+    "bytes": 4152,
+    "sha256": "3661a4d8e5f157b4417efd567799e6eacdaf6ecdb9db45534fba31cfac9f1002"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/研读/3.4 Orthonormal Bases, Abstract Fourier Expansions, and Gram–Schmidt.md",
+    "bytes": 4139,
+    "sha256": "29fa118f0d531bfefb2bfe3a1b0c47622e7ac3fb6dfe32949048f1a9eb957eb6"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/研读/3.5 Classical Fourier Series.md",
+    "bytes": 6123,
+    "sha256": "0f957750dfbe5cbd7cb379133bf40ec6ee0ef3bb2d8643676fbac2ccb2a355ab"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/研读/3.6 The Weak Topology.md",
+    "bytes": 4442,
+    "sha256": "eda56308cfb46efa25b9477cd18f799179954dbf4ed9845efb13abc91b18f0f0"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/研读/3.7 A First Look at Operators.md",
+    "bytes": 3686,
+    "sha256": "435ae46b3efa2b597b56c4654b7e1c0c2ce0dc21b447f8b7af63570f02d2fab9"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/研读/3.8 Direct Sums and Tensor Products of Hilbert Spaces.md",
+    "bytes": 4352,
+    "sha256": "b40afcacd1d8ce0a36d6f7c1840b930371129772a7e60c7460219d5ff184eb9a"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/第三章 Hilbert Spaces and Fourier Series.md",
+    "bytes": 9095,
+    "sha256": "9294d2415acc7dba492020fded5db85877735c262ad27a2a9e2b7dd8513ca1e3"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/第三章 习题与原书核校.md",
+    "bytes": 28358,
+    "sha256": "5e10d768db7a1d3c4ff2bfd2d52fc5e80c69b6c4faa34fceda5e1f26fbff4f6e"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/联系/From Algebraic Projections to Hilbert Best Approximation.md",
+    "bytes": 5473,
+    "sha256": "8df65f1752d8c5d5d8b9fea1a450bb700c36cea2c51435f9021693e31c96ab54"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/联系/From Coordinate Tests to Weak Compactness.md",
+    "bytes": 5452,
+    "sha256": "f0d2f4ef345a52edb47660d7d6567406975f34298d936ad53a33f133483f1c53"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第三章/联系/From Uniform Approximation to Fourier Expansions.md",
+    "bytes": 6809,
+    "sha256": "e4b844bcc0416705cc76b5262390d0dc7beb81bf6dc85c6766c98679eda7332d"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/知识/Algebras, Lattices, and Uniform Approximation.md",
+    "bytes": 7241,
+    "sha256": "b6276144e490f6bb920710b94d97e16cd9bf1972979824cee7f2ea1a95f301ab"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/知识/Bases and Countability Conditions.md",
+    "bytes": 6338,
+    "sha256": "4ef0e6bf72e41881f5414516f2e3ba7cdaf1bb32d588dd2ee7a1df652f0b0773"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/知识/Compactness and Total Boundedness.md",
+    "bytes": 7743,
+    "sha256": "872f0fbf8b9ba96de10b81d46cd1e2d07302a8fd618d267960046a07ffa7a4d6"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/知识/Connectedness and Components.md",
+    "bytes": 5839,
+    "sha256": "03dd7f1903c059c5244bd0d0e39ff9664350de67da5ebd6ac6bdcda8b2e8bb10"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/知识/Equicontinuity and Compact Families.md",
+    "bytes": 6380,
+    "sha256": "05a41fb05a51bf02e037b8dee36883e42b3ac0bb1049f75e6926f6c5c65ae5af"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/知识/Local Compactness and Compactification.md",
+    "bytes": 6578,
+    "sha256": "25ec5a3a6da9b4b792455f862cd4b01aaec734a68d03eb6fecbae3fe11d59570"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/知识/Metrization and the Hilbert Cube.md",
+    "bytes": 5816,
+    "sha256": "bef3871c633dea338971e091f1c025796e904fd1ebb0ed166a9f2d84f886adc2"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/知识/Nets and General Convergence.md",
+    "bytes": 7422,
+    "sha256": "f5a057193d55ca869fa83ace9f3f956b84e6ebb0a6403bdb6093dc67ec23101b"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/知识/Open Sets, Closure, and Continuity.md",
+    "bytes": 7464,
+    "sha256": "814881c7838f12deb216118d06345c6c39a87383d5a92e2ab3c7a2d25aafad29"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/知识/Positive Approximation and Bernstein Polynomials.md",
+    "bytes": 6979,
+    "sha256": "8effc1461bb43b5e65b6221e9df45c4277bde9fcc17694194568ab667d3dd3f2"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/知识/Products and Compactness.md",
+    "bytes": 7228,
+    "sha256": "2594f8e3a5c8fb28fb3f8a14f10f81b68b3997af936d140d48ea651de37173ad"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/知识/Quotient Topologies.md",
+    "bytes": 7794,
+    "sha256": "b2701bfb72539537d8e6334407e5411c8cc1511db80920d14d21649f20c7a9db"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/知识/Semicontinuity, Extrema, and Continuous Partitions.md",
+    "bytes": 6448,
+    "sha256": "73ea166b37177aa1490cf174b9935c41975f215acbdab5e04f26c59c12b4a537"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/知识/Separation and Continuous Extension.md",
+    "bytes": 6383,
+    "sha256": "206b752dba34193bfbb92663863cf26b4aa0a19a5237ce76234d09c7cf63b11e"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/研读/2.1 Lots of Definitions.md",
+    "bytes": 4479,
+    "sha256": "72fe9d95d8267c02350441f75db0580a71fe27ad2d45ffda398638198ad201e5"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/研读/2.2 Countability and Separation Properties.md",
+    "bytes": 4261,
+    "sha256": "c7efe8efe99e62fdbf6ee227b029d358e310204532ed12b25740dd1a6c91f496"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/研读/2.3 Compact Spaces.md",
+    "bytes": 4680,
+    "sha256": "41eaf63c79510cfe31e3d2ca3e6b9dc3bddf8108ad909c2289cac00103f27e00"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/研读/2.4 The Weierstrass Approximation Theorem and Bernstein Polynomials.md",
+    "bytes": 4323,
+    "sha256": "47b46993d982fd911bce97f2e41991294f6eb7499d871c09b741c358cfdfbae7"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/研读/2.5 The Stone–Weierstrass Theorem.md",
+    "bytes": 3727,
+    "sha256": "a4adc4c32925ba781afe5a472bc601846bfd0e68ecf44cc42ebc26917897e01f"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/研读/2.6 Nets.md",
+    "bytes": 3693,
+    "sha256": "dc81ba15574f15fc002aead13d2c49871ca344d4c8ce30840a72eaa00bf72e72"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/研读/2.7 Product Topologies and Tychonoff’s Theorem.md",
+    "bytes": 4076,
+    "sha256": "a5e066bef5407e0eaf139a07ab6dd3720b3eb41637bb355a4f6f75971b65ea39"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/研读/2.8 Quotient Topologies.md",
+    "bytes": 3860,
+    "sha256": "beaf94ef18623dc5545ee8ad2f2967e5386dcc86ec9adc06c02db8a7886f18e2"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/第二章 Topological Spaces.md",
+    "bytes": 7868,
+    "sha256": "a7c42f4207462814df50ba788db9ff25eaff0f17fe8386b37c398d61e7fe36da"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/第二章 习题与原书核校.md",
+    "bytes": 22390,
+    "sha256": "eaca4a9f572e55caf1f75bb6f3077094e5121484a859aa7a4bf58f7ad4c9246d"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/联系/From Compactness to Uniform Control.md",
+    "bytes": 7437,
+    "sha256": "e20f732490d7f9e3adc369c2ac80d854c1ff71aeeff8e2ea71145f631d3658ae"
+  },
+  {
+    "path": "content/笔记主体/书籍/Simon实分析/第二章/联系/From Metric Sequences to Topological Nets.md",
+    "bytes": 5213,
+    "sha256": "3148300af38107090791b0f3c81d7e9ca6334db2241cc3d03e37f1441ff3bc17"
+  },
+  {
+    "path": "content/笔记主体/发现归档.md",
+    "bytes": 11537,
+    "sha256": "e3a3943e4ee4b5c306fef73ea5c2e06aa0efb55c826eb6ab7012f2cebe10f2f7"
+  },
+  {
+    "path": "content/笔记主体/笔记主体.md",
+    "bytes": 3240,
+    "sha256": "08b2839a8401eaf0946af13e148ee595ecc4053fb52a01b031ceb91d31e68650"
+  },
+  {
+    "path": "content/笔记科学与逻辑.md",
+    "bytes": 38064,
+    "sha256": "349df56704e7bd20b98b4e9169e9a44882d7b24f4e993a1b4867f12d56b5fc0c"
+  },
+  {
+    "path": "globals.d.ts",
+    "bytes": 558,
+    "sha256": "8d77d6699277df8caef3e0105fded9c33e0f26ea4df91d37f8fe53f4b467a17f"
+  },
+  {
+    "path": "index.d.ts",
+    "bytes": 398,
+    "sha256": "8801414e4a0b73a07d37b9a5e8ecc2c15c4d4919ad09568f3ac4d48bca99f037"
+  },
+  {
+    "path": "knowledge/ONNX-LICENSE.txt",
+    "bytes": 1073,
+    "sha256": "2f07c72751aed99790b8a4869cf2311df85a860b22ded05fa22803587a48922c"
+  },
+  {
+    "path": "knowledge/SEMANTIC-MODEL.md",
+    "bytes": 5103,
+    "sha256": "67c8796487ed4d5370e305f22d9c185810ee7115c3247f65a12fb334394a112d"
+  },
+  {
+    "path": "knowledge/index.json",
+    "bytes": 1190708,
+    "sha256": "d2d7e745994f5686ab1111257869681f9e2912a8a62059299b9d97329060604d"
+  },
+  {
+    "path": "knowledge/model-manifest.json",
+    "bytes": 1135,
+    "sha256": "eb2fac10a7c39087539420177c0002fa7e6b01a30567c4ef32a2f9d557d05566"
+  },
+  {
+    "path": "knowledge/overrides.json",
+    "bytes": 10132,
+    "sha256": "3faf5b7459a70b499ff31884731af1f6b44990eafa09d567ccc16d443b0ba883"
+  },
+  {
+    "path": "knowledge/registry.json",
+    "bytes": 48678,
+    "sha256": "9ea8335d5645f8b104f560ef088d669a467302b99bb4e10f80fe90082e30bfb2"
+  },
+  {
+    "path": "knowledge/semantic.json",
+    "bytes": 902681,
+    "sha256": "15580011048802dd0fc4938b16748e5cc07082979ce0f31c3ddf1b3d109ccdde"
+  },
+  {
+    "path": "knowledge/topos/README.md",
+    "bytes": 5948,
+    "sha256": "3fd2f378d9292c8bf3072b2a3abfe7e7e8d9ef8e6bfa176e3df3eb72d28adf26"
+  },
+  {
+    "path": "knowledge/topos/note-topics.json",
+    "bytes": 10213,
+    "sha256": "3f7e6da8efb75cf8b28a6e444fc444d81f5e8e7e63b8d2246363f4ab247d7418"
+  },
+  {
+    "path": "knowledge/topos/prototype.json",
+    "bytes": 47511,
+    "sha256": "fb561af76fc81a0a9b175c713f9e3b2d9e8a8fef2c72fae1bd1a5bd4d364f0ed"
+  },
+  {
+    "path": "knowledge/topos/sections/action-definition.md",
+    "bytes": 606,
+    "sha256": "2c8e7a6bca48a019f1d136af89c4f8b277620ab65523802de2756f38aad9519c"
+  },
+  {
+    "path": "knowledge/topos/sections/action-example.md",
+    "bytes": 335,
+    "sha256": "c1e8827228d00b4918664c0bb7340ac4cb68c782c3931254c59656b7a2ef18e6"
+  },
+  {
+    "path": "knowledge/topos/sections/action-overview.md",
+    "bytes": 152,
+    "sha256": "34bd5bd4a717f344895d6c4e1adf415f2694f6d76d9f7c2d4c61bd916805f34a"
+  },
+  {
+    "path": "knowledge/topos/sections/character-definition.md",
+    "bytes": 431,
+    "sha256": "2fcbb79271cc7d5bd85056dd869ba721efabdd45f052ce6bba622ed1f62dac4d"
+  },
+  {
+    "path": "knowledge/topos/sections/character-example.md",
+    "bytes": 402,
+    "sha256": "871e2fb26f39309cb1ccd20ac1ea261ef5c7ef6357cca07d0cacd84b8ac7d323"
+  },
+  {
+    "path": "knowledge/topos/sections/character-overview.md",
+    "bytes": 179,
+    "sha256": "2cb7d1fadafb4963446fd48e390820f9cdc0e2b13287dbf18a53c6b0e23a8f08"
+  },
+  {
+    "path": "knowledge/topos/sections/general-linear-group-definition.md",
+    "bytes": 374,
+    "sha256": "c78b89c662b3126b4719d44ae1b64adc5495bcbc444eca6b82158e987680562e"
+  },
+  {
+    "path": "knowledge/topos/sections/general-linear-group-example.md",
+    "bytes": 349,
+    "sha256": "00caab0803b69de699a4b8c9087802212526bcf55458f9c79fbd4b1896f696b1"
+  },
+  {
+    "path": "knowledge/topos/sections/general-linear-group-overview.md",
+    "bytes": 151,
+    "sha256": "1c4fdc378940fa12ec70a285cdf8c8bfe0372b95dc9a0552c0c38d8c5c97a398"
+  },
+  {
+    "path": "knowledge/topos/sections/group-algebra-definition.md",
+    "bytes": 453,
+    "sha256": "bed798f23dab9a34a3aea4ba4d611dd1a5622744c75708fd1a8a43356c67b7ee"
+  },
+  {
+    "path": "knowledge/topos/sections/group-algebra-example.md",
+    "bytes": 323,
+    "sha256": "59e2c517f51a0da0469e336d405b1454602f604c379f40de2fefa02d8a4f8e25"
+  },
+  {
+    "path": "knowledge/topos/sections/group-algebra-overview.md",
+    "bytes": 160,
+    "sha256": "bfec91a1e83faf9e237b759298f155c03371fa10d4df18b0c69d0f571a40412e"
+  },
+  {
+    "path": "knowledge/topos/sections/group-associativity.md",
+    "bytes": 514,
+    "sha256": "2ca976483d3b0d4aad1f64f6b52a003be117f578b15f9e3e09ceda124bbb0666"
+  },
+  {
+    "path": "knowledge/topos/sections/group-definition.md",
+    "bytes": 647,
+    "sha256": "60eb4a1ea18fdd2538d893f7eda0e4301c6bfa5d922e180fbd6c0883788c98eb"
+  },
+  {
+    "path": "knowledge/topos/sections/group-example.md",
+    "bytes": 497,
+    "sha256": "df53b199aa491474edae7dddc6486d0799e36938aa1ae11509c608324af6fef1"
+  },
+  {
+    "path": "knowledge/topos/sections/group-overview.md",
+    "bytes": 119,
+    "sha256": "ad3390164a893addd888a0f10f3d77eada09685709647f7d6509f739fcf6de53"
+  },
+  {
+    "path": "knowledge/topos/sections/homomorphism-definition.md",
+    "bytes": 365,
+    "sha256": "267a36aac4346d850821b5c87adf10665b1ec071bba09ca7aaa93cf597af354e"
+  },
+  {
+    "path": "knowledge/topos/sections/homomorphism-example.md",
+    "bytes": 361,
+    "sha256": "6808cb06df3c7ed6f38b326eca4009b71f66976fed8ab8c37509291da6d8523a"
+  },
+  {
+    "path": "knowledge/topos/sections/homomorphism-overview.md",
+    "bytes": 120,
+    "sha256": "11c0f98ecb284ad984f5c009bc8718924c330f427650e32ab4a5fa75beec8a96"
+  },
+  {
+    "path": "knowledge/topos/sections/intertwiner-definition.md",
+    "bytes": 422,
+    "sha256": "7c2a1d57f1328a840e56800f09327cb3b1828ec8bde8159a77595c2cd1cc4d16"
+  },
+  {
+    "path": "knowledge/topos/sections/intertwiner-example.md",
+    "bytes": 423,
+    "sha256": "cf37277baafc2a7b9618c596e4906a9e389b6e02a369750e3cc3efce57fe303b"
+  },
+  {
+    "path": "knowledge/topos/sections/intertwiner-overview.md",
+    "bytes": 143,
+    "sha256": "b00b5945e7dc15ae3b818127245cff704f04edce2f8a0bb8a494dbb79ce1f907"
+  },
+  {
+    "path": "knowledge/topos/sections/invariant-subspace-definition.md",
+    "bytes": 379,
+    "sha256": "b24f60322c111b482dfb7c298bc6a3d738c0b8d4703b11614a01f8f555a86127"
+  },
+  {
+    "path": "knowledge/topos/sections/invariant-subspace-example.md",
+    "bytes": 370,
+    "sha256": "786a28ddbfd5d2101ced263a502c52212ac0c576a87335dfc5f1dabb904e0e4f"
+  },
+  {
+    "path": "knowledge/topos/sections/invariant-subspace-overview.md",
+    "bytes": 177,
+    "sha256": "1feb3f7dfbc3942210a5e692841186bad6dac0181de560fcff377cd185441cee"
+  },
+  {
+    "path": "knowledge/topos/sections/irreducible-representation-definition.md",
+    "bytes": 430,
+    "sha256": "d7c49d89225c425ddf8d7c36544b6c7772d8a92c77b4b76598a785351e1592a0"
+  },
+  {
+    "path": "knowledge/topos/sections/irreducible-representation-example.md",
+    "bytes": 408,
+    "sha256": "24970f50e8c3a060ae30f0a11128038764d29cc7fd94192fb19b4cfd39357d7c"
+  },
+  {
+    "path": "knowledge/topos/sections/irreducible-representation-overview.md",
+    "bytes": 146,
+    "sha256": "f9408f90ae3872e01e6707f2b4c8840a6bf5b4084fc5335bcbfec88560a93896"
+  },
+  {
+    "path": "knowledge/topos/sections/linear-map-definition.md",
+    "bytes": 319,
+    "sha256": "cc1717019246bc09e77660e8b89fd7fb583f73cbbfc9c5af41af03e2ff6287d5"
+  },
+  {
+    "path": "knowledge/topos/sections/linear-map-example.md",
+    "bytes": 367,
+    "sha256": "f07377cee03e3847be41b72822d25fef396ef81aeb3102879d264e83571513de"
+  },
+  {
+    "path": "knowledge/topos/sections/linear-map-overview.md",
+    "bytes": 148,
+    "sha256": "d8722b35f54f83ce3e82a3a510c60cbb53f68d0ed139f1ca5d5238ccc1c9ec70"
+  },
+  {
+    "path": "knowledge/topos/sections/module-definition.md",
+    "bytes": 492,
+    "sha256": "3033c8580e98f7e1b96f03c70fb8b91e7d2ce9f6927a3de06497c7a643e86b6e"
+  },
+  {
+    "path": "knowledge/topos/sections/module-example.md",
+    "bytes": 389,
+    "sha256": "09e06b89381d65ed8f51508512ba7f90e2603ea0ed3512765fecde4d17677a1e"
+  },
+  {
+    "path": "knowledge/topos/sections/module-overview.md",
+    "bytes": 159,
+    "sha256": "43c1a7530c791f79327cec64ee3a569915f2475d6dbba0a32f99e4b2ea07ca3d"
+  },
+  {
+    "path": "knowledge/topos/sections/normal-subgroup-definition.md",
+    "bytes": 340,
+    "sha256": "9e255271da1ef04bc5536713d6cab2cf193099a7827872df06fc2e7ba37ee8c4"
+  },
+  {
+    "path": "knowledge/topos/sections/normal-subgroup-example.md",
+    "bytes": 375,
+    "sha256": "8f5066ae8ceb8e920bbd8a886ed36dccd9b475c4483efe4381d18f033947bb90"
+  },
+  {
+    "path": "knowledge/topos/sections/normal-subgroup-overview.md",
+    "bytes": 154,
+    "sha256": "31e10afac0d25e52b57adf5195439b0591a7f0ec1b8291ac1851e537a06cd1f3"
+  },
+  {
+    "path": "knowledge/topos/sections/orbit-definition.md",
+    "bytes": 324,
+    "sha256": "9fed06f6f90b7df25ee47ef6956fecca989b30b5027d756bc21647a74d2c398c"
+  },
+  {
+    "path": "knowledge/topos/sections/orbit-example.md",
+    "bytes": 350,
+    "sha256": "9d5690b094ef4f3c4cf4645be1a05b5b7c5313d2a310dadc9bb33e2522753ab4"
+  },
+  {
+    "path": "knowledge/topos/sections/orbit-overview.md",
+    "bytes": 132,
+    "sha256": "86f7542a61612b0b44a239159e0880fef8e6db0c72753dd8d337a5d2c5e84165"
+  },
+  {
+    "path": "knowledge/topos/sections/permutation-group-definition.md",
+    "bytes": 375,
+    "sha256": "6141e4ea367a47b9cc44c73a782a3f0d00d32a4988b961518c0d4cf24e1b4229"
+  },
+  {
+    "path": "knowledge/topos/sections/permutation-group-example.md",
+    "bytes": 343,
+    "sha256": "7172acb425a4ff4a001347f7c021e12b3240e97187df7c18bb53be6e855a29a2"
+  },
+  {
+    "path": "knowledge/topos/sections/permutation-group-overview.md",
+    "bytes": 156,
+    "sha256": "2fd7ab2c902a854cf88145cd0707945a4de51331ac10aeeba2d3ea05ec51a01c"
+  },
+  {
+    "path": "knowledge/topos/sections/permutation-representation-definition.md",
+    "bytes": 398,
+    "sha256": "5342d06fe51651856b5654f959d1c627edb7c6cb07731be8984c5f05703a71c9"
+  },
+  {
+    "path": "knowledge/topos/sections/permutation-representation-example.md",
+    "bytes": 392,
+    "sha256": "98f0be7869a307ed24c5f2aea56ff79a586bcc7788627ff234d966f83db27166"
+  },
+  {
+    "path": "knowledge/topos/sections/permutation-representation-overview.md",
+    "bytes": 196,
+    "sha256": "f90801a1817ad0e709e30633ff62e734c34ed4e40a45cf254903caa9a06a5abe"
+  },
+  {
+    "path": "knowledge/topos/sections/quotient-definition.md",
+    "bytes": 411,
+    "sha256": "138633816f45ad455871aa3c4c8ae25ddc65dcb3792b6fe901a1dc0fa467976b"
+  },
+  {
+    "path": "knowledge/topos/sections/quotient-example.md",
+    "bytes": 359,
+    "sha256": "bcaf6df54f1a052d6619ac4b4a8efe3bed94bf4649598a8278369198f6bec304"
+  },
+  {
+    "path": "knowledge/topos/sections/quotient-overview.md",
+    "bytes": 137,
+    "sha256": "aad4e7f3ba13b68aed26db7d2468fff02b234502f51e543215cefe7a99f33716"
+  },
+  {
+    "path": "knowledge/topos/sections/representation-definition.md",
+    "bytes": 642,
+    "sha256": "3673af4a2889d3d36d5eb755276c66a6c8469ae4766b03aad0bf534e4dab69a2"
+  },
+  {
+    "path": "knowledge/topos/sections/representation-example.md",
+    "bytes": 487,
+    "sha256": "b07e390746aff9123aa6bfbf3725eb43d06da5b9c75cd0fda0ada5451e116808"
+  },
+  {
+    "path": "knowledge/topos/sections/representation-overview.md",
+    "bytes": 142,
+    "sha256": "d8c11be9cb80cd5248455e53e70de629d9ee496156730c9e3a88e99c725c3c50"
+  },
+  {
+    "path": "knowledge/topos/sections/representation-theory-definition.md",
+    "bytes": 472,
+    "sha256": "60855a7997a594a84c3f0115eef0b29703b78bc182b2d322493d9c35597c7755"
+  },
+  {
+    "path": "knowledge/topos/sections/representation-theory-example.md",
+    "bytes": 470,
+    "sha256": "f9b41c0e538c5f47ab9ad1c675d5e5f01e506ea3ee2968877992a9dfe3ae371d"
+  },
+  {
+    "path": "knowledge/topos/sections/representation-theory-overview.md",
+    "bytes": 181,
+    "sha256": "5ae078a7a7b1b080f337afebc1a464b2bdac3f3c310f0415521d385717b8dd27"
+  },
+  {
+    "path": "knowledge/topos/sections/stabilizer-definition.md",
+    "bytes": 391,
+    "sha256": "462034e0e0856f06d05dd2e84b9e8f2f55dd2c670e7ed5c7e70695363ca5a2dd"
+  },
+  {
+    "path": "knowledge/topos/sections/stabilizer-example.md",
+    "bytes": 342,
+    "sha256": "0e604c9ec833a79a64a49a217408a9ca798086584859f215732b2398df059f9a"
+  },
+  {
+    "path": "knowledge/topos/sections/stabilizer-overview.md",
+    "bytes": 134,
+    "sha256": "65ae1f4ccb2204c226609fb59691413859c1864cd4ee31932eda57a1db4e2d14"
+  },
+  {
+    "path": "knowledge/topos/sections/subgroup-definition.md",
+    "bytes": 401,
+    "sha256": "bb3533b638b99e93112a3fe389a58199ba0d6ff566f488194f93fea00118a9b7"
+  },
+  {
+    "path": "knowledge/topos/sections/subgroup-example.md",
+    "bytes": 381,
+    "sha256": "e85fee7028931d59593fa916523f8f6e7853289a75c889e8029df34e4fbc10e3"
+  },
+  {
+    "path": "knowledge/topos/sections/subgroup-overview.md",
+    "bytes": 147,
+    "sha256": "4a9606a471992c096b7daa317e5628fe225f7d8f0a5cb2b8b48cbebc07373e49"
+  },
+  {
+    "path": "knowledge/topos/sections/symmetry-definition.md",
+    "bytes": 518,
+    "sha256": "fdcca67e55b5d935364e4ab3197fef47d481297ba5a7dde0b3c58f3996a21c93"
+  },
+  {
+    "path": "knowledge/topos/sections/symmetry-example.md",
+    "bytes": 417,
+    "sha256": "827cde91496b73aaa02d669122d9751e7ed3788a27ceee8050e32c387a5a8710"
+  },
+  {
+    "path": "knowledge/topos/sections/symmetry-overview.md",
+    "bytes": 166,
+    "sha256": "60ba0853d3e7e16dd40490cabb67b147752c8e433efd584ac5ad16c76787a0f6"
+  },
+  {
+    "path": "knowledge/topos/sections/vector-space-definition.md",
+    "bytes": 346,
+    "sha256": "4f5d4bd90afb0a6244d8e4465de69875079abd237c98ba4f848b1e549b9fb708"
+  },
+  {
+    "path": "knowledge/topos/sections/vector-space-example.md",
+    "bytes": 305,
+    "sha256": "b774d4612f411f79c2a790d6135cb2cda3af77db986954680d8c91237e743527"
+  },
+  {
+    "path": "knowledge/topos/sections/vector-space-overview.md",
+    "bytes": 164,
+    "sha256": "d8a6e8ee4110e4322922e8684ee6860fc0ba290d3010ef3f26fd35d7c8b74f14"
+  },
+  {
+    "path": "ontology/audit.json",
+    "bytes": 39615,
+    "sha256": "72efc651b60c31dd5820d013c5217b8adfb4366f59fe09d9331077ddbee96771"
+  },
+  {
+    "path": "ontology/benchmarks/README.md",
+    "bytes": 3491,
+    "sha256": "775a8c8c187181b91a68e12dcc64f5e462b4a9340db0f3d3f025f02bdc1daec2"
+  },
+  {
+    "path": "ontology/benchmarks/arxiv-math.json",
+    "bytes": 2885,
+    "sha256": "c33cdc13d8d121f6efebdd4b2c50c5e65fd330099d4ad0c7921061ea27fc5333"
+  },
+  {
+    "path": "ontology/benchmarks/assemble.mjs",
+    "bytes": 22715,
+    "sha256": "679241348bf5bbacebaa2a7a6c9b4cef5f06fd36c8dd55985ebbcef75e1a4ccd"
+  },
+  {
+    "path": "ontology/benchmarks/msc2020-level1.json",
+    "bytes": 5598,
+    "sha256": "6e271da145cfc4e3f03ca648e40b9135d78a46fc85464655da22eb4e8f2b80d6"
+  },
+  {
+    "path": "ontology/benchmarks/record-audit.mjs",
+    "bytes": 14915,
+    "sha256": "e4625fcddbc5cc9b12868a92826c5f228f363c7842330f6248649306fdb91a86"
+  },
+  {
+    "path": "ontology/benchmarks/regions-07-12-verification.json",
+    "bytes": 32054,
+    "sha256": "acd881ba88fbf413c3db0071f3dae24b4132bc69f6f87a66f2aa94498391049b"
+  },
+  {
+    "path": "ontology/benchmarks/research-regions-01-06.mjs",
+    "bytes": 17049,
+    "sha256": "dc36588cadfe409092a575d2c65d5a209ec521fa187cf55417c777a6b0f3422e"
+  },
+  {
+    "path": "ontology/benchmarks/retrieval-regions-01-06.json",
+    "bytes": 12203,
+    "sha256": "e524dca3364c72e965c50500ea617bd4c4aa14546a2978d1d676e007d782446d"
+  },
+  {
+    "path": "ontology/benchmarks/review-records.json",
+    "bytes": 37307,
+    "sha256": "07f17855dfef025ea6db77cdc8191934bc506bea8817f47b592890f8d1a5f332"
+  },
+  {
+    "path": "ontology/benchmarks/run-acceptance.mjs",
+    "bytes": 3270,
+    "sha256": "d31f85a34210424ab217d4eb28a860eebddcd6c587bb596ded38a6d1d6191cb9"
+  },
+  {
+    "path": "ontology/benchmarks/sample-selection.json",
+    "bytes": 3639,
+    "sha256": "96febcc924144232686f5bffedf8e18e7a0876d6f2da08bbadfcccbc90b57185"
+  },
+  {
+    "path": "ontology/benchmarks/schema-contract.json",
+    "bytes": 1879,
+    "sha256": "b8412b65c7546c7d09fde89f30e76c206c118e26a09209b33e9c8ab6f3bc8c04"
+  },
+  {
+    "path": "ontology/math_outline.md",
+    "bytes": 8960,
+    "sha256": "4a17ab90ac6b21b9f1196647310048068d321105bd30cd1301202c2936732b6c"
+  },
+  {
+    "path": "ontology/math_registry.json",
+    "bytes": 133757,
+    "sha256": "0ab04467fa5a7510e0b5774726cf19a93628660e47b2c41112a34cf88d272730"
+  },
+  {
+    "path": "ontology/research-regions-01-06.json",
+    "bytes": 35147,
+    "sha256": "b5387c39b8efb229d31131516b9f3de5d02a6e86b881a4d951a0ea5c00c4ad58"
+  },
+  {
+    "path": "ontology/research-regions-07-12.json",
+    "bytes": 42866,
+    "sha256": "f95477352f5e08f492352b6f423770f7a7480d395847d2292f4f7f271388fd0d"
+  },
+  {
+    "path": "ontology/sources.json",
+    "bytes": 45994,
+    "sha256": "5a5d3fe7fc046b16fa6430d2023c64302e234bacdec51f0b3b3ace8ffd06897b"
+  },
+  {
+    "path": "package-lock.json",
+    "bytes": 328869,
+    "sha256": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef"
+  },
+  {
+    "path": "package.json",
+    "bytes": 6088,
+    "sha256": "995051c71e9eeca35c846e6427c2ea7c49e9e22152a09f973790b6b89c5420eb"
+  },
+  {
+    "path": "publish-manifest.json",
+    "bytes": 89066,
+    "sha256": "3529deb78e8d950d91d65ce58e72827056df9f5de2fb6b59a17f26d5d5145684"
+  },
+  {
+    "path": "publish.config.json",
+    "bytes": 595,
+    "sha256": "2a6dd2dd7346119ea25484ab30af6de36c493c41fabda78b9e4c936268cf35d8"
+  },
+  {
+    "path": "quartz.config.ts",
+    "bytes": 2665,
+    "sha256": "9f99954d65b859e72bec110c725a61b148f660e681cee8db56c647b5507e8d98"
+  },
+  {
+    "path": "quartz.layout.ts",
+    "bytes": 535,
+    "sha256": "f3aaa13baf63e3b1f3709491dd3714f2f21c0c8a5ac90c72949f60f3fe87d4d4"
+  },
+  {
+    "path": "quartz/bootstrap-cli.mjs",
+    "bytes": 1155,
+    "sha256": "f4ed5151cf3737666ddfc214f1cd189ce24922194a66c7b1bb4838ca7b8dba81"
+  },
+  {
+    "path": "quartz/bootstrap-worker.mjs",
+    "bytes": 232,
+    "sha256": "0e6ca7137df25ddda4667dc9cf1d7dc0e8850d3a56a2f192dbde541a79baaf55"
+  },
+  {
+    "path": "quartz/build.ts",
+    "bytes": 9844,
+    "sha256": "28319daa8a71d4dd56a2a480710e88df337a9621338246ab86fa7d7da149fe3d"
+  },
+  {
+    "path": "quartz/cfg.ts",
+    "bytes": 2944,
+    "sha256": "bbc074661e6a48ec60fd9659c64b5c9f78974ba414437e0414b39dde5401ecbd"
+  },
+  {
+    "path": "quartz/cli/args.js",
+    "bytes": 2337,
+    "sha256": "aa7cff1c4482f2a90b063e8a683a066787f354a46cc8eb3f00f48359c0da75c0"
+  },
+  {
+    "path": "quartz/cli/constants.js",
+    "bytes": 583,
+    "sha256": "2c9eca3a24946b365e380ff6a8d6e963f051b7f55cb7e28ef784ac9b92aa0bd9"
+  },
+  {
+    "path": "quartz/cli/handlers.js",
+    "bytes": 19083,
+    "sha256": "8cebae9e87cc3d399bed4872a1b4db5f43301baf335c7ac61c3f5250c54ffe9e"
+  },
+  {
+    "path": "quartz/cli/helpers.js",
+    "bytes": 1691,
+    "sha256": "53700aa11d68225bbf042902255cd727635ff3226493b6edaa69a2c0e811ef24"
+  },
+  {
+    "path": "quartz/components/ArticleTitle.tsx",
+    "bytes": 538,
+    "sha256": "b235f6cfce5542afb30645e2d3559ebb2a8dcda3f2d439bf67f704bd3db22c44"
+  },
+  {
+    "path": "quartz/components/Backlinks.tsx",
+    "bytes": 1718,
+    "sha256": "34470666a9cbe52256315fdf7df33e0e4e3cb04b2bd792c81b63299f7933a819"
+  },
+  {
+    "path": "quartz/components/Body.tsx",
+    "bytes": 470,
+    "sha256": "9ffa8a1f5225ebee0ccc320caedfee7eef57f5f882d56c910c40768284bdfd9e"
+  },
+  {
+    "path": "quartz/components/BookSearch.tsx",
+    "bytes": 2997,
+    "sha256": "b640d914847b4661a366d42ccefd162fe6b1182779a8d0c8f6a094ff0b60b2d9"
+  },
+  {
+    "path": "quartz/components/Breadcrumbs.tsx",
+    "bytes": 2541,
+    "sha256": "52969976bcdb638dcfcdf606f3a48503635f9e3d5f5bd3cd90755f3b08a20374"
+  },
+  {
+    "path": "quartz/components/Comments.tsx",
+    "bytes": 2073,
+    "sha256": "f09b32f81bfae97c688e9c6bbf78d73c616da952abff75448fa2a27438be550f"
+  },
+  {
+    "path": "quartz/components/ConditionalRender.tsx",
+    "bytes": 735,
+    "sha256": "7f3d658c913632b0b198b4b9d06b225787acf6095ada7a2bdbb7fc49d330edff"
+  },
+  {
+    "path": "quartz/components/ContentMeta.tsx",
+    "bytes": 1612,
+    "sha256": "ae6f4a3ad7f004b5c1283a62fc5aa1d356056d8cdccd0fb4cfcddee4c1e23bdd"
+  },
+  {
+    "path": "quartz/components/Darkmode.tsx",
+    "bytes": 3498,
+    "sha256": "0f2c616e834b5eb5469d3a137e34a0fe5b26b86e84fb67c32ca8285e8cd54856"
+  },
+  {
+    "path": "quartz/components/Date.tsx",
+    "bytes": 957,
+    "sha256": "1bd3fca4019b74b862101348b5f8bb53ec762efd578296a457a8ef5e60044bcf"
+  },
+  {
+    "path": "quartz/components/DesktopOnly.tsx",
+    "bytes": 595,
+    "sha256": "8c1fc5ef8104f44fd7cbf1d007333b6b68fea95ae4e03af506457aa3557f6b38"
+  },
+  {
+    "path": "quartz/components/Explorer.tsx",
+    "bytes": 5185,
+    "sha256": "77a9e44d9a8acfe24a654b56b16b422a68970b88081abc18a85b5f3f2ab1e7c1"
+  },
+  {
+    "path": "quartz/components/Flex.tsx",
+    "bytes": 1997,
+    "sha256": "937524545086db7ce7401316d423b2706e438e767d7ad155e12b93d9c0c45f1e"
+  },
+  {
+    "path": "quartz/components/Footer.tsx",
+    "bytes": 970,
+    "sha256": "6af0e560611302127346ad8d746801301a027ba84c1ed6cdaef8f1b43a13966a"
+  },
+  {
+    "path": "quartz/components/Graph.tsx",
+    "bytes": 4034,
+    "sha256": "1fe1deeedd79e39dce86e90df8723c186e4fef08940511dc55f0716e38bb0057"
+  },
+  {
+    "path": "quartz/components/Head.tsx",
+    "bytes": 4263,
+    "sha256": "f9cff313910d72bcb574abdb501864f95b2b62dceaada6e12370526bfbd9494b"
+  },
+  {
+    "path": "quartz/components/Header.tsx",
+    "bytes": 470,
+    "sha256": "88844f8b79ee0f1cb081e5d39f7a4a68c5631d17c547da1cc9fde15367004fe6"
+  },
+  {
+    "path": "quartz/components/KnowledgeReader.tsx",
+    "bytes": 1286,
+    "sha256": "dcdd02214d6c39d29de4e59a3edea4aafdccebf2ac2b13f49cfa91e03c904f1b"
+  },
+  {
+    "path": "quartz/components/MobileOnly.tsx",
+    "bytes": 588,
+    "sha256": "0cd40e2ddbbb0fded37a10bf33ea849e6292d5bace43c2e94f6a29f4b464c41f"
+  },
+  {
+    "path": "quartz/components/NoteGraph.tsx",
+    "bytes": 1680,
+    "sha256": "c908461755f4352ce7beaec31a1445a23549c962cccdb10dc322dd6d1408d3aa"
+  },
+  {
+    "path": "quartz/components/OverflowList.tsx",
+    "bytes": 1155,
+    "sha256": "e527c4b627ee982433fd9dc073d7ce8f9ddb2d156054087be74d1a85ff787e46"
+  },
+  {
+    "path": "quartz/components/PageList.tsx",
+    "bytes": 3375,
+    "sha256": "473c6ef467063d22157ae4466835cec7eae700b3c49b9e5603db53a748a9f962"
+  },
+  {
+    "path": "quartz/components/PageTitle.tsx",
+    "bytes": 718,
+    "sha256": "f2bb2f01bbdc595b31ce59ea5964caee8d3ca0bd587f1ea09f5230fb74ade7e8"
+  },
+  {
+    "path": "quartz/components/ReaderMode.tsx",
+    "bytes": 3136,
+    "sha256": "43724402ed6592c57add50cd5d2a64ce6b70824fc0c4e6fc411573e4274b2b64"
+  },
+  {
+    "path": "quartz/components/Reading.tsx",
+    "bytes": 25671,
+    "sha256": "aae6fa27dcb0c6b63cb13bd8c5369e861d458b3988612f048abda67f332ad0f5"
+  },
+  {
+    "path": "quartz/components/RecentNotes.tsx",
+    "bytes": 3147,
+    "sha256": "c1d36418b8259c6939acc6ed7b52b29fd55ffae9dba6bd3128e5372c8db90ca6"
+  },
+  {
+    "path": "quartz/components/Search.tsx",
+    "bytes": 1744,
+    "sha256": "d751258025e12a668dd8669fa78b57b17ca4a11a3c1c6c9d0c93562230294284"
+  },
+  {
+    "path": "quartz/components/Spacer.tsx",
+    "bytes": 310,
+    "sha256": "59f88c2de2d766ce2910f72f40b2564613baee1ea0bc68c05597c734b1d79652"
+  },
+  {
+    "path": "quartz/components/SpatialReading.tsx",
+    "bytes": 6021,
+    "sha256": "81c81285b808b92cdacd8d8f88b4af5dc4b1a349b938edcc280cf5025808795e"
+  },
+  {
+    "path": "quartz/components/TableOfContents.tsx",
+    "bytes": 3077,
+    "sha256": "e23878849cc298e2b0fa504cbf3346f18714e8e8d557a708ccf25decd4abd995"
+  },
+  {
+    "path": "quartz/components/TagList.tsx",
+    "bytes": 1270,
+    "sha256": "aee63b4529e10f7e2f15157753aff30b2d3f56ffa7e4de8ebd2119da67355c35"
+  },
+  {
+    "path": "quartz/components/index.ts",
+    "bytes": 1259,
+    "sha256": "4c2ef4caca7eb05cc222f6dcb952fe9fa41c618734d119098506d1f5907d3c2a"
+  },
+  {
+    "path": "quartz/components/pages/404.tsx",
+    "bytes": 649,
+    "sha256": "c400e367aada3f4bedfe90880ac978c6c4c2496b7fba0f97b79dd25fb97af401"
+  },
+  {
+    "path": "quartz/components/pages/Content.tsx",
+    "bytes": 593,
+    "sha256": "61f93e31c53b75d87937f0bae8da336832ad8d38c0a26b2532c4f8bfb33e86b5"
+  },
+  {
+    "path": "quartz/components/pages/FolderContent.tsx",
+    "bytes": 4037,
+    "sha256": "ac033ad7b61fbc92ba2973b01088325b8a78f84a4bee3b1088714489eda8ac15"
+  },
+  {
+    "path": "quartz/components/pages/TagContent.tsx",
+    "bytes": 4617,
+    "sha256": "1a2f0b254a558c7032f792351caefba49ef00e96ba69c3e484b2faa382703019"
+  },
+  {
+    "path": "quartz/components/renderPage.tsx",
+    "bytes": 4446,
+    "sha256": "d61b361ab75da3a5e2e1ca659fe0a3efdedc70d8b588b6114f2d6f714a4785f6"
+  },
+  {
+    "path": "quartz/components/scripts/bookSearch.inline.ts",
+    "bytes": 8782,
+    "sha256": "a0791b382c9ff8761e0a81b2d999ab6b7e5c244805a096633ee1866c5f6477f0"
+  },
+  {
+    "path": "quartz/components/scripts/callout.inline.ts",
+    "bytes": 1067,
+    "sha256": "b8955a8a2ff6bb2107587690d665fc04d3ea9acd869e342e27d550cab27ff458"
+  },
+  {
+    "path": "quartz/components/scripts/checkbox.inline.ts",
+    "bytes": 754,
+    "sha256": "9a4767d38a7031f43c5a6a81af767f307e3fee8d97e06a4fcdbeacdc18b4b6f0"
+  },
+  {
+    "path": "quartz/components/scripts/clipboard.inline.ts",
+    "bytes": 2069,
+    "sha256": "482d646d0e9b54b1bca81a9f7db085511507a70ca980b318b26a43bab67d901d"
+  },
+  {
+    "path": "quartz/components/scripts/comments.inline.ts",
+    "bytes": 3110,
+    "sha256": "97a7f9c105fa2e2d3ff85b0d8bdf7962b1ea480303ec41c7a8adfeb1e9ac1eb5"
+  },
+  {
+    "path": "quartz/components/scripts/darkmode.inline.ts",
+    "bytes": 1530,
+    "sha256": "0eb895cd4e6e7fb026c30aadd3c0db29e5794793da562505c7da85a995558b82"
+  },
+  {
+    "path": "quartz/components/scripts/explorer.inline.ts",
+    "bytes": 10824,
+    "sha256": "0baaaa7cbce298eff0e886bf1bae646ec805643c7b76ddab867c51e06e9bc4e0"
+  },
+  {
+    "path": "quartz/components/scripts/graph.inline.ts",
+    "bytes": 18524,
+    "sha256": "a2d3632f2870f1a3b9a0b208f5b0d5e124eb00813b0fe3a3afa580d854e22c01"
+  },
+  {
+    "path": "quartz/components/scripts/interfaceMotion.inline.ts",
+    "bytes": 7690,
+    "sha256": "d94b15bd9bc89eb91fc87d99cf68f058291473ebb20e5fe76db7ef62dae6411f"
+  },
+  {
+    "path": "quartz/components/scripts/knowledgeGraph.ts",
+    "bytes": 34516,
+    "sha256": "06403be0209dc8d0e7c7685f9f00ec9ef4b8ca98ac5f44af6854410cab68c7e0"
+  },
+  {
+    "path": "quartz/components/scripts/knowledgeGraph3d.ts",
+    "bytes": 47411,
+    "sha256": "30c1feda215620462af76cc79a96ba28f2d993212ce479eac9584df5253f4831"
+  },
+  {
+    "path": "quartz/components/scripts/knowledgeReader.inline.ts",
+    "bytes": 12218,
+    "sha256": "c29661e5287a02b701d1426efd4dbbe434358b1acd549ddf9443ec39da8e5bf8"
+  },
+  {
+    "path": "quartz/components/scripts/mermaid.inline.ts",
+    "bytes": 9336,
+    "sha256": "3b9917d224022671b91037ece443be3de9a887747ded97d8eaee7d829bcd0dec"
+  },
+  {
+    "path": "quartz/components/scripts/noteGraph.inline.ts",
+    "bytes": 21665,
+    "sha256": "50083e22dc0ddce201a769c7441c23f3f8a9598bd0b5adcc98873b37b66c65f3"
+  },
+  {
+    "path": "quartz/components/scripts/popover.inline.ts",
+    "bytes": 4243,
+    "sha256": "4c572519e2a9e52576d2c2c7b9b4fde3d1dbced704f0f1cc6d5997120b5e8059"
+  },
+  {
+    "path": "quartz/components/scripts/readermode.inline.ts",
+    "bytes": 860,
+    "sha256": "f111c2ce7106e037b79163ec4933217b1b9c08921ddee3eef44486030ddfd74a"
+  },
+  {
+    "path": "quartz/components/scripts/reading.inline.ts",
+    "bytes": 6456,
+    "sha256": "137d93db56d5702295b71d0552fa4d81d30145c2ca319592be1f0defc099fd2f"
+  },
+  {
+    "path": "quartz/components/scripts/search.inline.ts",
+    "bytes": 18524,
+    "sha256": "8d26d9657fa8611e5bc066d7ef77e72d02c752152ec7337de8fa55706e3e361b"
+  },
+  {
+    "path": "quartz/components/scripts/search.test.ts",
+    "bytes": 5128,
+    "sha256": "665d9b85f2b2e1ff275cb09d487a7544766623da53b76b44693a1794f535770a"
+  },
+  {
+    "path": "quartz/components/scripts/semanticWorker.ts",
+    "bytes": 7375,
+    "sha256": "5a5b15043fdc3b5e22bd66ca2592765d981a553b1bbf040415758acfdccb1ce4"
+  },
+  {
+    "path": "quartz/components/scripts/spa.inline.ts",
+    "bytes": 5976,
+    "sha256": "04349516b7d59d4e7a754d3e9702d63e4e7f3eed75d2f49b1fa55938dac4abb0"
+  },
+  {
+    "path": "quartz/components/scripts/spatialReading.inline.ts",
+    "bytes": 48769,
+    "sha256": "a573fb4b31cba978fe01e88795f2a59283ce4cb610a627223539f8e92c5681e3"
+  },
+  {
+    "path": "quartz/components/scripts/toc.inline.ts",
+    "bytes": 1547,
+    "sha256": "91f8560cf3b076b46e8e1c78d496e4374c4e779bfe547ae9fce48e7d28ede2fa"
+  },
+  {
+    "path": "quartz/components/scripts/topos/main.ts",
+    "bytes": 67315,
+    "sha256": "ab0387b91af3ed8e72d40e787657215570c37a9389556c92fa0fb7770b5ec046"
+  },
+  {
+    "path": "quartz/components/scripts/topos/renderer.ts",
+    "bytes": 21577,
+    "sha256": "e3da699f00b7aab74b26d1da09e6c11fb23d3be60c9b3070154d4aa1287531dc"
+  },
+  {
+    "path": "quartz/components/scripts/topos/sidebar.ts",
+    "bytes": 7221,
+    "sha256": "05a637eea555fd5a5e971772e40a923e8569ce80b50794d5739fca004d6cb17b"
+  },
+  {
+    "path": "quartz/components/scripts/util.ts",
+    "bytes": 1724,
+    "sha256": "ade8a70c3eddd0e810894f1ace2e5296a43d86e883d2091a70357b5faf9a51e3"
+  },
+  {
+    "path": "quartz/components/styles/backlinks.scss",
+    "bytes": 370,
+    "sha256": "105fd2dc8d25ba6731ed62392f75fee948d0d7052786f65e3025b6df3997d52a"
+  },
+  {
+    "path": "quartz/components/styles/bookSearch.scss",
+    "bytes": 3879,
+    "sha256": "4be267408c6b8eea40d25b93b89def82323b49d661ebe7b0ae0a9793c9b05dcc"
+  },
+  {
+    "path": "quartz/components/styles/breadcrumbs.scss",
+    "bytes": 356,
+    "sha256": "08e9d919bdeb728b62fac28ef9bb4555da44716ac362764451b6c020fb488f1a"
+  },
+  {
+    "path": "quartz/components/styles/clipboard.scss",
+    "bytes": 546,
+    "sha256": "fa6391dd120a8da501050f6a1b59e40fc983d0b253875a4efe4ef160ead9e203"
+  },
+  {
+    "path": "quartz/components/styles/contentMeta.scss",
+    "bytes": 197,
+    "sha256": "5bf8e8b538bcf138728f4d1123ef0663cd766aa8b3bde3770d1a0627fe2c3137"
+  },
+  {
+    "path": "quartz/components/styles/darkmode.scss",
+    "bytes": 691,
+    "sha256": "da14702afcc0fb298e99f9a8e54d214bb0bf019e32d04949ddbabc18cb992819"
+  },
+  {
+    "path": "quartz/components/styles/explorer.scss",
+    "bytes": 5134,
+    "sha256": "82d241f993468926fcd9ec2e457dc947d6825bceebd3b8683d93d540c3ad6069"
+  },
+  {
+    "path": "quartz/components/styles/footer.scss",
+    "bytes": 219,
+    "sha256": "081146815bb53433f3155e5f9e2b0033bb837940218d70bf83f1b21ab72aa947"
+  },
+  {
+    "path": "quartz/components/styles/graph.scss",
+    "bytes": 1434,
+    "sha256": "6a39938ab47066ba93dd1cf5bd15dc865f88c856174f53ef4f55922949cf47d1"
+  },
+  {
+    "path": "quartz/components/styles/knowledgeReader.scss",
+    "bytes": 2182,
+    "sha256": "58ab8d71b97fcf9fb33820c8a94983812a4bc7be7993ae92d43a50c3ecc1d680"
+  },
+  {
+    "path": "quartz/components/styles/legacyToc.scss",
+    "bytes": 379,
+    "sha256": "3cfcb166d9de5d7cd65e43ae8d3448328e97ce95d53d1fb0d5a9b4285e9041c0"
+  },
+  {
+    "path": "quartz/components/styles/listPage.scss",
+    "bytes": 630,
+    "sha256": "15d4caa77789e05efd7f24c44797b6f2f755baae0f3d926c7435ab172aea7b9b"
+  },
+  {
+    "path": "quartz/components/styles/mermaid.inline.scss",
+    "bytes": 2536,
+    "sha256": "d8fa555779d5d0f6bcf51d9f2e23e6f90a31d9193766f4c1f165fbdc45bea81b"
+  },
+  {
+    "path": "quartz/components/styles/noteGraph.scss",
+    "bytes": 8907,
+    "sha256": "cfaf3d841db5cadf859998837ff7ad7233054a383e0e0c407df272985ef162c8"
+  },
+  {
+    "path": "quartz/components/styles/popover.scss",
+    "bytes": 1569,
+    "sha256": "8c06e1338b31b28a7581d1c8a64c878ab97b4423446b03f56c1cd2de1e8738a8"
+  },
+  {
+    "path": "quartz/components/styles/readermode.scss",
+    "bytes": 547,
+    "sha256": "fb028e3edcefcf5976600570226ca397ac0946de13cd6268223a3a6cfcfbedf9"
+  },
+  {
+    "path": "quartz/components/styles/recentNotes.scss",
+    "bytes": 380,
+    "sha256": "92846237b88e824bdb2a0bbbe1f6ca13c811029a43fc6d7b9e434f95c61ba459"
+  },
+  {
+    "path": "quartz/components/styles/search.scss",
+    "bytes": 5390,
+    "sha256": "363a28899a91b01f3098c1e384ca36e4ad5424bd5f30eb70243636b741f95b98"
+  },
+  {
+    "path": "quartz/components/styles/spatialReading.scss",
+    "bytes": 14635,
+    "sha256": "45b66cff2a5476d710d33d51572af2c43072d984b212646f23ff3c0aca17dcdf"
+  },
+  {
+    "path": "quartz/components/styles/toc.scss",
+    "bytes": 1104,
+    "sha256": "bad456ad7f58b9477bfb300da35f27591318f6b2e68568c305e80b009fa8f6e9"
+  },
+  {
+    "path": "quartz/components/styles/topos.css",
+    "bytes": 25997,
+    "sha256": "bace98be0c1fbb8cb2e77b32de0d3be463ab74b6086916d5c7b2efcf81f46aad"
+  },
+  {
+    "path": "quartz/components/types.ts",
+    "bytes": 915,
+    "sha256": "be21da7ed9999546dfa0569e7b91adab2ab6d6013a0d114ca9a1dcb30ee4950b"
+  },
+  {
+    "path": "quartz/i18n/index.ts",
+    "bytes": 2128,
+    "sha256": "5084ea210ad768d5b5fa4514e7f7e7db66165488289914380948fc3f8fc8e85b"
+  },
+  {
+    "path": "quartz/i18n/locales/ar-SA.ts",
+    "bytes": 2871,
+    "sha256": "20a504498384568b47b6c05187b53e6d0c639bba8d5e7d54e60a0e04b9ecf6da"
+  },
+  {
+    "path": "quartz/i18n/locales/ca-ES.ts",
+    "bytes": 2326,
+    "sha256": "cd66cd68f0aefe840e2e6038a326b6a21fbe5d0ed877bccc79cd45dc8a85188c"
+  },
+  {
+    "path": "quartz/i18n/locales/cs-CZ.ts",
+    "bytes": 2348,
+    "sha256": "04ea0a7b19d02d0010178ef3cbbb6a186aa406f725fb894992f3d4fa5ec04f0d"
+  },
+  {
+    "path": "quartz/i18n/locales/de-DE.ts",
+    "bytes": 2330,
+    "sha256": "ec040ad64027459990456a024a3c947dc48e198b7db088a09c23c894b6d20647"
+  },
+  {
+    "path": "quartz/i18n/locales/definition.ts",
+    "bytes": 1805,
+    "sha256": "a72cb9dcba1e364983306607109ebf2b8b91add05103419f3383ec92dc53eead"
+  },
+  {
+    "path": "quartz/i18n/locales/en-GB.ts",
+    "bytes": 2201,
+    "sha256": "c000266a11a904a35d1726fdb9ea937a71d642c054065aa37efd1faace9f3f19"
+  },
+  {
+    "path": "quartz/i18n/locales/en-US.ts",
+    "bytes": 2200,
+    "sha256": "aeaa5fa9d70be731a61529e881b223ad22ebfa467f7226e889f8f9a0a85e8190"
+  },
+  {
+    "path": "quartz/i18n/locales/es-ES.ts",
+    "bytes": 2338,
+    "sha256": "41e81c1f4510dae3790d231cc70afb06d5c110239e8c5f6d34353a3f46c20ee7"
+  },
+  {
+    "path": "quartz/i18n/locales/fa-IR.ts",
+    "bytes": 2642,
+    "sha256": "1777814664b1e6d418fb93523a6e6172f9f846a307aabac97937a38617dda430"
+  },
+  {
+    "path": "quartz/i18n/locales/fi-FI.ts",
+    "bytes": 2384,
+    "sha256": "310d6dd8e1778313716473bd9a2e9b824d272eca3a445643f12520c47ab6deb7"
+  },
+  {
+    "path": "quartz/i18n/locales/fr-FR.ts",
+    "bytes": 2382,
+    "sha256": "5361fec8e0e436fa6ea9a7ad453d7cf44c4d12fc2958d082852d7d722cc1b658"
+  },
+  {
+    "path": "quartz/i18n/locales/he-IL.ts",
+    "bytes": 2571,
+    "sha256": "e6959d1eadacc38cafedafb257c9e8e0dd1aac055f82d2c45d58280181a2c718"
+  },
+  {
+    "path": "quartz/i18n/locales/hu-HU.ts",
+    "bytes": 2253,
+    "sha256": "60b1033733c772be657f4eb39df05aec85a1b5f8360453922a831c58c7dfc445"
+  },
+  {
+    "path": "quartz/i18n/locales/id-ID.ts",
+    "bytes": 2259,
+    "sha256": "4e152ae731ec35d1525401fc18d6ad1c66b6a3eecd86be569b32ffdf51ae6bd5"
+  },
+  {
+    "path": "quartz/i18n/locales/it-IT.ts",
+    "bytes": 2472,
+    "sha256": "697bec0915c3de6db2597868f77c212cec56e6c40a47e016f4a5bc61fafd2529"
+  },
+  {
+    "path": "quartz/i18n/locales/ja-JP.ts",
+    "bytes": 2254,
+    "sha256": "dc0ae653dbb557d76b6d2532c7d2fd72f3b992323610e3acbc39660d9a0cfe5b"
+  },
+  {
+    "path": "quartz/i18n/locales/kk-KZ.ts",
+    "bytes": 2750,
+    "sha256": "ef5ff8fc977caba8d7d61ac419d8fd8d83f4bd68948bdf9c58404271c83398c8"
+  },
+  {
+    "path": "quartz/i18n/locales/ko-KR.ts",
+    "bytes": 2170,
+    "sha256": "d44bd3bd3f754c67b49427f27ecde2d9508be37a70874fb708586348355c53b8"
+  },
+  {
+    "path": "quartz/i18n/locales/lt-LT.ts",
+    "bytes": 2951,
+    "sha256": "42e6a6e38210ccfca3f3f86d24ef8d477f09c2adc1a13681198b3e3ea7774d28"
+  },
+  {
+    "path": "quartz/i18n/locales/nb-NO.ts",
+    "bytes": 2264,
+    "sha256": "17d4c5f242827fda50859877153bcfa856b2a02171915a7bd8dc963fe1316bb7"
+  },
+  {
+    "path": "quartz/i18n/locales/nl-NL.ts",
+    "bytes": 2353,
+    "sha256": "d94818447a2d78123f39ec08a939596a276f4aec2ba2ca75b5e2f476e9f9375d"
+  },
+  {
+    "path": "quartz/i18n/locales/pl-PL.ts",
+    "bytes": 2374,
+    "sha256": "f968a0fb34d159d2792453160f1b2babd39a4b023ffbf29591d2139c6342f960"
+  },
+  {
+    "path": "quartz/i18n/locales/pt-BR.ts",
+    "bytes": 2242,
+    "sha256": "f87885bda218f63356b64b8e700f436a42da65677fe209c4d8ab99b119d2fe2a"
+  },
+  {
+    "path": "quartz/i18n/locales/ro-RO.ts",
+    "bytes": 2443,
+    "sha256": "50f60b14ae10f1f07be8edf59e058ae48a681cf3f5941725480017bdbc24829e"
+  },
+  {
+    "path": "quartz/i18n/locales/ru-RU.ts",
+    "bytes": 3360,
+    "sha256": "0c26bf344ba567d80f1d0b7ab0b8e0af7f73b4e0eaf9b64e8a30ffdc2cbaa9b0"
+  },
+  {
+    "path": "quartz/i18n/locales/th-TH.ts",
+    "bytes": 3111,
+    "sha256": "4d37ea278b48a36bd62deda84a3d0e15416a4f086e86b534bc2ea33461008524"
+  },
+  {
+    "path": "quartz/i18n/locales/tr-TR.ts",
+    "bytes": 2300,
+    "sha256": "9e8817b00f12ad494231921ea5a7c52275e25d491fc46cec059febf81583b85e"
+  },
+  {
+    "path": "quartz/i18n/locales/uk-UA.ts",
+    "bytes": 2816,
+    "sha256": "923cb7a1730337824680fd61bc09859997ca77c7454969d98a769cfe9b89be5e"
+  },
+  {
+    "path": "quartz/i18n/locales/vi-VN.ts",
+    "bytes": 2342,
+    "sha256": "8c75ea598261023eb24bf11b9801e4aa351c96c7e531a6ab45c73d76a93c2b3e"
+  },
+  {
+    "path": "quartz/i18n/locales/zh-CN.ts",
+    "bytes": 2128,
+    "sha256": "565f9ba83034d8a1b26a81ba54ff7ea48c29c954dad7fe22c27b3c0994bca53b"
+  },
+  {
+    "path": "quartz/i18n/locales/zh-TW.ts",
+    "bytes": 2152,
+    "sha256": "b182291c887760195445ae8f2b47e2db6cc6fa01a060a9c2b406bac1063a8d42"
+  },
+  {
+    "path": "quartz/plugins/emitters/404.tsx",
+    "bytes": 1887,
+    "sha256": "c5a9fe86f8cfa5564470e38cc9bcd962070d7c64a7d5b2c31aa1851effe80187"
+  },
+  {
+    "path": "quartz/plugins/emitters/aliases.ts",
+    "bytes": 1651,
+    "sha256": "ecc7f50a1002968eedd40cd945df26c769788d97d77b36b5916ff28ec89b8a5a"
+  },
+  {
+    "path": "quartz/plugins/emitters/approvedAssets.ts",
+    "bytes": 1601,
+    "sha256": "0a4f6aa9fca1024c5413aaad0dab56330a154684f55f041e72c4feae82195346"
+  },
+  {
+    "path": "quartz/plugins/emitters/assets.ts",
+    "bytes": 1714,
+    "sha256": "8cf627506704125d7f71cfd9bff76e15e68abc2173724141bd091edd4d6dfe5b"
+  },
+  {
+    "path": "quartz/plugins/emitters/bookIndex.ts",
+    "bytes": 2148,
+    "sha256": "9564ffa53b5cb1f10da3cc9791d704bb98726a0c7d590a8318175e162e0cfbc5"
+  },
+  {
+    "path": "quartz/plugins/emitters/cname.ts",
+    "bytes": 848,
+    "sha256": "cda42e1b891023c072dab8b24805b6c6530c4f643b76a32ccddae8e78081825a"
+  },
+  {
+    "path": "quartz/plugins/emitters/componentResources.ts",
+    "bytes": 15006,
+    "sha256": "5fd38619523a4d81d6f2b1addf8b76076aaf0d867b4f7747c9a504c40ff4283c"
+  },
+  {
+    "path": "quartz/plugins/emitters/contentIndex.tsx",
+    "bytes": 5561,
+    "sha256": "60d0d5644866537c6e8280d7df10bcca0043caf3f71367a07faf25ef8c062082"
+  },
+  {
+    "path": "quartz/plugins/emitters/contentPage.tsx",
+    "bytes": 3855,
+    "sha256": "de2e1959c9fa91c0f9ade34b860a044a850544da6f5f4d97b593ad9e143ef7b7"
+  },
+  {
+    "path": "quartz/plugins/emitters/favicon.ts",
+    "bytes": 631,
+    "sha256": "e6623d350b08ec6c2672507e4e91b60fdb7dde89db3677966e231e37d3214eb4"
+  },
+  {
+    "path": "quartz/plugins/emitters/folderPage.tsx",
+    "bytes": 5215,
+    "sha256": "767b718eae78f8a0f02a694daa6ee5f07960a573bd946693a575f3f255030529"
+  },
+  {
+    "path": "quartz/plugins/emitters/helpers.ts",
+    "bytes": 643,
+    "sha256": "b0ce6723e189037e2525c83df518fab27fb18ff0ef316ef22a258883fc1e3aac"
+  },
+  {
+    "path": "quartz/plugins/emitters/index.ts",
+    "bytes": 501,
+    "sha256": "480eb34330741c569cbc79e1d81aa02daccd236a200d71f9aeddc161251d34fe"
+  },
+  {
+    "path": "quartz/plugins/emitters/knowledge.ts",
+    "bytes": 8375,
+    "sha256": "c020f85e6cbc4619358c7545f5487faff73f10ba04130e8eab9b1a3a7b9ccc98"
+  },
+  {
+    "path": "quartz/plugins/emitters/ogImage.tsx",
+    "bytes": 6021,
+    "sha256": "a3c0c6353f8fb92ae6aa9f6d0a1de001ea4234055bb36f3a1a351c2424d9b0c0"
+  },
+  {
+    "path": "quartz/plugins/emitters/static.ts",
+    "bytes": 1965,
+    "sha256": "546bf4ad18390ba28d745f5da47b2ba5994a8c1a48dadc43ec1f128150728909"
+  },
+  {
+    "path": "quartz/plugins/emitters/tagPage.tsx",
+    "bytes": 5390,
+    "sha256": "3e0f63742f4c0983b16f77ae81071b38532d970d543928391800d9fb5b5702d7"
+  },
+  {
+    "path": "quartz/plugins/emitters/topos.ts",
+    "bytes": 11157,
+    "sha256": "9042b5125987687a45d1b4ac5840965ec5ee4a233f338a2d2a54eb23ea3540b8"
+  },
+  {
+    "path": "quartz/plugins/filters/draft.ts",
+    "bytes": 324,
+    "sha256": "8122364bdd6e43579ca4ef48ef1e4c1fd6d48d6fdd75bb789c5bf5345b1e2c3f"
+  },
+  {
+    "path": "quartz/plugins/filters/explicit.ts",
+    "bytes": 282,
+    "sha256": "5d96c8699869a0ffb194042e6b51d5568c11f1ee968f87998d9615cecea0f17b"
+  },
+  {
+    "path": "quartz/plugins/filters/index.ts",
+    "bytes": 84,
+    "sha256": "a975e4bbe882aa1f967d680855ff90025bbb3308084d05d29a57ebee0fa2d85c"
+  },
+  {
+    "path": "quartz/plugins/index.ts",
+    "bytes": 1584,
+    "sha256": "e14cfad0614caee7854bb93a811ea51bf76c0b13c108983525720e3fc0439196"
+  },
+  {
+    "path": "quartz/plugins/transformers/atoms.ts",
+    "bytes": 9746,
+    "sha256": "3567eb84818934a6478e35a96485708bd6c7e97e3578b6111b7162740315b0d1"
+  },
+  {
+    "path": "quartz/plugins/transformers/citations.ts",
+    "bytes": 2153,
+    "sha256": "2dcc85534dcd34bf265fdb48fcbffb2ebf510d29c634e511f2ee37b15fd06ee0"
+  },
+  {
+    "path": "quartz/plugins/transformers/description.ts",
+    "bytes": 2868,
+    "sha256": "b5bae85916a37c829eb6c72407cb34ed956e2aca8be4663ef1d92001d5abe66e"
+  },
+  {
+    "path": "quartz/plugins/transformers/frontmatter.ts",
+    "bytes": 5016,
+    "sha256": "05d0c7f7021952e67d69f134c44213f911610f0f5dad4bd21c8d4cb8e1e44fd9"
+  },
+  {
+    "path": "quartz/plugins/transformers/gfm.ts",
+    "bytes": 2257,
+    "sha256": "1b2bc93f553ea85b89ffbdfd49726ec651cb2382d2b06dfb1484e90959e08bf3"
+  },
+  {
+    "path": "quartz/plugins/transformers/index.ts",
+    "bytes": 572,
+    "sha256": "64c5c0d43dc6ace2605c3a6db32358f9b927040f6366049bc512dd413d89a056"
+  },
+  {
+    "path": "quartz/plugins/transformers/lastmod.ts",
+    "bytes": 3725,
+    "sha256": "b7151562006abda50c3824055eeb7e9120a3defecadf22c58c8e02b53bd7735b"
+  },
+  {
+    "path": "quartz/plugins/transformers/latex.ts",
+    "bytes": 2234,
+    "sha256": "93fa13385065ee95a2cd8f6ccf3cb1bb81d8b6b552c6fa899399487d0df7a4ed"
+  },
+  {
+    "path": "quartz/plugins/transformers/linebreaks.ts",
+    "bytes": 260,
+    "sha256": "426ae4c9f8490bb67458d9bd8c194cd2225feeb5a037b40daf6c86fcbfc83bfe"
+  },
+  {
+    "path": "quartz/plugins/transformers/links.ts",
+    "bytes": 6133,
+    "sha256": "e0b6e2a33b36ff78c745569bee3d8a1eb252d5254c10cf719d4927c94fb1124f"
+  },
+  {
+    "path": "quartz/plugins/transformers/localMath.ts",
+    "bytes": 461,
+    "sha256": "b9ab329ab5ecb54346ffceb2fe008a4fce14dfe614cac04a20fc3fc3a72e2e8d"
+  },
+  {
+    "path": "quartz/plugins/transformers/ofm.ts",
+    "bytes": 28720,
+    "sha256": "baee861c2638c0ddb6f3246c29e6a6f96bf789f7113098f1c648f8cd25f1f94e"
+  },
+  {
+    "path": "quartz/plugins/transformers/oxhugofm.ts",
+    "bytes": 3678,
+    "sha256": "b39de6f499651c6546efcad86498159cd935f650d64db4bb06832eb9e7f99e09"
+  },
+  {
+    "path": "quartz/plugins/transformers/readerMetadata.ts",
+    "bytes": 2778,
+    "sha256": "4eaf4edf67384290005d6434f72dbb7616e06d08c1ee7ea137aa025145267dd7"
+  },
+  {
+    "path": "quartz/plugins/transformers/roam.ts",
+    "bytes": 6676,
+    "sha256": "ccc11deedff6b351d2fe56a91d9b5631b4f3cfd16b88d238f34d23d498fb1da1"
+  },
+  {
+    "path": "quartz/plugins/transformers/semanticBlocks.test.ts",
+    "bytes": 6628,
+    "sha256": "24f23a8006ef5a40e6a294bde68d0aaac67c8592ce47828f7938ccb0d0cf9136"
+  },
+  {
+    "path": "quartz/plugins/transformers/semanticBlocks.ts",
+    "bytes": 5240,
+    "sha256": "8d039992ba00ecf48ab538959a2828304c057e9c415c33e0d9e8a2a9512a5926"
+  },
+  {
+    "path": "quartz/plugins/transformers/syntax.ts",
+    "bytes": 711,
+    "sha256": "db2758faa8629ef17df4da11e9f0c432dbeabecdd2457349aaadca4ddacae3f8"
+  },
+  {
+    "path": "quartz/plugins/transformers/toc.ts",
+    "bytes": 2027,
+    "sha256": "127731bef4f383ef1e73aedd1849f4eeec6906723d2312540981c48c7bc21023"
+  },
+  {
+    "path": "quartz/plugins/types.ts",
+    "bytes": 2183,
+    "sha256": "d1d68d08256c6d392988c2c7ab44a46e5798baaf645712d2ecfe69c43d0f577b"
+  },
+  {
+    "path": "quartz/plugins/vfile.ts",
+    "bytes": 482,
+    "sha256": "37d1a1d31c5049f0da9a2258a9e32b92be7898fc8ffbd7c4d005f64fec978844"
+  },
+  {
+    "path": "quartz/processors/emit.ts",
+    "bytes": 1706,
+    "sha256": "1e3f4fa86a54d4c3abf14fe14eda59239fe6b01759544eb8e69be3a7246c26a8"
+  },
+  {
+    "path": "quartz/processors/filter.ts",
+    "bytes": 815,
+    "sha256": "c3ee54724164050830b38fbb68ae99c35194b2060ac367c9b7c2055742dd5008"
+  },
+  {
+    "path": "quartz/processors/parse.ts",
+    "bytes": 7183,
+    "sha256": "f247d04239720a920fb04d4caa5fff1934c98c14a0c8f2721164702f896a99c8"
+  },
+  {
+    "path": "quartz/styles/base.scss",
+    "bytes": 11123,
+    "sha256": "89b4c98bc542b607454681440594f8ceae0cd0519424e0abd578682504c210c5"
+  },
+  {
+    "path": "quartz/styles/book.scss",
+    "bytes": 7237,
+    "sha256": "4e33d8643a99501adbb418c71aac52bd8e0eec1eceb7463f699d6ec74204997b"
+  },
+  {
+    "path": "quartz/styles/callouts.scss",
+    "bytes": 9368,
+    "sha256": "a401f9d27da77cb34215d9497c23c78cdbcd76f09315b4235db0d5778b739727"
+  },
+  {
+    "path": "quartz/styles/custom.scss",
+    "bytes": 11213,
+    "sha256": "fa90514d1f984c55fc742bac062e1a46bcf9d49e7dba18c89f78078b715fff44"
+  },
+  {
+    "path": "quartz/styles/interface.scss",
+    "bytes": 16616,
+    "sha256": "17914e1e1ebc64f8053c9b34efd4fc24f42cb086dfdcdd7c066fd8e40c0e2ca4"
+  },
+  {
+    "path": "quartz/styles/knowledgeGraph.scss",
+    "bytes": 10380,
+    "sha256": "d55bddddfde12c7d19fb40917507b7a61bda7042d65d303a27e8bcf3b60142b6"
+  },
+  {
+    "path": "quartz/styles/knowledgeGraph3d.scss",
+    "bytes": 7469,
+    "sha256": "be370e010fdf78a025245b510ff1992374c7bd931e0718ed0bed84ad6116bf36"
+  },
+  {
+    "path": "quartz/styles/reader.scss",
+    "bytes": 14640,
+    "sha256": "03512742ba76ecbcc24480b8e017bb5e3869e41fbc8ce4569ef5c6d42e158f2e"
+  },
+  {
+    "path": "quartz/styles/syntax.scss",
+    "bytes": 358,
+    "sha256": "f76569760f857fe72c23d74c89e8ab83bc3f0db24b453a4d15842a1435bfb66a"
+  },
+  {
+    "path": "quartz/styles/variables.scss",
+    "bytes": 1658,
+    "sha256": "365594b1baf3194f01a4c0bd6763dd5f0f10703346b7207b3613ccc7669f9436"
+  },
+  {
+    "path": "quartz/util/atomHast.test.ts",
+    "bytes": 6934,
+    "sha256": "c549e35b87b6931623cc40214d7ac07b766d48d5f57aeddd21eb26e42bbd3f6e"
+  },
+  {
+    "path": "quartz/util/atomHast.ts",
+    "bytes": 2618,
+    "sha256": "03c517c45a48c949fb841930a76a64b30249949596a1ef5aaa5e1df1e5b64dd3"
+  },
+  {
+    "path": "quartz/util/bookNavigation.ts",
+    "bytes": 2358,
+    "sha256": "c6056b235a3db5551c6ed2bd45b38296183db8b3d36c7831cd8f56b5b5f89942"
+  },
+  {
+    "path": "quartz/util/bookSearch.test.ts",
+    "bytes": 6970,
+    "sha256": "147dbfaea049eb5410decc461de5053961034350f698e500107a5b18e10b9da0"
+  },
+  {
+    "path": "quartz/util/bookSearch.ts",
+    "bytes": 8864,
+    "sha256": "c1b38dffbbc81ba6e8564be8ef35fcf5b6f83499c253bd297222f44b4e5a7125"
+  },
+  {
+    "path": "quartz/util/clone.ts",
+    "bytes": 53,
+    "sha256": "17330edaf917791ec2468c428ca7a8ee1f3286565f31344e3b0e380c3b9f5f6d"
+  },
+  {
+    "path": "quartz/util/ctx.ts",
+    "bytes": 1127,
+    "sha256": "d7473d00d0b62cf852f3bc5afa8699b86f8ee19bb5115cc9260887b58ff653fe"
+  },
+  {
+    "path": "quartz/util/d3-force-3d.d.ts",
+    "bytes": 1204,
+    "sha256": "281755dd6d0e5c1095a0d7a746aef709f003f35b1a0febc10b4cbac4c4ed1cee"
+  },
+  {
+    "path": "quartz/util/emoji.ts",
+    "bytes": 1145,
+    "sha256": "21bc4d10119514ed824897094a9a4a1659df97f2d1b5e165213098875c6766d3"
+  },
+  {
+    "path": "quartz/util/emojimap.json",
+    "bytes": 15304987,
+    "sha256": "4a401cda0af66ffc38f5747a0fc6ad578affbda5296e36390daac194d3b39c23"
+  },
+  {
+    "path": "quartz/util/escape.ts",
+    "bytes": 431,
+    "sha256": "4c3b2851c2c9e817748ac78176e827460f7816a7baa55952df10eb4bf9d804b2"
+  },
+  {
+    "path": "quartz/util/fileTrie.test.ts",
+    "bytes": 12575,
+    "sha256": "24c017f2f2282646a3398a9171a98426b487ec7aa34ffa684471fd8e289d7f98"
+  },
+  {
+    "path": "quartz/util/fileTrie.ts",
+    "bytes": 4755,
+    "sha256": "ec5e1f3816ec56bc1978ad9b0380d3bc437940d3bf963d2b22aed2693cff3d2c"
+  },
+  {
+    "path": "quartz/util/glob.ts",
+    "bytes": 462,
+    "sha256": "fce246da1c409f254375ea5b2be8c6ee03e018dafc9460805c0ae76a5fbe4db5"
+  },
+  {
+    "path": "quartz/util/jsx.tsx",
+    "bytes": 720,
+    "sha256": "b013f4479e9fe8fe380834d88d970b4d2d76ec85ec640ac748951a2abb22abf3"
+  },
+  {
+    "path": "quartz/util/knowledge.ts",
+    "bytes": 2574,
+    "sha256": "5d4a4f81f946db26f668b15739919120ce0e6f62271ca3d1f2cc46b0cb0e1419"
+  },
+  {
+    "path": "quartz/util/knowledgeGraph.test.ts",
+    "bytes": 5681,
+    "sha256": "8653a954fd0d2cb784c639a18d91d0128031bbe5fbff36ccb19f8e822a641547"
+  },
+  {
+    "path": "quartz/util/knowledgeGraph.ts",
+    "bytes": 8859,
+    "sha256": "1258f2e9c5bf2835319b5ce1135efb9a3336f2b7645f431505148357a2f80f2b"
+  },
+  {
+    "path": "quartz/util/knowledgeScene.test.ts",
+    "bytes": 6988,
+    "sha256": "1c36f96b2d2570388dca68dedd0601a20f4a52e4ec25ca3ae842bf00d076340c"
+  },
+  {
+    "path": "quartz/util/knowledgeScene.ts",
+    "bytes": 9994,
+    "sha256": "86a1f07466c0a5073890a73a48c447ff2ebefc93f419d21a4708da1f7114a3ff"
+  },
+  {
+    "path": "quartz/util/lang.ts",
+    "bytes": 307,
+    "sha256": "d30875154e7b73814ed74020383d79a3b2ac5b7002a85ff8c6e7dbfc516f73f0"
+  },
+  {
+    "path": "quartz/util/log.ts",
+    "bytes": 1651,
+    "sha256": "73bf4eb2f4a56b15e7022809674fe8716ba6dc24cf5d87e6c581cd8787480c0d"
+  },
+  {
+    "path": "quartz/util/noteGraph.test.ts",
+    "bytes": 11319,
+    "sha256": "53e23bb7266e20b174e9241b2e86c090fb357cb48b78e693d103b1a1f2690113"
+  },
+  {
+    "path": "quartz/util/noteGraph.ts",
+    "bytes": 9140,
+    "sha256": "406938677cbb5715488fc9eedbd1678776fbe6ceab5a01f0eb93826d8eab4bda"
+  },
+  {
+    "path": "quartz/util/og.tsx",
+    "bytes": 10635,
+    "sha256": "a59b986af0d08f185a1e91f014c1e055db6cba09bf9fab34df5adbeea722efb0"
+  },
+  {
+    "path": "quartz/util/path.test.ts",
+    "bytes": 13601,
+    "sha256": "1d345df8f3aba65b16e9fe868fc961c37219727b4e0fe44ad3076b25e232a3d3"
+  },
+  {
+    "path": "quartz/util/path.ts",
+    "bytes": 9579,
+    "sha256": "140798300a583b7439a7918ed9f21ed51bdf0d8c813a95e9a9d2a85218fbd614"
+  },
+  {
+    "path": "quartz/util/perf.ts",
+    "bytes": 415,
+    "sha256": "26e58d7fb87eca4f365a06d5a46b6f2fbbce08b669ff0b53fa44ba052a3826a9"
+  },
+  {
+    "path": "quartz/util/random.ts",
+    "bytes": 92,
+    "sha256": "8d092f377061fde94f6b3c0159807e94be413e5dd570d8923ad3e6961fa9f998"
+  },
+  {
+    "path": "quartz/util/readerCatalog.test.ts",
+    "bytes": 7634,
+    "sha256": "4c1159d97b1755e15eb084786da18075dcf8a43dd027437f4463a58516499c3d"
+  },
+  {
+    "path": "quartz/util/readerCatalog.ts",
+    "bytes": 13849,
+    "sha256": "a30d4f9c28d1dffd7003bfa671beaeb380927a605cd7829331c35f5e03c529f6"
+  },
+  {
+    "path": "quartz/util/resources.tsx",
+    "bytes": 1967,
+    "sha256": "5bf74db1317989f63508796292ca90979ca0b01dabb968d4f5a002c5ad99a923"
+  },
+  {
+    "path": "quartz/util/semantic.test.ts",
+    "bytes": 2719,
+    "sha256": "56191066d05ec296faf70d45e81f0351bcd97b88881e5b61e6e541564ce31bf6"
+  },
+  {
+    "path": "quartz/util/semantic.ts",
+    "bytes": 5455,
+    "sha256": "2a46ff9dcdb92b5a1f2ba3b01f1219363d487cde4027fa0795d912edcbb42e9c"
+  },
+  {
+    "path": "quartz/util/sourcemap.ts",
+    "bytes": 493,
+    "sha256": "077e6f2e5c0b332f8b4c6e62093bbe9d15c2ffb5232db5dad466b30cf631a126"
+  },
+  {
+    "path": "quartz/util/spatialSearch.test.ts",
+    "bytes": 1335,
+    "sha256": "5965d00671e6f0286a9a3a6e1ddd940c382462ed433053e3db643117a9e4d0f3"
+  },
+  {
+    "path": "quartz/util/spatialSearch.ts",
+    "bytes": 2715,
+    "sha256": "ebb8d381b49e1b81292d2492384283303d46b57e027b713856d8f8676c5d08a7"
+  },
+  {
+    "path": "quartz/util/theme.ts",
+    "bytes": 5038,
+    "sha256": "2850e5acf2d168d0c8f5b79b23d26a0d0621b2f99e7ebb2e23efd5acbc439e47"
+  },
+  {
+    "path": "quartz/util/topos/annotations.test.ts",
+    "bytes": 5035,
+    "sha256": "b005b75f0c17078044fdecc43fd4c375e6d1d0e4614841c0f1f5f8f423a8ca43"
+  },
+  {
+    "path": "quartz/util/topos/annotations.ts",
+    "bytes": 6361,
+    "sha256": "ec7d9ebcaa3dc9836cb0d9107933972f47475fceb191c2dafc5582d25e0ae356"
+  },
+  {
+    "path": "quartz/util/topos/atlas.ts",
+    "bytes": 6895,
+    "sha256": "99cefff79f09e38808fd2eb36b3ab6eae7d18a2c0b897e88852799ea1b28e73b"
+  },
+  {
+    "path": "quartz/util/topos/context.ts",
+    "bytes": 8933,
+    "sha256": "3d6aa4fce5ec04c87bf63565b1d54d2966d221b65c544fdc2d52464bb8973a2c"
+  },
+  {
+    "path": "quartz/util/topos/field.ts",
+    "bytes": 13587,
+    "sha256": "812854457118af346af4645b5a099e4f0b583683d0125e1bc842e95003b82b2c"
+  },
+  {
+    "path": "quartz/util/topos/published.test.ts",
+    "bytes": 12426,
+    "sha256": "a8f2a7ff7ba638e775796e2529a4f5e69453fa48746246d8910a82a601efa733"
+  },
+  {
+    "path": "quartz/util/topos/published.ts",
+    "bytes": 14042,
+    "sha256": "6f1c6792df9a8bb43485dd0913a47f59f431c029bad689a6a20ff67e34eb735e"
+  },
+  {
+    "path": "quartz/util/topos/topics.test.ts",
+    "bytes": 3509,
+    "sha256": "2a22c9711c5df9bcb1b3bb977a580cbfc882bbf21ca8427fda54d8c4d38469b5"
+  },
+  {
+    "path": "quartz/util/topos/topics.ts",
+    "bytes": 2144,
+    "sha256": "d92b51b3d30891f6eac32c9c3e561001d1c075c5617f140c82c4d426037353b2"
+  },
+  {
+    "path": "quartz/util/topos/topos.test.ts",
+    "bytes": 25398,
+    "sha256": "c174e60cb645abd1e6f7c24176dd4b9476cc741320cc043b1520c309bc76170c"
+  },
+  {
+    "path": "quartz/util/topos/types.ts",
+    "bytes": 3259,
+    "sha256": "ffc5df3675f41759feb747efc51cb68ae6cfc0903d5d8877f2b868314aca9ded"
+  },
+  {
+    "path": "quartz/util/trace.ts",
+    "bytes": 973,
+    "sha256": "b8216e24985fdc0e466638b449573e2e9ac2fece4b0481ee705b9f3852db9aca"
+  },
+  {
+    "path": "quartz/util/transcludes.test.ts",
+    "bytes": 2335,
+    "sha256": "7dbf49168801432beb410db8a7e8ec5e9530c6a4c1898e87c6072c35985ed150"
+  },
+  {
+    "path": "quartz/util/transcludes.ts",
+    "bytes": 5890,
+    "sha256": "315b9e5b8031654cf1798e1542993a0847a4c3dec3fd9b97995e5f637d3c4cef"
+  },
+  {
+    "path": "quartz/worker.ts",
+    "bytes": 1042,
+    "sha256": "5cab2a42976061edf93e52fd99cb13d26e855ee25bdcf78aa25877b10f8c64bd"
+  },
+  {
+    "path": "reader.config.ts",
+    "bytes": 2355,
+    "sha256": "d53ca3f65e1fb74fc1a0c6710cd76d8a5056f78ef1de6094c971fe57eac804f8"
+  },
+  {
+    "path": "scripts/atomSource.test.ts",
+    "bytes": 5434,
+    "sha256": "d43dc8082c10ab06a2af1605f8d446bd483f743cbd15cd117dd4983cf53170a4"
+  },
+  {
+    "path": "scripts/define-note-topics.mjs",
+    "bytes": 5944,
+    "sha256": "8f544aa8575ce0c244dc2f8d4a6ccd52ac91b0988906cef18aff711ba7339245"
+  },
+  {
+    "path": "scripts/export-vault.mjs",
+    "bytes": 14518,
+    "sha256": "7370a8b07eb0b6f2156685277f4f7aadcfef590e6f6ad015195f0f8efb4f2194"
+  },
+  {
+    "path": "scripts/export-vault.test.ts",
+    "bytes": 11488,
+    "sha256": "367a3153c76a8931ce92c09fe4013bc221163a796dc5aa63ddebea233c1a2496"
+  },
+  {
+    "path": "scripts/github-status.mjs",
+    "bytes": 1633,
+    "sha256": "dac80e00a6e13a99e2a7f751aae56631a06b6b5eb58b683be76df58b80333a86"
+  },
+  {
+    "path": "scripts/lib/atomSource.ts",
+    "bytes": 7936,
+    "sha256": "4096b1cdb6860bb1c5fde5d668120734e57565833b803eb15a9a7bd6eabd3bf8"
+  },
+  {
+    "path": "scripts/lib/export-boundary.mjs",
+    "bytes": 3176,
+    "sha256": "641540a5d3c42af000be6852dcfec8dd987c1525437c697477dd1295e58ba9a8"
+  },
+  {
+    "path": "scripts/lib/export-canvas.mjs",
+    "bytes": 6901,
+    "sha256": "9c22132b1cfc17915eb7c1898720348d1f620cc412306c5d8a9db97e7bf4b539"
+  },
+  {
+    "path": "scripts/lib/export-markdown.mjs",
+    "bytes": 6570,
+    "sha256": "22b31db9b52e45b3b4d672f3971b98f020bed29241cab2a29330a3c25d322183"
+  },
+  {
+    "path": "scripts/lib/publication-review.mjs",
+    "bytes": 1059,
+    "sha256": "74eeab86c4b8f84076eb684b2a2f68a369956c262265f1b2679612cd5f1ce624"
+  },
+  {
+    "path": "scripts/lib/site-sync-core.mjs",
+    "bytes": 18459,
+    "sha256": "3da7df5d9d768e428dfe2881b29bb5dbabdd45edf342ba3402ed5877c6e5871a"
+  },
+  {
+    "path": "scripts/lib/verify-topos-output.mjs",
+    "bytes": 10565,
+    "sha256": "ed92ccccee8cdc600407e0eda6c2fd5a168fd2e153c8bfc6ef1f5c0fdb31dcb0"
+  },
+  {
+    "path": "scripts/ontology.test.mjs",
+    "bytes": 4301,
+    "sha256": "a6e4ebedbbb8cdabede97a9c2b2adb49482e3d9957726069e1964c2ecfa1ed7b"
+  },
+  {
+    "path": "scripts/prepare-assets.mjs",
+    "bytes": 2748,
+    "sha256": "38f42261be8620dd22a791df7ded895b2680372451a1b6ea9b55e2604b4791d6"
+  },
+  {
+    "path": "scripts/prepare-atoms.test.ts",
+    "bytes": 863,
+    "sha256": "08e8e6f71788e4d78ffc492c7837376c82910be7cfe53f853a0f2b1833a4742d"
+  },
+  {
+    "path": "scripts/prepare-atoms.ts",
+    "bytes": 11400,
+    "sha256": "40636cbeb05818ea5c64fbd69b2ee63e7573f13789f79539383ebae8b5e70196"
+  },
+  {
+    "path": "scripts/prepare-graph-runtime.mjs",
+    "bytes": 1360,
+    "sha256": "b1101ae31cd4ce4391a20bf3f7e61ae0e1d7c032590924c8d5b0bcceed40268c"
+  },
+  {
+    "path": "scripts/prepare-knowledge.mjs",
+    "bytes": 670,
+    "sha256": "cc1fe2e5fcdf1796154d0df6adc3502ee0073b7debea486b0dcb5e6d8e670e6d"
+  },
+  {
+    "path": "scripts/prepare-semantic-runtime.mjs",
+    "bytes": 2032,
+    "sha256": "6b2cf8a60bd3134ef9d80d50de947caaf4c98494aa3309d3bdaefe92845c9a0e"
+  },
+  {
+    "path": "scripts/prepare-semantics.mjs",
+    "bytes": 9904,
+    "sha256": "b3c609cb8918d056c11b241d15bcf8f52c21643685b9ed754d0ab26c02471cf0"
+  },
+  {
+    "path": "scripts/prepare-topos-runtime.mjs",
+    "bytes": 1030,
+    "sha256": "26c5d55fc9ffe08fd3f60f5b52517bf63d12513ef991fce503dbb57578d80de8"
+  },
+  {
+    "path": "scripts/preview.mjs",
+    "bytes": 4341,
+    "sha256": "29b19cdf82c3b1b30324a521af69e78cc54957d63a9712635da933025e06c949"
+  },
+  {
+    "path": "scripts/publication-review.test.mjs",
+    "bytes": 1751,
+    "sha256": "579bdc40e9a8f0481f633fbea6c47c51c81eaec78ac25c46bfc09e1dd42c5cc7"
+  },
+  {
+    "path": "scripts/publish.mjs",
+    "bytes": 12009,
+    "sha256": "31f4ba26ce431840e12bad130fedbd76f3739634b90d8e035355ea1e666907a3"
+  },
+  {
+    "path": "scripts/site-sync.test.mjs",
+    "bytes": 19482,
+    "sha256": "9d6bbfa13cdeadbe61eed3c41106334d2e52ea351198cac241c0900620df1723"
+  },
+  {
+    "path": "scripts/sync-site.mjs",
+    "bytes": 12567,
+    "sha256": "5240c1e5b3ba33e8b923b324e95ff60d02470bc85e82048545e2607585f27a5e"
+  },
+  {
+    "path": "scripts/topos-content.test.ts",
+    "bytes": 11353,
+    "sha256": "02c64055d1712b059619f38f7aae5c05d4ead2b633152745eed181fe4a249597"
+  },
+  {
+    "path": "scripts/validate-ontology.mjs",
+    "bytes": 12867,
+    "sha256": "c539be6d3ca99271e884414e2fb9a6e61b3b1ef76fa3eaa893c8d68a6a03a568"
+  },
+  {
+    "path": "scripts/verify-browser.mjs",
+    "bytes": 24216,
+    "sha256": "48dde82fed55cbfa1aa4cfd04b0f5f3e08266f4dd429a4547be1bbb6ac37c1ad"
+  },
+  {
+    "path": "scripts/verify-content.mjs",
+    "bytes": 33189,
+    "sha256": "2cdbf8a4b899d55bed81bbe3c47c3fc1b8e766811116bc7a008bca2b9b7d5c81"
+  },
+  {
+    "path": "scripts/verify-graph.mjs",
+    "bytes": 25286,
+    "sha256": "8de04b10cfc2386665c2e571a6b9c15abce614b1c78813e41d19df02258afcbb"
+  },
+  {
+    "path": "scripts/verify-interface.mjs",
+    "bytes": 22489,
+    "sha256": "8ecc01d442c6af3ec6672efd3567b4a0d746c43922a660212539e55dbcd8c31f"
+  },
+  {
+    "path": "scripts/verify-knowledge-graph.mjs",
+    "bytes": 13111,
+    "sha256": "25bda59be94177715d4a0a277930fcd4faed6337bb36c40c9281b0b41f5972ba"
+  },
+  {
+    "path": "scripts/verify-knowledge.mjs",
+    "bytes": 6872,
+    "sha256": "0602a1c07b015dc5ca752bfe8cec71f01d4ccde91d8ba495c265dc19b33a40e7"
+  },
+  {
+    "path": "scripts/verify-navigation.mjs",
+    "bytes": 8455,
+    "sha256": "3e97bc0de94860834cd5801ac18a141062890a5ef07ff4241f983f94ab386bbd"
+  },
+  {
+    "path": "scripts/verify-reader.mjs",
+    "bytes": 16343,
+    "sha256": "ef0341ebabedfa1861ce8070ee237d03634368966237b752675117d82eecfbf1"
+  },
+  {
+    "path": "scripts/verify-search.mjs",
+    "bytes": 16950,
+    "sha256": "66640e583c172e373b5d38e93c2f7ae31a70a4b42e81856d072084d3a3812299"
+  },
+  {
+    "path": "scripts/verify-semantics.mjs",
+    "bytes": 13483,
+    "sha256": "495f6b7a8e0f2a31f820144b3ba57b21a11b89fe63f93fb32673a38e946884ca"
+  },
+  {
+    "path": "scripts/verify-spatial.mjs",
+    "bytes": 26210,
+    "sha256": "7b646107214476d6006b61e07c5a11b0839de79862d88602a7dbba77085499ac"
+  },
+  {
+    "path": "scripts/verify-three.mjs",
+    "bytes": 36090,
+    "sha256": "427e520f2516bc3957f95777a20a61ddaaa8801c5dd018bbb7319730a4aabb33"
+  },
+  {
+    "path": "scripts/verify-topic-browser.mjs",
+    "bytes": 9540,
+    "sha256": "915690c3687c0415754414975f5d6795b552d8809cf8a680913ad5c9d486d55b"
+  },
+  {
+    "path": "scripts/verify-topic-interactions.mjs",
+    "bytes": 18552,
+    "sha256": "227723471d9ab3fc23d8e9207bc6a0773e556c6fb2348f061e04756788844a25"
+  },
+  {
+    "path": "scripts/verify-topic-map.mjs",
+    "bytes": 3854,
+    "sha256": "f29cf243e9180555487b177e4b4a0f57413b1464de03842473e9a501c29fb600"
+  },
+  {
+    "path": "scripts/verify-topos-published.mjs",
+    "bytes": 27528,
+    "sha256": "4541fd233db66a78638e50e6d5529cac629b9d1670092ef49dc64bac469d623a"
+  },
+  {
+    "path": "scripts/verify-topos.mjs",
+    "bytes": 54731,
+    "sha256": "46e01c87adffefeae9e97bd61a79ae1d88b1fe62e354b2b6236ea9ab7d33fa5e"
+  },
+  {
+    "path": "scripts/verify-upstream.mjs",
+    "bytes": 2625,
+    "sha256": "f7cf635116ce410327b575c0f9657257e641af6228673edd6bfa24775d0d39cf"
+  },
+  {
+    "path": "tests/fixtures/build-locale.mjs",
+    "bytes": 285,
+    "sha256": "42a49f558407bd62d0e8df263d8193c8b8551484e823975fdcd8c560f3c3bbc2"
+  },
+  {
+    "path": "tests/fixtures/synthetic/index.md",
+    "bytes": 7101,
+    "sha256": "1a047b3bd4b346d88fe850fd5947950ad135618db8859103309ade5747b3f563"
+  },
+  {
+    "path": "tests/fixtures/synthetic/notes/complete-metric-spaces.md",
+    "bytes": 3059,
+    "sha256": "b54b7162212a83949d6bd3bc1e5e73b48cfdb67c26a234b4e2c110a6ea0c09fc"
+  },
+  {
+    "path": "tsconfig.json",
+    "bytes": 618,
+    "sha256": "3ae81d9be5219a5d02e9ff770d9963c544ee8c7db5c5b3fac03002b2843659cd"
+  }
+]

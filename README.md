@@ -1,5 +1,15 @@
 # Notes & Knowledge
 
+## 从主题开始
+
+主页与 `topos.html` 增加主题侧栏。勾选“集合、序与实数”“线性结构与谱”“度量、拓扑与紧性”“微积分与逼近”“Hilbert 空间与算子”“Fourier 展开”，右侧显示对应知识对象与原文联系。多个主题取并集，同一对象只出现一次；清空后可以重新选择。“在选中主题中定位”支持按名称筛选并直接展开正式渲染的原文。手机使用左上角的“主题”抽屉，原有书籍阅读入口保留。
+
+切换“数学地图”进入 `atlas.html`：十二个宏观区域来自 Phase 1 标题注册表，分类节点只展示标题、归属、活动来源及边界，尚无你的正文的方向不会冒充成已有笔记。三卷完整标题树与源审计在 [ontology](ontology/math_outline.md)，阶段进度在 [phase-status.json](docs/phase-status.json)。主网站仍使用已批准的 Obsidian 导出快照，本轮不扩大私人库范围。
+
+Phase 0 的仓库与能力审计，以及 Phase 1 的来源核对、标题注册表和分类基准已完成；详细状态分别见 [Phase 0](docs/phases/phase-00/acceptance.json) 与 [Phase 1](docs/phases/phase-01/acceptance.json)。标题地图包含 94 个有来源的数学主题，其中 24 个为前沿方向；这些是导航标题，不能当成已经写成或形式化验证过的数学讲义。
+
+新增验证命令为 `pnpm --package=npm@10.9.2 dlx npm run check:ontology`、`npm run test:topic-map`、`npm run test:topics` 和 `npm run test:topic-interactions`（后三条使用同样的 pnpm/npm 前缀；先构建）。双击 `同步到GitHub.cmd` 继续走检查、预览、确认、普通推送的流程；这个入口不扫描源 Vault。检查结果见 [验证记录](docs/validation.md)。
+
 数学与物理教材笔记网站。线上地址：[mydearatri.github.io/World/](https://mydearatri.github.io/World/)；仓库：[MyDearATRI/World](https://github.com/MyDearATRI/World)。
 
 网站首页与 `/World/topos.html` 使用已有公开数学笔记的 Knowledge Topos：119 个数学对象和 73 篇完整正文共享连续知识场，保持原来的稳定身份、条件、来源与证明状态。普通点击改变当前语境，拉近展开原文和公式，链接可在场内继续深入；书籍与章号用于来源追溯，不再决定默认知识结构。没有独立登记对象的正文仍完整可读。

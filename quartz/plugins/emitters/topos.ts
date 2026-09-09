@@ -18,6 +18,8 @@ import type { Root } from "hast"
 import { renderTranscludes } from "../../util/transcludes"
 import type { QuartzPluginData } from "../vfile"
 import { createHash } from "node:crypto"
+import noteTopics from "../../../knowledge/topos/note-topics.json"
+import { attachNoteTopics, createAtlas } from "../../util/topos/atlas"
 
 const escapeHtml = (value: string) =>
   value
@@ -35,12 +37,17 @@ function host(
   runtime: { script: string; style: string },
 ) {
   const demo = model.mode === "demo"
-  const identity = demo
-    ? "群、作用与表示 · 合成演示"
-    : `${model.stats?.atoms ?? 0} 个知识原子 · ${model.stats?.notes ?? 0} 篇完整笔记`
-  const description = demo
-    ? "这是以公开数学定义编写的 Group → Action → Representation 合成演示，与实际笔记分开保存。"
-    : "这里展开已有公开笔记中的定义、定理、论证和完整正文。没有独立登记原子的笔记也完整保留；书籍和章节仅说明出处。"
+  const atlas = model.mode === "atlas"
+  const identity = atlas
+    ? "数学标题地图 · 分类、前沿与来源"
+    : demo
+      ? "群、作用与表示 · 合成演示"
+      : `${model.stats?.atoms ?? 0} 个知识原子 · ${model.stats?.notes ?? 0} 篇完整笔记`
+  const description = atlas
+    ? "标题来自独立的分类与来源注册表，归属连线不表示证明依赖；未提供个人正文或 Lean 验证。"
+    : demo
+      ? "这是以公开数学定义编写的 Group → Action → Representation 合成演示，与实际笔记分开保存。"
+      : "这里展开已有公开笔记中的定义、定理、论证和完整正文。没有独立登记原子的笔记也完整保留；书籍和章节仅说明出处。"
   const lenses = model.lenses ?? [
     { id: "structural", label: "结构" },
     { id: "action", label: "作用" },
@@ -51,7 +58,7 @@ function host(
 <body data-topos-index="${indexPath}"><main id="topos-world" data-mode="${model.mode}" data-index="${indexPath}" aria-label="可连续探索的数学知识场"><canvas id="topos-canvas" aria-label="数学关系场：拖动概念，或拖动空白平移" tabindex="0"></canvas><div id="topos-labels"></div><div id="topos-explanations"></div><div id="topos-communities"></div><div id="topos-relations"></div>
 <div class="topos-identity"><span>KNOWLEDGE TOPOS</span><small>${escapeHtml(identity)}</small></div>
 <div class="topos-utility"><button type="button" data-back aria-label="返回上一语境">↶</button><button type="button" data-help aria-label="操作说明">?</button></div>
-<div class="topos-guide" aria-live="polite">点击一个概念，观察周围如何改变。滚轮向内，展开它的含义。</div>
+<div class="topos-guide" aria-live="polite">${demo ? "点击一个概念，观察周围如何改变。" : "从主题栏勾选范围，点击节点继续探索。"}滚轮向内，展开${atlas ? "分类与来源" : "它的含义"}。</div>
 <div class="topos-instruments" aria-label="语境与语义深度"><div class="topos-lenses"><span>观察方式</span>${lenses.map((lens) => `<button data-lens="${lens.id}" type="button">${escapeHtml(lens.label)}</button>`).join("")}</div><div class="topos-depth"><button data-zoom="out" type="button" aria-label="收拢语义层级">−</button><input type="range" min="0" max="3" step="0.05" value="1" aria-label="语义深度"><button data-zoom="in" type="button" aria-label="深入语义层级">＋</button><output>概念与关系</output></div></div>
 <dialog class="topos-help"><button type="button" data-close-help aria-label="关闭说明">关闭</button><h1>沿着一个想法走进去</h1><p>点击改变当前语境；拖动概念感受关联牵引。拖动空白移动视野，滚轮或双指缩放逐层展开含义。</p><p>聚焦后可以展开原文，继续查看相关内容；浏览器后退恢复上一语境。键盘 Tab 选择概念，Enter 聚焦；＋／− 调整语义深度，方向键平移。</p><p>${escapeHtml(description)} 线条的名称与来源说明其关系；正文引用不等同于先修条件，空间距离不是数学命题。</p><button type="button" data-labels-toggle>暂时隐藏文字，观察结构</button><a href="./library.html">按书阅读与完整目录</a><a href="${demo ? "./topos.html" : "./topos-demo.html"}">${demo ? "回到实际笔记的知识空间" : "查看群、作用与表示的合成演示"}</a></dialog>
 <p class="topos-status" role="status">正在准备知识空间…</p><noscript><p>知识空间的交互需要 JavaScript。<a href="./library.html">阅读已有笔记与教材目录</a>。</p></noscript></main><script type="module" src="./static/topos/topos.js?v=${runtime.script}"></script></body></html>`
@@ -108,6 +115,7 @@ export const Topos: QuartzEmitterPlugin = () => ({
       })),
     )
     const sectionFiles: Record<string, string> = {}
+    attachNoteTopics(published.model, noteTopics)
     for (const section of published.model.sections) {
       const html = published.sections[section.id]
       const digest = createHash("sha256").update(`${section.id}\0${html}`).digest("hex")
@@ -137,6 +145,28 @@ export const Topos: QuartzEmitterPlugin = () => ({
           runtime,
         ),
       })
+
+    const registry = JSON.parse(await fs.readFile("ontology/math_registry.json", "utf8"))
+    const sourceRegistry = JSON.parse(await fs.readFile("ontology/sources.json", "utf8"))
+    const atlas = createAtlas(registry, sourceRegistry.sources)
+    const atlasIndex = JSON.stringify(atlas)
+    yield write({ ctx, slug: "static/topos/atlas" as FullSlug, ext: ".json", content: atlasIndex })
+    yield write({
+      ctx,
+      slug: "atlas" as FullSlug,
+      ext: ".html",
+      content: host(atlas.model, `./static/topos/atlas.json?v=${contentHash(atlasIndex)}`, runtime),
+    })
+    // Explicit public research outputs only; no prompt, machine audit, or private input copy.
+    for (const file of ["math_registry.json", "math_outline.md", "sources.json", "audit.json"]) {
+      const ext = path.extname(file) as `.${string}`
+      yield write({
+        ctx,
+        slug: `static/ontology/${file.slice(0, -ext.length)}` as FullSlug,
+        ext,
+        content: await fs.readFile(`ontology/${file}`, "utf8"),
+      })
+    }
 
     const base = path.resolve("knowledge/topos")
     for (const target of [path.dirname(base), base, path.join(base, "prototype.json")])

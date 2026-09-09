@@ -6,6 +6,7 @@
   --line: #c4cecc;
   --serif: "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
   --sans: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+  --topic-rail: 272px;
 }
 * {
   box-sizing: border-box;
@@ -686,23 +687,25 @@ button[aria-pressed="true"] {
 }
 
 /* Published mathematics shares the field; reading receives a wider quiet surface. */
-[data-mode="published"] .topos-concept[data-focus="true"] .concept-title {
+:is([data-mode="published"], [data-mode="atlas"]) .topos-concept[data-focus="true"] .concept-title {
   font-family: var(--serif);
   font-size: clamp(25px, 2.8vw, 37px);
   line-height: 1.4;
   letter-spacing: -0.035em;
 }
-[data-mode="published"] .topos-prose {
+:is([data-mode="published"], [data-mode="atlas"]) .topos-prose {
   font-size: 18px;
   line-height: 1.85;
 }
-[data-mode="published"] .topos-unfolding {
+:is([data-mode="published"], [data-mode="atlas"]) .topos-unfolding {
   padding: 18px 28px 35px;
 }
-[data-mode="published"] .topos-explanation-lead {
+:is([data-mode="published"], [data-mode="atlas"]) .topos-explanation-lead {
   font-size: 14px;
 }
-[data-mode="published"] .topos-concept:not([data-focus="true"]) .concept-title {
+:is([data-mode="published"], [data-mode="atlas"])
+  .topos-concept:not([data-focus="true"])
+  .concept-title {
   font-family: var(--serif);
   font-size: 15px;
   line-height: 1.4;
@@ -923,18 +926,18 @@ button[aria-pressed="true"] {
   color: #637a83;
 }
 @media (max-width: 700px) {
-  [data-mode="published"] .topos-identity > small {
+  :is([data-mode="published"], [data-mode="atlas"]) .topos-identity > small {
     display: none;
   }
-  [data-mode="published"] .topos-identity {
+  :is([data-mode="published"], [data-mode="atlas"]) .topos-identity {
     left: 14px;
     top: 29px;
   }
-  [data-mode="published"] .topos-identity > span {
+  :is([data-mode="published"], [data-mode="atlas"]) .topos-identity > span {
     letter-spacing: 0.05em;
     font-size: 10px;
   }
-  [data-mode="published"] .topos-utility {
+  :is([data-mode="published"], [data-mode="atlas"]) .topos-utility {
     right: 12px;
     gap: 6px;
   }
@@ -942,25 +945,27 @@ button[aria-pressed="true"] {
     font-size: 10px;
     padding: 0 10px;
   }
-  [data-mode="published"] .topos-concept[data-focus="true"] .concept-title {
+  :is([data-mode="published"], [data-mode="atlas"])
+    .topos-concept[data-focus="true"]
+    .concept-title {
     font-size: 25px;
   }
-  [data-mode="published"] .topos-unfolding {
+  :is([data-mode="published"], [data-mode="atlas"]) .topos-unfolding {
     padding: 12px 16px 26px;
   }
-  [data-mode="published"] .topos-prose {
+  :is([data-mode="published"], [data-mode="atlas"]) .topos-prose {
     font-size: 16px;
   }
-  [data-mode="published"] .topos-prose h1 {
+  :is([data-mode="published"], [data-mode="atlas"]) .topos-prose h1 {
     font-size: 23px;
   }
-  [data-mode="published"] .topos-prose h2 {
+  :is([data-mode="published"], [data-mode="atlas"]) .topos-prose h2 {
     font-size: 20px;
   }
-  [data-mode="published"] .topos-lenses {
+  :is([data-mode="published"], [data-mode="atlas"]) .topos-lenses {
     gap: 2px;
   }
-  [data-mode="published"] .topos-lenses > span {
+  :is([data-mode="published"], [data-mode="atlas"]) .topos-lenses > span {
     display: none;
   }
   .topos-search {
@@ -1002,7 +1007,7 @@ button[aria-pressed="true"] {
   font: 12px var(--sans);
   text-decoration: underline;
 }
-[data-mode="published"] .concept-summary {
+:is([data-mode="published"], [data-mode="atlas"]) .concept-summary {
   display: none !important;
 }
 .topos-prose .block-label {
@@ -1020,8 +1025,279 @@ button[aria-pressed="true"] {
   font: 600 16px/1.7 var(--serif);
   color: #294f5d;
 }
+
+/* Theme selection is a navigation layer over the same persistent reading field. */
+.has-topic-sidebar #topos-world {
+  margin-left: var(--topic-rail);
+  width: calc(100% - var(--topic-rail));
+}
+.topos-topic-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  margin: 0;
+  padding: 28px 20px 20px;
+  width: var(--topic-rail);
+  height: 100svh;
+  max-height: 100svh;
+  max-width: 100vw;
+  border: 0;
+  border-right: 1px solid #d8dcd7;
+  background: #eeede6;
+  color: var(--ink);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  font: 13px/1.7 var(--sans);
+  z-index: 30;
+}
+.topos-topic-sidebar > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 34px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.17em;
+}
+.topos-topic-sidebar nav {
+  display: flex;
+  margin: 20px 0 30px;
+  padding: 3px;
+  background: #dedfd7;
+  border-radius: 7px;
+}
+.topos-topic-sidebar nav a {
+  flex: 1;
+  padding: 7px 0;
+  text-align: center;
+  font-size: 12px;
+}
+.topos-topic-sidebar nav a[aria-current="page"] {
+  color: #244e60;
+  background: #fcfcf8;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px #1d313815;
+}
+.topos-topic-sidebar h2 {
+  font: 500 22px/1.5 var(--serif);
+  margin: 0;
+}
+.topos-topic-sidebar p {
+  color: #647377;
+  font-size: 12px;
+}
+.topos-topic-commands {
+  display: flex;
+  gap: 16px;
+  margin: 22px 0 6px;
+}
+.topos-topic-commands button {
+  padding: 4px 0;
+  font-size: 11px;
+  color: #3e6879;
+}
+.topos-topic-sidebar fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.topos-topic-sidebar legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.topos-topic-sidebar label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 43px;
+  cursor: pointer;
+  padding: 6px;
+  margin: 2px -6px;
+  border-radius: 5px;
+  transition: background 140ms ease;
+}
+.topos-topic-sidebar label:has(input:checked) {
+  background: #ffffff6b;
+}
+.topos-topic-sidebar label:hover {
+  background: #ffffffb3;
+}
+.topos-topic-sidebar label input {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  margin: 0;
+  accent-color: var(--topic-color);
+}
+.topos-topic-sidebar label span {
+  flex: 1;
+}
+.topos-topic-sidebar label small {
+  font-variant-numeric: tabular-nums;
+  color: #637074;
+}
+.topos-topic-count {
+  padding-top: 13px;
+  border-top: 1px solid #d7dbd4;
+  font-variant-numeric: tabular-nums;
+}
+.topos-topic-directory {
+  margin: 20px 0;
+}
+.topos-topic-directory summary {
+  cursor: pointer;
+  font-weight: 500;
+  padding: 8px 0;
+}
+.topos-topic-directory input {
+  width: 100%;
+  padding: 9px;
+  margin: 8px 0;
+  border: 1px solid #ccd3cd;
+  background: #fafaf6;
+  border-radius: 4px;
+  font: inherit;
+}
+.topos-topic-directory > div {
+  max-height: 34svh;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.topos-topic-directory a {
+  display: block;
+  padding: 9px 8px;
+  margin: 4px 0;
+  border-left: 2px solid var(--topic-color);
+  font-size: 11px;
+}
+.topos-topic-directory a[aria-current="true"] {
+  background: #fffefa;
+}
+.topos-topic-sidebar footer {
+  display: grid;
+  gap: 14px;
+  padding-top: 16px;
+  border-top: 1px solid #d7dbd4;
+}
+.topos-topic-sidebar footer small {
+  font-size: 10px;
+  color: #778085;
+}
+.has-topic-sidebar .topos-concept .concept-zh {
+  color: var(--topic-color, var(--blue));
+}
+.has-topic-sidebar .topos-concept .concept-zh::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--topic-color, var(--blue));
+  margin-right: 7px;
+}
+.topos-topics-empty {
+  position: absolute;
+  inset: 32% 24px auto;
+  z-index: 10;
+  text-align: center;
+  max-width: 470px;
+  margin: auto;
+  padding: 25px;
+  background: var(--paper);
+}
+[data-mode="atlas"] .topos-guide {
+  display: none;
+}
+.topos-topics-empty h2 {
+  font: 500 25px/1.6 var(--serif);
+}
+.topos-topics-empty p {
+  font-size: 13px;
+  line-height: 1.9;
+  color: #5d747c;
+}
+.topos-topics-trigger {
+  position: fixed;
+  top: 15px;
+  left: 14px;
+  z-index: 20;
+  padding: 7px 12px;
+  background: #fafaf6;
+  border: 1px solid #c6ceca;
+  border-radius: 5px;
+  font-size: 12px;
+}
+@media (min-width: 761px) and (max-width: 1100px) {
+  :root {
+    --topic-rail: 235px;
+  }
+  .has-topic-sidebar .topos-identity {
+    left: 24px;
+  }
+  .has-topic-sidebar .topos-identity small {
+    max-width: 250px;
+    font-size: 11px;
+  }
+  .has-topic-sidebar .topos-instruments {
+    left: 24px;
+    right: 24px;
+    gap: 12px;
+  }
+}
+@media (max-width: 760px) {
+  .has-topic-sidebar #topos-world {
+    margin-left: 0;
+    width: 100%;
+  }
+  .topos-topic-sidebar {
+    width: min(340px, 88vw);
+    padding-top: 16px;
+  }
+  .topos-topic-sidebar::backdrop {
+    background: #253c4655;
+  }
+  .has-topic-sidebar .topos-identity {
+    left: 88px;
+    top: 19px;
+  }
+  .has-topic-sidebar .topos-identity > span {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+  }
+  .has-topic-sidebar .topos-identity small {
+    max-width: 180px;
+    font-size: 9px;
+    letter-spacing: 0;
+    line-height: 1.6;
+  }
+  .has-topic-sidebar .topos-utility {
+    right: 10px;
+    top: 13px;
+    gap: 4px;
+  }
+  .has-topic-sidebar .topos-utility button {
+    width: 28px;
+    height: 28px;
+    font-size: 15px;
+  }
+  .has-topic-sidebar .topos-utility .topos-search-trigger {
+    width: 29px;
+    font-size: 0;
+  }
+  .has-topic-sidebar .topos-utility .topos-search-trigger::after {
+    content: "⌕";
+    font-size: 19px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .topos-topic-sidebar label {
+    transition: none;
+  }
+}
 @media (max-width: 700px) {
-  [data-mode="published"] .topos-status {
+  :is([data-mode="published"], [data-mode="atlas"]) .topos-status {
     top: 62px;
     left: 14px;
     right: 14px;

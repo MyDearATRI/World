@@ -49,7 +49,11 @@
     "sync:preview": "node scripts/sync-site.mjs --preview-only",
     "prepare:topos-runtime": "node scripts/prepare-topos-runtime.mjs",
     "test:topos": "node scripts/verify-topos.mjs",
-    "test:topos-published": "node scripts/verify-topos-published.mjs"
+    "test:topos-published": "node scripts/verify-topos-published.mjs",
+    "check:ontology": "node scripts/validate-ontology.mjs",
+    "test:topic-map": "node scripts/verify-topic-map.mjs",
+    "test:topics": "node scripts/verify-topic-browser.mjs",
+    "test:topic-interactions": "node scripts/verify-topic-interactions.mjs"
   },
   "engines": {
     "npm": ">=10.9.2",

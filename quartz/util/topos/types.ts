@@ -47,6 +47,8 @@ export interface Concept {
   aliases?: string[]
   occurrences?: { slug: string; anchor: string; href: string }[]
   relatedNotes?: string[]
+  topicIDs?: string[]
+  color?: string
 }
 export interface Relation {
   id: string
@@ -80,7 +82,8 @@ export interface KnowledgeModel {
   relations: Relation[]
   sections: Section[]
   sources: { id: string; title: string; url: string }[]
-  mode?: "published" | "demo"
+  mode?: "published" | "demo" | "atlas"
+  topics?: { id: string; title: string; color: string; description: string }[]
   snapshotHash?: string
   lenses?: { id: Lens; label: string; description?: string }[]
   stats?: { atoms: number; notes: number; unregisteredNotes: number; relations: number }
@@ -97,6 +100,8 @@ export interface ViewState {
   lens: Lens
   scale: number
   unfolded: Unfolding[]
+  /** Undefined is the complete collection; [] is an intentional empty selection. */
+  topics?: string[]
 }
 export interface ContextNode {
   id: string
@@ -118,6 +123,7 @@ export interface Context {
   nodes: ContextNode[]
   relations: Relation[]
   communities: Community[]
+  visibleIDs?: string[]
 }
 export interface FieldNode {
   id: string

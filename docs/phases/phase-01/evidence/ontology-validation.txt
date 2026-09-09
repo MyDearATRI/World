@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "as_of": "2026-09-10",
+  "scope": "Frozen official classification mappings, registry structure and recorded AI topic/source audits; not mathematical proof correctness or human review",
+  "counts": {
+    "canonical_nodes": 121,
+    "substantive_math_nodes": 94,
+    "unique_frontiers": 24,
+    "official_msc": 63,
+    "official_arxiv": 32,
+    "sources": 49,
+    "samples": 17
+  },
+  "criteria": {
+    "P01-01": {
+      "status": "PASS",
+      "failures": []
+    },
+    "P01-02": {
+      "status": "PASS",
+      "failures": []
+    },
+    "P01-03": {
+      "status": "PASS",
+      "failures": []
+    },
+    "P01-04": {
+      "status": "PASS",
+      "failures": []
+    },
+    "P01-05": {
+      "status": "PASS",
+      "failures": []
+    },
+    "P01-06": {
+      "status": "PASS",
+      "failures": []
+    }
+  },
+  "errors": []
+}

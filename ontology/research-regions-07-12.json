@@ -1,0 +1,680 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-09-10",
+  "activity_window": {
+    "start": "2021-09-10",
+    "end": "2026-09-10",
+    "date_policy": "Use an explicitly dated research result, publication, scientific meeting or research course. A crawl date or website update is not activity evidence. Month precision is retained where the source provides no day."
+  },
+  "regions": [
+    {
+      "id": "math.region.geometry",
+      "title_zh": "几何",
+      "directions": [
+        {
+          "stable_id": "math.frontier.ricci-flow-singularities",
+          "canonical_title": "Ricci flow singularities",
+          "title_zh": "Ricci 流奇性",
+          "aliases": ["Ricci flow singularity models", "Ricci 流奇性模型"],
+          "parent_ids": ["math.region.geometry"],
+          "source_ids": ["src.ias.sesum-ricci-2024", "src.mfo.differential-geometry-2023"],
+          "regional_relevance": "研究几何演化在曲率集中处的局部模型、孤立子与极限几何。所选证据覆盖广义柱面奇性和 Ricci 孤立子研究，不宣称已经分类所有奇性。",
+          "activity_evidence": [
+            {
+              "source_id": "src.ias.sesum-ricci-2024",
+              "date": "2024-04-19",
+              "evidence_summary": "IAS 的 Sesum 报告介绍多重翘曲积度量中的开放初值集合，其 Ricci 流以广义柱面作为奇性模型。"
+            },
+            {
+              "source_id": "src.mfo.differential-geometry-2023",
+              "date": "2023-07-02",
+              "evidence_summary": "2023 年 Oberwolfach 微分几何研讨会将 Ricci/Kähler 流与扩张 Ricci 孤立子列为实质报告主题。"
+            }
+          ]
+        },
+        {
+          "stable_id": "math.frontier.kahler-einstein-metrics",
+          "canonical_title": "Kähler–Einstein metrics and canonical complex geometry",
+          "title_zh": "Kähler–Einstein 度量与典范复几何",
+          "aliases": ["Kähler-Einstein geometry", "典范 Kähler 度量"],
+          "parent_ids": ["math.region.geometry"],
+          "source_ids": [
+            "src.icm2022.berman-emergent-geometry",
+            "src.mfo.differential-geometry-2023"
+          ],
+          "regional_relevance": "以典范度量的存在、变化及构造联系复几何、Fano 簇与概率方法。与 Ricci 流奇性保留交叉联系，但作为不同研究问题登记。",
+          "activity_evidence": [
+            {
+              "source_id": "src.mfo.differential-geometry-2023",
+              "date": "2023-07-02",
+              "evidence_summary": "研讨会专门报告 Fano 簇族上的 Kähler–Einstein 度量，提供近年活动依据；ICM 章节另解释概率构造与变分观点。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "math.region.analysis-pde",
+      "title_zh": "分析与偏微分方程",
+      "directions": [
+        {
+          "stable_id": "math.frontier.nonlinear-dispersive-long-time-dynamics",
+          "canonical_title": "Scattering and long-time dynamics of nonlinear dispersive equations",
+          "title_zh": "非线性色散方程的散射与长时间动力学",
+          "aliases": ["Nonlinear dispersive scattering", "色散 PDE 的长时间行为"],
+          "parent_ids": ["math.region.analysis-pde"],
+          "source_ids": ["src.ias.mmt-report-2024", "src.park.inls-2023"],
+          "regional_relevance": "围绕非线性色散方程的长期正则性、Sobolev 范数增长和散射展开。区分已有定理与报告中的待研究问题，不将所有模型视为具有相同散射行为。",
+          "activity_evidence": [
+            {
+              "source_id": "src.ias.mmt-report-2024",
+              "date": "2024-06",
+              "evidence_summary": "IAS 合作报告记录 2024 年 6 月对 MMT 模型的 Sobolev 增长研究；实线上的散射在报告中仍作为后续问题。"
+            },
+            {
+              "source_id": "src.park.inls-2023",
+              "date": "2023-07-14",
+              "evidence_summary": "Park 的论文在明确的维数与权重范围内证明径向散焦能量临界非齐次 NLS 的整体适定性和散射。"
+            }
+          ]
+        },
+        {
+          "stable_id": "math.frontier.fluid-pde-singularities-dynamics",
+          "canonical_title": "Singularity formation and long-time dynamics in fluid PDEs",
+          "title_zh": "流体方程的奇性形成与长时间动力学",
+          "aliases": ["Euler dynamics and fluid singularities", "Euler 方程动力学与流体奇性"],
+          "parent_ids": ["math.region.analysis-pde"],
+          "source_ids": ["src.ias.elgindi-euler-2023", "src.simons.wave-turbulence-2025"],
+          "regional_relevance": "研究 Euler 等流体方程中稳定性、细丝化、范数增长及奇性机制，并连接计算辅助证明。这里不声称解决 Navier–Stokes 正则性问题。",
+          "activity_evidence": [
+            {
+              "source_id": "src.ias.elgindi-euler-2023",
+              "date": "2023-10-13",
+              "evidence_summary": "Elgindi 的分析报告讨论二维 Euler 解的长期演化、扭转稳定性、细丝化与 Sobolev 增长。"
+            },
+            {
+              "source_id": "src.simons.wave-turbulence-2025",
+              "date": "2025-12-04",
+              "evidence_summary": "Buckmaster 在波湍流合作年会报告流体奇性、不稳定 PDE 解及计算辅助证明方法。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "math.region.probability-statistics",
+      "title_zh": "概率与统计",
+      "directions": [
+        {
+          "stable_id": "math.frontier.singular-stochastic-pdes",
+          "canonical_title": "Singular stochastic partial differential equations",
+          "title_zh": "奇异随机偏微分方程",
+          "aliases": ["Singular SPDEs", "随机 PDE 的重整化"],
+          "parent_ids": ["math.region.probability-statistics"],
+          "source_ids": ["src.slmath.spde-program-2025", "src.sissa.duch-spde-2026"],
+          "regional_relevance": "研究粗糙噪声导致的非线性乘积、解理论与重整化，并与普适性和随机量子化相连。研究课程用于证明方向活跃，不单独作为新定理证明。",
+          "activity_evidence": [
+            {
+              "source_id": "src.slmath.spde-program-2025",
+              "date": "2025-08-18",
+              "evidence_summary": "SLMath 研究项目聚焦 SPDE 解理论、正则性结构、仿控制方法、普适性及量子场论联系。"
+            },
+            {
+              "source_id": "src.sissa.duch-spde-2026",
+              "date": "2026-03-09",
+              "evidence_summary": "Duch 在 SISSA 的研究课程以 KPZ、随机量子化和流方程方法讲授亚临界奇异 SPDE 的重整化。"
+            }
+          ]
+        },
+        {
+          "stable_id": "math.frontier.high-dimensional-statistical-inference",
+          "canonical_title": "High-dimensional statistical inference",
+          "title_zh": "高维统计推断",
+          "aliases": ["High-dimensional inference", "高维推断"],
+          "parent_ids": ["math.region.probability-statistics"],
+          "source_ids": [
+            "src.mfo.high-dimensional-extremes-2024",
+            "src.simons.learning-universe-2024"
+          ],
+          "regional_relevance": "研究维数增长、稀疏结构或不可显式计算似然时的统计推断。此处选取高维极值与模拟驱动推断为两个有证据的活动切面，不把应用案例当作整个统计领域的代表。",
+          "activity_evidence": [
+            {
+              "source_id": "src.mfo.high-dimensional-extremes-2024",
+              "date": "2024-08-18",
+              "evidence_summary": "Oberwolfach 研讨会讨论高维极值、稀疏表示及多元和时间序列的统计推断。"
+            },
+            {
+              "source_id": "src.simons.learning-universe-2024",
+              "date": "2024-09-19",
+              "evidence_summary": "Learning the Universe 年会报告利用非线性模拟进行可扩展隐式似然推断，包含大体积宇宙学数据的高维应用。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "math.region.combinatorics-discrete",
+      "title_zh": "组合与离散数学",
+      "directions": [
+        {
+          "stable_id": "math.frontier.extremal-probabilistic-combinatorics",
+          "canonical_title": "Extremal and probabilistic combinatorics",
+          "title_zh": "极值与概率组合学",
+          "aliases": ["Extremal and probabilistic graph theory", "极值与概率图论"],
+          "parent_ids": ["math.region.combinatorics-discrete"],
+          "source_ids": ["src.ams.jmm-extremal-2025", "src.slmath.graph-theory-2025"],
+          "regional_relevance": "以满足给定性质的组合对象的极端规模、典型性质及图结构为核心。两个独立研究活动都明确讨论近年问题与研究报告，而不是仅提供学科目录名称。",
+          "activity_evidence": [
+            {
+              "source_id": "src.ams.jmm-extremal-2025",
+              "date": "2025-01-11",
+              "evidence_summary": "JMM 的 AMS 专题场次以极值和概率组合学研究报告组成，说明两个方面的具体研究对象。"
+            },
+            {
+              "source_id": "src.slmath.graph-theory-2025",
+              "date": "2025-02-10",
+              "evidence_summary": "SLMath 的图论研讨会结合极值、概率与结构方法，安排介绍性讲座及近期成果研究报告。"
+            }
+          ]
+        },
+        {
+          "stable_id": "math.frontier.additive-combinatorics",
+          "canonical_title": "Quantitative structure and generalizations in additive combinatorics",
+          "title_zh": "加性组合中的定量结构与推广",
+          "aliases": ["Additive combinatorics", "加性组合学"],
+          "parent_ids": ["math.region.combinatorics-discrete"],
+          "source_ids": [
+            "src.ias.kelley-meka-progressions-2023",
+            "src.stanford.pham-additive-2024"
+          ],
+          "regional_relevance": "研究算术级数、小倍增集合与群外组合结构中的定量定理。三项等差数列界与小倍增结构推广是不同工作，不重复登记为两个宏区节点。",
+          "activity_evidence": [
+            {
+              "source_id": "src.ias.kelley-meka-progressions-2023",
+              "date": "2023-03-21",
+              "evidence_summary": "Kelley 与 Meka 的 IAS 报告深入讨论三项等差数列问题中改进的定量界及其证明方法。"
+            },
+            {
+              "source_id": "src.stanford.pham-additive-2024",
+              "date": "2024-05-30",
+              "evidence_summary": "Pham 的 Stanford 报告介绍小倍增结构问题的图论方法，以及经典加性组合结果的非交换和组合推广。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "math.region.mathematical-physics",
+      "title_zh": "数学物理",
+      "directions": [
+        {
+          "stable_id": "math.frontier.tensor-network-quantum-states",
+          "canonical_title": "Tensor-network methods for quantum many-body states",
+          "title_zh": "量子多体态的张量网络方法",
+          "aliases": ["Quantum tensor networks", "多体纠缠与张量网络"],
+          "parent_ids": ["math.region.mathematical-physics"],
+          "source_ids": ["src.ipam.tensor-networks-2024", "src.aps.watanabe-ueda-tn-2024"],
+          "regional_relevance": "利用张量网络组织量子多体态与纠缠结构，并研究网络结构选择和可计算性。保留其数学物理与科学计算的交叉性，但只登记一个规范方向。",
+          "activity_evidence": [
+            {
+              "source_id": "src.ipam.tensor-networks-2024",
+              "date": "2024-02-05",
+              "evidence_summary": "IPAM 研讨会集中讨论张量网络结构、纠缠、量子多体建模以及与量子计算的比较。"
+            },
+            {
+              "source_id": "src.aps.watanabe-ueda-tn-2024",
+              "date": "2024-09-06",
+              "evidence_summary": "Watanabe 与 Ueda 提出包含纠缠重整化的张量网络结构搜索，并在具体自旋模型中检验能量、保真度和纠缠熵。"
+            }
+          ]
+        },
+        {
+          "stable_id": "math.frontier.rigorous-liouville-cft",
+          "canonical_title": "Rigorous Liouville conformal field theory",
+          "title_zh": "Liouville 共形场论的严格构造",
+          "aliases": ["Probabilistic Liouville CFT", "概率方法与 Liouville 场论"],
+          "parent_ids": ["math.region.mathematical-physics"],
+          "source_ids": ["src.ihes.guillarmou-lcft-2022", "src.ang.quantum-zipper-2023"],
+          "regional_relevance": "用概率、分析与曲面几何建立 Liouville 共形场论及其与量子曲面、SLE 的联系。登记明确的严格理论方向，不将物理启发关系自动标为证明。",
+          "activity_evidence": [
+            {
+              "source_id": "src.ihes.guillarmou-lcft-2022",
+              "date": "2022-03-14",
+              "evidence_summary": "Guillarmou 在 IHES 报告 Liouville 共形场论的数学构造及结构常数、Virasoro 共形块的分解。"
+            },
+            {
+              "source_id": "src.ang.quantum-zipper-2023",
+              "date": "2023-01-30",
+              "evidence_summary": "Ang 的论文研究 Liouville 场论曲面的量子缝合与 SLE，并证明边界 BPZ 方程。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "math.region.applied-computational",
+      "title_zh": "应用与计算数学",
+      "directions": [
+        {
+          "stable_id": "math.frontier.inverse-problems-wave-imaging",
+          "canonical_title": "Inverse problems and wave imaging",
+          "title_zh": "反问题与波成像",
+          "aliases": ["Inverse wave scattering", "波散射反问题"],
+          "parent_ids": ["math.region.applied-computational"],
+          "source_ids": [
+            "src.ini.multiple-wave-scattering-2023",
+            "src.aims.cheng-dong-elastic-2023"
+          ],
+          "regional_relevance": "研究由散射或测量数据恢复障碍物、介质及材料结构，兼顾唯一性与重建算法。波成像作为应用入口，保留问题本身的数学条件。",
+          "activity_evidence": [
+            {
+              "source_id": "src.ini.multiple-wave-scattering-2023",
+              "date": "2023-05-31",
+              "evidence_summary": "INI 项目报告记录材料表征与波散射研究活动，并讨论多重散射成像和波速重建等反问题。"
+            },
+            {
+              "source_id": "src.aims.cheng-dong-elastic-2023",
+              "date": "2023-09",
+              "evidence_summary": "Cheng 与 Dong 的论文给出二维无相位弹性散射数据的唯一性结果及刚性障碍物形状、位置的迭代重建。"
+            }
+          ]
+        },
+        {
+          "stable_id": "math.frontier.geometric-numerical-integration",
+          "canonical_title": "Structure-preserving geometric numerical integration",
+          "title_zh": "保持结构的几何数值积分",
+          "aliases": ["Geometric numerical integration", "几何积分方法"],
+          "parent_ids": ["math.region.applied-computational"],
+          "source_ids": [
+            "src.cambridge.blanes-casas-murua-splitting-2024",
+            "src.munthe-kaas.symmetric-integrators-2023"
+          ],
+          "regional_relevance": "研究保留几何结构的时间离散方法，当前证据覆盖分裂与复合算法以及对称空间上的积分器。不是声称整个几何积分领域首次出现于近五年。",
+          "activity_evidence": [
+            {
+              "source_id": "src.cambridge.blanes-casas-murua-splitting-2024",
+              "date": "2024-09-04",
+              "evidence_summary": "Acta Numerica 综述分析分裂与复合方法的阶条件、几何性质、高振荡问题及 PDE 应用，并比较具体算法。"
+            },
+            {
+              "source_id": "src.munthe-kaas.symmetric-integrators-2023",
+              "date": "2023-08-30",
+              "evidence_summary": "Munthe-Kaas 研究对称空间上的几何积分器，使用 Lie 三重系统与典范操作处理球面、Grassmann 流形等空间。"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "src.ias.sesum-ricci-2024",
+      "title": "Generalized Cylinder Limits of Ricci Flow Singularities",
+      "url": "https://www.ias.edu/video/generalized-cylinder-limits-ricci-flow-singularities",
+      "source_group": "institute-for-advanced-study",
+      "kind": "official-research-seminar",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "Abstract; speaker Natasa Sesum; Date: April 19, 2024",
+      "support_summary": "Sesum describes open sets of multiply warped initial metrics whose Ricci flows develop generalized cylinders as singularity models. This supports an active investigation of higher-dimensional singularity geometry, not a classification of all possible singularities.",
+      "recent_activity_date": "2024-04-19",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.mfo.differential-geometry-2023",
+      "title": "Differentialgeometrie im Grossen — Oberwolfach Report 29/2023",
+      "url": "https://publications.mfo.de/bitstream/handle/mfo/4062/OWR_2023_29.pdf?sequence=4",
+      "source_group": "mathematisches-forschungsinstitut-oberwolfach",
+      "kind": "official-research-workshop-report",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "Printed pp.1617–1620: dates, scientific overview and table of contents; listed contributions by Chung-Ming Pan, p.1658, and Eric Chen, p.1663; DOI 10.4171/OWR/2023/29",
+      "support_summary": "The July 2–7, 2023 workshop overview discusses Ricci and Kähler flows alongside canonical geometry. Its contribution list includes Kähler–Einstein metrics on families of Fano varieties and expanding Ricci solitons asymptotic to cones. The evidence used here is the dated scientific overview and programme; the detailed proofs in those contributions were not audited.",
+      "recent_activity_date": "2023-07-02",
+      "activity_end_date": "2023-07-07",
+      "retrieval_status": "VERIFIED",
+      "retrieval_note": "The parsed official PDF overview and contents were read successfully. Later attempts to reopen individual contribution pages failed; no unobserved contribution theorem is claimed.",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.icm2022.berman-emergent-geometry",
+      "title": "Emergent complex geometry",
+      "url": "https://ems.press/books/standalone/276/5476",
+      "source_group": "icm2022-berman-emergent-complex-geometry",
+      "kind": "official-congress-research-chapter",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "Robert J. Berman; Abstract; ICM 2022 Volume 4, pp.2456–2483; DOI 10.4171/ICM2022/59",
+      "support_summary": "Berman's chapter relates canonical random point processes on projective varieties to Kähler–Einstein metrics. It compares this probabilistic construction with variational and Yau–Tian–Donaldson perspectives and discusses a non-Archimedean extension. It supports the meaning of canonical complex geometry; the independent 2023 MFO activity supplies the recent-date check.",
+      "retrieval_status": "VERIFIED",
+      "retrieval_note": "The official EMS chapter abstract was read. An earlier arXiv version dated September 1, 2021 is outside the requested window and is neither counted as a second source nor used for recency.",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.ias.mmt-report-2024",
+      "title": "IAS summer collaboration report on the MMT model",
+      "url": "https://www.ias.edu/sites/default/files/Yu%20SC%20report.pdf",
+      "source_group": "institute-for-advanced-study",
+      "kind": "official-research-collaboration-report",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "pp.1–3, especially Section 2 'Progress and Future Plan' and the acknowledgment of the June 2024 two-week visit",
+      "support_summary": "The report studies long-time behaviour of the dispersive MMT model on the torus and real line. It records conditional Sobolev-growth bounds and smoothing considerations; real-line scattering is described as an open or intended direction. The acknowledgment dates the collaboration to June 2024.",
+      "recent_activity_date": "2024-06",
+      "date_precision": "month",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.park.inls-2023",
+      "title": "Global well-posedness and scattering of the defocusing energy-critical inhomogeneous nonlinear Schrödinger equation with radial data",
+      "url": "https://arxiv.org/abs/2307.07204",
+      "source_group": "park-inls-arxiv-2307.07204",
+      "kind": "author-research-preprint",
+      "published_date": "2023-07-14",
+      "accessed_date": "2026-09-10",
+      "locator": "Dongjin Park; Abstract and submission history: v1 July 14, 2023, v2 March 4, 2024",
+      "support_summary": "The paper establishes global well-posedness and scattering for radial defocusing energy-critical inhomogeneous NLS in specified dimension and weight ranges, with explicit exceptions. It uses Lorentz-space estimates and quantitative energy bounds. The scope is those stated ranges, not arbitrary inhomogeneous NLS.",
+      "recent_activity_date": "2023-07-14",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.ias.elgindi-euler-2023",
+      "title": "On the Long-Time Behavior of Solutions to the 2d Euler Equation",
+      "url": "https://www.ias.edu/math/events/joint-iaspu-analysis-seminar-3",
+      "source_group": "institute-for-advanced-study",
+      "kind": "official-research-seminar",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "Tarek Elgindi; Abstract; Date & Time: October 13, 2023",
+      "support_summary": "Elgindi's seminar connects stability of twisting two-dimensional Hamiltonian flows with Euler dynamics. The stated topics include stationary-flow stability, filamentation, Sobolev norm growth and wandering behaviour. This supports long-time fluid dynamics rather than a claim of three-dimensional blow-up.",
+      "recent_activity_date": "2023-10-13",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.simons.wave-turbulence-2025",
+      "title": "Simons Collaboration on Wave Turbulence Annual Meeting 2025",
+      "url": "https://www.simonsfoundation.org/event/simons-collaboration-on-wave-turbulence-annual-meeting-2025/",
+      "source_group": "simons-foundation",
+      "kind": "official-research-collaboration-meeting",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "December 4–5, 2025 programme; Abstracts & Slides: Tristan Buckmaster, 'Fluid Singularities, Unstable PDE Solutions and Computer-Assisted Proofs'",
+      "support_summary": "Buckmaster's abstract discusses finding unstable fluid-PDE solutions computationally and converting suitable computational evidence into computer-assisted proofs. Euler and Navier–Stokes motivate the subject. This record supports an active singularity-research programme, not a resolution of the Navier–Stokes millennium problem.",
+      "recent_activity_date": "2025-12-04",
+      "activity_end_date": "2025-12-05",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.slmath.spde-program-2025",
+      "title": "Recent Trends in Stochastic Partial Differential Equations",
+      "url": "https://www.claymath.org/events/recent-trends-in-stochastic-partial-differential-equations/",
+      "source_group": "slmath-spde-program-2025",
+      "kind": "official-research-programme",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "Programme description, organisers and dates: August 18–December 19, 2025",
+      "support_summary": "The SLMath research programme covers SPDE solution theories, universality, large-scale asymptotics and links with quantum field theory and geometry. Its description explicitly includes regularity structures and paracontrolled distributions. The Clay and SLMath announcements refer to the same programme and count as one source group.",
+      "recent_activity_date": "2025-08-18",
+      "activity_end_date": "2025-12-19",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.sissa.duch-spde-2026",
+      "title": "Singular Stochastic PDEs",
+      "url": "https://www.math.sissa.it/course/phd-course/singular-stochastic-pdes/",
+      "source_group": "sissa-epfl-duch-course-2026",
+      "kind": "official-advanced-research-course",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "Paweł Duch (EPFL); Description and schedule, March 9–20, 2026, academic year 2025–2026",
+      "support_summary": "The course explains ill-defined nonlinearities caused by rough SPDE solutions, renormalization, KPZ and stochastic quantization. Its second part treats flow-equation methods for subcritical equations, including fractional Laplacians. This is dated advanced scientific activity, not evidence of a theorem first proved during the course.",
+      "recent_activity_date": "2026-03-09",
+      "activity_end_date": "2026-03-20",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.mfo.high-dimensional-extremes-2024",
+      "title": "Mathematics, Statistics, and Geometry of Extreme Events in High Dimensions",
+      "url": "https://publications.mfo.de/handle/mfo/4252",
+      "source_group": "mathematisches-forschungsinstitut-oberwolfach",
+      "kind": "official-research-workshop-report",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "Repository abstract; Oberwolfach Report 38/2024; meeting August 18–23, 2024; DOI 10.4171/OWR/2024/38",
+      "support_summary": "The workshop connects regular variation and extreme events with high-dimensional statistics and geometry. Its scientific description addresses sparsity-compatible representations, multivariate and time-series inference, and learning applications. This supports the high-dimensional extreme-value side of the direction.",
+      "recent_activity_date": "2024-08-18",
+      "activity_end_date": "2024-08-23",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.simons.learning-universe-2024",
+      "title": "Simons Collaboration on Learning the Universe Annual Meeting 2024",
+      "url": "https://www.simonsfoundation.org/event/simons-collaboration-on-learning-the-universe-annual-meeting-2024/",
+      "source_group": "simons-foundation",
+      "kind": "official-research-collaboration-meeting",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "September 19–20, 2024; abstract headed 'Implicit Likelihood Inference, Go Big, and Beyond'",
+      "support_summary": "The cited contribution describes high-dimensional implicit-likelihood inference using nonlinear simulations and scalable computational methods, including large-volume cosmological applications. It supplies an independently organised recent example of simulation-based inference, not a general theorem guaranteeing all such methods.",
+      "recent_activity_date": "2024-09-19",
+      "activity_end_date": "2024-09-20",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.ams.jmm-extremal-2025",
+      "title": "AMS Special Session on Extremal and Probabilistic Combinatorics",
+      "url": "https://jointmathematicsmeetings.org/meetings/national/jmm2025/2314_program_ss49.html",
+      "source_group": "american-mathematical-society-jmm",
+      "kind": "official-research-special-session",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "Session scientific description and research programme, January 11, 2025",
+      "support_summary": "The session description distinguishes extremal counts of combinatorial objects satisfying a property from almost-sure properties as object size grows. Its programme contains research talks devoted to the interaction of these approaches. It is scientific-activity evidence rather than an independently checked proof corpus.",
+      "recent_activity_date": "2025-01-11",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.slmath.graph-theory-2025",
+      "title": "Graph Theory: Extremal, Probabilistic and Structural",
+      "url": "https://www.slmath.org/ckeditor_assets/attachments/2724/2025_EC-375_Workshop_1088_Flyer.pdf",
+      "source_group": "slmath-extremal-combinatorics-2025",
+      "kind": "official-research-workshop-programme",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "p.1: scientific description, organisers, speakers and February 10–14, 2025 dates",
+      "support_summary": "The workshop combines extremal, probabilistic and structural graph theory through introductory lectures and research talks on recent developments. Its dated programme and named organisers establish a separate research activity from the January JMM session.",
+      "recent_activity_date": "2025-02-10",
+      "activity_end_date": "2025-02-14",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.ias.kelley-meka-progressions-2023",
+      "title": "Strong Bounds for 3-Progressions: In-Depth",
+      "url": "https://www.ias.edu/math/events/computer-sciencediscrete-mathematics-seminar-ii-530",
+      "source_group": "institute-for-advanced-study",
+      "kind": "official-research-seminar",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "Speakers Zander Kelley and Raghu Meka; Abstract and March 21, 2023 date",
+      "support_summary": "The seminar presents substantially improved quantitative bounds for three-term arithmetic progressions in dense sets of integers and examines the argument in depth. It supports quantitative additive-combinatorial research without reproducing the technical bound outside its hypotheses.",
+      "recent_activity_date": "2023-03-21",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.stanford.pham-additive-2024",
+      "title": "Additive combinatorics without groups",
+      "url": "https://mathematics.stanford.edu/events/additive-combinatorics-without-groups",
+      "source_group": "stanford-mathematics",
+      "kind": "official-research-colloquium",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "Huy Pham; May 30, 2024; abstract paragraphs on small doubling, Ruzsa's conjecture and graph-theoretic generalisation",
+      "support_summary": "Pham discusses quantitative small-doubling structure and a graph-theoretic approach extending classical additive-combinatorial results to more general combinatorial and nonabelian settings. The announced work concerns a different structural problem from Kelley–Meka's progression bounds.",
+      "recent_activity_date": "2024-05-30",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.ipam.tensor-networks-2024",
+      "title": "Tensor Networks",
+      "url": "https://www.ipam.ucla.edu/programs/workshops/tensor-networks/",
+      "source_group": "ipam-ucla",
+      "kind": "official-research-workshop",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "Overview; dates February 5–9, 2024",
+      "support_summary": "The overview explains tensor networks as structured representations of physically relevant many-body quantum states within exponentially large Hilbert spaces. It connects graph structure, computational tractability and entanglement, and compares tensor-network and quantum-computing approaches.",
+      "recent_activity_date": "2024-02-05",
+      "activity_end_date": "2024-02-09",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.aps.watanabe-ueda-tn-2024",
+      "title": "Automatic structural search of tensor network states including entanglement renormalization",
+      "url": "https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.6.033259",
+      "source_group": "watanabe-ueda-tensor-network-2024",
+      "kind": "publisher-research-article",
+      "published_date": "2024-09-06",
+      "accessed_date": "2026-09-10",
+      "locator": "Ryo Watanabe and Hiroshi Ueda; Abstract; Physical Review Research 6, 033259; publication date September 6, 2024",
+      "support_summary": "The authors propose energy-based local reconstruction of tensor-network structure, including entanglement renormalization. Tests on spin-tetramer and random-XY models examine energy, fidelity and entanglement entropy. These are results for the specified models, not a universal optimal tensor-network construction.",
+      "recent_activity_date": "2024-09-06",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.ihes.guillarmou-lcft-2022",
+      "title": "A mathematical approach to Liouville conformal field theory on Riemann surfaces",
+      "url": "https://www.ihes.fr/~kassel/seminGGD.html",
+      "source_group": "institut-hautes-etudes-scientifiques",
+      "kind": "official-research-seminar",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "Entry 'Lundi 14 mars 2022', Colin Guillarmou; title and abstract",
+      "support_summary": "Guillarmou's abstract combines probabilistic, analytic and Teichmüller methods for a mathematical construction of Liouville CFT on Riemann surfaces. It discusses correlation functions through structure constants and Virasoro conformal blocks. This records a rigorous-construction programme rather than an informal physical analogy.",
+      "recent_activity_date": "2022-03-14",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.ang.quantum-zipper-2023",
+      "title": "Liouville conformal field theory and the quantum zipper",
+      "url": "https://arxiv.org/abs/2301.13200",
+      "source_group": "ang-quantum-zipper-arxiv-2301.13200",
+      "kind": "author-research-preprint",
+      "published_date": "2023-01-30",
+      "accessed_date": "2026-09-10",
+      "locator": "Morris Ang; Abstract and submission history: v1 January 30, 2023; v3 August 13, 2024",
+      "support_summary": "Ang studies conformal welding of Liouville quantum surfaces and its relation to SLE, obtaining explicit laws at stopping times and proving boundary BPZ equations. This is a separate author contribution supporting a specific connection between rigorous CFT and random geometry.",
+      "recent_activity_date": "2023-01-30",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.ini.multiple-wave-scattering-2023",
+      "title": "Scientific report of the INI Multiple Wave Scattering programme",
+      "url": "https://api.newton.ac.uk/website/v0/events/mws/reports/scientific-report",
+      "source_group": "isaac-newton-institute",
+      "kind": "official-research-programme-report",
+      "published_date": null,
+      "accessed_date": "2026-09-10",
+      "locator": "Scientific report, discussion headed 'Inverse problems'; p.10, OFBW60 'Wave scattering in complex matter: Advances in material characterisation and design of materials', May 31, 2023",
+      "support_summary": "The programme report discusses inverse problems involving multiple-scattering imaging and wave-speed reconstruction. A dated associated meeting addresses material characterisation with wave scattering, including imaging and ultrasonic techniques. This connects mathematical reconstruction questions with concrete wave-imaging research activity.",
+      "recent_activity_date": "2023-05-31",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.aims.cheng-dong-elastic-2023",
+      "title": "Uniqueness and reconstruction method for inverse elastic wave scattering with phaseless data",
+      "url": "https://www.aimsciences.org/article/doi/10.3934/ipi.2023038",
+      "source_group": "cheng-dong-jilin-elastic-inverse-scattering",
+      "kind": "publisher-research-article",
+      "published_date": "2023-09",
+      "accessed_date": "2026-09-10",
+      "locator": "Zhiyong Cheng and Heping Dong; Abstract; Published online September 2023; Inverse Problems and Imaging 18(2), 2024, pp.406–433; DOI 10.3934/ipi.2023038",
+      "support_summary": "The paper treats two-dimensional elastic inverse scattering with phaseless data. It gives uniqueness results under specified incident-field families and proposes a nonlinear integral-equation iteration to reconstruct the shape and location of a rigid obstacle, with numerical experiments.",
+      "recent_activity_date": "2023-09",
+      "date_precision": "month",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.cambridge.blanes-casas-murua-splitting-2024",
+      "title": "Splitting methods for differential equations",
+      "url": "https://www.cambridge.org/core/journals/acta-numerica/article/splitting-methods-for-differential-equations/2C1BD434F8D2052E593A755351B3ACA3",
+      "source_group": "blanes-casas-murua-splitting-methods",
+      "kind": "publisher-research-survey",
+      "published_date": "2024-09-04",
+      "accessed_date": "2026-09-10",
+      "locator": "Sergio Blanes, Fernando Casas and Ander Murua; Abstract; online date September 4, 2024; Acta Numerica 33, pp.1–161; DOI 10.1017/S0962492923000077",
+      "support_summary": "The survey analyses splitting and composition integrators, order conditions, qualitative geometric properties and highly oscillatory problems. It also treats PDE applications, especially parabolic equations, and compares concrete methods. Its Cambridge, arXiv and institutional-repository versions are one work, not independent sources.",
+      "recent_activity_date": "2024-09-04",
+      "retrieval_status": "VERIFIED",
+      "retrieval_note": "The official Cambridge abstract and online publication date were read, as was the author-deposited arXiv abstract. A blocked institutional-repository opening is not used as independent evidence.",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "source_id": "src.munthe-kaas.symmetric-integrators-2023",
+      "title": "Geometric integration on symmetric spaces",
+      "url": "https://arxiv.org/abs/2308.16012",
+      "source_group": "munthe-kaas-symmetric-space-integrators",
+      "kind": "author-research-preprint",
+      "published_date": "2023-08-30",
+      "accessed_date": "2026-09-10",
+      "locator": "Hans Munthe-Kaas; Abstract and submission history, v1 August 30, 2023",
+      "support_summary": "Munthe-Kaas constructs geometric integrators using canonical symmetric-space operations, Lie triple systems and exponentials. Examples include spheres, Grassmann manifolds, positive-definite matrices and hyperbolic spaces. This is a separate authored construction from the Blanes–Casas–Murua splitting-method survey.",
+      "recent_activity_date": "2023-08-30",
+      "retrieval_status": "VERIFIED",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    }
+  ],
+  "verification_notes": [
+    "This file is a bounded Phase 1 title-map audit for regions 07–12: six regions, two canonical frontier directions per region. It does not claim exhaustive coverage of mathematics or of each region.",
+    "Every included source was actually retrieved and its scientific description, abstract or specified report passage read through the browser research tool. A successful HTTP address alone was not accepted. Failed follow-up retrievals are not treated as new supporting evidence.",
+    "Source groups represent originating institutions, programmes or distinct authored works. Mirrored copies and co-hosted announcements of one programme count once; different papers are not made dependent merely because both are deposited on arXiv. Each direction pairs independent originating groups.",
+    "Published dates are null when an announcement gives only the scientific event date. The IAS MMT report gives June 2024 and the AIMS paper gives September 2023 without an exact day; those values retain month precision.",
+    "A dated official research event or advanced research course supports recent activity and the stated direction, not independent verification of every theorem discussed there. Paper abstracts support the authors' reported scope; no full proof audit was performed.",
+    "All reviews are AI reviews. No human reviewer, human sign-off, established priority claim, new theorem, or formal verification is asserted.",
+    "Macroregion placement and canonical bilingual direction labels are editorial synthesis from the cited material. They are not claimed to be official MSC or arXiv category names; the integrating ontology supplies those mappings separately.",
+    "The MFO 2023 overview supports both geometric directions but remains one source record and one source group. Each direction has a different independent second group; its detailed contribution proofs were not used as if read.",
+    "No private Vault note, credential, model service or local writing source was accessed for this research. This file contains public-source summaries only."
+  ],
+  "gaps": []
+}

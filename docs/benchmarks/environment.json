@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-09T18:59:57.217Z",
+  "benchmarkVersion": "phase-00-environment-v1",
+  "sourceRevision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+  "sourceManifest": "docs/phases/phase-00/evidence/source-file-hashes.json",
+  "sourceManifestSha256": "734cfcb8c5128e73b79461ac5da961677da61108dd36d625aeeae5375fa39010",
+  "dependencyLock": {
+    "path": "package-lock.json",
+    "bytes": 328869,
+    "sha256": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef"
+  },
+  "hardware": {
+    "cpuModels": ["Intel(R) Core(TM) Ultra 9 275HX"],
+    "logicalCpuCount": 24,
+    "totalMemoryBytes": 33752997888,
+    "gpu": null,
+    "gpuDriver": null,
+    "unavailableReason": "CIM read attempt returned Access denied; no escalation for hardware metadata"
+  },
+  "platform": {
+    "os": "win32",
+    "release": "10.0.26200",
+    "architecture": "x64",
+    "node": "v24.19.0",
+    "edge": "152.0.4191.66",
+    "playwright": "1.62.1",
+    "device": "Physical Windows computer; future mobile viewports are desktop browser emulation, not physical phone tests"
+  },
+  "auditExecution": {
+    "localCommand": "node --use-env-proxy docs/phases/phase-00/evidence/audit-local.mjs",
+    "officialCommand": "node --use-env-proxy docs/phases/phase-00/evidence/audit-official.mjs (approved network capability required in restricted environments)",
+    "perProcessTimeoutSeconds": 20,
+    "perOfficialRequestTimeoutSeconds": 20,
+    "installPerformed": false,
+    "servicesCreated": false,
+    "previewLifetime": "ephemeral loopback,closed in finally"
+  },
+  "referenceViewports": [
+    {
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "width": 1024,
+      "height": 900
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "futureMeasurements": [
+    {
+      "phase": 3,
+      "source": "M36 + R P03-05",
+      "nodes": 150,
+      "edges": 400,
+      "repetitions": 5,
+      "secondsPerRun": 30,
+      "windowSeconds": 1,
+      "minimumMedianFPS": 45,
+      "maximumSettleSeconds": 1.2,
+      "settleWindowMilliseconds": 300,
+      "maximumSettleDisplacementCSSPixels": 1,
+      "postSettleObserveSeconds": 3,
+      "devicePixelRatio": null,
+      "warmupProtocol": null,
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 6,
+      "source": "M41–43 + R P06-04",
+      "edits": 60,
+      "repetitionsPerEdit": 5,
+      "raceSequences": 30,
+      "maximumWarmP50Milliseconds": 1500,
+      "maximumWarmP95Milliseconds": 4000,
+      "concurrentSessions": null,
+      "cacheModes": ["cold", "warm-check-required", "cache-hit"],
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 9,
+      "source": "M48 + C/R Phase9A",
+      "datasetTheorems": 60,
+      "humanSteps": 300,
+      "split": {
+        "development": 30,
+        "validation": 10,
+        "sealed": 20
+      },
+      "independentReviewers": 2,
+      "reviewerIdentities": [],
+      "bootstrapConfidence": 0.95,
+      "bootstrapReplications": null,
+      "randomSeed": null,
+      "actual_result": null,
+      "status": "NOT_RUN"
+    },
+    {
+      "phase": 10,
+      "source": "R Phase10 task5",
+      "relativeBackendScales": [1, 2, 5],
+      "actualNodeCounts": null,
+      "actualEdgeCounts": null,
+      "concurrentSessions": null,
+      "actual_result": null,
+      "status": "NOT_RUN"
+    }
+  ],
+  "missingResources": [
+    "Installed Lean toolchain and locked formal/Lake project",
+    "Verified untrusted-code isolation backend",
+    "Second clean independent formal build environment",
+    "Named real mathematical/author-strategy reviewers",
+    "Authorized human study participants and research protocols",
+    "Measured GPU/driver and pixel-ratio baseline for future FPS tests"
+  ],
+  "humanReview": {
+    "reviewer": null,
+    "status": "NOT_RUN"
+  },
+  "networkEvidence": {
+    "restrictedLocal": "local-audit.json records EACCES",
+    "approvedReadOnly": "official-research.json records successful official requests and retained3connection failures"
+  }
+}

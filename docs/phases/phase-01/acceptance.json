@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "phase": 1,
+  "status": "PASS",
+  "data_criteria_status": "PASS",
+  "updated_at": "2026-09-09T19:01:04.503Z",
+  "dependency": {
+    "phase": 0,
+    "status": "PASS",
+    "reason": "The final frozen Phase0 acceptance was read after the last sync-allowlist repair: all five criteria PASS, with the recovered original77-section Master and reviewed mappings recorded. All six independent Phase1 data criteria also PASS.",
+    "checked_at": "2026-09-09T19:01:04.503Z",
+    "acceptance_sha256": "060c9929681aa0732654d218dbccccac4e93f68d373f970a499ee7480bc3db23",
+    "original_master_sha256": "e3ff6b57f67b198f81cb8234aa835c9e5bf1c12c4c6a5a3763a8c60074141619",
+    "criteria_passed": 5,
+    "evidence": [
+      "docs/phases/phase-00/acceptance.json",
+      "docs/phases/phase-00/evidence/input-resolution.json",
+      "docs/phases/phase-00/evidence/master-mapping-review.json"
+    ],
+    "source_manifest_sha256": "734cfcb8c5128e73b79461ac5da961677da61108dd36d625aeeae5375fa39010"
+  },
+  "criteria": [
+    {
+      "criterion_id": "P01-01",
+      "objective": "只有标题的三卷数学地图",
+      "user_task": "阅读标题树并区分现有数学、工程和研究设想",
+      "artifact": ["ontology/math_outline.md", "ontology/math_registry.json"],
+      "metric": "纯标题行及注册标题完整性",
+      "threshold": "三卷、零非标题正文、每一注册标题均在大纲出现",
+      "requirement_origin": "M / C",
+      "test_environment": {
+        "source_revision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+        "dependency_lock": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef",
+        "platform": "win32/x64; Node v24.19.0",
+        "benchmark_version": "phase-01-2026-09-10-v1"
+      },
+      "actual_result": {
+        "result": "PASS",
+        "volumes": 3,
+        "canonical_nodes": 121,
+        "exposition_paragraphs": 0
+      },
+      "evidence": [
+        "docs/phases/phase-01/evidence/run-report.json",
+        "docs/phases/phase-01/evidence/ontology-validation.txt"
+      ],
+      "known_limitations": ["源与解释在独立JSON中；同一规范节点可在大纲多处展示。"],
+      "status": "PASS"
+    },
+    {
+      "criterion_id": "P01-02",
+      "objective": "冻结官方分类，避免缩小分母制造覆盖率",
+      "user_task": "按MSC或arXiv分类找到具体主题",
+      "artifact": [
+        "ontology/benchmarks/msc2020-level1.json",
+        "ontology/benchmarks/arxiv-math.json",
+        "ontology/math_registry.json"
+      ],
+      "metric": "映射/已取得，以及已取得/完整官方列表",
+      "threshold": "两个分类分别100%；不能用根节点代替具体主题",
+      "requirement_origin": "C / R",
+      "test_environment": {
+        "source_revision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+        "dependency_lock": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef",
+        "platform": "win32/x64; Node v24.19.0",
+        "benchmark_version": "phase-01-2026-09-10-v1"
+      },
+      "actual_result": {
+        "msc": {
+          "mapped": 63,
+          "acquired": 63,
+          "official_list_total": 63
+        },
+        "arxiv": {
+          "mapped": 32,
+          "acquired": 32,
+          "official_list_total": 32
+        }
+      },
+      "evidence": [
+        "docs/phases/phase-01/evidence/run-report.json",
+        "docs/phases/phase-01/evidence/ontology-validation.txt"
+      ],
+      "known_limitations": [
+        "完整数来自实际取得的完整官方列表计数；不声称另有独立出版者总数统计。",
+        "只冻结MSC一级和arXiv数学分类，不是全部MSC细分类。"
+      ],
+      "status": "PASS"
+    },
+    {
+      "criterion_id": "P01-03",
+      "objective": "所有实质数学标题都有已读来源",
+      "user_task": "从标题追溯到支持它的官方分类、摘要或研究活动",
+      "artifact": ["ontology/sources.json", "ontology/audit.json"],
+      "metric": "有至少一个实读支持来源的第一卷实质节点/全部实质节点",
+      "threshold": "100%，来源位置与审阅身份明确",
+      "requirement_origin": "C",
+      "test_environment": {
+        "source_revision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+        "dependency_lock": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef",
+        "platform": "win32/x64; Node v24.19.0",
+        "benchmark_version": "phase-01-2026-09-10-v1"
+      },
+      "actual_result": {
+        "verified_nodes": 94,
+        "total_substantive_nodes": 94,
+        "source_records": 49
+      },
+      "evidence": [
+        "docs/phases/phase-01/evidence/run-report.json",
+        "docs/phases/phase-01/evidence/ontology-validation.txt"
+      ],
+      "known_limitations": [
+        "分类页支持主题身份；论文摘要和会议说明支持研究范围，不等于核验论文完整证明。",
+        "全部审阅为AI；human_reviewer均为null。"
+      ],
+      "status": "PASS"
+    },
+    {
+      "criterion_id": "P01-04",
+      "objective": "十二宏区有实证前沿，且来源不靠镜像凑数",
+      "user_task": "查看各区域的前沿及活动时间",
+      "artifact": [
+        "ontology/math_registry.json",
+        "ontology/sources.json",
+        "ontology/benchmarks/regions-07-12-verification.json"
+      ],
+      "metric": "每宏区方向数、每方向独立来源组、五年窗口证据",
+      "threshold": "12区各至少2；每方向至少2组；至少1条2021-09-10至2026-09-10实质活动",
+      "requirement_origin": "C",
+      "test_environment": {
+        "source_revision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+        "dependency_lock": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef",
+        "platform": "win32/x64; Node v24.19.0",
+        "benchmark_version": "phase-01-2026-09-10-v1"
+      },
+      "actual_result": {
+        "regions": 12,
+        "minimum_directions_per_region": 2,
+        "unique_directions": 24,
+        "minimum_source_groups": 2,
+        "recent_activity_met": 24
+      },
+      "evidence": [
+        "docs/phases/phase-01/evidence/run-report.json",
+        "docs/phases/phase-01/evidence/ontology-validation.txt"
+      ],
+      "known_limitations": [
+        "前沿方向并非完整领域名录。",
+        "活动日期保持源精度；月精度不虚构日。此冻结集每方向另有满足窗口的精确日期记录。"
+      ],
+      "status": "PASS"
+    },
+    {
+      "criterion_id": "P01-05",
+      "objective": "全部前沿与分层随机样本接受真实范围核对",
+      "user_task": "复查抽样种子、选择名单、问题与修复记录",
+      "artifact": [
+        "ontology/benchmarks/sample-selection.json",
+        "ontology/benchmarks/review-records.json",
+        "ontology/audit.json"
+      ],
+      "metric": "前沿复核数与非前沿分层样本数",
+      "threshold": "24/24；各区域与层级非空层取ceil(10%)；错误保留并扩查",
+      "requirement_origin": "C / R",
+      "test_environment": {
+        "source_revision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+        "dependency_lock": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef",
+        "platform": "win32/x64; Node v24.19.0",
+        "benchmark_version": "phase-01-2026-09-10-v1"
+      },
+      "actual_result": {
+        "frontiers_reviewed": 24,
+        "frontiers_total": 24,
+        "sampled_nonfrontier": 17,
+        "nonfrontier_population": 70,
+        "sampled_fraction": 0.24285714285714285,
+        "seed": "phase-01-2026-09-10-v1",
+        "recorded_corrections": 5
+      },
+      "evidence": [
+        "docs/phases/phase-01/evidence/run-report.json",
+        "docs/phases/phase-01/evidence/ontology-validation.txt"
+      ],
+      "known_limitations": [
+        "17/70为24.29%，因为小层使用向上取整；不是事后降低阈值。",
+        "节点哈希变化使对应审阅失效；record-audit仅能重放明确冻结输入。"
+      ],
+      "status": "PASS"
+    },
+    {
+      "criterion_id": "P01-06",
+      "objective": "身份唯一，多归属不重复计数，结构引用可解析",
+      "user_task": "查看多父节点并重跑结构检查",
+      "artifact": [
+        "ontology/math_registry.json",
+        "scripts/validate-ontology.mjs",
+        "scripts/ontology.test.mjs"
+      ],
+      "metric": "ID唯一性、引用解析、无环、跨归属解释、去重决策",
+      "threshold": "零重复ID、悬空引用、父环；分类与来源可追溯",
+      "requirement_origin": "R",
+      "test_environment": {
+        "source_revision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+        "dependency_lock": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef",
+        "platform": "win32/x64; Node v24.19.0",
+        "benchmark_version": "phase-01-2026-09-10-v1"
+      },
+      "actual_result": {
+        "canonical_nodes": 121,
+        "duplicate_ids": 0,
+        "unresolved_references": 0,
+        "parent_cycles": 0,
+        "boundary_tests_passed": 17
+      },
+      "evidence": [
+        "docs/phases/phase-01/evidence/run-report.json",
+        "docs/phases/phase-01/evidence/ontology-validation.txt"
+      ],
+      "known_limitations": [
+        "parent边是编辑导航，不是先修条件或数学蕴含。",
+        "MSC00/01/97明确标为editorial-context，不宣称历史、教育或文集属于逻辑分支。"
+      ],
+      "status": "PASS"
+    }
+  ],
+  "scope": "Source-audited title cartography only; no Lean verification, human review, mathematical proof audit, or later-phase implementation is claimed."
+}

@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-09-09T18:48:16.836Z",
+  "status": "PASS",
+  "source_revision": "d418ed2fb793b36ea3723bf4614ded8a35f1ad72",
+  "working_tree": "Uncommitted ontology files; exact source hashes below identify this run",
+  "node": "v24.19.0",
+  "platform": "win32/x64",
+  "dependency_lock": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef",
+  "benchmark_version": "phase-01-2026-09-10-v1",
+  "runs": [
+    {
+      "name": "ontology-validation",
+      "command": "node scripts/validate-ontology.mjs",
+      "started_at": "2026-09-09T18:48:16.061Z",
+      "finished_at": "2026-09-09T18:48:16.149Z",
+      "exit_code": 0,
+      "signal": null,
+      "stdout_stderr": "docs/phases/phase-01/evidence/ontology-validation.txt",
+      "log_sha256": "d6dc4d2ab08a4a437493cdc7f46ad37b33f2860e78c348b288f70c6995d4cf63"
+    },
+    {
+      "name": "ontology-tests",
+      "command": "node --test scripts/ontology.test.mjs",
+      "started_at": "2026-09-09T18:48:16.149Z",
+      "finished_at": "2026-09-09T18:48:16.367Z",
+      "exit_code": 0,
+      "signal": null,
+      "stdout_stderr": "docs/phases/phase-01/evidence/ontology-tests.txt",
+      "log_sha256": "ec6e48a9b5fbf479d1da1709c9c9970565a6d77759b56fb3d29c0cd9ffdb8a01"
+    },
+    {
+      "name": "ontology-format",
+      "command": "node node_modules/prettier/bin/prettier.cjs --check ontology scripts/validate-ontology.mjs scripts/ontology.test.mjs",
+      "started_at": "2026-09-09T18:48:16.367Z",
+      "finished_at": "2026-09-09T18:48:16.769Z",
+      "exit_code": 0,
+      "signal": null,
+      "stdout_stderr": "docs/phases/phase-01/evidence/ontology-format.txt",
+      "log_sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    }
+  ],
+  "validation": {
+    "status": "PASS",
+    "as_of": "2026-09-10",
+    "scope": "Frozen official classification mappings, registry structure and recorded AI topic/source audits; not mathematical proof correctness or human review",
+    "counts": {
+      "canonical_nodes": 121,
+      "substantive_math_nodes": 94,
+      "unique_frontiers": 24,
+      "official_msc": 63,
+      "official_arxiv": 32,
+      "sources": 49,
+      "samples": 17
+    },
+    "criteria": {
+      "P01-01": {
+        "status": "PASS",
+        "failures": []
+      },
+      "P01-02": {
+        "status": "PASS",
+        "failures": []
+      },
+      "P01-03": {
+        "status": "PASS",
+        "failures": []
+      },
+      "P01-04": {
+        "status": "PASS",
+        "failures": []
+      },
+      "P01-05": {
+        "status": "PASS",
+        "failures": []
+      },
+      "P01-06": {
+        "status": "PASS",
+        "failures": []
+      }
+    },
+    "errors": []
+  },
+  "files": [
+    {
+      "path": "ontology/math_registry.json",
+      "sha256": "0ab04467fa5a7510e0b5774726cf19a93628660e47b2c41112a34cf88d272730"
+    },
+    {
+      "path": "ontology/math_outline.md",
+      "sha256": "4a17ab90ac6b21b9f1196647310048068d321105bd30cd1301202c2936732b6c"
+    },
+    {
+      "path": "ontology/sources.json",
+      "sha256": "5a5d3fe7fc046b16fa6430d2023c64302e234bacdec51f0b3b3ace8ffd06897b"
+    },
+    {
+      "path": "ontology/audit.json",
+      "sha256": "72efc651b60c31dd5820d013c5217b8adfb4366f59fe09d9331077ddbee96771"
+    },
+    {
+      "path": "ontology/benchmarks/msc2020-level1.json",
+      "sha256": "6e271da145cfc4e3f03ca648e40b9135d78a46fc85464655da22eb4e8f2b80d6"
+    },
+    {
+      "path": "ontology/benchmarks/arxiv-math.json",
+      "sha256": "c33cdc13d8d121f6efebdd4b2c50c5e65fd330099d4ad0c7921061ea27fc5333"
+    },
+    {
+      "path": "ontology/benchmarks/schema-contract.json",
+      "sha256": "b8412b65c7546c7d09fde89f30e76c206c118e26a09209b33e9c8ab6f3bc8c04"
+    },
+    {
+      "path": "ontology/benchmarks/sample-selection.json",
+      "sha256": "96febcc924144232686f5bffedf8e18e7a0876d6f2da08bbadfcccbc90b57185"
+    },
+    {
+      "path": "ontology/benchmarks/review-records.json",
+      "sha256": "07f17855dfef025ea6db77cdc8191934bc506bea8817f47b592890f8d1a5f332"
+    },
+    {
+      "path": "ontology/benchmarks/regions-07-12-verification.json",
+      "sha256": "acd881ba88fbf413c3db0071f3dae24b4132bc69f6f87a66f2aa94498391049b"
+    },
+    {
+      "path": "ontology/research-regions-01-06.json",
+      "sha256": "b5387c39b8efb229d31131516b9f3de5d02a6e86b881a4d951a0ea5c00c4ad58"
+    },
+    {
+      "path": "ontology/research-regions-07-12.json",
+      "sha256": "f95477352f5e08f492352b6f423770f7a7480d395847d2292f4f7f271388fd0d"
+    },
+    {
+      "path": "ontology/benchmarks/retrieval-regions-01-06.json",
+      "sha256": "e524dca3364c72e965c50500ea617bd4c4aa14546a2978d1d676e007d782446d"
+    },
+    {
+      "path": "ontology/benchmarks/assemble.mjs",
+      "sha256": "679241348bf5bbacebaa2a7a6c9b4cef5f06fd36c8dd55985ebbcef75e1a4ccd"
+    },
+    {
+      "path": "ontology/benchmarks/record-audit.mjs",
+      "sha256": "e4625fcddbc5cc9b12868a92826c5f228f363c7842330f6248649306fdb91a86"
+    },
+    {
+      "path": "ontology/benchmarks/run-acceptance.mjs",
+      "sha256": "d31f85a34210424ab217d4eb28a860eebddcd6c587bb596ded38a6d1d6191cb9"
+    },
+    {
+      "path": "scripts/validate-ontology.mjs",
+      "sha256": "c539be6d3ca99271e884414e2fb9a6e61b3b1ef76fa3eaa893c8d68a6a03a568"
+    },
+    {
+      "path": "scripts/ontology.test.mjs",
+      "sha256": "a6e4ebedbbb8cdabede97a9c2b2adb49482e3d9957726069e1964c2ecfa1ed7b"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "fc25b75a0a518fa0466a71603561e90b4063821fd97a847c238d69547942d2ef"
+    },
+    {
+      "path": "docs/phases/phase-00/acceptance.json",
+      "sha256": "060c9929681aa0732654d218dbccccac4e93f68d373f970a499ee7480bc3db23"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/input-resolution.json",
+      "sha256": "146b60c983e696c29266d9c3078270e76aa5d168ed2c2570376d1205fcfda314"
+    },
+    {
+      "path": "docs/phases/phase-00/evidence/master-mapping-review.json",
+      "sha256": "1459292bf4bfd644ab06104fe15f6f9f426ae1f9bfb70e334e908ddd74f19b5e"
+    },
+    {
+      "path": "docs/phases/phase-01/acceptance.json",
+      "sha256": "eb79d15ab3cb3ad4e77488a974ea4332a04707cc85ba5ec2119c825d60d08015"
+    },
+    {
+      "path": "docs/phases/phase-01/handoff.md",
+      "sha256": "4251b414f961dc32c142daab1946848227ea0056f4372f9741a697e3bb290053"
+    }
+  ],
+  "finalized_at": "2026-09-09T19:01:22.613Z",
+  "phase_exit_status": "PASS",
+  "dependency_check": {
+    "phase": 0,
+    "status": "PASS",
+    "checked_at": "2026-09-09T19:01:22.613Z",
+    "method": "Read the final frozen Phase0 acceptance after the last sync-allowlist repair and check all five criterion statuses; verify the six existing Phase1 criteria; hash all five dependency and handoff files; compare the four frozen ontology files to their successful test-run hashes. No data, production build, or original test log was changed.",
+    "phase0_criteria_passed": 5,
+    "phase1_criteria_passed": 6,
+    "original_master_sha256": "e3ff6b57f67b198f81cb8234aa835c9e5bf1c12c4c6a5a3763a8c60074141619",
+    "ontology_files_unchanged": [
+      "ontology/math_registry.json",
+      "ontology/math_outline.md",
+      "ontology/sources.json",
+      "ontology/audit.json"
+    ],
+    "files": [
+      {
+        "path": "docs/phases/phase-00/acceptance.json",
+        "sha256": "060c9929681aa0732654d218dbccccac4e93f68d373f970a499ee7480bc3db23"
+      },
+      {
+        "path": "docs/phases/phase-00/evidence/input-resolution.json",
+        "sha256": "146b60c983e696c29266d9c3078270e76aa5d168ed2c2570376d1205fcfda314"
+      },
+      {
+        "path": "docs/phases/phase-00/evidence/master-mapping-review.json",
+        "sha256": "1459292bf4bfd644ab06104fe15f6f9f426ae1f9bfb70e334e908ddd74f19b5e"
+      },
+      {
+        "path": "docs/phases/phase-01/acceptance.json",
+        "sha256": "eb79d15ab3cb3ad4e77488a974ea4332a04707cc85ba5ec2119c825d60d08015"
+      },
+      {
+        "path": "docs/phases/phase-01/handoff.md",
+        "sha256": "4251b414f961dc32c142daab1946848227ea0056f4372f9741a697e3bb290053"
+      }
+    ],
+    "note": "The original run timestamps and logs above remain the actual data-check run. This later closure verifies the now-complete dependency; it does not invent another test or browser run. Frozen audit.json retains its earlier phase-dependency note; phase-01/acceptance.json is authoritative for the current formal exit status.",
+    "source_manifest_sha256": "734cfcb8c5128e73b79461ac5da961677da61108dd36d625aeeae5375fa39010"
+  }
+}

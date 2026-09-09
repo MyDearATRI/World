@@ -1,5 +1,11 @@
 # Content contract
 
+## Themes and audited title data
+
+`knowledge/topos/note-topics.json` assigns explicit public note IDs to editorial navigation themes. Atoms inherit every original occurrence; unknown future notes remain in Other. Runtime classification does not guess from folders or keywords. No theme change rewrites the Vault or expands publication permission.
+
+The Phase 1 ontology is separate from authored mathematics. Only its first volume generates classification nodes; the other volumes remain plans. Build output includes four explicitly named ontology files and a derived atlas index. Source review is identified as AI work and does not confer human review or Lean verification. The full Master Prompt and local machine/private diagnostics are excluded from the website output.
+
 ## Approved notes as Topos source
 
 The current default Topos model is derived from the exact committed KnowledgeIndex and the same manifest-bounded Quartz HAST used by complete note and atom pages. It contains every existing eligible object, not a curated subset replacing the user's notes. Stable atom identities, multi-location provenance, proof qualifications and complete notes with no extracted atom remain intact. Book/chapter fields describe provenance only. No source note is rewritten, renamed or exported by this adapter.

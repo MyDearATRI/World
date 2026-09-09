@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-09-10",
+  "registry": "nodes[]: stable_id, canonical_title, title_zh, aliases, volume_id, kind, substantive, parent_ids, cross_memberships, source_ids, classification_codes, frontier",
+  "source": "sources[]: id = source_id, title, url, source_group, kind, accessed_date, locator, support_summary, retrieval_status, reviewer_type, human_reviewer",
+  "identity_policy": "Semantic stable IDs are never recomputed from title, order or hash. Multiple parents are placements of one node; classification labels are mappings, not additional copies.",
+  "classification_policy": "Preserve the complete official two-digit MSC2020 and math.* arXiv acquisition. A mapping can target several concrete nodes; a generic math root is forbidden.",
+  "source_group_policy": "A research paper and its mirrors form one group. A separately organized research event or an independently authored work is a separate evidence group; shared hosting is not identity and domain count is not the metric.",
+  "sampling_protocol": {
+    "frozen_before_generation": true,
+    "seed": "phase-01-2026-09-10-v1",
+    "selection": "For every nonempty primary-region plus hierarchy-depth stratum of nonfrontier substantive volume-one nodes, sort by SHA256(seed + NUL + stable_id), then take ceil(0.10 * stratum_size). Review all frontier nodes separately.",
+    "minimum_fraction": 0.1,
+    "error_response": "Record the original error, correct it without removing the failed sample, and review every node sharing the erroneous mapping or source-version pattern."
+  },
+  "review_policy": "All present mathematical/source audits are AI review of labels, source abstracts and event scopes, not human peer review and not proof verification. human_reviewer remains null.",
+  "capacity_policy": "600–1000 is future capacity planning, never a minimum to satisfy by padding."
+}

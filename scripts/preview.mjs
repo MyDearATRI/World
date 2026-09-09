@@ -18,6 +18,7 @@ const types = {
   ".woff2": "font/woff2",
   ".ttf": "font/ttf",
   ".txt": "text/plain; charset=utf-8",
+  ".md": "text/plain; charset=utf-8",
 }
 
 /** Serve one artifact at root and simulated Pages paths without reading outside public. */

@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "sourceThread": "01a0871b-9721-7c50-92b8-9d1aa3376150",
+  "userMessage": "01a0871f-af22-7392-a6c1-c28502dfcd3b",
+  "attachmentID": "8f12098b-5076-47aa-a1fc-c806017ac927",
+  "fileName": "pasted-text.txt",
+  "masterBytes": 51992,
+  "masterSha256": "e3ff6b57f67b198f81cb8234aa835c9e5bf1c12c4c6a5a3763a8c60074141619",
+  "numberedSections": 77,
+  "sourceLines": 2580,
+  "resolvedAt": "2026-09-09T18:45:19.787Z",
+  "priorCheck": "local-audit.json inputs recorded three missing proposed locations and two unrelated earlier attachments; this was a bounded search, not evidence that the user never supplied the Master",
+  "privateBackup": "artifacts/phase-00/private-inputs/master-prompt.txt (ignored; not an upload artifact)",
+  "publicationBoundary": "Only section summaries/headers/hashes are public; original text remains local",
+  "requiredHumanReview": null
+}

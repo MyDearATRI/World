@@ -1,0 +1,870 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-09-10",
+  "reviewer_type": "AI",
+  "human_reviewer": null,
+  "input_file": "ontology/research-regions-07-12.json",
+  "method": "Public primary-source browser retrieval, bounded abstract/programme/report-passage review, followed by reproducible data checks. This is not a full mathematical proof audit.",
+  "direction_reviews": [
+    {
+      "stable_id": "math.frontier.ricci-flow-singularities",
+      "result": "PASS",
+      "conclusion": "IAS 的广义柱面奇性描述与独立 MFO 的 Ricci 流/扩张孤立子活动共同支持标题；不外推为全部奇性分类。",
+      "limitation": "MFO 只使用已成功读取的科学概述与目录；个别后续贡献页重取失败，详细证明未审核。",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "stable_id": "math.frontier.kahler-einstein-metrics",
+      "result": "PASS",
+      "conclusion": "Berman 的官方 ICM 章节说明概率构造的 Kähler–Einstein 度量，MFO 独立 Fano 簇族活动提供近年依据；两组含义相符。",
+      "limitation": "不以 2021-09-01 的早期 arXiv 稿作为窗口内活动；未断言所有 Fano 簇都存在该度量。",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "stable_id": "math.frontier.nonlinear-dispersive-long-time-dynamics",
+      "result": "PASS",
+      "conclusion": "IAS MMT 研究中的长时间 Sobolev 增长与 Park 独立 INLS 散射结果支持共同的色散长时间问题，保留模型差别。",
+      "limitation": "MMT 实线散射在报告中是开放/计划问题；Park 的维数和权重限制没有删除。",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "stable_id": "math.frontier.fluid-pde-singularities-dynamics",
+      "result": "PASS",
+      "conclusion": "IAS 二维 Euler 的长期动力学和 Simons 独立流体奇性/计算辅助研究活动支持所选范围。",
+      "limitation": "活动报告不是 Navier–Stokes 千禧问题已解决的证据，也没有把二维长期行为直接当三维奇性定理。",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "stable_id": "math.frontier.singular-stochastic-pdes",
+      "result": "PASS",
+      "conclusion": "SLMath 的正则性结构/仿控制研究项目与独立 SISSA/EPFL 的重整化课程共同明确研究粗糙 SPDE 的解理论。",
+      "limitation": "Clay/SLMath 是同项目仅计一组；课程支持活跃性，不声称课程首次证明新定理。",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "stable_id": "math.frontier.high-dimensional-statistical-inference",
+      "result": "PASS",
+      "conclusion": "MFO 高维极值统计与 Simons 大规模隐式似然推断活动，从两个独立切面支持高维统计推断。",
+      "limitation": "标题是有意保留的方向性概括；宇宙学应用不代表全体高维统计问题已得到解决。",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "stable_id": "math.frontier.extremal-probabilistic-combinatorics",
+      "result": "PASS",
+      "conclusion": "AMS/JMM 与 SLMath 两个独立研究活动具体描述极值、概率和结构图论方法，支持方向的含义和近年活动。",
+      "limitation": "这里使用科学活动而非逐篇定理证明；未将这两个会议宣称为完整组合学研究谱系。",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "stable_id": "math.frontier.additive-combinatorics",
+      "result": "PASS",
+      "conclusion": "Kelley–Meka 的三项级数界与 Pham 的小倍增/群外推广是独立工作，支持定量加性结构方向。",
+      "limitation": "不重复登记为两个方向凑数；没有脱离前提抄写精细数值界或扩大结论。",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "stable_id": "math.frontier.tensor-network-quantum-states",
+      "result": "PASS",
+      "conclusion": "IPAM 的多体纠缠/张量网络研究与 Watanabe–Ueda 独立具体结构搜索论文，分别支持学科意义和当前构造。",
+      "limitation": "数值改进限于论文测试模型，不外推为通用最优网络或量子计算优势定理。",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "stable_id": "math.frontier.rigorous-liouville-cft",
+      "result": "PASS",
+      "conclusion": "IHES 的 Guillarmou 构造报告和 Morris Ang 独立量子缝合论文支持严格 Liouville 场论与随机曲面的联系。",
+      "limitation": "不把物理类比升级为数学依赖，也未全文复验 BPZ 证明。",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "stable_id": "math.frontier.inverse-problems-wave-imaging",
+      "result": "PASS",
+      "conclusion": "INI 研究报告的成像/波速反问题与 Cheng–Dong 独立弹性无相位反散射论文支持题名。",
+      "limitation": "论文的二维、数据和入射场限制保留；AIMS 日期只有月份，没有伪造日。",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    },
+    {
+      "stable_id": "math.frontier.geometric-numerical-integration",
+      "result": "PASS",
+      "conclusion": "Cambridge 的分裂/复合方法综述与 Munthe-Kaas 独立对称空间积分器构造支持保持结构的数值积分方向。",
+      "limitation": "Cambridge/arXiv/机构库同一论文只计一组；不声称几何积分领域在近五年才产生。",
+      "reviewer_type": "AI",
+      "human_reviewer": null
+    }
+  ],
+  "independent_registry_review": {
+    "snapshot_observed": {
+      "nodes": 121,
+      "first_volume_substantive": 94,
+      "frontiers": 24,
+      "region_containers": 12
+    },
+    "source_files": [
+      "ontology/math_registry.json",
+      "ontology/sources.json",
+      "ontology/benchmarks/arxiv-math.json"
+    ],
+    "additional_source_read": "https://arxiv.org/category_taxonomy",
+    "positive_findings": [
+      "The registry scope explicitly rejects a complete enumeration of mathematics.",
+      "No exact duplicate canonical titles were found among substantive mathematical nodes; the three same-name pairs are non-counted region containers plus counted subjects.",
+      "Engineering and proposed-research nodes occupy separate volumes and are not included in the 94 first-volume substantive total."
+    ],
+    "findings": [
+      {
+        "id": "R07-12-01",
+        "status": "RESOLVED",
+        "target": "cross_memberships.reason",
+        "detail": "Several cross-membership rationales repeat the primary macroregion instead of explaining the target subject. Examples: prismatic-cohomology → math.msc.14 and cubical-univalence → math.msc.03/math.msc.55. Audit all same-template entries and supply target-specific mathematical reasons.",
+        "initial_status": "REPORTED_FOR_CORRECTION",
+        "resolution": {
+          "as_of": "2026-09-10",
+          "reviewer_type": "AI",
+          "human_reviewer": null,
+          "result": "PASS",
+          "conclusion": "Every secondary placement now has a target-specific mathematical explanation and source references, including the four multi-parent arXiv subjects. Reviewed explanations describe type theory/homotopy, formal schemes, sheaves, representation categories, K-theory and Floer geometry rather than repeating a macroregion label."
+        }
+      },
+      {
+        "id": "R07-12-02",
+        "status": "RESOLVED",
+        "target": "math.msc.00, math.msc.01, math.msc.97",
+        "detail": "General collections, history/biography and mathematics education are placed as ordinary children of foundations-logic. Classification titles do not establish that they are branches of logic. Preserve them as volume-level subjects or explicitly distinguish editorial navigation placement from mathematical subsumption.",
+        "initial_status": "REPORTED_FOR_CORRECTION",
+        "resolution": {
+          "as_of": "2026-09-10",
+          "reviewer_type": "AI",
+          "human_reviewer": null,
+          "result": "PASS",
+          "conclusion": "MSC 00, 01 and 97 retain navigation placement but now explicitly carry membership_role=editorial-context and state that the parent does not make history, education or collections branches of logic."
+        }
+      },
+      {
+        "id": "R07-12-03",
+        "status": "RESOLVED",
+        "target": "mappings.arxiv: math.OC / math.RA",
+        "detail": "The official descriptions include game theory in math.OC, and lattice/linear algebra in math.RA. Scope-distributed targets omit MSC91 and MSC06/15 respectively. Add supported targets or explicitly constrain claims; inspect same-kind compound mappings.",
+        "initial_status": "REPORTED_FOR_CORRECTION",
+        "resolution": {
+          "as_of": "2026-09-10",
+          "reviewer_type": "AI",
+          "human_reviewer": null,
+          "result": "PASS",
+          "conclusion": "math.OC now includes MSC 91; math.RA includes 06, 15 and 20; math.HO also includes 00. These additions match the relevant game theory, lattice/linear algebra/semigroup and overview portions read in the official descriptions."
+        }
+      }
+    ],
+    "review_scope": "This independent review checks merged title/placement/count semantics and selected official category descriptions. It does not repeat the other agent's full 24-frontier source audit.",
+    "resolution_owner": "atom_pipeline",
+    "final_registry_approval": "PASS_FOR_REPORTED_SCOPE_ONLY",
+    "recheck": {
+      "result": "PASS",
+      "passed": 42,
+      "failed": 0,
+      "registry_sha256": "2d6214d43ca308889cac0ac9a84cc396d66f53e564cdf54e492a4b60ea580f65",
+      "checks": [
+        {
+          "label": "math.msc.00 editorial role",
+          "result": "PASS"
+        },
+        {
+          "label": "math.msc.00 excludes mathematical subsumption",
+          "result": "PASS"
+        },
+        {
+          "label": "math.msc.01 editorial role",
+          "result": "PASS"
+        },
+        {
+          "label": "math.msc.01 excludes mathematical subsumption",
+          "result": "PASS"
+        },
+        {
+          "label": "math.msc.97 editorial role",
+          "result": "PASS"
+        },
+        {
+          "label": "math.msc.97 excludes mathematical subsumption",
+          "result": "PASS"
+        },
+        {
+          "label": "math.OC includes game theory",
+          "result": "PASS"
+        },
+        {
+          "label": "math.RA includes math.msc.06",
+          "result": "PASS"
+        },
+        {
+          "label": "math.RA includes math.msc.15",
+          "result": "PASS"
+        },
+        {
+          "label": "math.RA includes math.msc.20",
+          "result": "PASS"
+        },
+        {
+          "label": "math.HO includes overarching topics",
+          "result": "PASS"
+        },
+        {
+          "label": "math.subject.representation-theory secondary reason math.msc.16",
+          "result": "PASS"
+        },
+        {
+          "label": "math.subject.representation-theory target-specific sourced explanation math.msc.16",
+          "result": "PASS"
+        },
+        {
+          "label": "math.subject.quantum-algebra secondary reason math.msc.16",
+          "result": "PASS"
+        },
+        {
+          "label": "math.subject.quantum-algebra target-specific sourced explanation math.msc.16",
+          "result": "PASS"
+        },
+        {
+          "label": "math.subject.operator-algebras secondary reason math.msc.47",
+          "result": "PASS"
+        },
+        {
+          "label": "math.subject.operator-algebras target-specific sourced explanation math.msc.47",
+          "result": "PASS"
+        },
+        {
+          "label": "math.subject.metric-geometry secondary reason math.msc.52",
+          "result": "PASS"
+        },
+        {
+          "label": "math.subject.metric-geometry target-specific sourced explanation math.msc.52",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.cubical-univalence secondary reason math.msc.03",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.cubical-univalence target-specific sourced explanation math.msc.03",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.cubical-univalence secondary reason math.msc.55",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.cubical-univalence target-specific sourced explanation math.msc.55",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.representation-categorification secondary reason math.msc.18",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.representation-categorification target-specific sourced explanation math.msc.18",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.modular-blocks secondary reason math.msc.20",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.modular-blocks target-specific sourced explanation math.msc.20",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.prismatic-cohomology secondary reason math.msc.14",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.prismatic-cohomology target-specific sourced explanation math.msc.14",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.local-langlands-geometrization secondary reason math.subject.representation-theory",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.local-langlands-geometrization target-specific sourced explanation math.subject.representation-theory",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.local-langlands-geometrization secondary reason math.msc.14",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.local-langlands-geometrization target-specific sourced explanation math.msc.14",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.derived-sheaf-moduli secondary reason math.msc.18",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.derived-sheaf-moduli target-specific sourced explanation math.msc.18",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.chromatic-k-theory secondary reason math.msc.19",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.chromatic-k-theory target-specific sourced explanation math.msc.19",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.floer-homotopy secondary reason math.subject.symplectic-geometry",
+          "result": "PASS"
+        },
+        {
+          "label": "math.frontier.floer-homotopy target-specific sourced explanation math.subject.symplectic-geometry",
+          "result": "PASS"
+        },
+        {
+          "label": "no duplicate substantive canonical titles",
+          "result": "PASS"
+        },
+        {
+          "label": "bounded scope disclaimer preserved",
+          "result": "PASS"
+        },
+        {
+          "label": "region containers not counted as substantive",
+          "result": "PASS"
+        }
+      ]
+    }
+  },
+  "input_sha256": "f95477352f5e08f492352b6f423770f7a7480d395847d2292f4f7f271388fd0d",
+  "automated_checks": {
+    "result": "PASS",
+    "passed": 127,
+    "failed": 0,
+    "checks": [
+      {
+        "label": "six regions",
+        "result": "PASS"
+      },
+      {
+        "label": "twelve directions",
+        "result": "PASS"
+      },
+      {
+        "label": "unique directions",
+        "result": "PASS"
+      },
+      {
+        "label": "unique sources",
+        "result": "PASS"
+      },
+      {
+        "label": "math.region.geometry two directions",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.ricci-flow-singularities sources resolve",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.ricci-flow-singularities independent-group count",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.ricci-flow-singularities recent activity",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.ricci-flow-singularities parent region",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.kahler-einstein-metrics sources resolve",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.kahler-einstein-metrics independent-group count",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.kahler-einstein-metrics recent activity",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.kahler-einstein-metrics parent region",
+        "result": "PASS"
+      },
+      {
+        "label": "math.region.analysis-pde two directions",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.nonlinear-dispersive-long-time-dynamics sources resolve",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.nonlinear-dispersive-long-time-dynamics independent-group count",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.nonlinear-dispersive-long-time-dynamics recent activity",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.nonlinear-dispersive-long-time-dynamics parent region",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.fluid-pde-singularities-dynamics sources resolve",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.fluid-pde-singularities-dynamics independent-group count",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.fluid-pde-singularities-dynamics recent activity",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.fluid-pde-singularities-dynamics parent region",
+        "result": "PASS"
+      },
+      {
+        "label": "math.region.probability-statistics two directions",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.singular-stochastic-pdes sources resolve",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.singular-stochastic-pdes independent-group count",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.singular-stochastic-pdes recent activity",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.singular-stochastic-pdes parent region",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.high-dimensional-statistical-inference sources resolve",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.high-dimensional-statistical-inference independent-group count",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.high-dimensional-statistical-inference recent activity",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.high-dimensional-statistical-inference parent region",
+        "result": "PASS"
+      },
+      {
+        "label": "math.region.combinatorics-discrete two directions",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.extremal-probabilistic-combinatorics sources resolve",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.extremal-probabilistic-combinatorics independent-group count",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.extremal-probabilistic-combinatorics recent activity",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.extremal-probabilistic-combinatorics parent region",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.additive-combinatorics sources resolve",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.additive-combinatorics independent-group count",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.additive-combinatorics recent activity",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.additive-combinatorics parent region",
+        "result": "PASS"
+      },
+      {
+        "label": "math.region.mathematical-physics two directions",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.tensor-network-quantum-states sources resolve",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.tensor-network-quantum-states independent-group count",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.tensor-network-quantum-states recent activity",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.tensor-network-quantum-states parent region",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.rigorous-liouville-cft sources resolve",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.rigorous-liouville-cft independent-group count",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.rigorous-liouville-cft recent activity",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.rigorous-liouville-cft parent region",
+        "result": "PASS"
+      },
+      {
+        "label": "math.region.applied-computational two directions",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.inverse-problems-wave-imaging sources resolve",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.inverse-problems-wave-imaging independent-group count",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.inverse-problems-wave-imaging recent activity",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.inverse-problems-wave-imaging parent region",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.geometric-numerical-integration sources resolve",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.geometric-numerical-integration independent-group count",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.geometric-numerical-integration recent activity",
+        "result": "PASS"
+      },
+      {
+        "label": "math.frontier.geometric-numerical-integration parent region",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ias.sesum-ricci-2024 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ias.sesum-ricci-2024 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ias.sesum-ricci-2024 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.mfo.differential-geometry-2023 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.mfo.differential-geometry-2023 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.mfo.differential-geometry-2023 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.icm2022.berman-emergent-geometry explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.icm2022.berman-emergent-geometry evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.icm2022.berman-emergent-geometry summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ias.mmt-report-2024 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ias.mmt-report-2024 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ias.mmt-report-2024 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.park.inls-2023 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.park.inls-2023 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.park.inls-2023 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ias.elgindi-euler-2023 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ias.elgindi-euler-2023 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ias.elgindi-euler-2023 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.simons.wave-turbulence-2025 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.simons.wave-turbulence-2025 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.simons.wave-turbulence-2025 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.slmath.spde-program-2025 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.slmath.spde-program-2025 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.slmath.spde-program-2025 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.sissa.duch-spde-2026 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.sissa.duch-spde-2026 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.sissa.duch-spde-2026 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.mfo.high-dimensional-extremes-2024 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.mfo.high-dimensional-extremes-2024 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.mfo.high-dimensional-extremes-2024 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.simons.learning-universe-2024 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.simons.learning-universe-2024 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.simons.learning-universe-2024 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ams.jmm-extremal-2025 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ams.jmm-extremal-2025 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ams.jmm-extremal-2025 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.slmath.graph-theory-2025 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.slmath.graph-theory-2025 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.slmath.graph-theory-2025 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ias.kelley-meka-progressions-2023 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ias.kelley-meka-progressions-2023 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ias.kelley-meka-progressions-2023 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.stanford.pham-additive-2024 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.stanford.pham-additive-2024 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.stanford.pham-additive-2024 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ipam.tensor-networks-2024 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ipam.tensor-networks-2024 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ipam.tensor-networks-2024 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.aps.watanabe-ueda-tn-2024 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.aps.watanabe-ueda-tn-2024 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.aps.watanabe-ueda-tn-2024 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ihes.guillarmou-lcft-2022 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ihes.guillarmou-lcft-2022 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ihes.guillarmou-lcft-2022 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ang.quantum-zipper-2023 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ang.quantum-zipper-2023 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ang.quantum-zipper-2023 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ini.multiple-wave-scattering-2023 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ini.multiple-wave-scattering-2023 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.ini.multiple-wave-scattering-2023 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.aims.cheng-dong-elastic-2023 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.aims.cheng-dong-elastic-2023 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.aims.cheng-dong-elastic-2023 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.cambridge.blanes-casas-murua-splitting-2024 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.cambridge.blanes-casas-murua-splitting-2024 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.cambridge.blanes-casas-murua-splitting-2024 summary below 100 words",
+        "result": "PASS"
+      },
+      {
+        "label": "src.munthe-kaas.symmetric-integrators-2023 explicit AI review",
+        "result": "PASS"
+      },
+      {
+        "label": "src.munthe-kaas.symmetric-integrators-2023 evidence locator",
+        "result": "PASS"
+      },
+      {
+        "label": "src.munthe-kaas.symmetric-integrators-2023 summary below 100 words",
+        "result": "PASS"
+      }
+    ]
+  },
+  "reproduction": {
+    "runtime": "v24.19.0",
+    "working_directory": "website",
+    "validation_javascript": "const d=JSON.parse(require('node:fs').readFileSync('ontology/research-regions-07-12.json','utf8'));const checks=[]; const ok=(pass,label)=>checks.push({label,result:pass?'PASS':'FAIL'}); const sources=new Map(d.sources.map(s=>[s.source_id,s])); const directions=d.regions.flatMap(r=>r.directions); ok(d.regions.length===6,'six regions');ok(directions.length===12,'twelve directions');ok(new Set(directions.map(x=>x.stable_id)).size===12,'unique directions');ok(sources.size===d.sources.length,'unique sources');for(const r of d.regions){ok(r.directions.length>=2,r.id+' two directions');for(const n of r.directions){ok(n.source_ids.every(s=>sources.has(s)),n.stable_id+' sources resolve');ok(new Set(n.source_ids.map(s=>sources.get(s)?.source_group)).size>=2,n.stable_id+' independent-group count');ok(n.activity_evidence.some(e=>e.date>='2021-09-10'&&e.date<='2026-09-10'&&n.source_ids.includes(e.source_id)),n.stable_id+' recent activity');ok(n.parent_ids.includes(r.id),n.stable_id+' parent region');}}for(const s of d.sources){ok(s.retrieval_status==='VERIFIED'&&s.reviewer_type==='AI'&&s.human_reviewer===null,s.source_id+' explicit AI review');ok(Boolean(s.locator&&s.support_summary&&s.accessed_date==='2026-09-10'),s.source_id+' evidence locator');ok(s.support_summary.split(/\\s+/).length<100,s.source_id+' summary below 100 words');}console.log(JSON.stringify(checks,null,2)); if(checks.some(c=>c.result==='FAIL'))process.exitCode=1;",
+    "note": "Run the exact validation_javascript with Node from website. Source-group independence also requires the recorded semantic review; group-string counts alone do not establish independence."
+  }
+}

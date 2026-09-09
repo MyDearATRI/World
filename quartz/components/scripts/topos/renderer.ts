@@ -50,6 +50,8 @@ export function createAppearanceModel(model: KnowledgeModel) {
   const byId = new Map(model.concepts.map((c) => [c.id, c]))
   const lensCache = new Map<Lens, { score: Map<string, number>; major: Set<string> }>()
   return (node: FieldNode, context: Context): ConceptAppearance => {
+    if (context.visibleIDs && !context.visibleIDs.includes(node.id))
+      return { opacity: 0, radius: 0, major: false }
     let importance = lensCache.get(context.lens)
     if (!importance) {
       const pairs = new Map<string, Map<string, number>>()
@@ -238,12 +240,16 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
         : concept.kind === "example"
           ? triangleGeometry
           : pointGeometry,
-      new THREE.MeshBasicMaterial({ color: ink, transparent: true, depthWrite: false }),
+      new THREE.MeshBasicMaterial({
+        color: concept.color ?? ink,
+        transparent: true,
+        depthWrite: false,
+      }),
     )
     const ring = new THREE.Mesh(
       ringGeometry,
       new THREE.MeshBasicMaterial({
-        color: blue,
+        color: concept.color ?? blue,
         transparent: true,
         opacity: 0,
         depthWrite: false,
@@ -412,7 +418,14 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
       updatePoint(mesh.point, p, node.z)
       mesh.point.scale.setScalar(r)
       ;(mesh.point.material as THREE.MeshBasicMaterial).opacity = visual.opacity
-      const emphasis = node.id === context.focus ? 1 : node.id === context.previous ? 0.25 : 0
+      const visible = !context.visibleIDs || context.visibleIDs.includes(node.id)
+      const emphasis = !visible
+        ? 0
+        : node.id === context.focus
+          ? 1
+          : node.id === context.previous
+            ? 0.25
+            : 0
       updatePoint(mesh.ring, p, node.z - 2)
       mesh.ring.scale.setScalar(18 + node.relevance * 12)
       ;(mesh.ring.material as THREE.Material).opacity +=
@@ -421,7 +434,7 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
         Math.abs(emphasis * 0.48 - (mesh.ring.material as THREE.Material).opacity) > 0.001
       if (fallback) {
         fallback.globalAlpha = visual.opacity
-        fallback.fillStyle = "#355f76"
+        fallback.fillStyle = model.concepts.find((c) => c.id === node.id)?.color ?? "#355f76"
         fallback.setLineDash([])
         fallback.beginPath()
         const concept = model.concepts.find((c) => c.id === node.id)
