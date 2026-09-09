@@ -1,5 +1,11 @@
 # Project brief
 
+## Knowledge Topos — current direction
+
+The September 10 specification replaces page-centered exploration with continuous context transformations. The immediate deliverable is one Group → Group Action → Representation vertical prototype, not a whole-site migration. In one persistent field, selected concepts become the focus, old contexts remain perceivable, nearby concepts approach and irrelevant concepts recede. Source explanations unfold in place rather than opening an article.
+
+The six independent primitives are Concept, Relation, Context, Section, Lens and ViewState. A separate graph/context/physics/render/content architecture supports calm 2.5D semantic depth, typed relations and graph-derived collective structures. The prototype uses website-owned synthetic Markdown based on checked public mathematical references. It does not read or re-export the Vault. Existing textbook content remains available. Requirements and actual evidence must be assessed under `topos-acceptance.md`, not the earlier map acceptance.
+
 ## Three-dimensional exploration follow-up
 
 The map is a spatial reading interface built around the actual book, chapter and section sequence. Readers progressively enter a section, inspect named mathematical objects and follow typed, sourced relations into the existing flat reading space. The tree gives orientation; local attraction and repulsion make relationships visible without asserting mathematical significance for geometric distance. Model similarity is a weaker, explicitly labelled and switchable discovery layer. This follow-up does not change writing conventions, public content scope or canonical article/atom URLs.

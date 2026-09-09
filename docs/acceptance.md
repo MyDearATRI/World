@@ -1,5 +1,9 @@
 # Website acceptance
 
+## Knowledge Topos prototype acceptance
+
+The current Group → Action → Representation prototype must satisfy the independent T01–T13 matrix in `topos-acceptance.md`. It requires persistent scene identity and real context-dependent node motion, semantic levels 0–3, source Markdown with MathML, recursive local unfolding, typed relations, graph-computed communities and both labelled and label-free screen recordings. Screenshots or older map test results alone are insufficient. Scope is this vertical prototype, not full textbook migration. Record failures, fixes, actual video/frame observations and untested limitations separately.
+
 ## Three-dimensional map acceptance
 
 Validate the real book/chapter/section tree, multi-section identity, empty 3.7 section, unmapped objects, finite attractive/repulsive physics and explicit relation provenance. Test scene persistence after filtering, drag versus click, native links, camera controls, back/forward/refresh, keyboard focus, mobile grouped lists, simulated touch, reduced motion and WebGL initialization/context-loss fallback. Check at 1440×1000, 1024×900 and 390×844 and inspect actual screenshots. Preserve ordinary search, Markdown, source state, MathML and local formula scrolling.

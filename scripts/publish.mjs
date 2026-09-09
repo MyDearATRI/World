@@ -180,6 +180,7 @@ try {
     `知识索引：${knowledgeIndex.objects.filter((object) => object.kind === "atom").length} 个原子；${knowledgeIndex.relations.length} 条有出处的联系。完整笔记仍为原文。`,
   )
   await node(["scripts/prepare-assets.mjs"])
+  await node(["scripts/prepare-topos-runtime.mjs"])
   await node([
     "quartz/bootstrap-cli.mjs",
     "build",

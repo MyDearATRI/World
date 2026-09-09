@@ -29,6 +29,9 @@ export const Static: QuartzEmitterPlugin = () => ({
         "graph/knowledgeGraph3d.js",
         "graph/three-LICENSE.txt",
         "graph/d3-force-3d-LICENSE.txt",
+        "topos/topos.js",
+        "topos/topos.css",
+        "topos/three-LICENSE.txt",
       ],
       {
         cwd: staticPath,

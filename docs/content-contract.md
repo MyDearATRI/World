@@ -1,5 +1,11 @@
 # Content contract
 
+## Bounded Topos prototype content
+
+`knowledge/topos/prototype.json` declares 22 concepts, 40 sourced typed relations, 67 Markdown sections and nine public references. The Quartz Topos emitter renders the real section Markdown through remark/GFM/math/KaTeX with HTML and MathML. `concept:` changes field focus, while `section:` unfolds an explanation in place. The UI does not hard-code mathematical prose or attribute synthetic examples to the author's notes.
+
+Only declared `sections/<ascii-id>.md` files under this website-owned directory are read; symlink paths are rejected. The output is `topos.html`, a rendered content index, and exactly allowed runtime/CSS/license resources. The original publication manifest, exported textbook, attachments, atom identities and vectors are unchanged. Synthetic prototype content does not silently enter the textbook search/vector index. The ontology is independent of physical layout; distance does not assert mathematical dependence or opposition. Coverage and mathematical caveats are in `knowledge/topos/README.md`.
+
 ## Three-dimensional scene contract
 
 `buildKnowledgeScene` derives a structural collection tree and many-to-many memberships from ReaderCatalog and the prepared KnowledgeIndex. It never reads the Vault, creates mathematical prose or changes atom IDs. Section collections reuse the section note identity; book/chapter collections have separate navigation IDs. A primary geometric anchor is not exclusive content membership. Version 2 map history stores XYZ positions, expanded context, selection, layers and camera position/target/up; old 2D camera pixels are replaced by a fitted 3D view while valid selections survive.

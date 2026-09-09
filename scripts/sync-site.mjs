@@ -83,6 +83,7 @@ async function runChecks() {
     ["已准备向量检查", ["scripts/prepare-semantics.mjs", "--check"]],
     ["本地运行资源准备", ["scripts/prepare-semantic-runtime.mjs"]],
     ["关系图运行资源准备", ["scripts/prepare-graph-runtime.mjs"]],
+    ["Topos 原型运行资源准备", ["scripts/prepare-topos-runtime.mjs"]],
     [
       "正式构建",
       ["quartz/bootstrap-cli.mjs", "build", "-d", "content", "-o", "public", "--concurrency", "2"],
@@ -100,6 +101,7 @@ async function openPreview() {
   preview = await startPreview({ port: 0 })
   const url = preview.url + "/World/"
   console.log(`本地预览：${url}`)
+  console.log(`Knowledge Topos 原型：${url}topos.html`)
   if (!noOpen && process.platform === "win32")
     await runProcess(root, "powershell.exe", ["-NoProfile", "-Command", `Start-Process '${url}'`])
 }

@@ -27,6 +27,7 @@ import {
   validatePendingSync,
   listGitPaths,
   gitTransportOptions,
+  toposSyncFiles,
 } from "./lib/site-sync-core.mjs"
 
 const project = fileURLToPath(new URL("../", import.meta.url))
@@ -110,6 +111,105 @@ test("sync policy selects exact new code names and excludes unknown files withou
     /重复/,
   )
 })
+
+test("the Topos publication scope exactly matches the reviewed model and explicit new-file list", async () => {
+  const model = JSON.parse(
+    await readFile(path.join(project, "knowledge/topos/prototype.json"), "utf8"),
+  )
+  const config = JSON.parse(await readFile(path.join(project, "site-sync.config.json"), "utf8"))
+  const expected = [
+    "knowledge/topos/prototype.json",
+    "knowledge/topos/README.md",
+    ...model.sections.map((section) => `knowledge/topos/${section.markdown}`),
+  ].sort()
+  assert.equal(model.sections.length, 67)
+  assert.equal(toposSyncFiles.length, 69)
+  assert.deepEqual([...toposSyncFiles].sort(), expected)
+  assert.deepEqual(
+    config.newFiles.filter((file) => file.startsWith("knowledge/topos/")).sort(),
+    expected,
+  )
+  for (const file of expected) assert.doesNotThrow(() => assertSyncPath(file), file)
+  // Existing prepared indices and their narrow supporting configuration retain permission.
+  for (const file of [
+    "knowledge/index.json",
+    "knowledge/registry.json",
+    "knowledge/semantic.json",
+    "knowledge/overrides.json",
+    "knowledge/model-manifest.json",
+  ])
+    assert.doesNotThrow(() => assertSyncPath(file), file)
+})
+
+test("new Topos prose does not authorize unknown notes, model weights, caches or path escapes", () => {
+  for (const file of [
+    "knowledge/topos/sections/not-approved.md",
+    "knowledge/topos/sections/group-definition (1).md",
+    "knowledge/topos/notes/private.md",
+    "knowledge/topos/cache/result.json",
+    "knowledge/topos/model.onnx",
+    "knowledge/topos/weights.safetensors",
+    "knowledge/topos/sections/../../other-note.md",
+    "knowledge/topos/sections/../../../content/private.md",
+    "knowledge/topos/sections/../../../../outside.md",
+    "knowledge/topos/sections/%2e%2e/private.md",
+    "Knowledge/topos/sections/not-approved.md",
+    "KNOWLEDGE/private.md",
+    "knowledge/notes/private.md",
+    "quartz/static/topos/main.js",
+    "C:/Users/Someone/private.md",
+  ]) {
+    assert.throws(() => assertSyncPath(file), undefined, file)
+    // Listing a new file in configuration alone cannot widen the bounded content scope.
+    assert.throws(
+      () => selectSyncPaths({ trackedChanges: [], untracked: [file], allowedNewFiles: [file] }),
+      undefined,
+      file,
+    )
+    assert.throws(
+      () => selectSyncPaths({ trackedChanges: [file], untracked: [], allowedNewFiles: [] }),
+      undefined,
+      file,
+    )
+  }
+  assert.deepEqual(
+    selectSyncPaths({
+      trackedChanges: [],
+      untracked: [
+        "knowledge/topos/sections/group-definition.md",
+        "knowledge/topos/sections/not-approved.md",
+      ],
+      allowedNewFiles: ["knowledge/topos/sections/group-definition.md"],
+    }),
+    {
+      paths: ["knowledge/topos/sections/group-definition.md"],
+      skipped: ["knowledge/topos/sections/not-approved.md"],
+    },
+  )
+})
+
+test("reviewed synthetic Markdown uses exact-byte staging while adjacent unlisted notes remain local", async () =>
+  fixture(async ({ root, git }) => {
+    const approved = "knowledge/topos/sections/group-definition.md"
+    const unapproved = "knowledge/topos/sections/not-approved.md"
+    await mkdir(path.join(root, "knowledge/topos/sections"), { recursive: true })
+    const original = "Synthetic fixture: a group has an associative operation.\n"
+    await writeFile(path.join(root, approved), original)
+    await writeFile(path.join(root, unapproved), "Unapproved fixture note; do not stage.\n")
+    const config = { newFiles: [approved] }
+    const selected = await discoverSyncPaths(git, config)
+    assert.deepEqual(selected.paths, [approved])
+    assert.deepEqual(selected.skipped, [unapproved])
+    const review = await captureSyncReview(root, git, selected.paths)
+    await writeFile(path.join(root, approved), original + "Changed after preview.\n")
+    await assert.rejects(stageReviewedSync(root, git, config, review))
+    assert.equal(await git(["diff", "--cached", "--name-only"]), "")
+    await writeFile(path.join(root, approved), original)
+    await stageReviewedSync(root, git, config, review)
+    assert.deepEqual(listGitPaths(await git(["diff", "--cached", "--name-only", "-z"])), [approved])
+    assert.equal(await git(["show", `:${approved}`]), original.trimEnd())
+    await assert.rejects(git(["show", `:${unapproved}`]))
+  }))
 
 test("Git reuses configured or environment proxies without disabling TLS or changing persistent config", () => {
   const existingProxy = "http://proxy.example.invalid:8080"

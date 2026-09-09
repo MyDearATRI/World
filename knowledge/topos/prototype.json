@@ -1,0 +1,1391 @@
+{
+  "version": 1,
+  "title": "Knowledge Topos · Group → Action → Representation",
+  "initial": "group",
+  "concepts": [
+    {
+      "id": "group",
+      "title": "Group",
+      "zh": "群",
+      "kind": "concept",
+      "summary": "A group records how reversible operations compose.",
+      "symbol": "G,\\quad gh",
+      "terms": ["群", "group", "composition", "可逆", "结合律"],
+      "sections": ["group-overview", "group-definition", "group-associativity", "group-example"]
+    },
+    {
+      "id": "symmetry",
+      "title": "Symmetry",
+      "zh": "对称",
+      "kind": "concept",
+      "summary": "A symmetry is an invertible transformation preserving the structure being studied.",
+      "symbol": "\\operatorname{Sym}(X)",
+      "terms": ["对称", "symmetry", "automorphism", "保结构"],
+      "sections": ["symmetry-overview", "symmetry-definition", "symmetry-example"]
+    },
+    {
+      "id": "homomorphism",
+      "title": "Homomorphism",
+      "zh": "群同态",
+      "kind": "concept",
+      "summary": "A group homomorphism preserves the rule for composing elements.",
+      "symbol": "\\varphi(gh)=\\varphi(g)\\varphi(h)",
+      "terms": ["同态", "homomorphism", "kernel", "核"],
+      "sections": ["homomorphism-overview", "homomorphism-definition", "homomorphism-example"]
+    },
+    {
+      "id": "subgroup",
+      "title": "Subgroup",
+      "zh": "子群",
+      "kind": "concept",
+      "summary": "A subgroup is a group sitting inside another group with the same operation.",
+      "symbol": "H\\leq G",
+      "terms": ["子群", "subgroup", "闭合", "closure"],
+      "sections": ["subgroup-overview", "subgroup-definition", "subgroup-example"]
+    },
+    {
+      "id": "quotient",
+      "title": "Quotient Group",
+      "zh": "商群",
+      "kind": "construction",
+      "summary": "A quotient group identifies elements modulo a normal subgroup.",
+      "symbol": "G/N",
+      "terms": ["商群", "quotient", "factor group", "陪集"],
+      "sections": ["quotient-overview", "quotient-definition", "quotient-example"]
+    },
+    {
+      "id": "action",
+      "title": "Group Action",
+      "zh": "群作用",
+      "kind": "concept",
+      "summary": "A group action makes abstract group elements act consistently on a set.",
+      "symbol": "G\\curvearrowright X",
+      "terms": ["群作用", "action", "G-set", "置换"],
+      "sections": ["action-overview", "action-definition", "action-example"]
+    },
+    {
+      "id": "representation",
+      "title": "Representation",
+      "zh": "线性表示",
+      "kind": "concept",
+      "summary": "A representation is a group action by invertible linear maps.",
+      "symbol": "\\rho:G\\to\\operatorname{GL}_k(V)",
+      "terms": ["表示", "representation", "linear action", "线性作用"],
+      "sections": ["representation-overview", "representation-definition", "representation-example"]
+    },
+    {
+      "id": "orbit",
+      "title": "Orbit",
+      "zh": "轨道",
+      "kind": "concept",
+      "summary": "An orbit is the set of points reachable from one point by the action.",
+      "symbol": "G\\cdot x",
+      "terms": ["轨道", "orbit", "transitive", "传递"],
+      "sections": ["orbit-overview", "orbit-definition", "orbit-example"]
+    },
+    {
+      "id": "stabilizer",
+      "title": "Stabilizer",
+      "zh": "稳定子",
+      "kind": "concept",
+      "summary": "A stabilizer collects the group elements that fix a chosen point.",
+      "symbol": "G_x=\\{g:g\\cdot x=x\\}",
+      "terms": ["稳定子", "stabilizer", "stabiliser", "固定点"],
+      "sections": ["stabilizer-overview", "stabilizer-definition", "stabilizer-example"]
+    },
+    {
+      "id": "normal-subgroup",
+      "title": "Normal Subgroup",
+      "zh": "正规子群",
+      "kind": "concept",
+      "summary": "A normal subgroup is unchanged by conjugation in the ambient group.",
+      "symbol": "N\\trianglelefteq G",
+      "terms": ["正规子群", "normal subgroup", "conjugation", "共轭"],
+      "sections": [
+        "normal-subgroup-overview",
+        "normal-subgroup-definition",
+        "normal-subgroup-example"
+      ]
+    },
+    {
+      "id": "permutation-group",
+      "title": "Permutation Group",
+      "zh": "置换群",
+      "kind": "concept",
+      "summary": "Permutations form a group under composition; their subgroups are permutation groups.",
+      "symbol": "\\operatorname{Sym}(X)",
+      "terms": ["置换群", "permutation group", "symmetric group", "对称群"],
+      "sections": [
+        "permutation-group-overview",
+        "permutation-group-definition",
+        "permutation-group-example"
+      ]
+    },
+    {
+      "id": "vector-space",
+      "title": "Vector Space",
+      "zh": "向量空间",
+      "kind": "concept",
+      "summary": "A vector space supports addition and scalar multiplication over a specified field.",
+      "symbol": "V\\text{ over }k",
+      "terms": ["向量空间", "vector space", "linear combination", "线性组合"],
+      "sections": ["vector-space-overview", "vector-space-definition", "vector-space-example"]
+    },
+    {
+      "id": "linear-map",
+      "title": "Linear Map",
+      "zh": "线性映射",
+      "kind": "concept",
+      "summary": "A linear map preserves linear combinations.",
+      "symbol": "T(au+bv)=aT(u)+bT(v)",
+      "terms": ["线性映射", "linear map", "linear transformation", "线性变换"],
+      "sections": ["linear-map-overview", "linear-map-definition", "linear-map-example"]
+    },
+    {
+      "id": "general-linear-group",
+      "title": "General Linear Group",
+      "zh": "一般线性群",
+      "kind": "concept",
+      "summary": "The general linear group consists of all invertible linear maps of a vector space.",
+      "symbol": "\\operatorname{GL}_k(V)",
+      "terms": ["一般线性群", "general linear group", "GL", "invertible"],
+      "sections": [
+        "general-linear-group-overview",
+        "general-linear-group-definition",
+        "general-linear-group-example"
+      ]
+    },
+    {
+      "id": "group-algebra",
+      "title": "Group Algebra",
+      "zh": "群代数",
+      "kind": "construction",
+      "summary": "The group algebra allows finite linear combinations of group elements.",
+      "symbol": "k[G]",
+      "terms": ["群代数", "group algebra", "linear extension", "线性延拓"],
+      "sections": ["group-algebra-overview", "group-algebra-definition", "group-algebra-example"]
+    },
+    {
+      "id": "module",
+      "title": "Module",
+      "zh": "模",
+      "kind": "concept",
+      "summary": "A module lets an algebra act linearly on a vector space.",
+      "symbol": "k[G]\\text{-Mod}",
+      "terms": ["模", "module", "left module", "左模"],
+      "sections": ["module-overview", "module-definition", "module-example"]
+    },
+    {
+      "id": "character",
+      "title": "Character",
+      "zh": "特征标",
+      "kind": "concept",
+      "summary": "A character records the trace of each operator in a finite-dimensional representation.",
+      "symbol": "\\chi_\\rho(g)=\\operatorname{tr}(\\rho(g))",
+      "terms": ["特征标", "character", "trace", "迹", "class function"],
+      "sections": ["character-overview", "character-definition", "character-example"]
+    },
+    {
+      "id": "irreducible-representation",
+      "title": "Irreducible Representation",
+      "zh": "不可约表示",
+      "kind": "concept",
+      "summary": "An irreducible representation has no nonzero proper invariant subspace.",
+      "symbol": "0\\ne V\\text{ irreducible}",
+      "terms": ["不可约表示", "irreducible representation", "simple module", "单模"],
+      "sections": [
+        "irreducible-representation-overview",
+        "irreducible-representation-definition",
+        "irreducible-representation-example"
+      ]
+    },
+    {
+      "id": "intertwiner",
+      "title": "Intertwiner",
+      "zh": "交织映射",
+      "kind": "concept",
+      "summary": "An intertwiner is a linear map compatible with two actions of the same group.",
+      "symbol": "T\\rho(g)=\\sigma(g)T",
+      "terms": ["交织映射", "intertwiner", "intertwining operator", "equivariant map"],
+      "sections": ["intertwiner-overview", "intertwiner-definition", "intertwiner-example"]
+    },
+    {
+      "id": "invariant-subspace",
+      "title": "Invariant Subspace",
+      "zh": "不变子空间",
+      "kind": "concept",
+      "summary": "An invariant subspace remains inside itself under every operator of the representation.",
+      "symbol": "\\rho(g)W\\subseteq W",
+      "terms": ["不变子空间", "invariant subspace", "subrepresentation", "子表示"],
+      "sections": [
+        "invariant-subspace-overview",
+        "invariant-subspace-definition",
+        "invariant-subspace-example"
+      ]
+    },
+    {
+      "id": "permutation-representation",
+      "title": "Permutation Representation",
+      "zh": "置换表示",
+      "kind": "construction",
+      "summary": "An action on a finite set becomes a linear representation by permuting basis vectors.",
+      "symbol": "g\\cdot e_x=e_{g\\cdot x}",
+      "terms": ["置换表示", "permutation representation", "linearization", "线性化"],
+      "sections": [
+        "permutation-representation-overview",
+        "permutation-representation-definition",
+        "permutation-representation-example"
+      ]
+    },
+    {
+      "id": "representation-theory",
+      "title": "Representation Theory",
+      "zh": "表示论",
+      "kind": "structure",
+      "summary": "Representation theory studies linear actions and the maps that compare them.",
+      "symbol": "\\operatorname{Rep}_k(G)",
+      "terms": ["表示论", "representation theory", "representations", "modules"],
+      "sections": [
+        "representation-theory-overview",
+        "representation-theory-definition",
+        "representation-theory-example"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "id": "group--example--symmetry",
+      "source": "group",
+      "target": "symmetry",
+      "type": "example",
+      "strength": 0.94,
+      "label": "由对称体现",
+      "explanation": "固定结构的可逆对称在复合下形成群；三角形提供具体实例。",
+      "evidence": "mit-groups#pp. 1–3; section:group-example",
+      "lenses": {
+        "structural": 1,
+        "action": 0.8
+      }
+    },
+    {
+      "id": "group--construction--homomorphism",
+      "source": "group",
+      "target": "homomorphism",
+      "type": "construction",
+      "strength": 0.84,
+      "label": "保乘法的映射",
+      "explanation": "给定两个群后，同态记录保持其乘法的映射；不要求可逆。",
+      "evidence": "mit-homomorphisms#homomorphism definition; section:homomorphism-definition",
+      "lenses": {
+        "structural": 1,
+        "action": 0.65,
+        "linear": 0.7
+      }
+    },
+    {
+      "id": "group--construction--subgroup",
+      "source": "group",
+      "target": "subgroup",
+      "type": "construction",
+      "strength": 0.9,
+      "label": "在群内取子群",
+      "explanation": "选择含单位元且对乘法、逆元封闭的子集，继承群结构。",
+      "evidence": "mit-subgroups#Proposition 2.3; section:subgroup-definition",
+      "lenses": {
+        "structural": 1,
+        "action": 0.6
+      }
+    },
+    {
+      "id": "group--construction--quotient",
+      "source": "group",
+      "target": "quotient",
+      "type": "construction",
+      "strength": 0.8,
+      "label": "按正规子群取商",
+      "explanation": "给定正规子群 N 后，G/N 的乘法由代表元乘法诱导；不是任意集合商。",
+      "evidence": "mit-quotients#quotient multiplication; section:quotient-definition",
+      "lenses": {
+        "structural": 1,
+        "action": 0.3
+      }
+    },
+    {
+      "id": "group--construction--action",
+      "source": "group",
+      "target": "action",
+      "type": "construction",
+      "strength": 1,
+      "label": "让群作用于集合",
+      "explanation": "额外选定集合 X 及满足作用律的操作，得到 G 作用于 X。",
+      "evidence": "mit-actions#Definition 23.1; section:action-definition",
+      "lenses": {
+        "structural": 0.95,
+        "action": 1,
+        "linear": 0.55
+      }
+    },
+    {
+      "id": "group--representation--representation",
+      "source": "group",
+      "target": "representation",
+      "type": "representation",
+      "strength": 0.82,
+      "label": "用线性算子表示",
+      "explanation": "给定域 k、向量空间 V 和同态 G→GL_k(V)，把群乘法实现为算子复合。",
+      "evidence": "mit-representations#§1.7; section:representation-definition",
+      "lenses": {
+        "structural": 0.7,
+        "action": 0.8,
+        "linear": 1
+      }
+    },
+    {
+      "id": "subgroup--specialization--normal-subgroup",
+      "source": "subgroup",
+      "target": "normal-subgroup",
+      "type": "specialization",
+      "strength": 0.91,
+      "label": "加上正规性",
+      "explanation": "正规子群是进一步满足 gNg⁻¹=N 的子群。",
+      "evidence": "mit-homomorphisms#normal subgroups; section:normal-subgroup-definition",
+      "lenses": {
+        "structural": 1,
+        "action": 0.4
+      }
+    },
+    {
+      "id": "normal-subgroup--prerequisite--quotient",
+      "source": "normal-subgroup",
+      "target": "quotient",
+      "type": "prerequisite",
+      "strength": 0.98,
+      "label": "商群的条件",
+      "explanation": "用陪集乘法定义 G/N，必须要求 N 在 G 中正规。",
+      "evidence": "mit-quotients#quotient multiplication; section:quotient-definition",
+      "lenses": {
+        "structural": 1
+      }
+    },
+    {
+      "id": "homomorphism--construction--normal-subgroup",
+      "source": "homomorphism",
+      "target": "normal-subgroup",
+      "type": "construction",
+      "strength": 0.9,
+      "label": "取同态的核",
+      "explanation": "群同态的核是正规子群；这是从同态得到可取商子群的构造。",
+      "evidence": "mit-homomorphisms#kernels are normal; section:normal-subgroup-example",
+      "lenses": {
+        "structural": 1
+      }
+    },
+    {
+      "id": "quotient--construction--homomorphism",
+      "source": "quotient",
+      "target": "homomorphism",
+      "type": "construction",
+      "strength": 0.78,
+      "label": "自然投影",
+      "explanation": "商映射 g↦gN 是满同态，核恰为 N。",
+      "evidence": "mit-quotients#natural quotient homomorphism; section:quotient-definition",
+      "lenses": {
+        "structural": 1
+      }
+    },
+    {
+      "id": "symmetry--representation--permutation-group",
+      "source": "symmetry",
+      "target": "permutation-group",
+      "type": "representation",
+      "strength": 0.82,
+      "label": "记录点的重排",
+      "explanation": "对称变换作用在底层集合上，给出到置换群的同态。",
+      "evidence": "mit-groups#triangle vertices; section:symmetry-example",
+      "lenses": {
+        "structural": 0.7,
+        "action": 1
+      }
+    },
+    {
+      "id": "action--representation--permutation-group",
+      "source": "action",
+      "target": "permutation-group",
+      "type": "representation",
+      "strength": 0.95,
+      "label": "置换描述",
+      "explanation": "G 在 X 上的作用可由同态 G→Sym(X) 完整描述；作用未必忠实。",
+      "evidence": "mit-actions#Definition 23.1; section:action-definition",
+      "lenses": {
+        "structural": 0.6,
+        "action": 1
+      }
+    },
+    {
+      "id": "action--equivalence--homomorphism",
+      "source": "action",
+      "target": "homomorphism",
+      "type": "equivalence",
+      "strength": 0.82,
+      "label": "作用律等价于同态律",
+      "explanation": "固定 G 与 X 时，群作用的数据等价于一个到 Sym(X) 的群同态；并非任意目标的同态。",
+      "evidence": "mit-actions#Definition 23.1; section:action-definition",
+      "lenses": {
+        "structural": 0.8,
+        "action": 1
+      }
+    },
+    {
+      "id": "action--construction--orbit",
+      "source": "action",
+      "target": "orbit",
+      "type": "construction",
+      "strength": 0.98,
+      "label": "跟踪一个点",
+      "explanation": "由具体作用和选定的 x 构造所有 g·x 组成的轨道。",
+      "evidence": "mit-actions#Definition–Lemma 23.2; section:orbit-definition",
+      "lenses": {
+        "action": 1,
+        "structural": 0.4
+      }
+    },
+    {
+      "id": "action--construction--stabilizer",
+      "source": "action",
+      "target": "stabilizer",
+      "type": "construction",
+      "strength": 0.98,
+      "label": "保留固定点的操作",
+      "explanation": "由具体作用和选定的 x 构造固定 x 的子群 G_x。",
+      "evidence": "mit-actions#Definition–Lemma 23.3; section:stabilizer-definition",
+      "lenses": {
+        "action": 1,
+        "structural": 0.55
+      }
+    },
+    {
+      "id": "stabilizer--generalization--subgroup",
+      "source": "stabilizer",
+      "target": "subgroup",
+      "type": "generalization",
+      "strength": 0.82,
+      "label": "稳定子是子群",
+      "explanation": "作用律、单位元和逆元保证固定一点的元素构成 G 的子群。",
+      "evidence": "mit-actions#Definition–Lemma 23.3; section:stabilizer-definition",
+      "lenses": {
+        "structural": 0.85,
+        "action": 1
+      }
+    },
+    {
+      "id": "stabilizer--construction--orbit",
+      "source": "stabilizer",
+      "target": "orbit",
+      "type": "construction",
+      "strength": 0.95,
+      "label": "陪集对应轨道",
+      "explanation": "gG_x↦g·x 给出 G/G_x 到 G·x 的双射；G/G_x 此处只是陪集集合。",
+      "evidence": "mit-actions#Lemma 23.5; section:stabilizer-definition",
+      "lenses": {
+        "action": 1,
+        "structural": 0.7
+      }
+    },
+    {
+      "id": "action--specialization--representation",
+      "source": "action",
+      "target": "representation",
+      "type": "specialization",
+      "strength": 1,
+      "label": "加上线性结构",
+      "explanation": "当作用对象是 k-向量空间且每个群元素线性作用时，得到线性表示。",
+      "evidence": "mit-representations#§1.7; section:representation-definition",
+      "lenses": {
+        "action": 1,
+        "linear": 1,
+        "structural": 0.65
+      }
+    },
+    {
+      "id": "vector-space--prerequisite--representation",
+      "source": "vector-space",
+      "target": "representation",
+      "type": "prerequisite",
+      "strength": 0.94,
+      "label": "选定作用空间",
+      "explanation": "一个 k-线性表示要指定 k-向量空间 V；这不是任意集合上作用的要求。",
+      "evidence": "mit-representations#§1.7; section:representation-definition",
+      "lenses": {
+        "linear": 1,
+        "action": 0.45
+      }
+    },
+    {
+      "id": "linear-map--construction--general-linear-group",
+      "source": "linear-map",
+      "target": "general-linear-group",
+      "type": "construction",
+      "strength": 0.89,
+      "label": "限制到可逆自映射",
+      "explanation": "GL_k(V) 由 V 上可逆的 k-线性自映射组成，乘法是复合。",
+      "evidence": "mit-representations#§1.7; section:general-linear-group-definition",
+      "lenses": {
+        "linear": 1
+      }
+    },
+    {
+      "id": "general-linear-group--definition--representation",
+      "source": "general-linear-group",
+      "target": "representation",
+      "type": "definition",
+      "strength": 0.96,
+      "label": "同态的目标群",
+      "explanation": "表示的定义为到 GL_k(V) 的群同态；目标限制确保线性与可逆。",
+      "evidence": "mit-representations#§1.7; section:representation-definition",
+      "lenses": {
+        "linear": 1,
+        "action": 0.6
+      }
+    },
+    {
+      "id": "vector-space--construction--linear-map",
+      "source": "vector-space",
+      "target": "linear-map",
+      "type": "construction",
+      "strength": 0.85,
+      "label": "比较线性结构",
+      "explanation": "线性映射在相同域上的两个向量空间之间保持线性组合。",
+      "evidence": "carleton-linear#definition; section:linear-map-definition",
+      "lenses": {
+        "linear": 1
+      }
+    },
+    {
+      "id": "group--construction--group-algebra",
+      "source": "group",
+      "target": "group-algebra",
+      "type": "construction",
+      "strength": 0.7,
+      "label": "线性延拓乘法",
+      "explanation": "固定域 k 后，以群元素为基并双线性延拓群乘法，得到 k[G]。",
+      "evidence": "mit-representations#Example 1.6(5); section:group-algebra-definition",
+      "lenses": {
+        "structural": 0.4,
+        "linear": 1
+      }
+    },
+    {
+      "id": "group-algebra--dependency--module",
+      "source": "group-algebra",
+      "target": "module",
+      "type": "dependency",
+      "strength": 0.95,
+      "label": "作用的代数",
+      "explanation": "表示对应的是含幺群代数 k[G] 的左模；代数和标量域都需指定。",
+      "evidence": "mit-representations#Definition 1.9; §1.7; section:module-definition",
+      "lenses": {
+        "linear": 1
+      }
+    },
+    {
+      "id": "representation--equivalence--module",
+      "source": "representation",
+      "target": "module",
+      "type": "equivalence",
+      "strength": 1,
+      "label": "两种语言，同一数据",
+      "explanation": "在固定 G、k 后，k-线性群表示等价于含幺左 k[G]-模，映射也对应。",
+      "evidence": "mit-representations#Definition 1.9; §1.7; section:module-definition",
+      "lenses": {
+        "linear": 1,
+        "action": 0.7
+      }
+    },
+    {
+      "id": "representation--construction--character",
+      "source": "representation",
+      "target": "character",
+      "type": "construction",
+      "strength": 0.92,
+      "label": "取各算子的迹",
+      "explanation": "本原型只对有限群的有限维复表示取迹，得到特征标。",
+      "evidence": "mit-characters#§3.2; section:character-definition",
+      "lenses": {
+        "linear": 1
+      }
+    },
+    {
+      "id": "representation--construction--invariant-subspace",
+      "source": "representation",
+      "target": "invariant-subspace",
+      "type": "construction",
+      "strength": 0.9,
+      "label": "寻找子表示",
+      "explanation": "若 W 对所有 ρ(g) 不变，则作用可以限制到 W。",
+      "evidence": "mit-representations#Definition 1.11; section:invariant-subspace-definition",
+      "lenses": {
+        "linear": 1,
+        "action": 0.3
+      }
+    },
+    {
+      "id": "representation--specialization--irreducible-representation",
+      "source": "representation",
+      "target": "irreducible-representation",
+      "type": "specialization",
+      "strength": 0.96,
+      "label": "排除非平凡不变子空间",
+      "explanation": "不可约表示非零，并且没有非零真子表示；依赖所选标量域。",
+      "evidence": "mit-representations#Definition 1.12; section:irreducible-representation-definition",
+      "lenses": {
+        "linear": 1
+      }
+    },
+    {
+      "id": "invariant-subspace--definition--irreducible-representation",
+      "source": "invariant-subspace",
+      "target": "irreducible-representation",
+      "type": "definition",
+      "strength": 0.93,
+      "label": "不可约性的判据",
+      "explanation": "不可约性的定义通过不变子空间是否只有 0、V 来判断。",
+      "evidence": "mit-representations#Definitions 1.11–1.12; section:irreducible-representation-definition",
+      "lenses": {
+        "linear": 1
+      }
+    },
+    {
+      "id": "representation--construction--intertwiner",
+      "source": "representation",
+      "target": "intertwiner",
+      "type": "construction",
+      "strength": 0.95,
+      "label": "相容地比较表示",
+      "explanation": "固定同一 G 和 k，用满足 Tρ(g)=σ(g)T 的线性映射比较两个表示。",
+      "evidence": "mit-representations#Definition 1.13; section:intertwiner-definition",
+      "lenses": {
+        "linear": 1,
+        "action": 0.55
+      }
+    },
+    {
+      "id": "linear-map--specialization--intertwiner",
+      "source": "linear-map",
+      "target": "intertwiner",
+      "type": "specialization",
+      "strength": 0.86,
+      "label": "加上等变条件",
+      "explanation": "交织映射是再满足群作用相容条件的线性映射；不要求可逆。",
+      "evidence": "mit-representations#Definition 1.13; section:intertwiner-definition",
+      "lenses": {
+        "linear": 1
+      }
+    },
+    {
+      "id": "action--construction--permutation-representation",
+      "source": "action",
+      "target": "permutation-representation",
+      "type": "construction",
+      "strength": 0.96,
+      "label": "把点变为基向量",
+      "explanation": "有限 G-集合 X 给出基向量 e_x，再线性延拓 g·e_x=e_{g·x}。",
+      "evidence": "mit-characters#§3.8, permutation representations; section:permutation-representation-definition",
+      "lenses": {
+        "action": 1,
+        "linear": 1
+      }
+    },
+    {
+      "id": "permutation-representation--example--representation",
+      "source": "permutation-representation",
+      "target": "representation",
+      "type": "example",
+      "strength": 0.96,
+      "label": "由置换得到表示",
+      "explanation": "作用律保证置换基向量的算子满足群同态律，因此是表示的具体来源。",
+      "evidence": "mit-characters#§3.8; section:permutation-representation-definition",
+      "lenses": {
+        "action": 0.8,
+        "linear": 1
+      }
+    },
+    {
+      "id": "permutation-representation--construction--character",
+      "source": "permutation-representation",
+      "target": "character",
+      "type": "construction",
+      "strength": 0.8,
+      "label": "数固定的基向量",
+      "explanation": "对有限集合上的复置换表示，迹等于该群元素固定的点数。",
+      "evidence": "mit-characters#§3.8; section:permutation-representation-example",
+      "lenses": {
+        "linear": 1,
+        "action": 0.7
+      }
+    },
+    {
+      "id": "invariant-subspace--example--permutation-representation",
+      "source": "invariant-subspace",
+      "target": "permutation-representation",
+      "type": "example",
+      "strength": 0.8,
+      "label": "常向量给出子表示",
+      "explanation": "S_3 的三维置换表示中，e_1+e_2+e_3 张成一个固定直线。",
+      "evidence": "mit-representations#Definition 1.11; section:invariant-subspace-example",
+      "lenses": {
+        "linear": 1,
+        "action": 0.6
+      }
+    },
+    {
+      "id": "module--equivalence--irreducible-representation",
+      "source": "module",
+      "target": "irreducible-representation",
+      "type": "equivalence",
+      "strength": 0.82,
+      "label": "单模与不可约表示",
+      "explanation": "固定群代数 k[G] 时，简单左模恰好对应不可约 k-线性群表示。",
+      "evidence": "mit-representations#Definition 1.12; §1.7; section:irreducible-representation-definition",
+      "lenses": {
+        "linear": 1
+      }
+    },
+    {
+      "id": "representation-theory--dependency--representation",
+      "source": "representation-theory",
+      "target": "representation",
+      "type": "dependency",
+      "strength": 0.86,
+      "label": "研究对象",
+      "explanation": "这里的表示论语境以群的线性表示作为研究对象，并以交织映射比较它们。",
+      "evidence": "mit-representations#§1.3; section:representation-theory-definition",
+      "lenses": {
+        "linear": 1
+      }
+    },
+    {
+      "id": "representation-theory--dependency--intertwiner",
+      "source": "representation-theory",
+      "target": "intertwiner",
+      "type": "dependency",
+      "strength": 0.85,
+      "label": "比较的方法",
+      "explanation": "表示之间的态射是交织映射；可逆交织映射给出表示同构。",
+      "evidence": "mit-representations#Definition 1.13; section:intertwiner-definition",
+      "lenses": {
+        "linear": 1
+      }
+    },
+    {
+      "id": "representation-theory--dependency--irreducible-representation",
+      "source": "representation-theory",
+      "target": "irreducible-representation",
+      "type": "dependency",
+      "strength": 0.9,
+      "label": "分解的问题",
+      "explanation": "有限群在复数域上的有限维表示可分解为不可约直和；此条件由 Maschke 定理支持。",
+      "evidence": "mit-characters#§3.1; section:representation-theory-example",
+      "lenses": {
+        "linear": 1
+      }
+    },
+    {
+      "id": "representation-theory--dependency--character",
+      "source": "representation-theory",
+      "target": "character",
+      "type": "dependency",
+      "strength": 0.84,
+      "label": "可计算的记录",
+      "explanation": "特征标为有限维表示提供迹数据；本图不把相同迹的任意对象自动认作同一表示。",
+      "evidence": "mit-characters#§3.2; section:character-definition",
+      "lenses": {
+        "linear": 1
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "group-overview",
+      "concept": "group",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/group-overview.md",
+      "children": ["group-definition"]
+    },
+    {
+      "id": "group-definition",
+      "concept": "group",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/group-definition.md",
+      "children": ["group-associativity"]
+    },
+    {
+      "id": "group-example",
+      "concept": "group",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/group-example.md",
+      "children": []
+    },
+    {
+      "id": "group-associativity",
+      "concept": "group",
+      "title": "Why parentheses can move · 结合律",
+      "level": 3,
+      "markdown": "sections/group-associativity.md",
+      "children": ["group-example"]
+    },
+    {
+      "id": "symmetry-overview",
+      "concept": "symmetry",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/symmetry-overview.md",
+      "children": ["symmetry-definition"]
+    },
+    {
+      "id": "symmetry-definition",
+      "concept": "symmetry",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/symmetry-definition.md",
+      "children": ["symmetry-example"]
+    },
+    {
+      "id": "symmetry-example",
+      "concept": "symmetry",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/symmetry-example.md",
+      "children": []
+    },
+    {
+      "id": "homomorphism-overview",
+      "concept": "homomorphism",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/homomorphism-overview.md",
+      "children": ["homomorphism-definition"]
+    },
+    {
+      "id": "homomorphism-definition",
+      "concept": "homomorphism",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/homomorphism-definition.md",
+      "children": ["homomorphism-example"]
+    },
+    {
+      "id": "homomorphism-example",
+      "concept": "homomorphism",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/homomorphism-example.md",
+      "children": []
+    },
+    {
+      "id": "subgroup-overview",
+      "concept": "subgroup",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/subgroup-overview.md",
+      "children": ["subgroup-definition"]
+    },
+    {
+      "id": "subgroup-definition",
+      "concept": "subgroup",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/subgroup-definition.md",
+      "children": ["subgroup-example"]
+    },
+    {
+      "id": "subgroup-example",
+      "concept": "subgroup",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/subgroup-example.md",
+      "children": []
+    },
+    {
+      "id": "quotient-overview",
+      "concept": "quotient",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/quotient-overview.md",
+      "children": ["quotient-definition"]
+    },
+    {
+      "id": "quotient-definition",
+      "concept": "quotient",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/quotient-definition.md",
+      "children": ["quotient-example"]
+    },
+    {
+      "id": "quotient-example",
+      "concept": "quotient",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/quotient-example.md",
+      "children": []
+    },
+    {
+      "id": "action-overview",
+      "concept": "action",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/action-overview.md",
+      "children": ["action-definition"]
+    },
+    {
+      "id": "action-definition",
+      "concept": "action",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/action-definition.md",
+      "children": ["action-example", "orbit-definition", "stabilizer-definition"]
+    },
+    {
+      "id": "action-example",
+      "concept": "action",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/action-example.md",
+      "children": []
+    },
+    {
+      "id": "representation-overview",
+      "concept": "representation",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/representation-overview.md",
+      "children": ["representation-definition"]
+    },
+    {
+      "id": "representation-definition",
+      "concept": "representation",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/representation-definition.md",
+      "children": ["representation-example", "vector-space-definition", "linear-map-definition"]
+    },
+    {
+      "id": "representation-example",
+      "concept": "representation",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/representation-example.md",
+      "children": []
+    },
+    {
+      "id": "orbit-overview",
+      "concept": "orbit",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/orbit-overview.md",
+      "children": ["orbit-definition"]
+    },
+    {
+      "id": "orbit-definition",
+      "concept": "orbit",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/orbit-definition.md",
+      "children": ["orbit-example"]
+    },
+    {
+      "id": "orbit-example",
+      "concept": "orbit",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/orbit-example.md",
+      "children": []
+    },
+    {
+      "id": "stabilizer-overview",
+      "concept": "stabilizer",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/stabilizer-overview.md",
+      "children": ["stabilizer-definition"]
+    },
+    {
+      "id": "stabilizer-definition",
+      "concept": "stabilizer",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/stabilizer-definition.md",
+      "children": ["stabilizer-example"]
+    },
+    {
+      "id": "stabilizer-example",
+      "concept": "stabilizer",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/stabilizer-example.md",
+      "children": []
+    },
+    {
+      "id": "normal-subgroup-overview",
+      "concept": "normal-subgroup",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/normal-subgroup-overview.md",
+      "children": ["normal-subgroup-definition"]
+    },
+    {
+      "id": "normal-subgroup-definition",
+      "concept": "normal-subgroup",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/normal-subgroup-definition.md",
+      "children": ["normal-subgroup-example"]
+    },
+    {
+      "id": "normal-subgroup-example",
+      "concept": "normal-subgroup",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/normal-subgroup-example.md",
+      "children": []
+    },
+    {
+      "id": "permutation-group-overview",
+      "concept": "permutation-group",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/permutation-group-overview.md",
+      "children": ["permutation-group-definition"]
+    },
+    {
+      "id": "permutation-group-definition",
+      "concept": "permutation-group",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/permutation-group-definition.md",
+      "children": ["permutation-group-example"]
+    },
+    {
+      "id": "permutation-group-example",
+      "concept": "permutation-group",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/permutation-group-example.md",
+      "children": []
+    },
+    {
+      "id": "vector-space-overview",
+      "concept": "vector-space",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/vector-space-overview.md",
+      "children": ["vector-space-definition"]
+    },
+    {
+      "id": "vector-space-definition",
+      "concept": "vector-space",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/vector-space-definition.md",
+      "children": ["vector-space-example"]
+    },
+    {
+      "id": "vector-space-example",
+      "concept": "vector-space",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/vector-space-example.md",
+      "children": []
+    },
+    {
+      "id": "linear-map-overview",
+      "concept": "linear-map",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/linear-map-overview.md",
+      "children": ["linear-map-definition"]
+    },
+    {
+      "id": "linear-map-definition",
+      "concept": "linear-map",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/linear-map-definition.md",
+      "children": ["linear-map-example"]
+    },
+    {
+      "id": "linear-map-example",
+      "concept": "linear-map",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/linear-map-example.md",
+      "children": []
+    },
+    {
+      "id": "general-linear-group-overview",
+      "concept": "general-linear-group",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/general-linear-group-overview.md",
+      "children": ["general-linear-group-definition"]
+    },
+    {
+      "id": "general-linear-group-definition",
+      "concept": "general-linear-group",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/general-linear-group-definition.md",
+      "children": ["general-linear-group-example"]
+    },
+    {
+      "id": "general-linear-group-example",
+      "concept": "general-linear-group",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/general-linear-group-example.md",
+      "children": []
+    },
+    {
+      "id": "group-algebra-overview",
+      "concept": "group-algebra",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/group-algebra-overview.md",
+      "children": ["group-algebra-definition"]
+    },
+    {
+      "id": "group-algebra-definition",
+      "concept": "group-algebra",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/group-algebra-definition.md",
+      "children": ["group-algebra-example"]
+    },
+    {
+      "id": "group-algebra-example",
+      "concept": "group-algebra",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/group-algebra-example.md",
+      "children": []
+    },
+    {
+      "id": "module-overview",
+      "concept": "module",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/module-overview.md",
+      "children": ["module-definition"]
+    },
+    {
+      "id": "module-definition",
+      "concept": "module",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/module-definition.md",
+      "children": ["module-example", "group-algebra-definition"]
+    },
+    {
+      "id": "module-example",
+      "concept": "module",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/module-example.md",
+      "children": []
+    },
+    {
+      "id": "character-overview",
+      "concept": "character",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/character-overview.md",
+      "children": ["character-definition"]
+    },
+    {
+      "id": "character-definition",
+      "concept": "character",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/character-definition.md",
+      "children": ["character-example"]
+    },
+    {
+      "id": "character-example",
+      "concept": "character",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/character-example.md",
+      "children": []
+    },
+    {
+      "id": "irreducible-representation-overview",
+      "concept": "irreducible-representation",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/irreducible-representation-overview.md",
+      "children": ["irreducible-representation-definition"]
+    },
+    {
+      "id": "irreducible-representation-definition",
+      "concept": "irreducible-representation",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/irreducible-representation-definition.md",
+      "children": ["irreducible-representation-example", "invariant-subspace-definition"]
+    },
+    {
+      "id": "irreducible-representation-example",
+      "concept": "irreducible-representation",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/irreducible-representation-example.md",
+      "children": []
+    },
+    {
+      "id": "intertwiner-overview",
+      "concept": "intertwiner",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/intertwiner-overview.md",
+      "children": ["intertwiner-definition"]
+    },
+    {
+      "id": "intertwiner-definition",
+      "concept": "intertwiner",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/intertwiner-definition.md",
+      "children": ["intertwiner-example"]
+    },
+    {
+      "id": "intertwiner-example",
+      "concept": "intertwiner",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/intertwiner-example.md",
+      "children": []
+    },
+    {
+      "id": "invariant-subspace-overview",
+      "concept": "invariant-subspace",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/invariant-subspace-overview.md",
+      "children": ["invariant-subspace-definition"]
+    },
+    {
+      "id": "invariant-subspace-definition",
+      "concept": "invariant-subspace",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/invariant-subspace-definition.md",
+      "children": ["invariant-subspace-example"]
+    },
+    {
+      "id": "invariant-subspace-example",
+      "concept": "invariant-subspace",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/invariant-subspace-example.md",
+      "children": []
+    },
+    {
+      "id": "permutation-representation-overview",
+      "concept": "permutation-representation",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/permutation-representation-overview.md",
+      "children": ["permutation-representation-definition"]
+    },
+    {
+      "id": "permutation-representation-definition",
+      "concept": "permutation-representation",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/permutation-representation-definition.md",
+      "children": ["permutation-representation-example"]
+    },
+    {
+      "id": "permutation-representation-example",
+      "concept": "permutation-representation",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/permutation-representation-example.md",
+      "children": []
+    },
+    {
+      "id": "representation-theory-overview",
+      "concept": "representation-theory",
+      "title": "The idea · 概念句",
+      "level": 1,
+      "markdown": "sections/representation-theory-overview.md",
+      "children": ["representation-theory-definition"]
+    },
+    {
+      "id": "representation-theory-definition",
+      "concept": "representation-theory",
+      "title": "Definition · 定义",
+      "level": 2,
+      "markdown": "sections/representation-theory-definition.md",
+      "children": ["representation-theory-example"]
+    },
+    {
+      "id": "representation-theory-example",
+      "concept": "representation-theory",
+      "title": "A concrete view · 具体展开",
+      "level": 3,
+      "markdown": "sections/representation-theory-example.md",
+      "children": []
+    }
+  ],
+  "sources": [
+    {
+      "id": "mit-groups",
+      "title": "James McKernan — MIT 18.703, Lecture 1: Groups",
+      "url": "https://ocw.mit.edu/courses/18-703-modern-algebra-spring-2013/resources/mit18_703s13_pra_l_1/"
+    },
+    {
+      "id": "mit-subgroups",
+      "title": "James McKernan — MIT 18.703, Lecture 2: Subgroups",
+      "url": "https://ocw.mit.edu/courses/18-703-modern-algebra-spring-2013/resources/mit18_703s13_pra_l_2/"
+    },
+    {
+      "id": "mit-homomorphisms",
+      "title": "James McKernan — MIT 18.703, Lecture 8: Homomorphisms and kernels",
+      "url": "https://ocw.mit.edu/courses/18-703-modern-algebra-spring-2013/resources/mit18_703s13_pra_l_8/"
+    },
+    {
+      "id": "mit-quotients",
+      "title": "James McKernan — MIT 18.703, Lecture 9: Quotient Groups",
+      "url": "https://ocw.mit.edu/courses/18-703-modern-algebra-spring-2013/resources/mit18_703s13_pra_l_9/"
+    },
+    {
+      "id": "mit-actions",
+      "title": "James McKernan — MIT 18.703, Lecture 23: Group actions and automorphisms",
+      "url": "https://ocw.mit.edu/courses/18-703-modern-algebra-spring-2013/resources/mit18_703s13_pra_l_23/"
+    },
+    {
+      "id": "mit-representations",
+      "title": "Pavel Etingof et al. — MIT 18.712, Chapter 1: Basic notions of representation theory",
+      "url": "https://ocw.mit.edu/courses/18-712-introduction-to-representation-theory-fall-2010/resources/mit18_712f10_ch1/"
+    },
+    {
+      "id": "mit-characters",
+      "title": "Pavel Etingof et al. — MIT 18.712, Chapter 3: Representations of finite groups",
+      "url": "https://ocw.mit.edu/courses/18-712-introduction-to-representation-theory-fall-2010/resources/mit18_712f10_ch3/"
+    },
+    {
+      "id": "brown-linear",
+      "title": "Sergei Treil — Linear Algebra Done Wrong, Chapter 1: Basic Notions",
+      "url": "https://www.math.brown.edu/streil/papers/LADW/HTML_2026_04-30/Ch1.html"
+    },
+    {
+      "id": "carleton-linear",
+      "title": "Kevin Cheung — MATH 1107: Linear transformation definition",
+      "url": "https://people.math.carleton.ca/~kcheung/math/notes/MATH1107/11/11_definition.html"
+    }
+  ]
+}

@@ -1,5 +1,11 @@
 # Design specification
 
+## Knowledge Topos — continuous contexts
+
+The current vertical prototype uses a full-viewport field at `topos.html`, with small secondary lens/depth controls. There is no primary folder sidebar, top navigation, card grid or article transition. Click changes the force field while preserving node position and velocity. GPU marks, typed arrows, graph-derived boundaries, anchored DOM labels and mathematical sections belong to the same space. Screen-space annotation collision/leader placement is separate from semantic relationships.
+
+Semantic depth runs from 0 to 3: collective structures; concepts and selective typed links; summaries and formal mathematics; recursive definitions/examples/constructions. The orthographic drawing layer communicates depth with opacity, scale and restrained parallax. Context changes cause attraction, recession and emergence, with finite damping and no decorative motion. Expanded explanations participate in collision spacing and retain local formula scrolling. Mathematical text uses dark serif type over warm paper, with muted blue structure. Inspect label-free recordings as well as readable content; the concrete evidence matrix is `topos-acceptance.md`.
+
 ## Three-dimensional tree and flat reading
 
 The current map uses Three.js 0.185.1 and d3-force-3d 3.0.6. A stable book → chapter → section skeleton separates local neighborhoods. Collections have hollow geometry; mathematical objects have solid nodes and camera-facing labels. One atom keeps one identity and spatial position even when associated with several sections. The earliest explicit section in the catalog supplies its initial layout anchor, while all memberships remain visible. Chapter-level fallback retains unassigned objects and sections without atoms still link to their full reading.

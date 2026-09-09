@@ -64,6 +64,7 @@ try {
   const knowledge = JSON.parse(await readFile(path.join(root, "knowledge/index.json"), "utf8"))
   const derivedPages = new Set([
     "explore.html",
+    "topos.html",
     ...knowledge.objects.filter((object) => object.kind === "atom").map((object) => object.href),
     ...(knowledge.aliases ?? []).map((alias) => alias.href),
   ])
@@ -95,6 +96,10 @@ try {
     "static/graph/knowledgeGraph3d.js",
     "static/graph/three-LICENSE.txt",
     "static/graph/d3-force-3d-LICENSE.txt",
+    "static/topos/topos.js",
+    "static/topos/topos.css",
+    "static/topos/index.json",
+    "static/topos/three-LICENSE.txt",
   ])
   check(
     published.every(
@@ -747,6 +752,69 @@ try {
         verifyHref(match[1], file, "CSS resource")
       }
   }
+  const toposModel = JSON.parse(
+    await readFile(path.join(root, "knowledge/topos/prototype.json"), "utf8"),
+  )
+  const topos = JSON.parse(await readFile(path.join(publicRoot, "static/topos/index.json"), "utf8"))
+  check(
+    JSON.stringify(topos.model) === JSON.stringify(toposModel),
+    "Topos published ontology matches its approved prototype",
+  )
+  check(
+    sameSet(new Set(Object.keys(topos.sections)), new Set(toposModel.sections.map((s) => s.id))),
+    "Topos emits exactly the registered sections",
+  )
+  const conceptIds = new Set(toposModel.concepts.map((c) => c.id))
+  const sectionIds = new Set(toposModel.sections.map((s) => s.id))
+  let toposFormulas = 0
+  for (const section of toposModel.sections) {
+    if (!/^sections\/[a-z0-9-]+\.md$/.test(section.markdown))
+      throw new Error("Invalid Topos content path")
+    const markdown = await readFile(path.join(root, "knowledge/topos", section.markdown), "utf8")
+    const tree = unified().use(remarkParse).use(remarkMath).parse(markdown)
+    const sourceFormulas = []
+    visit(tree, (node) => {
+      if (node.type === "math" || node.type === "inlineMath")
+        sourceFormulas.push(normalize(node.value))
+    })
+    const all = elements(parse(topos.sections[section.id] ?? ""))
+    const renderedFormulas = all
+      .filter(
+        (node) => node.tagName === "annotation" && attrs(node).encoding === "application/x-tex",
+      )
+      .map((node) => normalize(text(node)))
+    check(
+      JSON.stringify(sourceFormulas) === JSON.stringify(renderedFormulas),
+      "Every Topos source formula survives in published MathML in order",
+      section.id,
+    )
+    check(
+      !all.some((node) => hasClass(node, "katex-error")),
+      "No Topos KaTeX rendering error",
+      section.id,
+    )
+    check(
+      all.some((node) => node.tagName === "p"),
+      "Topos section contains actual rendered prose",
+      section.id,
+    )
+    toposFormulas += renderedFormulas.length
+    for (const node of all.filter((node) => node.tagName === "a")) {
+      const href = attrs(node).href ?? ""
+      if (href.startsWith("concept:"))
+        check(
+          conceptIds.has(href.slice(8)),
+          "Topos concept link has an existing target",
+          section.id,
+        )
+      if (href.startsWith("section:"))
+        check(
+          sectionIds.has(href.slice(8)),
+          "Topos recursive link has an existing target",
+          section.id,
+        )
+    }
+  }
   const report = {
     version: 1,
     pages: expectedPages.size,
@@ -759,6 +827,12 @@ try {
     formulas: totalMath,
     links: totalLinks,
     footnotes: totalFootnotes,
+    topos: {
+      concepts: conceptIds.size,
+      sections: sectionIds.size,
+      relations: toposModel.relations.length,
+      formulas: toposFormulas,
+    },
     checks,
     passed: checks - failures.length,
     failed: failures.length,

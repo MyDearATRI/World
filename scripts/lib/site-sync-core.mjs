@@ -10,6 +10,79 @@ export const derivedSyncFiles = [
   "knowledge/index.json",
   "knowledge/semantic.json",
 ]
+// This website-authored prototype is an explicit publication scope. Do not infer
+// permission from a directory glob or from a newly edited model's file list.
+export const toposSyncFiles = Object.freeze([
+  "knowledge/topos/README.md",
+  "knowledge/topos/prototype.json",
+  "knowledge/topos/sections/action-definition.md",
+  "knowledge/topos/sections/action-example.md",
+  "knowledge/topos/sections/action-overview.md",
+  "knowledge/topos/sections/character-definition.md",
+  "knowledge/topos/sections/character-example.md",
+  "knowledge/topos/sections/character-overview.md",
+  "knowledge/topos/sections/general-linear-group-definition.md",
+  "knowledge/topos/sections/general-linear-group-example.md",
+  "knowledge/topos/sections/general-linear-group-overview.md",
+  "knowledge/topos/sections/group-algebra-definition.md",
+  "knowledge/topos/sections/group-algebra-example.md",
+  "knowledge/topos/sections/group-algebra-overview.md",
+  "knowledge/topos/sections/group-associativity.md",
+  "knowledge/topos/sections/group-definition.md",
+  "knowledge/topos/sections/group-example.md",
+  "knowledge/topos/sections/group-overview.md",
+  "knowledge/topos/sections/homomorphism-definition.md",
+  "knowledge/topos/sections/homomorphism-example.md",
+  "knowledge/topos/sections/homomorphism-overview.md",
+  "knowledge/topos/sections/intertwiner-definition.md",
+  "knowledge/topos/sections/intertwiner-example.md",
+  "knowledge/topos/sections/intertwiner-overview.md",
+  "knowledge/topos/sections/invariant-subspace-definition.md",
+  "knowledge/topos/sections/invariant-subspace-example.md",
+  "knowledge/topos/sections/invariant-subspace-overview.md",
+  "knowledge/topos/sections/irreducible-representation-definition.md",
+  "knowledge/topos/sections/irreducible-representation-example.md",
+  "knowledge/topos/sections/irreducible-representation-overview.md",
+  "knowledge/topos/sections/linear-map-definition.md",
+  "knowledge/topos/sections/linear-map-example.md",
+  "knowledge/topos/sections/linear-map-overview.md",
+  "knowledge/topos/sections/module-definition.md",
+  "knowledge/topos/sections/module-example.md",
+  "knowledge/topos/sections/module-overview.md",
+  "knowledge/topos/sections/normal-subgroup-definition.md",
+  "knowledge/topos/sections/normal-subgroup-example.md",
+  "knowledge/topos/sections/normal-subgroup-overview.md",
+  "knowledge/topos/sections/orbit-definition.md",
+  "knowledge/topos/sections/orbit-example.md",
+  "knowledge/topos/sections/orbit-overview.md",
+  "knowledge/topos/sections/permutation-group-definition.md",
+  "knowledge/topos/sections/permutation-group-example.md",
+  "knowledge/topos/sections/permutation-group-overview.md",
+  "knowledge/topos/sections/permutation-representation-definition.md",
+  "knowledge/topos/sections/permutation-representation-example.md",
+  "knowledge/topos/sections/permutation-representation-overview.md",
+  "knowledge/topos/sections/quotient-definition.md",
+  "knowledge/topos/sections/quotient-example.md",
+  "knowledge/topos/sections/quotient-overview.md",
+  "knowledge/topos/sections/representation-definition.md",
+  "knowledge/topos/sections/representation-example.md",
+  "knowledge/topos/sections/representation-overview.md",
+  "knowledge/topos/sections/representation-theory-definition.md",
+  "knowledge/topos/sections/representation-theory-example.md",
+  "knowledge/topos/sections/representation-theory-overview.md",
+  "knowledge/topos/sections/stabilizer-definition.md",
+  "knowledge/topos/sections/stabilizer-example.md",
+  "knowledge/topos/sections/stabilizer-overview.md",
+  "knowledge/topos/sections/subgroup-definition.md",
+  "knowledge/topos/sections/subgroup-example.md",
+  "knowledge/topos/sections/subgroup-overview.md",
+  "knowledge/topos/sections/symmetry-definition.md",
+  "knowledge/topos/sections/symmetry-example.md",
+  "knowledge/topos/sections/symmetry-overview.md",
+  "knowledge/topos/sections/vector-space-definition.md",
+  "knowledge/topos/sections/vector-space-example.md",
+  "knowledge/topos/sections/vector-space-overview.md",
+])
 export const listGitPaths = (value) => value.split("\0").filter(Boolean)
 export function gitTransportOptions({ platform, env, configuredProxy = "" }) {
   const inherited = { ...env, GIT_TERMINAL_PROMPT: "0", GCM_INTERACTIVE: "never" }
@@ -111,7 +184,7 @@ export function assertSyncPath(file) {
     /(?:^|\/)(?:\.git|\.obsidian|\.codex|\.agents|\.cache|\.quartz-cache|\.setup|node_modules|public|artifacts|private)(?:\/|$)/i.test(
       file,
     ) ||
-    /^quartz\/static\/(?:fonts|katex|semantic|graph)(?:\/|$)/i.test(file) ||
+    /^quartz\/static\/(?:fonts|katex|semantic|graph|topos)(?:\/|$)/i.test(file) ||
     /(?:^|\/)(?:\.env(?:\..*)?|id_rsa|id_ed25519|credentials(?:\.[^/]+)?|secrets?(?:\.[^/]+)?)$/i.test(
       file,
     ) ||
@@ -119,8 +192,9 @@ export function assertSyncPath(file) {
   )
     throw new Error(`不属于网站工程同步范围：${file}`)
   if (
-    file.startsWith("knowledge/") &&
+    /^knowledge\//i.test(file) &&
     !derivedSyncFiles.includes(file) &&
+    !toposSyncFiles.includes(file) &&
     !["knowledge/overrides.json", "knowledge/model-manifest.json"].includes(file)
   )
     throw new Error(`未列明的知识派生文件：${file}`)

@@ -1,5 +1,11 @@
 # Website implementation rules
 
+## Current Knowledge Topos vertical prototype
+
+The user's September 10 specification supersedes the page-centered and full-3D directions below. First establish Group → Action → Representation at `topos.html`; do not migrate the whole textbook before that interaction succeeds. Concept, Relation, Context, Section, Lens and ViewState are independent primitives. Ordinary concept activation deforms the existing field around a new focus, with persistent node identity/position/velocity; it must not open an article page or replace the scene.
+
+Keep graph data, context derivation, physical layout, GPU/DOM rendering and Markdown explanations separate. Use calm 2.5D semantic depth, typed/evidenced links, graph-derived communities and recursively unfolding mathematical content. `knowledge/topos/` is explicitly synthetic content from public references, not a new Vault export. Old textbook URLs and publication boundaries remain intact. Only explicitly listed prototype files may be synchronized. New acceptance is `docs/topos-acceptance.md`: inspect real labelled and label-free recordings for meaningful movement; old graph test results cannot prove this interaction works.
+
 ## Current authorized three-dimensional knowledge map
 
 Use the existing approved snapshot only. The map combines a ReaderCatalog book/chapter/section tree with one spatial entity per KnowledgeIndex ID; many-to-many membership is retained separately from each atom's primary layout anchor. Empty sections remain navigable and unmapped atoms remain at chapter level. Three.js 0.185.1 and d3-force-3d 3.0.6 are bundled into explicitly allowed static resources and loaded on demand. Full Markdown reading and canonical atom URLs remain unchanged.

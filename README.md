@@ -2,6 +2,10 @@
 
 数学与物理教材笔记网站。线上地址：[mydearatri.github.io/World/](https://mydearatri.github.io/World/)；仓库：[MyDearATRI/World](https://github.com/MyDearATRI/World)。
 
+本轮另行建立 Knowledge Topos 纵向原型，入口为 `/World/topos.html`。它用网站自己的合成数学内容完成 Group → Group Action → Representation，不重新读取 Obsidian 库。普通点击重排同一个知识场；拉近逐步展开定义、公式和递归解释；拉远显示由关系图计算出的集合。这个原型的验收规则见 [Topos 验收](docs/topos-acceptance.md)，不能用旧三维地图的测试结果代替。既有教材阅读系统仍可使用，尚未把整个知识库迁移成这个原型。
+
+原型使用鼠标点选概念、拖动节点、拖动空白平移、滚轮或底部深度控件调整语义层次。键盘 Tab / Enter 可进入概念，`+` / `-` 改变深度；解释中的下一级按钮在当前位置展开，浏览器前进后退保留探索来路。操作说明内可暂时移去文字，只观察空间行为；这项检查也可用 `Alt+L` 切换。减少动画模式保留相同状态与内容。
+
 正文来自本地 Obsidian 笔记。首页提供“按书阅读”和“探索知识”：可以按原有章节顺序读，也可以从定义、定理、证明或观察进入。原子阅读页保留原文与出处；点开相关笔记时，探索来路留在侧边，正文进入中央。规划、演示材料放在附属入口，数学例子、反例和习题正常可见。当前版本的实际部署与验收情况见 [验证记录](docs/validation.md)。
 
 当前视觉规则用灰白页面层次和近白阅读区域区分导航与正文：主标题采用 700 字重无衬线字体，章节标题采用 650 字重，正文保持约 18px 的中文友好衬线字体。数学块以简短类型标记和原题名分别呈现；有明确“来源：”或“Source:”标记的开头来源段用 12px 无衬线字体，保留全部引用文字与链接。控件提供短暂反馈，原生 `details` / `dialog` 提供轻量展开或入场效果，并响应减少动态效果设置。排版层级与交互反馈参考 [Apple MacBook Pro 页面](https://www.apple.com/macbook-pro/)和 [Human Interface Guidelines：Motion](https://developer.apple.com/design/human-interface-guidelines/motion)，使用本站自己的字体、配色和图形，不复制商标视觉。具体效果及验证结果仍以验证记录为准。
@@ -67,6 +71,7 @@ pnpm --package=npm@10.9.2 dlx npm run test:knowledge
 pnpm --package=npm@10.9.2 dlx npm run test:spatial
 pnpm --package=npm@10.9.2 dlx npm run test:knowledge-graph
 pnpm --package=npm@10.9.2 dlx npm run test:semantics
+pnpm --package=npm@10.9.2 dlx npm run test:topos
 ```
 
 浏览器检查使用本机 Edge 和隔离的本地端口。检查期间不要同时重建 `public`。`npm run preview` 可单独查看正式产物，默认端口 8081，同一产物支持根路径、`/World/` 和 `/math-notes/`。

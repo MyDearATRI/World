@@ -17,9 +17,9 @@
     "format": "npx prettier . --write",
     "test": "tsx --test",
     "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1",
-    "predev": "node scripts/prepare-assets.mjs && tsx scripts/prepare-atoms.ts --check && node scripts/prepare-semantics.mjs --check && node scripts/prepare-semantic-runtime.mjs && node scripts/prepare-graph-runtime.mjs",
+    "predev": "node scripts/prepare-assets.mjs && tsx scripts/prepare-atoms.ts --check && node scripts/prepare-semantics.mjs --check && node scripts/prepare-semantic-runtime.mjs && node scripts/prepare-graph-runtime.mjs && node scripts/prepare-topos-runtime.mjs",
     "dev": "node quartz/bootstrap-cli.mjs build -d content -o public --serve --port 8080 --concurrency 2",
-    "prebuild": "node scripts/prepare-assets.mjs && tsx scripts/prepare-atoms.ts --check && node scripts/prepare-semantics.mjs --check && node scripts/prepare-semantic-runtime.mjs && node scripts/prepare-graph-runtime.mjs",
+    "prebuild": "node scripts/prepare-assets.mjs && tsx scripts/prepare-atoms.ts --check && node scripts/prepare-semantics.mjs --check && node scripts/prepare-semantic-runtime.mjs && node scripts/prepare-graph-runtime.mjs && node scripts/prepare-topos-runtime.mjs",
     "build": "node quartz/bootstrap-cli.mjs build -d content -o public --concurrency 2",
     "test:content": "node scripts/verify-content.mjs",
     "test:browser": "node scripts/verify-browser.mjs",
@@ -46,7 +46,9 @@
     "prepare:graph-runtime": "node scripts/prepare-graph-runtime.mjs",
     "test:three": "node scripts/verify-three.mjs",
     "sync:site": "node scripts/sync-site.mjs",
-    "sync:preview": "node scripts/sync-site.mjs --preview-only"
+    "sync:preview": "node scripts/sync-site.mjs --preview-only",
+    "prepare:topos-runtime": "node scripts/prepare-topos-runtime.mjs",
+    "test:topos": "node scripts/verify-topos.mjs"
   },
   "engines": {
     "npm": ">=10.9.2",
