@@ -30,6 +30,23 @@ test("an unobstructed label stays upper-right and close to its concept", () => {
   assert.deepEqual(result, [{ id: "focus", x: 144, y: 234, width: 120, height: 52 }])
 })
 
+test("a half-pixel anchor change preserves a valid remembered title slot", () => {
+  const room = { left: 14, top: 100, right: 986, bottom: 790 }
+  const a = { id: "a", anchorX: 400, anchorY: 420, width: 185, height: 55, priority: 7 }
+  const b = { id: "b", anchorX: 406, anchorY: 430, width: 185, height: 55, priority: 6 }
+  const original = computeAnnotations([a, b], room)
+  const changed = computeAnnotations([a, { ...b, anchorX: 406.5 }], room, [], original)
+  for (const box of changed) {
+    const prior = original.find((value) => value.id === box.id)!
+    assert.ok(Math.hypot(box.x - prior.x, box.y - prior.y) <= 0.5)
+  }
+  assert.equal(area(changed[0], changed[1]), 0)
+  const blocked = { ...original[1], width: 200, height: 70 }
+  const relocated = computeAnnotations([a, b], room, [blocked], original)
+  assert.ok(relocated.every((box) => within(box, room) && area(box, blocked) === 0))
+  assert.equal(area(relocated[0], relocated[1]), 0)
+})
+
 test("eight clustered mobile labels remain present, readable and inside safe bounds", () => {
   const items = [
     { ...item("focus", 192, 330, 100), width: 170, height: 64 },

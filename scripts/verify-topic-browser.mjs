@@ -3,7 +3,7 @@ import path from "node:path"
 import { chromium } from "playwright"
 import { startPreview } from "./preview.mjs"
 
-const output = path.resolve(process.env.TOPIC_OUTPUT ?? "artifacts/phase-01/browser")
+const output = path.resolve(process.env.TOPIC_OUTPUT ?? "artifacts/stable-field/topics")
 await mkdir(output, { recursive: true })
 const report = {
   startedAt: new Date().toISOString(),
@@ -91,7 +91,8 @@ try {
       await hideSidebar(page, phone)
       check(
         `${prefix} intentional empty state is readable`,
-        await page.getByRole("heading", { name: "选一个主题，开始探索" }).isVisible(),
+        (await page.getByRole("heading", { name: "未选择主题", exact: true }).isVisible()) &&
+          (await page.locator(".overview-empty").isVisible()),
       )
       await showSidebar(page, phone)
       await page.locator('[data-topic="topology"]').check()

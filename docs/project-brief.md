@@ -1,5 +1,11 @@
 # Project brief
 
+## Stable topic exploration
+
+Selecting a major theme must immediately disclose named knowledge objects without an unlabelled cloud. A stable spatial overview uses actual titles and object types, theme-union counts, query/type filtering and explicit pages. Every approved identity stays accessible. Activating an object enters the same mathematical reader; actual relationships remain inspectable, including off-page destinations. Focused views show only named context instead of anonymous decorative horizon points.
+
+The current correction addresses unwanted spatial motion: preserve dropped positions, confine response to local neighbors, retain valid text slots, and stop after brief intentional transitions. Mere hovering must not move anything. Computational throughput alone does not satisfy this requirement.
+
 ## Topic selection and Phase 0 / Phase 1
 
 The current request adds a colored theme checkbox sidebar to the continuous reader. Multi-selection displays a union of unique objects and actual links; the searchable in-scope directory retains access to labels that cannot fit spatially. On phones the controls use a native modal drawer. The separate `atlas.html` scope renders the source-audited mathematical title registry and twelve macroregions, without fabricating personal exposition. Only volume one counts as mathematics; the system/research volumes remain plans. Phase 0 audits capabilities and the 77-section contract, and Phase 1 records official classifications, sources, frontier activity, duplication and review. Their acceptance files govern completion; this UI does not execute later Lean phases.

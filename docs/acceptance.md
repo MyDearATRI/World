@@ -1,5 +1,11 @@
 # Website acceptance
 
+## Stable knowledge positioning and immediate naming
+
+The current task is complete only when a reader can select a theme, immediately identify the displayed objects by full title/type, find every in-scope identity through explicit pages or query, inspect actual directional/evidenced relationships, and enter the unchanged mathematical reader. Verify selected themes form a unique union and every page entry has a real identity. Check no overlap, title clipping, anonymous visible points or decorative horizon remain; total counts must not confuse the current page with the full collection.
+
+Measure actual world/screen/title coordinates after selection and drag release at 2, 5 and 10 seconds. After the short intentional transition, drift must remain within 0.5 CSS px; pure pointer hover must not re-layout or move anything. Check the dropped node remains at its drop location and unrelated objects do not get pushed across the field. Test tiny anchor changes against remembered label slots. Include mouse, touch, keyboard, Back/refresh and focus return for overview filtering/paging, original math and Canvas2D fallback at 1440, 1024 and 390 CSS px. These tests supplement content/type/build/unit gates; old frame-timing results cannot prove this acceptance.
+
 ## Animation responsiveness
 
 Run `npm run test:motion -- --output artifacts/motion/current` on a built site. The script records an unchanged baseline and candidate with the same real pointer/touch tasks, browser version, rendered-resource hashes and viewport. It distinguishes application callback time, callback intervals, input dispatch delay, event-to-completed-render time, long tasks and finite settling. Thresholds are declared by the diagnostic before measurements; no headless measurement is labelled as physical-screen FPS, field INP or an actual phone test. CI keeps deterministic functional and content checks; machine-specific timing is a local diagnostic.

@@ -1,5 +1,11 @@
 # Design specification
 
+## Stable named exploration
+
+Topic selection opens a named spatial index in the existing world. Use fine colored node marks and full titles, compact type labels and real relationship counts, with restrained separation rather than thick cards. Bound the number of simultaneous labels with explicit pages and filters; show the total and current range. Query, page and clicked identity belong to navigation history. Relations are disclosed on deliberate hover or keyboard focus, with a readable list for cross-page links and sources. Never infer mathematics from spatial arrangement.
+
+Object reading retains the same controller and stable IDs. No anonymous background cloud, pointer parallax or periodic label shuffling should disturb the current object. Remember feasible label slots, preserve manual drops and keep drag feedback local. Structural layout transitions are brief and finite; identical context and zoom do not restart whole-scene relaxation. The phone overview scrolls within a clear single-column area, with no dependence on hover to find objects or relations.
+
 ## Responsive movement
 
 Continuous wheel, pinch and depth-slider input is coalesced into the next animation frame. Pointer panning follows the pointer directly; camera changes use short time-based easing, and concept labels follow their actual anchors on every paint. Collision placement is independent from anchor tracking. Direct navigation supersedes any queued zoom from the previous context.

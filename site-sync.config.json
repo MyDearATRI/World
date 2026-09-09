@@ -1,6 +1,11 @@
 {
   "version": 1,
   "newFiles": [
+    "quartz/components/scripts/topos/overview.ts",
+    "quartz/components/styles/overview.css",
+    "quartz/util/topos/topicOverview.ts",
+    "quartz/util/topos/topicOverview.test.ts",
+    "scripts/verify-stable-field.mjs",
     "quartz/util/topos/field.test.ts",
     "quartz/util/topos/renderer.test.ts",
     "scripts/verify-topos-performance.mjs",

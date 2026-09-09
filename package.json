@@ -54,7 +54,8 @@
     "test:topic-map": "node scripts/verify-topic-map.mjs",
     "test:topics": "node scripts/verify-topic-browser.mjs",
     "test:topic-interactions": "node scripts/verify-topic-interactions.mjs",
-    "test:motion": "node scripts/verify-topos-performance.mjs"
+    "test:motion": "node scripts/verify-topos-performance.mjs",
+    "test:stable-field": "node scripts/verify-stable-field.mjs"
   },
   "engines": {
     "npm": ">=10.9.2",

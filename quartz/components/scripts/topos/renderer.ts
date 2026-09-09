@@ -310,9 +310,49 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
   const concepts = new Map(model.concepts.map((concept) => [concept.id, concept]))
   const targetAppearance = createAppearanceModel(model)
   const nodeAppearances = new Map<string, ConceptAppearance>()
+  let presentation: Set<string> | undefined
+  let includeCommunities = true
+  const presented = (id: string) => !presentation || presentation.has(id)
   function appearance(node: FieldNode, context: Context): ConceptAppearance {
+    if (!presented(node.id)) return { opacity: 0, radius: 0, major: false }
     const current = nodeAppearances.get(node.id)
     return current ?? targetAppearance(node, context)
+  }
+  // Publication eligibility and what can be named on this screen are different.
+  // Keep every mesh/identity; suppress excluded marks immediately with their edges.
+  function setPresentation(
+    ids: readonly string[] | undefined,
+    options?: { includeCommunities?: boolean },
+  ) {
+    const showCommunities = options?.includeCommunities ?? ids === undefined
+    const next = ids ? new Set(ids.filter((id) => concepts.has(id))) : undefined
+    if (
+      includeCommunities === showCommunities &&
+      ((!next && !presentation) ||
+        (next && presentation && next.size === presentation.size && [...next].every(presented)))
+    )
+      return
+    presentation = next
+    includeCommunities = showCommunities
+    for (const [id, mesh] of meshes) {
+      if (presented(id)) continue
+      mesh.point.visible = mesh.ring.visible = false
+      ;(mesh.point.material as THREE.Material).opacity = 0
+      ;(mesh.ring.material as THREE.Material).opacity = 0
+      nodeAppearances.set(id, { opacity: 0, radius: 0, major: false })
+    }
+    for (const relation of model.relations) {
+      if (presented(relation.source) && presented(relation.target)) continue
+      const entry = edges.get(relation.id)!
+      entry.opacity = 0
+      entry.line.visible = entry.arrow.visible = false
+    }
+    if (!includeCommunities)
+      for (const entry of hulls.values()) {
+        entry.visual.opacity = 0
+        entry.line.visible = false
+        ;(entry.line.material as THREE.Material).opacity = 0
+      }
   }
   const pointGeometry = new THREE.CircleGeometry(1, 32)
   const squareGeometry = new THREE.PlaneGeometry(1.7, 1.7)
@@ -382,8 +422,11 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
     scene.add(line, arrow)
   }
   function resize() {
-    width = Math.max(canvas.clientWidth, 1)
-    height = Math.max(canvas.clientHeight, 1)
+    // The named overview can conceal the canvas without changing the reader's
+    // viewport. Measure its persistent host, including while a view is hidden.
+    const host = canvas.parentElement ?? canvas
+    width = Math.max(host.clientWidth, 1)
+    height = Math.max(host.clientHeight, 1)
     camera.left = -width / 2
     camera.right = width / 2
     camera.top = height / 2
@@ -445,6 +488,7 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
     }
     let changing = false
     for (const node of nodes) {
+      if (!presented(node.id)) continue
       const target = targetAppearance(node, context)
       const current = nodeAppearances.get(node.id) ?? { ...target }
       const blend = Math.min(1, dt * 7)
@@ -462,6 +506,7 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
       nodeAppearances.set(node.id, current)
     }
     for (const [id, entry] of hulls) {
+      if (!includeCommunities) continue
       if (activeCommunities.has(id)) continue
       const material = entry.line.material as THREE.Material
       material.opacity *= Math.max(0, 1 - dt * 3)
@@ -471,9 +516,11 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
       changing ||= material.opacity > 0
       if (fallback && material.opacity > 0) paintCommunity(entry)
     }
-    for (const community of context.communities)
-      changing = drawCommunity(community, nodes, dt, context.scale) || changing
+    if (includeCommunities)
+      for (const community of context.communities)
+        changing = drawCommunity(community, nodes, dt, context.scale) || changing
     for (const relation of model.relations) {
+      if (!presented(relation.source) || !presented(relation.target)) continue
       const source = nodeMap.get(relation.source)!,
         target = nodeMap.get(relation.target)!
       if (!source || !target) continue
@@ -542,6 +589,7 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
       }
     }
     for (const node of nodes) {
+      if (!presented(node.id)) continue
       const mesh = meshes.get(node.id)!,
         p = projected.get(node.id)!
       const visual = nodeAppearances.get(node.id)!,
@@ -734,6 +782,7 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
     project,
     unproject,
     appearance,
+    setPresentation,
     view,
     get communityVisuals(): CommunityVisual[] {
       return [...hulls.values()]
@@ -747,6 +796,7 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
       return {
         calls: gpu?.info.render.calls ?? 0,
         geometries: gpu?.info.memory.geometries ?? 0,
+        visibleNodes: [...meshes.values()].filter((mesh) => mesh.point.visible).length,
         visibleEdges: [...edges.values()].filter((edge) => edge.line.visible).length,
       }
     },

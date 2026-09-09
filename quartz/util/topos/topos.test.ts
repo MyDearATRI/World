@@ -237,11 +237,17 @@ test("context changes preserve node identity and all position/velocity state bef
   assert.ok(xy(node(field, "r")) < 460, "new neighbor emerges from the horizon")
   assert.ok(xy(node(field, "r")) < xy(horizonBefore) - 180)
   assert.ok(node(field, "r").z > horizonBefore.z + 100)
+  const previousPosition = { ...node(field, "g") }
   field.setContext(deriveContext(model, view("r", ["g", "a"])))
   field.settle()
   assert.ok(xy(node(field, "r")) < 1)
   assert.ok(xy(node(field, "a")) < 400)
-  assert.ok(xy(node(field, "g")) > 500, "a former neighborhood recedes instead of being deleted")
+  assert.deepEqual(
+    [node(field, "g").x, node(field, "g").y, node(field, "g").z],
+    [previousPosition.x, previousPosition.y, previousPosition.z],
+    "hidden horizon objects retain position instead of pushing readable neighbors",
+  )
+  assert.ok(node(field, "g").relevance < previousPosition.relevance)
   assert.ok(xy(node(field, "v")) < 460)
 })
 
@@ -283,12 +289,19 @@ test("unfolded content changes exclusion forces continuously and leaves usable f
   )
   assert.ok(
     distance(node(field, "a"), focus) >
-      distance(before.nodes.find((n) => n.id === "a")!, before.nodes.find((n) => n.id === "g")!) +
-        80,
+      distance(before.nodes.find((n) => n.id === "a")!, before.nodes.find((n) => n.id === "g")!),
+  )
+  assert.deepEqual(
+    [node(field, "island").x, node(field, "island").y],
+    [
+      before.nodes.find((n) => n.id === "island")!.x,
+      before.nodes.find((n) => n.id === "island")!.y,
+    ],
+    "unrelated remote objects do not move to make local reading clearance",
   )
 })
 
-test("dragging one concept influences its neighbors, then release allows relaxation", () => {
+test("dragging one concept gently influences its neighbors and preserves the released position", () => {
   const model = fixture(),
     field = createField(model, deriveContext(model, view("a")))
   field.settle()
@@ -299,12 +312,13 @@ test("dragging one concept influences its neighbors, then release allows relaxat
   assert.equal(node(field, "g").y, oldNeighbor.y + 30)
   assert.ok(distance(node(field, "h"), oldNeighbor) > 10)
   field.release("g")
-  field.settle()
+  for (let i = 0; i < 42; i++) field.step(1 / 60)
   assert.equal(field.step(1 / 60), false)
-  assert.ok(
-    distance(node(field, "g"), node(field, "h")) >
-      node(field, "g").radius + node(field, "h").radius,
+  assert.deepEqual(
+    [node(field, "g").x, node(field, "g").y],
+    [oldNeighbor.x + 30, oldNeighbor.y + 30],
   )
+  assert.ok(distance(node(field, "h"), oldNeighbor) <= 20)
 })
 
 test("snapshots restore an in-flight trajectory exactly and validate all nodes before mutation", () => {
@@ -359,6 +373,10 @@ test("time steps remain finite and a stalled browser frame cannot teleport the f
   for (let i = 0; i < 30; i++) coarse.step(1 / 30)
   for (let i = 0; i < fine.nodes.length; i++)
     assert.ok(distance(fine.nodes[i], coarse.nodes[i]) < 0.01)
+  const settled = coarse.snapshot()
+  assert.equal(coarse.step(NaN), false)
+  assert.deepEqual(coarse.snapshot(), settled)
+  coarse.setContext(deriveContext(model, view("a", ["g"])))
   const before = coarse.snapshot()
   assert.equal(coarse.step(NaN), true)
   assert.deepEqual(coarse.snapshot(), before)
@@ -404,11 +422,10 @@ test("typed relationships alter angular organization even when relevance targets
   })
   const connected = createField(connectedModel, context)
   for (const field of [base, connected]) {
-    field.drag("a", -240, -140)
-    field.drag("h", 150, -220)
-    field.release("a")
-    field.release("h")
-    field.setContext(context)
+    // Seed a test layout before its initial solve. Real user drags are now
+    // durable anchors and intentionally take priority over semantic springs.
+    Object.assign(node(field, "a"), { x: -240, y: -140 })
+    Object.assign(node(field, "h"), { x: 150, y: -220 })
   }
   base.settle()
   connected.settle()
@@ -450,8 +467,8 @@ test("the actual prototype exhibits emergence and recession along its approved t
       before.nodes.map((n) => [n.x, n.y, n.z]),
     )
     let frames = 0
-    while (field.step(1 / 60) && frames < 600) frames++
-    assert.ok(frames < 600, `${context.focus}: stops rendering motion within ten simulated seconds`)
+    while (field.step(1 / 60) && frames < 120) frames++
+    assert.ok(frames < 120, `${context.focus}: positions stop within two simulated seconds`)
     assert.ok(xy(node(field, context.focus)) < 1)
     assert.equal(field.nodes.length, refs.length)
     assert.ok(field.nodes.every((n, i) => n === refs[i]))
@@ -460,7 +477,11 @@ test("the actual prototype exhibits emergence and recession along its approved t
   }
   const read = (stage: number, id: string) => records[stage].nodes.find((n) => n.id === id)!
   assert.ok(xy(read(0, "orbit")) - xy(read(1, "orbit")) > 300)
-  assert.ok(xy(read(2, "orbit")) - xy(read(1, "orbit")) > 300)
+  assert.deepEqual(
+    [read(2, "orbit").x, read(2, "orbit").y, read(2, "orbit").z],
+    [read(1, "orbit").x, read(1, "orbit").y, read(1, "orbit").z],
+  )
+  assert.ok(read(2, "orbit").relevance < read(1, "orbit").relevance - 0.3)
   assert.ok(xy(read(0, "character")) - xy(read(2, "character")) > 300)
   assert.ok(read(2, "character").relevance > read(0, "character").relevance + 0.3)
   assert.ok(read(2, "character").z > read(0, "character").z + 180)

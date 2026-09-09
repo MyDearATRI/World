@@ -1,20 +1,40 @@
 import type { Context, FieldNode, KnowledgeModel, RelationType } from "./types"
 import { relationAffinity } from "./context"
 
+interface Point {
+  x: number
+  y: number
+  z: number
+}
+interface Pose extends Point {
+  relevance: number
+}
+interface Motion {
+  from: Pose
+  to: Pose
+  velocity: Point
+  elapsed: number
+  duration: number
+}
 export interface FieldSnapshot {
   version: 1
   focus: string
   nodes: FieldNode[]
-  targets?: Record<string, { x: number; y: number; z: number }>
+  targets?: Record<string, Point>
   sleeping?: boolean
+  /** Retained for old history records; this is now elapsed transition time, not heat. */
   coolingTime?: number
+  manualAnchors?: Record<string, Point>
+  motions?: Record<string, Motion>
 }
-interface Target {
-  x: number
-  y: number
-  z: number
-  relevance: number
-  role: Context["nodes"][number]["role"]
+interface Link {
+  source: string
+  target: string
+  gain: number
+}
+interface DragSession {
+  origin: Point
+  neighbors: Map<string, { origin: Pose; weight: number }>
 }
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v))
 function seed(id: string) {
@@ -32,14 +52,17 @@ const physicalGain: Partial<Record<RelationType, number>> = {
   contradiction: 0.7,
   historical: 0.25,
 }
+const point = (n: Point): Point => ({ x: n.x, y: n.y, z: n.z })
+const pose = (n: Pose): Pose => ({ ...point(n), relevance: n.relevance })
+const finitePoint = (value: Point) => value && [value.x, value.y, value.z].every(Number.isFinite)
 
-/** Pure, damped 2.5D field. Positions are persistent state; contexts change forces only. */
+/** Persistent positions with event-bounded layout transitions, not an always-live simulation. */
 export function createField(model: KnowledgeModel, initial: Context) {
   let context = initial
-  const initialRoles = new Map(initial.nodes.map((n) => [n.id, n]))
+  const roles = new Map(initial.nodes.map((n) => [n.id, n]))
   const nodes: FieldNode[] = model.concepts.map((concept, i) => {
-    const role = initialRoles.get(concept.id)!,
-      angle = seed(concept.id) * Math.PI * 2
+    const role = roles.get(concept.id)!
+    const angle = seed(concept.id) * Math.PI * 2
     const radius =
       role.role === "focus"
         ? 0
@@ -60,311 +83,482 @@ export function createField(model: KnowledgeModel, initial: Context) {
       mass: role.role === "focus" ? 4 : 1,
     }
   })
-  const byId = new Map(nodes.map((n) => [n.id, n])),
-    targets = new Map<string, Target>(),
-    pinned = new Map<string, { x: number; y: number }>()
+  const byId = new Map(nodes.map((n) => [n.id, n]))
+  const targets = new Map<string, Point>()
+  const manualAnchors = new Map<string, Point>()
+  const dragging = new Map<string, DragSession>()
+  const motions = new Map<string, Motion>()
+  const resized = new Set<string>()
+  let active = nodes
+  let activeIDs = new Set(nodes.map((n) => n.id))
+  let readable = nodes
+  let readableIDs = new Set(nodes.map((n) => n.id))
+  let links: Link[] = []
+  let fullLayoutPending = true
   let sleeping = false
   let coolingTime = 0
-  let targetsDirty = false
-  type Body = {
-    node: FieldNode
-    force: { x: number; y: number; z: number }
-    target: Target
-    radius: number
-  }
-  // Compile identities once. Inner force loops use direct references and reuse their
-  // accumulators; visibility checks and string-keyed lookups belong to context changes.
-  const bodies: Body[] = nodes.map((node) => ({
-    node,
-    force: { x: 0, y: 0, z: 0 },
-    target: { x: 0, y: 0, z: 0, relevance: 0, role: "horizon" },
-    radius: node.radius,
-  }))
-  const bodyById = new Map(bodies.map((body) => [body.node.id, body]))
-  let active = bodies
-  let inactive: Body[] = []
-  let links: { source: Body; target: Body; gain: number }[] = []
-  let communities: { members: Body[]; coherence: number }[] = []
-  const getRadius = (node: FieldNode) => clamp(node.radius, 12, 600)
 
-  function updateTargets() {
-    targetsDirty = false
-    const focus = byId.get(context.focus)!
-    const visible = context.visibleIDs ? new Set(context.visibleIDs) : undefined
-    active = visible ? bodies.filter(({ node }) => visible.has(node.id)) : bodies
-    inactive = visible ? bodies.filter(({ node }) => !visible.has(node.id)) : []
-    const roles = new Map(context.nodes.map((n) => [n.id, n]))
-    const near = context.nodes.filter((n) => n.role === "neighbor" || n.role === "previous")
-    // Preserve approach directions. Springs and collision forces may reorganize these;
-    // the model is not assigned to a ring of predetermined angular slots.
-    const angleById = new Map(
-      near.map((item) => {
-        const n = byId.get(item.id)!
-        return [item.id, Math.atan2(n.y - focus.y, n.x - focus.x)]
-      }),
-    )
-    for (const n of nodes) {
-      const r = roles.get(n.id)
-      if (!r) continue
-      const angle = angleById.get(n.id) ?? Math.atan2(n.y - focus.y, n.x - focus.x)
-      const minimum = getRadius(focus) + getRadius(n) + 105
-      const preferred =
-        r.role === "focus"
-          ? 0
-          : r.role === "previous"
-            ? Math.max(315, minimum)
-            : r.role === "neighbor"
-              ? Math.max(230 + (1 - r.relevance) * 190, minimum)
-              : 660 + (1 - r.relevance) * 200
-      const target: Target = {
-        x: Math.cos(angle) * preferred,
-        y: Math.sin(angle) * preferred * 0.8,
-        z:
-          r.role === "focus"
-            ? 0
-            : r.role === "previous"
-              ? -28
-              : r.role === "neighbor"
-                ? -45 - (1 - r.relevance) * 70
-                : -230 - (1 - r.relevance) * 100,
-        relevance: r.relevance,
-        role: r.role,
-      }
-      targets.set(n.id, target)
-      bodyById.get(n.id)!.target = target
-      n.targetRelevance = r.relevance
-      n.mass = r.role === "focus" ? 4 : 1
-    }
-    links = model.relations.flatMap((edge) => {
-      if (visible && (!visible.has(edge.source) || !visible.has(edge.target))) return []
-      const source = bodyById.get(edge.source),
-        target = bodyById.get(edge.target)
-      if (!source || !target || source === target) return []
-      const affinity = relationAffinity(edge, context.lens)
-      const relevance = Math.min(
-        roles.get(source.node.id)?.relevance ?? 0,
-        roles.get(target.node.id)?.relevance ?? 0,
-      )
-      return [{ source, target, gain: affinity * (physicalGain[edge.type] ?? 0.65) * relevance }]
-    })
-    communities = context.communities.map((community) => ({
-      coherence: community.coherence,
-      members: community.members
-        .filter((id) => !visible || visible.has(id))
-        .map((id) => bodyById.get(id))
-        .filter((body): body is Body => !!body),
-    }))
-    sleeping = false
-    coolingTime = 0
+  function geometryKey(next: Context) {
+    // Semantic depth changes display/relevance, not the reader's placement.
+    return JSON.stringify([
+      next.focus,
+      next.previous,
+      next.lens,
+      next.visibleIDs ?? model.concepts.map((n) => n.id),
+      model.relations.map((r) => [r.source, r.target, r.type, r.strength, r.lenses]),
+    ])
   }
-  function setContext(next: Context) {
+  let geometry = geometryKey(initial)
+
+  function compile() {
+    activeIDs = new Set(context.visibleIDs ?? nodes.map((n) => n.id))
+    active = nodes.filter((n) => activeIDs.has(n.id))
+    readableIDs = new Set(
+      context.nodes
+        .filter((n) => activeIDs.has(n.id) && (n.role !== "horizon" || n.relevance > 0.3))
+        .map((n) => n.id),
+    )
+    readable = active.filter((n) => readableIDs.has(n.id))
+    links = []
+    for (const edge of model.relations) {
+      if (!activeIDs.has(edge.source) || !activeIDs.has(edge.target) || edge.source === edge.target)
+        continue
+      const gain = relationAffinity(edge, context.lens) * (physicalGain[edge.type] ?? 0.65)
+      if (gain > 0) links.push({ source: edge.source, target: edge.target, gain })
+    }
+    for (const role of context.nodes) {
+      const n = byId.get(role.id)
+      if (!n) continue
+      n.targetRelevance = activeIDs.has(n.id) ? role.relevance : 0
+      n.mass = role.role === "focus" ? 4 : 1
+      if (!activeIDs.has(n.id)) {
+        motions.delete(n.id)
+        n.vx = n.vy = n.vz = 0
+        n.relevance = 0
+      }
+    }
+  }
+
+  function schedule(n: FieldNode, to: Pose, duration: number) {
+    targets.set(n.id, point(to))
+    if (
+      [n.x - to.x, n.y - to.y, n.z - to.z, n.relevance - to.relevance].every(
+        (v) => Math.abs(v) < 1e-9,
+      )
+    ) {
+      motions.delete(n.id)
+      n.vx = n.vy = n.vz = 0
+      return
+    }
+    // Cubic Hermite interpolation has a fixed endpoint and zero final velocity.
+    // Retargeting preserves the current pose; very large inherited velocity is
+    // bounded by the remaining path to avoid an overshoot on rapid focus changes.
+    const velocity = {
+      x: clamp(n.vx, (-2 * Math.abs(to.x - n.x)) / duration, (2 * Math.abs(to.x - n.x)) / duration),
+      y: clamp(n.vy, (-2 * Math.abs(to.y - n.y)) / duration, (2 * Math.abs(to.y - n.y)) / duration),
+      z: clamp(n.vz, (-2 * Math.abs(to.z - n.z)) / duration, (2 * Math.abs(to.z - n.z)) / duration),
+    }
+    motions.set(n.id, { from: pose(n), to: { ...to }, velocity, elapsed: 0, duration })
+    sleeping = false
+  }
+
+  function resolveCollisions(work: Map<string, Point>, movable: Set<string>, passes: number) {
+    for (let pass = 0; pass < passes; pass++) {
+      let maximum = 0
+      for (let i = 0; i < readable.length; i++)
+        for (let j = i + 1; j < readable.length; j++) {
+          const a = readable[i],
+            b = readable[j]
+          const moveA = movable.has(a.id),
+            moveB = movable.has(b.id)
+          if (!moveA && !moveB) continue
+          const p = work.get(a.id)!,
+            q = work.get(b.id)!
+          const dx = q.x - p.x,
+            dy = q.y - p.y
+          const d = Math.hypot(dx, dy)
+          const overlap = a.radius + b.radius + 24 - d
+          if (overlap <= 0.05) continue
+          maximum = Math.max(maximum, overlap)
+          const angle = d < 0.01 ? seed(`${a.id}:${b.id}`) * Math.PI * 2 : 0
+          const ux = d < 0.01 ? Math.cos(angle) : dx / d,
+            uy = d < 0.01 ? Math.sin(angle) : dy / d
+          const amount = overlap / (moveA && moveB ? 2 : 1)
+          if (moveA) {
+            p.x -= ux * amount
+            p.y -= uy * amount
+          }
+          if (moveB) {
+            q.x += ux * amount
+            q.y += uy * amount
+          }
+        }
+      if (maximum < 0.1) break
+    }
+  }
+
+  function finishClearance(work: Map<string, Point>, movable: Set<string>) {
+    const placed = readable
+      .filter((n) => !movable.has(n.id))
+      .map((n) => ({ node: n, p: work.get(n.id)! }))
+    const ordered = readable
+      .filter((n) => movable.has(n.id))
+      .sort(
+        (a, b) => b.targetRelevance - a.targetRelevance || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
+      )
+    for (const n of ordered) {
+      const p = work.get(n.id)!
+      const free = (x: number, y: number) =>
+        placed.every(({ node, p: other }) => {
+          const dx = x - other.x,
+            dy = y - other.y
+          return dx * dx + dy * dy >= (n.radius + node.radius + 23.95) ** 2
+        })
+      if (!free(p.x, p.y)) {
+        let best: { x: number; y: number } | undefined,
+          bestDistance = Infinity
+        const consider = (x: number, y: number) => {
+          const d = (x - p.x) ** 2 + (y - p.y) ** 2
+          if (d < bestDistance && free(x, y)) {
+            best = { x, y }
+            bestDistance = d
+          }
+        }
+        // First try exact nearby contact boundaries, so a one-pixel footprint
+        // change does not move a label by an entire search-grid step.
+        for (const { node, p: other } of placed) {
+          const dx = p.x - other.x,
+            dy = p.y - other.y
+          const radius = n.radius + node.radius + 24
+          if (dx * dx + dy * dy > (radius + 48) ** 2) continue
+          const angle = dx || dy ? Math.atan2(dy, dx) : seed(`${n.id}:${node.id}`) * Math.PI * 2
+          for (const offset of [0, 1, -1, 2, -2, 3, -3, 6, -6, 12]) {
+            const a = angle + (offset * Math.PI) / 12
+            consider(other.x + Math.cos(a) * radius, other.y + Math.sin(a) * radius)
+          }
+        }
+        for (const radius of [12, 24, 48, 72, 108, 162, 244, 366, 550, 825, 1240, 1860, 2790]) {
+          if (radius * radius > bestDistance) break
+          for (let i = 0; i < 24; i++) {
+            const angle = (i * Math.PI) / 12
+            consider(p.x + Math.cos(angle) * radius, p.y + Math.sin(angle) * radius)
+          }
+          if (best) break
+        }
+        // The world is not clipped to the viewport. Even an unusually large
+        // footprint has a deterministic, finite non-overlapping fallback.
+        if (!best) {
+          const right = Math.max(...placed.map(({ node, p: other }) => other.x + node.radius))
+          best = { x: right + n.radius + 24, y: p.y }
+        }
+        p.x = best.x
+        p.y = best.y
+      }
+      placed.push({ node: n, p })
+    }
+  }
+
+  function layoutGoals() {
+    const origin = manualAnchors.get(context.focus) ?? { x: 0, y: 0, z: 0 }
+    const focus = byId.get(context.focus)!
+    const currentFocus = point(focus)
+    const nextRoles = new Map(context.nodes.map((n) => [n.id, n]))
+    const preferred = new Map<string, Point>()
+    const work = new Map<string, Point>()
+    const movable = new Set(
+      readable.filter((n) => n.id !== context.focus && !manualAnchors.has(n.id)).map((n) => n.id),
+    )
+    for (const n of active) {
+      const role = nextRoles.get(n.id)!
+      const angle = Math.atan2(n.y - currentFocus.y, n.x - currentFocus.x)
+      const minimum = focus.radius + n.radius + 105
+      const radius =
+        role.role === "focus"
+          ? 0
+          : role.role === "previous"
+            ? Math.max(315, minimum)
+            : role.role === "neighbor"
+              ? Math.max(230 + (1 - role.relevance) * 190, minimum)
+              : 660 + (1 - role.relevance) * 200
+      const desired =
+        manualAnchors.get(n.id) ??
+        (!readableIDs.has(n.id)
+          ? point(n)
+          : {
+              x: origin.x + Math.cos(angle) * radius,
+              y: origin.y + Math.sin(angle) * radius * 0.8,
+              z:
+                role.role === "focus"
+                  ? origin.z
+                  : role.role === "previous"
+                    ? -28
+                    : role.role === "neighbor"
+                      ? -45 - (1 - role.relevance) * 70
+                      : -230 - (1 - role.relevance) * 100,
+            })
+      preferred.set(n.id, { ...desired })
+      work.set(n.id, { ...desired })
+    }
+    // A bounded, deterministic layout job. Edges retain their actual typed gains;
+    // node separation is a geometric constraint, not another mathematical relation.
+    for (let pass = 0; pass < 24; pass++) {
+      for (const n of active)
+        if (movable.has(n.id)) {
+          const p = work.get(n.id)!,
+            desired = preferred.get(n.id)!
+          p.x += (desired.x - p.x) * 0.09
+          p.y += (desired.y - p.y) * 0.09
+        }
+      for (const edge of links) {
+        if (!readableIDs.has(edge.source) || !readableIDs.has(edge.target)) continue
+        const a = byId.get(edge.source)!,
+          b = byId.get(edge.target)!
+        const p = work.get(a.id)!,
+          q = work.get(b.id)!
+        const dx = q.x - p.x,
+          dy = q.y - p.y,
+          d = Math.hypot(dx, dy) || 0.01
+        const amount = clamp(
+          (d - a.radius - b.radius - 125) *
+            edge.gain *
+            Math.min(a.targetRelevance, b.targetRelevance) *
+            0.07,
+          -24,
+          24,
+        )
+        if (movable.has(a.id)) {
+          p.x += (dx / d) * amount
+          p.y += (dy / d) * amount
+        }
+        if (movable.has(b.id)) {
+          q.x -= (dx / d) * amount
+          q.y -= (dy / d) * amount
+        }
+      }
+      resolveCollisions(work, movable, 1)
+    }
+    // Finish separating, rather than leaving a live spring fighting its rest length.
+    resolveCollisions(work, movable, 16)
+    finishClearance(work, movable)
+    return work
+  }
+
+  function flushLayout() {
+    if (fullLayoutPending) {
+      fullLayoutPending = false
+      resized.clear()
+      compile()
+      const goals = layoutGoals()
+      for (const n of active)
+        schedule(n, { ...goals.get(n.id)!, relevance: n.targetRelevance }, 0.6)
+      coolingTime = 0
+    } else if (resized.size) {
+      // Only objects obstructed by an actual footprint change need clearance.
+      const work = new Map(active.map((n) => [n.id, point(n)]))
+      const movable = new Set<string>()
+      for (const id of resized) {
+        const changed = byId.get(id)
+        if (!changed || !activeIDs.has(id)) continue
+        for (const n of readable)
+          if (
+            n.id !== id &&
+            n.id !== context.focus &&
+            !manualAnchors.has(n.id) &&
+            Math.hypot(n.x - changed.x, n.y - changed.y) < n.radius + changed.radius + 24
+          )
+            movable.add(n.id)
+      }
+      resized.clear()
+      resolveCollisions(work, movable, 16)
+      finishClearance(work, movable)
+      for (const id of movable) {
+        const n = byId.get(id)!
+        schedule(n, { ...work.get(id)!, relevance: n.targetRelevance }, 0.5)
+      }
+    }
+    sleeping = motions.size === 0
+  }
+
+  function setContext(
+    next: Context,
+    options: { rearrange?: boolean; clearManualAnchors?: boolean } = {},
+  ) {
     if (!byId.has(next.focus)) throw new Error(`Unknown field focus: ${next.focus}`)
     const ids = new Set(next.nodes.map((n) => n.id))
     if (nodes.some((n) => !ids.has(n.id)))
       throw new Error("A context must retain every concept in the field")
+    const key = geometryKey(next)
     context = next
-    updateTargets()
+    if (options.clearManualAnchors) manualAnchors.clear()
+    if (key !== geometry || options.rearrange || options.clearManualAnchors) {
+      geometry = key
+      fullLayoutPending = true
+      dragging.clear()
+      sleeping = false
+    }
+    compile()
+    // Relevance-only changes do not rebuild position goals or reset an in-flight layout.
+    if (!fullLayoutPending)
+      for (const n of active) {
+        const motion = motions.get(n.id)
+        if (motion) motion.to.relevance = n.targetRelevance
+        else if (Math.abs(n.relevance - n.targetRelevance) > 1e-9)
+          schedule(n, { ...point(n), relevance: n.targetRelevance }, 0.18)
+      }
   }
+
   function setRadius(id: string, radius: number) {
     const n = byId.get(id)
     if (!n || !Number.isFinite(radius)) return
     const next = clamp(radius, 12, 600)
     if (Math.abs(next - n.radius) < 0.1) return
     n.radius = next
-    // A label pass can resize every concept. Rebuild the shared targets once at
-    // the next simulation/history boundary instead of once for every label.
-    targetsDirty = true
+    resized.add(id)
     sleeping = false
-    coolingTime = 0
   }
 
-  function integrate(dt: number) {
-    if (!pinned.size) coolingTime += dt
-    // The first three seconds permit structural relaxation; the following five
-    // gently remove residual force. Damping completes the motion without a snap.
-    const cooling = clamp((coolingTime - 3) / 5, 0, 1),
-      heat = 1 - cooling * cooling * (3 - 2 * cooling)
-    const focus = byId.get(context.focus)!
-    const focusRadius = getRadius(focus)
-    for (const body of active) {
-      const { node: n, target: t, force: f } = body
-      f.x = f.y = f.z = 0
-      body.radius = getRadius(n)
-      const attraction =
-        t.role === "focus" ? 36 : t.role === "previous" ? 9 : t.role === "neighbor" ? 9 : 5.5
-      if (t.role === "focus" || t.role === "previous") {
-        f.x += (t.x - n.x) * attraction * n.mass
-        f.y += (t.y - n.y) * attraction * n.mass
-      } else {
-        // Relevance supplies a radial potential; a much weaker directional memory
-        // keeps continuity while typed edges can change angular organization.
-        const currentRadius = Math.hypot(n.x, n.y / 0.8) || 0.01,
-          targetRadius = Math.hypot(t.x, t.y / 0.8),
-          radialForce = (targetRadius - currentRadius) * attraction,
-          memory = t.role === "neighbor" ? 2 : 1.8
-        f.x += ((n.x / currentRadius) * radialForce + (t.x - n.x) * memory) * n.mass
-        f.y += ((n.y / currentRadius) * radialForce + (t.y - n.y) * memory) * n.mass
-      }
-      f.z += (t.z - n.z) * 11 * n.mass
-      // Unfolding changes excluded area, including nodes whose relevance is receding.
-      if (n !== focus) {
-        const dx = n.x - focus.x,
-          dy = n.y - focus.y,
-          d = Math.hypot(dx, dy) || 0.01,
-          min = focusRadius + body.radius + 38
-        if (d < min) {
-          const push = (min - d) * 36
-          f.x += (dx / d) * push
-          f.y += (dy / d) * push
-        }
-      }
-    }
-    for (let i = 0; i < active.length; i++)
-      for (let j = i + 1; j < active.length; j++) {
-        const first = active[i],
-          second = active[j],
-          a = first.node,
-          b = second.node,
-          dx = b.x - a.x,
-          dy = b.y - a.y,
-          d = Math.hypot(dx, dy)
-        const angle = d < 0.01 ? seed(`${a.id}:${b.id}`) * Math.PI * 2 : 0,
-          ux = d < 0.01 ? Math.cos(angle) : dx / d,
-          uy = d < 0.01 ? Math.sin(angle) : dy / d
-        const min = first.radius + second.radius + 24
-        const collision = Math.max(0, min - d) * 32
-        const repulsion =
-          (160000 / (d * d + 2500)) * Math.max(0.08, Math.min(a.relevance, b.relevance))
-        const amount = collision + repulsion
-        if (a.id !== context.focus) {
-          first.force.x -= ux * amount
-          first.force.y -= uy * amount
-        }
-        if (b.id !== context.focus) {
-          second.force.x += ux * amount
-          second.force.y += uy * amount
-        }
-      }
-    for (const { source, target, gain } of links) {
-      const a = source.node,
-        b = target.node,
-        dx = b.x - a.x,
-        dy = b.y - a.y,
-        d = Math.hypot(dx, dy) || 0.01
-      const rest = source.radius + target.radius + 125
-      const amount = (d - rest) * gain * 2.4
-      // Opposition remains eligible for informative adjacency, never an automatic repulsion.
-      if (a.id !== context.focus) {
-        source.force.x += (dx / d) * amount
-        source.force.y += (dy / d) * amount
-      }
-      if (b.id !== context.focus) {
-        target.force.x -= (dx / d) * amount
-        target.force.y -= (dy / d) * amount
-      }
-    }
-    for (const community of communities) {
-      const members = community.members
-      let total = 0,
-        cx = 0,
-        cy = 0
-      for (const { node: n } of members) {
-        total += n.relevance
-        cx += n.x * n.relevance
-        cy += n.y * n.relevance
-      }
-      if (!total) continue
-      cx /= total
-      cy /= total
-      for (const { node: n, force: f } of members) {
-        if (n.id === context.focus) continue
-        const gain = community.coherence * n.relevance * 0.7
-        f.x += (cx - n.x) * gain
-        f.y += (cy - n.y) * gain
-      }
-    }
-    let activity = 0
-    const damping = Math.exp(-7.8 * dt),
-      blend = 1 - Math.exp(-4.2 * dt)
-    for (const { node: n } of inactive) {
-      n.vx = n.vy = n.vz = 0
-      n.relevance = 0
-    }
-    for (const { node: n, force: f } of active) {
-      const pin = pinned.get(n.id)
-      if (pin) {
-        n.x = pin.x
-        n.y = pin.y
-        n.vx = n.vy = 0
-      } else {
-        n.vx = clamp((n.vx + (f.x / n.mass) * dt * heat) * damping, -1100, 1100)
-        n.vy = clamp((n.vy + (f.y / n.mass) * dt * heat) * damping, -1100, 1100)
-        n.x += n.vx * dt
-        n.y += n.vy * dt
-      }
-      n.vz = clamp((n.vz + (f.z / n.mass) * dt * heat) * damping, -600, 600)
-      n.z += n.vz * dt
-      const delta = n.targetRelevance - n.relevance
-      n.relevance += delta * blend
-      activity = Math.max(
-        activity,
-        Math.abs(n.vx),
-        Math.abs(n.vy),
-        Math.abs(n.vz),
-        Math.abs(delta) * 100,
-      )
-    }
-    return activity
-  }
   function step(dtSeconds: number): boolean {
-    if (targetsDirty) updateTargets()
+    flushLayout()
     if (sleeping) return false
     if (!Number.isFinite(dtSeconds) || dtSeconds <= 0) return true
-    const dt = Math.min(dtSeconds, 0.1),
-      steps = Math.max(1, Math.ceil(dt / (1 / 120)))
-    let activity = 0
-    for (let i = 0; i < steps; i++) activity = integrate(dt / steps)
-    if (activity < 0.08) {
-      for (const { node: n } of active) {
-        n.vx = n.vy = n.vz = 0
-        n.relevance = n.targetRelevance
+    const dt = Math.min(dtSeconds, 0.1)
+    coolingTime += dt
+    for (const [id, motion] of motions) {
+      const n = byId.get(id)!
+      motion.elapsed = Math.min(motion.duration, motion.elapsed + dt)
+      const t = motion.elapsed / motion.duration,
+        t2 = t * t,
+        t3 = t2 * t
+      const position = 3 * t2 - 2 * t3,
+        tangent = t3 - 2 * t2 + t
+      const derivative = (6 * t - 6 * t2) / motion.duration,
+        tangentDerivative = 3 * t2 - 4 * t + 1
+      for (const axis of ["x", "y", "z"] as const) {
+        const delta = motion.to[axis] - motion.from[axis]
+        n[axis] =
+          motion.from[axis] + delta * position + motion.velocity[axis] * motion.duration * tangent
       }
-      sleeping = true
-      return false
+      n.vx = (motion.to.x - motion.from.x) * derivative + motion.velocity.x * tangentDerivative
+      n.vy = (motion.to.y - motion.from.y) * derivative + motion.velocity.y * tangentDerivative
+      n.vz = (motion.to.z - motion.from.z) * derivative + motion.velocity.z * tangentDerivative
+      n.relevance = motion.from.relevance + (motion.to.relevance - motion.from.relevance) * position
+      if (motion.elapsed >= motion.duration - 1e-9) {
+        Object.assign(n, motion.to)
+        n.vx = n.vy = n.vz = 0
+        motions.delete(id)
+      }
     }
-    return true
+    sleeping = motions.size === 0
+    return !sleeping
   }
+
   function drag(id: string, x: number, y: number) {
     const n = byId.get(id)
-    if (!n || ![x, y].every(Number.isFinite)) return
-    const pin = pinned.get(id)
-    if (pin?.x === x && pin.y === y) return
-    pinned.set(id, { x, y })
+    if (!n || !activeIDs.has(id) || ![x, y].every(Number.isFinite)) return
+    const anchored = manualAnchors.get(id)
+    if (dragging.has(id) && anchored?.x === x && anchored.y === y) return
+    flushLayout()
+    let session = dragging.get(id)
+    if (!session) {
+      // Direct manipulation takes priority. Unrelated objects freeze where they
+      // already are; a pointer does not restart the global layout job.
+      motions.clear()
+      for (const other of nodes) {
+        other.vx = other.vy = other.vz = 0
+        other.relevance = other.targetRelevance
+      }
+      const weights = new Map<string, number>()
+      for (const edge of links) {
+        const other =
+          edge.source === id ? edge.target : edge.target === id ? edge.source : undefined
+        if (other && readableIDs.has(other) && other !== context.focus && !manualAnchors.has(other))
+          weights.set(other, Math.max(weights.get(other) ?? 0, edge.gain))
+      }
+      const largest = Math.max(...weights.values(), 1e-9)
+      session = {
+        origin: point(n),
+        neighbors: new Map(
+          [...weights].map(([other, weight]) => [
+            other,
+            { origin: pose(byId.get(other)!), weight: weight / largest },
+          ]),
+        ),
+      }
+      dragging.set(id, session)
+    }
     n.x = x
     n.y = y
-    n.vx = n.vy = 0
-    sleeping = false
-    coolingTime = 0
+    n.vx = n.vy = n.vz = 0
+    manualAnchors.set(id, point(n))
+    targets.set(id, point(n))
+    motions.delete(id)
+    const dx = x - session.origin.x,
+      dy = y - session.origin.y,
+      distance = Math.hypot(dx, dy)
+    for (const [other, neighbor] of session.neighbors) {
+      if (manualAnchors.has(other)) continue
+      const amount = Math.min(18, distance * 0.12) * neighbor.weight
+      const target = {
+        ...neighbor.origin,
+        x: neighbor.origin.x + (distance ? (dx / distance) * amount : 0),
+        y: neighbor.origin.y + (distance ? (dy / distance) * amount : 0),
+      }
+      const candidate = byId.get(other)!
+      schedule(candidate, { ...target, relevance: candidate.targetRelevance }, 0.16)
+    }
+    sleeping = motions.size === 0
   }
+
   function release(id: string) {
-    if (!pinned.delete(id)) return
-    sleeping = false
-    coolingTime = 0
+    const session = dragging.get(id)
+    if (!session) return
+    dragging.delete(id)
+    // The drop point is a durable reader-owned anchor, not a spring stretched
+    // away from a hidden target. Only the existing local response finishes.
+    const n = byId.get(id)!
+    n.vx = n.vy = n.vz = 0
+    for (const other of session.neighbors.keys()) {
+      const motion = motions.get(other)
+      if (motion && !manualAnchors.has(other)) schedule(byId.get(other)!, motion.to, 0.3)
+    }
+    sleeping = motions.size === 0
   }
+
   function settle() {
-    pinned.clear()
-    for (let i = 0; i < 2400; i++) if (!step(1 / 60)) break
+    dragging.clear()
+    flushLayout()
+    for (const [id, motion] of motions) {
+      const n = byId.get(id)!
+      Object.assign(n, motion.to)
+      n.vx = n.vy = n.vz = 0
+    }
+    motions.clear()
+    sleeping = true
     return snapshot()
   }
   function snapshot(): FieldSnapshot {
-    if (targetsDirty) updateTargets()
+    flushLayout()
     return {
       version: 1,
       focus: context.focus,
       nodes: nodes.map((n) => ({ ...n })),
-      targets: Object.fromEntries([...targets].map(([id, t]) => [id, { x: t.x, y: t.y, z: t.z }])),
+      targets: Object.fromEntries([...targets].map(([id, value]) => [id, { ...value }])),
       sleeping,
       coolingTime,
+      manualAnchors: Object.fromEntries(
+        [...manualAnchors].map(([id, value]) => [id, { ...value }]),
+      ),
+      motions: Object.fromEntries(
+        [...motions].map(([id, value]) => [
+          id,
+          {
+            ...value,
+            from: { ...value.from },
+            to: { ...value.to },
+            velocity: { ...value.velocity },
+          },
+        ]),
+      ),
     }
   }
   function restore(saved: FieldSnapshot) {
@@ -394,17 +588,36 @@ export function createField(model: KnowledgeModel, initial: Context) {
         ].every(Number.isFinite)
       )
         throw new Error(`Invalid field snapshot node: ${n.id}`)
-      const target = saved.targets?.[n.id]
-      if (target && ![target.x, target.y, target.z].every(Number.isFinite))
-        throw new Error(`Invalid field snapshot target: ${n.id}`)
     }
-    pinned.clear()
+    for (const values of [saved.targets ?? {}, saved.manualAnchors ?? {}])
+      for (const [id, value] of Object.entries(values))
+        if (!byId.has(id) || !finitePoint(value))
+          throw new Error(`Invalid field snapshot target: ${id}`)
+    for (const [id, value] of Object.entries(saved.motions ?? {}))
+      if (
+        !byId.has(id) ||
+        !finitePoint(value.from) ||
+        !finitePoint(value.to) ||
+        !finitePoint(value.velocity) ||
+        ![value.from.relevance, value.to.relevance, value.elapsed, value.duration].every(
+          Number.isFinite,
+        ) ||
+        value.duration <= 0 ||
+        value.elapsed < 0 ||
+        value.elapsed > value.duration
+      )
+        throw new Error(`Invalid field snapshot motion: ${id}`)
+    dragging.clear()
+    motions.clear()
+    manualAnchors.clear()
+    targets.clear()
+    resized.clear()
+    fullLayoutPending = false
+    compile()
     for (const n of nodes) {
       const value = updates.get(n.id)!
       Object.assign(n, {
-        x: value.x,
-        y: value.y,
-        z: value.z,
+        ...point(value),
         vx: value.vx,
         vy: value.vy,
         vz: value.vz,
@@ -412,14 +625,22 @@ export function createField(model: KnowledgeModel, initial: Context) {
         radius: clamp(value.radius, 12, 600),
       })
     }
-    updateTargets()
-    for (const [id, value] of Object.entries(saved.targets ?? {})) {
-      const target = targets.get(id)
-      if (target) Object.assign(target, value)
-    }
-    sleeping = saved.sleeping === true
+    for (const [id, value] of Object.entries(saved.targets ?? {})) targets.set(id, { ...value })
+    for (const [id, value] of Object.entries(saved.manualAnchors ?? {}))
+      manualAnchors.set(id, { ...value })
+    for (const [id, value] of Object.entries(saved.motions ?? {}))
+      motions.set(id, {
+        ...value,
+        from: { ...value.from },
+        to: { ...value.to },
+        velocity: { ...value.velocity },
+      })
+    for (const n of nodes) if (!motions.has(n.id)) n.vx = n.vy = n.vz = 0
     coolingTime = saved.coolingTime ?? 0
+    // Legacy records have no transition description: retain their exact pose and
+    // stop, rather than inventing a fresh 8-second flight on browser back.
+    sleeping = motions.size === 0
   }
-  updateTargets()
+  compile()
   return { nodes, setContext, step, drag, release, settle, snapshot, restore, setRadius }
 }

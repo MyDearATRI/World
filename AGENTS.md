@@ -1,5 +1,11 @@
 # Website implementation rules
 
+## Stable, named topic exploration
+
+The latest user clarification concerns spatial behavior and information clarity, not frame throughput alone. Topic selection opens a stable named overview, with actual object types, full titles, exact unique counts, explicit filtering and bounded pages; all approved identities remain reachable. Only relevant, named objects appear in focused relation views. Do not fill the background with unnamed horizon dots. Overview placement is a navigation arrangement, never a mathematical relation. Keep actual relationship labels, directions and evidence, including links outside the current page.
+
+Pointer hover must not move the field. Preserve manual node drops and allow only bounded local response to dragging; identical contexts, semantic zoom and label measurement must not restart global physics. Stop movement promptly after an intentional transition, and retain label placement across small anchor changes. Verify actual coordinates, readable titles and collisions after release, not merely rendering speed or a late settled flag. Preserve same-reader navigation, canonical links, history/focus, math, fallback and current publication boundaries. Use the existing snapshot without a Vault export.
+
 ## Theme sidebar and audited Phase 0 / Phase 1
 
 The latest explicit request adds a major-topic checkbox sidebar; it supersedes the earlier prohibition on a primary sidebar. The real-note field uses website-only editorial memberships in `knowledge/topos/note-topics.json`; shared occurrences inherit all themes and remain one object. An empty selection is deliberate, filters are unions, and hidden objects retain their identities and coordinates. Never rewrite source notes to implement navigation. Mobile uses an accessible topic drawer and the same reading controller.

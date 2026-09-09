@@ -102,6 +102,8 @@ export interface ViewState {
   unfolded: Unfolding[]
   /** Undefined is the complete collection; [] is an intentional empty selection. */
   topics?: string[]
+  /** A named, bounded topic map; omitted while exploring or reading an object. */
+  overview?: { page: number; query: string; kind: string; anchor?: string }
 }
 export interface ContextNode {
   id: string

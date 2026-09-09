@@ -48,6 +48,7 @@ export function computeAnnotations(
   items: readonly AnnotationItem[],
   bounds: AnnotationBounds,
   exclusions: readonly AnnotationBox[] = [],
+  previous: readonly AnnotationPlacement[] = [],
 ): AnnotationPlacement[] {
   const { left, top, right, bottom } = bounds
   if (![left, top, right, bottom].every(Number.isFinite) || right <= left || bottom <= top)
@@ -83,11 +84,13 @@ export function computeAnnotations(
     ordered.map((item) => [item.id, 1 + Math.log1p(Math.max(0, item.priority))]),
   )
   const placed = new Map<string, AnnotationPlacement>()
+  const remembered = new Map(previous.map((box) => [box.id, box]))
   const gap = 7
 
   function choose(item: AnnotationItem): AnnotationPlacement {
     const { width, height, anchorX: ax, anchorY: ay } = item
     const candidates: Candidate[] = []
+    const old = remembered.get(item.id)
     const seen = new Set<string>()
     function add(x: number, y: number, bias: number) {
       x = clamp(x, left, right - width)
@@ -97,6 +100,9 @@ export function computeAnnotations(
       seen.add(key)
       candidates.push({ x, y, width, height, bias })
     }
+    // Keep a valid existing slot. Tiny anchor movement must not flip a title to
+    // another side of its node merely because that side became fractionally closer.
+    if (old) add(old.x, old.y, -2000)
     // Prefer upper-right, then other sides of the same anchor before seeking distance.
     const bases = [
       [ax + 14, ay - height - 14],
@@ -150,7 +156,8 @@ export function computeAnnotations(
           }) * 0.7
       }
       const length = anchorDistance(candidate, item)
-      const distance = length * length + candidate.bias
+      const displacement = old ? (candidate.x - old.x) ** 2 + (candidate.y - old.y) ** 2 : 0
+      const distance = length * length + candidate.bias + displacement * 6
       if (
         collision < bestCollision - 0.01 ||
         (Math.abs(collision - bestCollision) <= 0.01 && distance < bestDistance)

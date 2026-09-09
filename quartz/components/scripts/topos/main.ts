@@ -1,7 +1,8 @@
-import { createRenderer, type CameraState } from "./renderer"
+import { createRenderer, createAppearanceModel, type CameraState } from "./renderer"
 import { createField, type FieldSnapshot } from "../../../util/topos/field"
 import { topicContext as deriveContext, topicIDs } from "../../../util/topos/topics"
 import { createTopicSidebar } from "./sidebar"
+import { createTopicOverview } from "./overview"
 import { computeAnnotations, type AnnotationPlacement } from "../../../util/topos/annotations"
 import type { Concept, KnowledgeModel, Lens, Section, ViewState } from "../../../util/topos/types"
 import "../../styles/topos.css"
@@ -147,6 +148,15 @@ async function start() {
         : atlas
           ? (concepts.get(focus)?.topicIDs ?? model.topics?.slice(0, 1).map((t) => t.id))
           : undefined,
+      overview:
+        published && (hash.get("view") === "topics" || (!hash.has("focus") && !hash.has("depth")))
+          ? {
+              page: Math.max(0, Math.min(10000, Number(hash.get("page")) || 0)),
+              query: (hash.get("query") ?? "").slice(0, 200),
+              kind: (hash.get("kind") ?? "all").slice(0, 80),
+              anchor: concepts.has(hash.get("entry") ?? "") ? hash.get("entry")! : undefined,
+            }
+          : undefined,
     } as ViewState
   }
   let state: ViewState = fromHash(),
@@ -154,6 +164,7 @@ async function start() {
   const field = createField(model, context),
     renderer = createRenderer(canvas, model)
   const fieldNodes = new Map(field.nodes.map((node) => [node.id, node]))
+  const priorityAppearance = createAppearanceModel(model)
   function restoreSaved(value: Saved) {
     const view = value.view
     state = {
@@ -164,6 +175,14 @@ async function start() {
       trail: Array.isArray(view?.trail) ? view.trail.filter((id) => concepts.has(id)) : [],
       topics: Array.isArray(view?.topics)
         ? view.topics.filter((id) => model.topics?.some((t) => t.id === id))
+        : undefined,
+      overview: view?.overview
+        ? {
+            page: Math.max(0, Math.min(10000, Number(view.overview.page) || 0)),
+            query: String(view.overview.query ?? "").slice(0, 200),
+            kind: String(view.overview.kind ?? "all").slice(0, 80),
+            anchor: concepts.has(view.overview.anchor ?? "") ? view.overview.anchor : undefined,
+          }
         : undefined,
       unfolded: Array.isArray(view?.unfolded)
         ? view.unfolded
@@ -219,7 +238,6 @@ async function start() {
     inFrame = false,
     last = 0,
     idle = false,
-    pointer = { x: 0, y: 0 },
     requested = 1
   let targetZoom = 1,
     pan = { x: renderer.view.x, y: renderer.view.y },
@@ -243,6 +261,9 @@ async function start() {
   let suppressedClick = 0
   let transitionTime = 0
   let annotationTime = -Infinity
+  let placeAfterMotion = false
+  let dragSettlingID: string | undefined
+  let presentedIDs = new Set<string>()
   let pendingScale: number | undefined
   let layoutVersion = ""
   let measurements = new WeakMap<HTMLElement, { width: number; height: number }>()
@@ -297,7 +318,8 @@ async function start() {
         ...state,
         topics: ids,
         focus: nextFocus,
-        scale: nextFocus === state.focus ? state.scale : 1,
+        scale: 1,
+        overview: { page: 0, query: "", kind: "all" },
         unfolded: state.unfolded.filter((u) => visible.has(u.concept)),
       })
     },
@@ -307,6 +329,29 @@ async function start() {
       labelNodes.get(id)?.focus({ preventScroll: true })
     },
   })
+  const overview = createTopicOverview(model, {
+    change(value) {
+      commit({ ...state, overview: value }, false)
+    },
+    open(id) {
+      focus(id)
+      zoom(2.1)
+      labelNodes.get(id)?.focus({ preventScroll: true })
+    },
+    close() {
+      commit({ ...state, overview: undefined })
+      labelNodes.get(state.focus)?.focus({ preventScroll: true })
+    },
+  })
+  world.append(overview.element)
+  const overviewButton = element("button", "topos-overview-trigger", "主题概览")
+  overviewButton.type = "button"
+  overviewButton.dataset.openOverview = "true"
+  overviewButton.addEventListener("click", () =>
+    commit({ ...state, overview: { page: 0, query: "", kind: "all" } }),
+  )
+  $(".topos-utility").prepend(overviewButton)
+  overviewButton.hidden = !published
   let visibilityContext: typeof context | undefined
   let visibleIDs: Set<string> | undefined
   const isVisible = (id: string) => {
@@ -334,12 +379,16 @@ async function start() {
       objectCount: model.concepts.length,
       modelStats: model.stats,
       topics: state.topics,
+      overview: state.overview ? overview.snapshot() : undefined,
+      presentedIDs: state.overview ? [] : [...presentedIDs],
       visibleIDs: context.visibleIDs ?? model.concepts.map((n) => n.id),
       camera: { ...renderer.view },
       modelSignature,
       nodes: field.nodes.map((n) => ({
         ...n,
-        ...renderer.appearance(n, context),
+        ...(state.overview
+          ? { opacity: 0, radius: 0, major: false }
+          : renderer.appearance(n, context)),
         screenX: renderer.project(n).x + bounds.left,
         screenY: renderer.project(n).y + bounds.top,
       })),
@@ -384,6 +433,13 @@ async function start() {
     })
     if (state.unfolded.length) params.set("open", state.unfolded.map((u) => u.section).join(","))
     if (state.topics !== undefined) params.set("topics", state.topics.join(","))
+    if (state.overview) {
+      params.set("view", "topics")
+      params.set("page", String(state.overview.page))
+      if (state.overview.query) params.set("query", state.overview.query)
+      if (state.overview.kind !== "all") params.set("kind", state.overview.kind)
+      if (state.overview.anchor) params.set("entry", state.overview.anchor)
+    }
     return `#${params}`
   }
   function remember() {
@@ -419,10 +475,11 @@ async function start() {
   }
   function focus(id: string, anchor?: string) {
     if (!concepts.has(id)) return
+    if (state.overview) state = { ...state, overview: { ...state.overview, anchor: id } }
     pendingAnchor = anchor
       ? { concept: id, anchor: decodeAnchor(anchor.replace(/^#/, "")) }
       : undefined
-    if (id === state.focus && isVisible(id)) {
+    if (id === state.focus && isVisible(id) && !state.overview) {
       zoom(Math.min(3, state.scale + 0.65))
       return
     }
@@ -431,16 +488,22 @@ async function start() {
     commit(
       {
         ...state,
+        overview: undefined,
         focus: id,
         topics:
           state.topics !== undefined && !isVisible(id)
             ? [...new Set([...state.topics, ...(concepts.get(id)?.topicIDs ?? [])])]
             : state.topics,
-        trail: [...state.trail.filter((x) => x !== id), state.focus].slice(-8),
+        trail:
+          id === state.focus
+            ? state.trail
+            : [...state.trail.filter((x) => x !== id), state.focus].slice(-8),
       },
       true,
     )
     document.title = `${concepts.get(id)!.title} · Knowledge Topos`
+    const target = field.snapshot().targets?.[id]
+    if (target) pan = { x: -target.x, y: -target.y }
     guide.textContent = published
       ? `${typeLabel(concepts.get(id)!)} · 点击当前对象${atlas ? "查看分类与来源" : "展开原文"}，或查找另一个知识点。`
       : `${concepts.get(id)!.zh}成为当前语境。观察邻域变化，或向内展开解释。`
@@ -1144,6 +1207,11 @@ async function start() {
   })
   function update() {
     sidebar?.update(state.topics, state.focus)
+    world.dataset.overview = String(Boolean(state.overview))
+    overview.element.hidden = !state.overview
+    overview.update(state.topics, state.overview)
+    overviewButton.hidden = !published || Boolean(state.overview)
+    resetLayout.hidden = Boolean(state.overview)
     empty.hidden = !context.visibleIDs || context.visibleIDs.length > 0
     const nextLayout = [
       state.focus,
@@ -1157,6 +1225,7 @@ async function start() {
       state.scale >= 1.7,
       renderer.size.width,
       renderer.size.height,
+      Boolean(state.overview),
     ].join("/")
     const layoutChanged = layoutVersion !== nextLayout
     if (layoutChanged) {
@@ -1168,6 +1237,7 @@ async function start() {
       world.dataset.explaining = String(state.scale >= 1.7)
       measurements = new WeakMap()
       annotationTime = -Infinity
+      placeAfterMotion = true
     }
     depth.value = String(state.scale)
     const depthTitle =
@@ -1219,12 +1289,26 @@ async function start() {
       y: clamp(
         focusedPoint.y - focusSize.height - 28,
         98,
-        renderer.size.height - focusSize.height - 160,
+        renderer.size.height - focusSize.height - (innerWidth < 600 ? 167 : 160),
       ),
       width: focusSize.width,
       height: focusSize.height,
     }
-    // Anchor tracking runs every paint; only the expensive collision search is throttled.
+    const protectedBoxes = [focusBox as { x: number; y: number; width: number; height: number }]
+    if (showUnfold) {
+      const width = Math.min(
+        innerWidth < 600 ? innerWidth - 28 : published ? 720 : 465,
+        renderer.size.width - 32,
+      )
+      const y = clamp(focusedPoint.y + 20, 130, renderer.size.height - 180)
+      protectedBoxes.push({
+        x: clamp(focusedPoint.x - width / 2, 14, renderer.size.width - width - 14),
+        y,
+        width,
+        height: Math.max(120, renderer.size.height - y - (innerWidth < 600 ? 145 : 96)),
+      })
+    }
+    // Track the same remembered slot with its anchor; reflow only on intentional changes.
     for (const [id, box] of annotationTargets) {
       const node = fieldNodes.get(id)
       const anchor = annotationAnchors.get(id)
@@ -1244,7 +1328,9 @@ async function start() {
     annotationTargets.set(state.focus, focusBox)
     annotationPositions.set(state.focus, { x: focusBox.x, y: focusBox.y })
     annotationAnchors.set(state.focus, focusedPoint)
-    const solveAnnotations = now - annotationTime > 160
+    // Anchor tracking is continuous; choosing a different text slot is an explicit
+    // layout operation. A clock must not repeatedly reshuffle stationary labels.
+    const solveAnnotations = annotationTime === -Infinity && !drag
     if (solveAnnotations) {
       annotationTime = now
       const candidates = field.nodes
@@ -1253,7 +1339,7 @@ async function start() {
             isVisible(n.id) &&
             n.relevance > 0.3 &&
             n.id !== state.focus &&
-            (state.scale >= 0.75 || renderer.appearance(n, context).major),
+            (state.scale >= 0.75 || priorityAppearance(n, context).major),
         )
         .sort(
           (a, b) =>
@@ -1293,6 +1379,7 @@ async function start() {
           bottom: renderer.size.height - (innerWidth < 600 ? 167 : 110),
         },
         excluded,
+        [...annotationTargets.values()],
       )
       annotationTargets.clear()
       annotationAnchors.clear()
@@ -1315,6 +1402,13 @@ async function start() {
       }
     }
     const visibleLabelBoxes: { x: number; y: number; width: number; height: number }[] = []
+    const painted = new Set<string>()
+    const heldID = drag && drag.distance > 5 ? drag.id : dragSettlingID
+    const heldTarget = heldID ? annotationTargets.get(heldID) : undefined
+    const heldPosition = heldID ? annotationPositions.get(heldID) : undefined
+    const heldBox = heldTarget
+      ? { ...heldTarget, x: heldPosition?.x ?? heldTarget.x, y: heldPosition?.y ?? heldTarget.y }
+      : undefined
     const labelBlend = reduce.matches ? 1 : 1 - Math.exp(-dt * 18)
     for (const n of field.nodes) {
       const a = labelNodes.get(n.id)!,
@@ -1335,10 +1429,44 @@ async function start() {
         x = previous.x
         y = previous.y
       }
-      const appearance = renderer.appearance(n, context)
+      const appearance = priorityAppearance(n, context)
+      // Dragging brings one named object forward. Nearby text briefly recedes
+      // instead of being pushed through other labels or shuffling their slots.
+      const occludedByDrag = Boolean(
+        heldBox &&
+        n.id !== heldID &&
+        box &&
+        x < heldBox.x + heldBox.width + 8 &&
+        x + labelWidth > heldBox.x - 8 &&
+        y < heldBox.y + heldBox.height + 8 &&
+        y + measure(a).height > heldBox.y - 8,
+      )
+      // A name must remain in the usable reading area, not underneath the fixed
+      // controls. Anchor following can temporarily move an otherwise valid slot
+      // out of bounds during a drag; its point and edges must recede with it.
+      const outsideReadingArea = Boolean(
+        box &&
+        (x < 13 ||
+          x + labelWidth > renderer.size.width - 13 ||
+          y < 96 ||
+          y + measure(a).height > renderer.size.height - (innerWidth < 600 ? 167 : 110)),
+      )
+      const intersects = (obstacle: { x: number; y: number; width: number; height: number }) =>
+        x < obstacle.x + obstacle.width + 7 &&
+        x + labelWidth > obstacle.x - 7 &&
+        y < obstacle.y + obstacle.height + 7 &&
+        y + measure(a).height > obstacle.y - 7
+      // Protect the live title/body throughout a focus transition, not just the
+      // first placement. Other labels never push one another to avoid overlap.
+      const occludedByReading =
+        published &&
+        !isFocus &&
+        n.id !== heldID &&
+        (protectedBoxes.some(intersects) || visibleLabelBoxes.some(intersects))
+      const concealed = occludedByDrag || outsideReadingArea || occludedByReading
       const farVisibility = appearance.major ? 1 : clamp((state.scale - 0.45) / 0.65, 0, 1)
       const opacity =
-        labelsHidden || !isVisible(n.id)
+        labelsHidden || !isVisible(n.id) || concealed
           ? 0
           : farVisibility *
             (box
@@ -1350,6 +1478,7 @@ async function start() {
       style(a, "visibility", opacity > 0.005 ? "visible" : "hidden")
       style(a, "will-change", opacity > 0.005 ? "transform, opacity" : "auto")
       if (opacity > 0.005) {
+        painted.add(n.id)
         style(a, "transform", `translate3d(${x}px,${y}px,0) scale(${box ? 1 : size})`)
         style(a, "filter", n.relevance < 0.28 ? `blur(${(0.28 - n.relevance) * 3}px)` : "none")
         style(a, "z-index", isFocus ? "8" : String(Math.floor(n.relevance * 5)))
@@ -1361,9 +1490,9 @@ async function start() {
             height: measure(a).height * (box ? 1 : size),
           })
       }
-      const tabIndex = box && !labelsHidden ? 0 : -1
+      const tabIndex = box && !labelsHidden && !concealed ? 0 : -1
       if (a.tabIndex !== tabIndex) a.tabIndex = tabIndex
-      style(a, "pointer-events", box && !labelsHidden ? "auto" : "none")
+      style(a, "pointer-events", box && !labelsHidden && !concealed ? "auto" : "none")
       let leader = leaders.get(n.id)
       if (!leader && box) {
         leader = document.createElementNS("http://www.w3.org/2000/svg", "line")
@@ -1380,7 +1509,7 @@ async function start() {
         style(
           leader,
           "opacity",
-          labelsHidden || !box ? "0" : String(n.relevance * 0.28 * farVisibility),
+          labelsHidden || !box || concealed ? "0" : String(n.relevance * 0.28 * farVisibility),
         )
       }
       const root = unfoldings.get(n.id)
@@ -1389,7 +1518,7 @@ async function start() {
           memory = isVisible(n.id) && n.id === context.previous && showUnfold
         root.style.opacity = active
           ? "1"
-          : memory && !mobileReading
+          : memory && !mobileReading && !published
             ? String(n.relevance * 0.3)
             : "0"
         root.style.pointerEvents = active ? "auto" : "none"
@@ -1418,7 +1547,7 @@ async function start() {
       activeUnfold.inert = true
     }
     const showCommunities = new Set(
-      state.scale < 0.9 && !labelsHidden ? context.communities.map((c) => c.id) : [],
+      !published && state.scale < 0.9 && !labelsHidden ? context.communities.map((c) => c.id) : [],
     )
     for (const [id, node] of communityNodes) if (!showCommunities.has(id)) node.style.opacity = "0"
     const communityItems = []
@@ -1475,6 +1604,7 @@ async function start() {
           bottom: renderer.size.height - (innerWidth < 600 ? 167 : 110),
         },
         [...annotationTargets.values()],
+        [...communityTargets.values()],
       )
       communityTargets.clear()
       for (const box of communityBoxes) communityTargets.set(box.id, box)
@@ -1489,6 +1619,7 @@ async function start() {
       communityNodes.get(box.id)!.style.transform = `translate(${previous.x}px,${previous.y}px)`
     }
     const direct = context.relations
+      .filter((r) => !published || (painted.has(r.source) && painted.has(r.target)))
       .filter((r) => r.source === state.focus || r.target === state.focus)
       .sort((a, b) => b.strength - a.strength)
       .slice(0, state.scale < 0.7 || state.scale > 1.7 ? 0 : innerWidth < 600 ? 2 : 4)
@@ -1531,6 +1662,7 @@ async function start() {
       label.style.opacity = labelsHidden || occluded ? "0" : "0.7"
       label.inert = labelsHidden || occluded
     }
+    presentedIDs = painted
     return annotationsMoving
   }
   const relationPopover = element("aside", "topos-relation-detail")
@@ -1610,6 +1742,15 @@ async function start() {
     last = now
     if (document.hidden) return
     inFrame = true
+    if (state.overview) {
+      pendingScale = undefined
+      frame++
+      inFrame = false
+      idle = true
+      world.dataset.settled = "true"
+      remember()
+      return
+    }
     if (pendingScale !== undefined) {
       const scale = pendingScale
       pendingScale = undefined
@@ -1633,9 +1774,26 @@ async function start() {
       state.scale >= 1.7 ? (published ? 0.235 : innerWidth < 600 ? 0.29 : 0.31) : 0.47
     currentCenter += (desiredCenter - currentCenter) * (reduce.matches ? 1 : 1 - Math.exp(-dt * 12))
     renderer.setCenterY(currentCenter)
-    renderer.setParallax(pointer.x, pointer.y)
-    const rendering = renderer.draw(field.nodes, context, reduce.matches ? 1 : dt)
+    renderer.setParallax(0, 0)
+    if (
+      !moving &&
+      !drag &&
+      placeAfterMotion &&
+      Math.abs(zoomDelta) <= 0.001 &&
+      Math.abs(pan.x - renderer.view.x) <= 0.1 &&
+      Math.abs(pan.y - renderer.view.y) <= 0.1 &&
+      Math.abs(desiredCenter - currentCenter) <= 0.001
+    ) {
+      annotationTime = -Infinity
+      placeAfterMotion = false
+    }
     const annotationsMoving = drawLabels(dt)
+    renderer.setPresentation(published ? [...presentedIDs] : undefined)
+    const rendering = renderer.draw(field.nodes, context, reduce.matches ? 1 : dt)
+    if (dragSettlingID && !drag && !moving && !annotationsMoving) {
+      dragSettlingID = undefined
+      requested = Math.max(requested, 2)
+    }
     requested--
     const cameraMoving =
       Math.abs(zoomDelta) > 0.001 ||
@@ -1664,12 +1822,15 @@ async function start() {
     x -= bounds.left
     y -= bounds.top
     return field.nodes
-      .filter((n) => isVisible(n.id) && n.relevance > 0.18)
+      .filter(
+        (n) => isVisible(n.id) && (!published || presentedIDs.has(n.id)) && n.relevance > 0.18,
+      )
       .map((n) => ({ n, p: renderer.project(n) }))
       .filter(({ p }) => Math.hypot(p.x - x, p.y - y) < 24)
       .sort((a, b) => b.n.relevance - a.n.relevance)[0]?.n.id
   }
   function down(e: PointerEvent) {
+    if (state.overview) return
     if (e.button > 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return
     const target = e.target as HTMLElement
     if (
@@ -1711,7 +1872,6 @@ async function start() {
     wake()
   }
   function move(e: PointerEvent) {
-    pointer = { x: (e.clientX / innerWidth - 0.5) * 2, y: (e.clientY / innerHeight - 0.5) * 2 }
     if (touches.has(e.pointerId)) touches.set(e.pointerId, { x: e.clientX, y: e.clientY })
     if (pinch && touches.size === 2) {
       const [a, b] = [...touches.values()],
@@ -1727,13 +1887,7 @@ async function start() {
       wake()
       return
     }
-    if (!drag) {
-      if (e.target === canvas && !reduce.matches) {
-        requested = 3
-        wake()
-      }
-      return
-    }
+    if (!drag) return
     drag.distance = Math.max(
       drag.distance,
       Math.hypot(e.clientX - drag.startX, e.clientY - drag.startY),
@@ -1758,6 +1912,7 @@ async function start() {
     if (touches.size < 2) pinch = undefined
     if (!drag || drag.pointer !== e.pointerId) return
     if (drag.id) {
+      if (drag.distance > 5) dragSettlingID = drag.id
       field.release(drag.id)
       if (drag.distance <= 5) {
         suppressedClick = performance.now() + 250
@@ -1765,6 +1920,7 @@ async function start() {
       } else suppressedClick = performance.now() + 350
     }
     drag = undefined
+    placeAfterMotion = true
     wake()
     laterRemember()
   }
@@ -1781,6 +1937,7 @@ async function start() {
   world.addEventListener(
     "wheel",
     (e) => {
+      if (state.overview) return
       if (
         (e.target as HTMLElement).closest(
           ".topos-unfolding,.topos-help,.topos-relation-detail,.topos-search",
@@ -1807,12 +1964,28 @@ async function start() {
   $("[data-back]").addEventListener("click", () => {
     if (state.trail.length || history.state?.toposCanBack) history.back()
     else {
-      pan = { x: 0, y: 0 }
+      const target = field.snapshot().targets?.[state.focus] ?? fieldNodes.get(state.focus)
+      pan = target ? { x: -target.x, y: -target.y } : { x: 0, y: 0 }
       zoom(1)
       wake()
     }
   })
   const help = $<HTMLDialogElement>(".topos-help")
+  const resetLayout = element("button", "topos-reset-layout", "重新整理当前布局")
+  resetLayout.type = "button"
+  resetLayout.dataset.resetLayout = "true"
+  resetLayout.addEventListener("click", () => {
+    remember()
+    field.setContext(context, { rearrange: true, clearManualAnchors: true })
+    pan = { x: 0, y: 0 }
+    annotationTime = -Infinity
+    placeAfterMotion = true
+    dragSettlingID = undefined
+    history.pushState({ topos: serialize(), toposCanBack: true }, "", hash())
+    help.close()
+    wake()
+  })
+  help.append(resetLayout)
   $("[data-help]").addEventListener("click", () => help.showModal())
   $("[data-close-help]").addEventListener("click", () => help.close())
   $("[data-labels-toggle]").addEventListener("click", () => {
@@ -1832,6 +2005,14 @@ async function start() {
     }
     if ((e.target as HTMLElement).matches("input,textarea,select") || help.open || search.open)
       return
+    if (state.overview) {
+      if (e.key === "Escape") {
+        e.preventDefault()
+        commit({ ...state, overview: undefined })
+        overviewButton.focus({ preventScroll: true })
+      }
+      return
+    }
     if (e.key === "Escape") {
       if (!relationPopover.hidden) {
         relationPopover.hidden = true
@@ -1880,7 +2061,8 @@ async function start() {
     contentVersion = ""
     update()
     wake()
-    labelNodes.get(state.focus)?.focus({ preventScroll: true })
+    if (state.overview) overview.focus(state.overview.anchor ?? state.focus)
+    else labelNodes.get(state.focus)?.focus({ preventScroll: true })
   })
   window.addEventListener("pagehide", remember)
   document.addEventListener("visibilitychange", () => {

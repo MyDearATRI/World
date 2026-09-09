@@ -4,7 +4,7 @@ import { chromium } from "playwright"
 import { startPreview } from "./preview.mjs"
 
 const output = path.resolve(
-  process.env.TOPIC_INTERACTION_OUTPUT ?? "artifacts/phase-01/interactions",
+  process.env.TOPIC_INTERACTION_OUTPUT ?? "artifacts/stable-field/topic-interactions",
 )
 await mkdir(output, { recursive: true })
 const report = {
@@ -29,6 +29,13 @@ const ready = async (page) => {
 }
 const stable = (page) =>
   page.waitForFunction(() => window.__topos.settled, null, { timeout: 35000 })
+const enterCurrentField = async (page) => {
+  // Theme selection now opens a named overview. Exercise its real return control
+  // before testing the spatial reader; do not interact with the hidden canvas.
+  await page.locator("[data-overview-close]").click()
+  await page.waitForFunction(() => !window.__topos.snapshot().overview)
+  await stable(page)
+}
 const shot = async (page, name) => {
   const file = path.join(output, `${name}.png`)
   await page.screenshot({ path: file })
@@ -83,6 +90,7 @@ try {
       await page.getByRole("button", { name: "清空", exact: true }).click()
       await page.locator('[data-topic="topology"]').check()
       await stable(page)
+      await enterCurrentField(page)
       const bounds = await page.locator("#topos-world").boundingBox()
       check("desktop: real scene is offset by sidebar", bounds.x > 200, bounds)
       check("desktop: actual WebGL2 renderer", (await snapshot(page)).renderer === "webgl2")
@@ -300,6 +308,7 @@ try {
         JSON.stringify((await snapshot(page)).visibleIDs.sort()) ===
           JSON.stringify(expected(["topology"])),
       )
+      await enterCurrentField(page)
       const pixels = await page.locator(".topos-flat-canvas").evaluate((canvas) => {
         const data = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data
         let distinct = 0
@@ -403,6 +412,13 @@ try {
             .locator(".topos-topics-trigger")
             .evaluate((e) => e === document.activeElement)),
       )
+      await shot(page, "390-touch-selected-topic-overview")
+      await page.locator("[data-overview-query]").fill("度量与度量拓扑")
+      await page.locator('[data-overview-open="a-000067"]').tap()
+      await page.waitForFunction(() =>
+        document.querySelector('.topos-unfolding[data-active="true"] math'),
+      )
+      await stable(page)
       await shot(page, "390-touch-return-reading")
     },
   )
