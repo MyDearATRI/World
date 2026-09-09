@@ -22,7 +22,13 @@ const edgeStyle = (edge: Relation) => {
   if (["example", "representation", "construction"].includes(edge.type)) return "emphasis"
   return "solid"
 }
-type EdgeMesh = { line: THREE.Line; arrow: THREE.Mesh; opacity: number }
+type EdgeMesh = {
+  line: THREE.Line
+  arrow: THREE.Mesh
+  opacity: number
+  style: ReturnType<typeof edgeStyle>
+  endpoints: [number, number, number, number, number, number]
+}
 export interface ConceptAppearance {
   opacity: number
   radius: number
@@ -49,9 +55,17 @@ const farScale = (scale: number) => 1 - smooth(0.45, 1.1, scale)
 export function createAppearanceModel(model: KnowledgeModel) {
   const byId = new Map(model.concepts.map((c) => [c.id, c]))
   const lensCache = new Map<Lens, { score: Map<string, number>; major: Set<string> }>()
+  const communityCache = new WeakMap<Community[], Map<Lens, Set<string>>>()
+  const visibleCache = new WeakMap<string[], Set<string>>()
   return (node: FieldNode, context: Context): ConceptAppearance => {
-    if (context.visibleIDs && !context.visibleIDs.includes(node.id))
-      return { opacity: 0, radius: 0, major: false }
+    if (context.visibleIDs) {
+      let visible = visibleCache.get(context.visibleIDs)
+      if (!visible) {
+        visible = new Set(context.visibleIDs)
+        visibleCache.set(context.visibleIDs, visible)
+      }
+      if (!visible.has(node.id)) return { opacity: 0, radius: 0, major: false }
+    }
     let importance = lensCache.get(context.lens)
     if (!importance) {
       const pairs = new Map<string, Map<string, number>>()
@@ -89,19 +103,30 @@ export function createAppearanceModel(model: KnowledgeModel) {
       importance = { score, major }
       lensCache.set(context.lens, importance)
     }
-    const communityMajor = context.communities.some((c) => {
-      if (!c.members.includes(node.id)) return false
-      const top = [...c.members].sort(
-        (a, b) =>
-          (importance!.score.get(b) ?? 0) - (importance!.score.get(a) ?? 0) || (a < b ? -1 : 1),
-      )[0]
-      return top === node.id
-    })
+    let byLens = communityCache.get(context.communities)
+    if (!byLens) {
+      byLens = new Map()
+      communityCache.set(context.communities, byLens)
+    }
+    let communityMajors = byLens.get(context.lens)
+    if (!communityMajors) {
+      communityMajors = new Set()
+      for (const community of context.communities) {
+        let top: string | undefined
+        for (const id of community.members) {
+          const score = importance.score.get(id) ?? 0
+          const best = top === undefined ? -Infinity : (importance.score.get(top) ?? 0)
+          if (score > best || (score === best && (top === undefined || id < top))) top = id
+        }
+        if (top !== undefined) communityMajors.add(top)
+      }
+      byLens.set(context.lens, communityMajors)
+    }
     const major =
       node.id === context.focus ||
       node.id === context.previous ||
       importance.major.has(node.id) ||
-      communityMajor
+      communityMajors.has(node.id)
     const far = farScale(context.scale),
       relevance = clamp(node.relevance),
       degree = importance.score.get(node.id) ?? 0
@@ -120,6 +145,7 @@ export function createAppearanceModel(model: KnowledgeModel) {
 }
 
 function convexHull(points: Point[]): Point[] {
+  if (points.length <= 1) return points.slice()
   const sorted = [...points].sort((a, b) => a.x - b.x || a.y - b.y)
   const cross = (a: Point, b: Point, c: Point) =>
     (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)
@@ -138,6 +164,15 @@ function convexHull(points: Point[]): Point[] {
   return [...half(sorted), ...half([...sorted].reverse())]
 }
 
+const paddingDirections = Array.from({ length: 12 }, (_, i) => ({
+  x: Math.cos((i * Math.PI) / 6),
+  y: Math.sin((i * Math.PI) / 6),
+}))
+const outlineDirections = Array.from({ length: 64 }, (_, i) => ({
+  x: Math.cos((i * Math.PI) / 32),
+  y: Math.sin((i * Math.PI) / 32),
+}))
+
 /** A community's local footprint: membership stays intact while distant contributions recede. */
 export function communityFootprint(
   community: Community,
@@ -145,7 +180,8 @@ export function communityFootprint(
   project: (node: FieldNode) => Point,
   scale: number,
 ) {
-  const members = nodes.filter((n) => community.members.includes(n.id))
+  const memberIDs = new Set(community.members)
+  const members = nodes.filter((n) => memberIDs.has(n.id))
   if (!members.length) return undefined
   const points = members.map((node) => ({ ...project(node), relevance: clamp(node.relevance) }))
   const total = points.reduce((sum, p) => sum + p.relevance ** 4, 0) || 1
@@ -159,18 +195,16 @@ export function communityFootprint(
   })
   // Rounded convex expansion; inner weak members cannot produce spiky inward curves.
   const padding = 26 + farScale(scale) * 14
-  const expanded = [...local, center].flatMap((p) =>
-    Array.from({ length: 12 }, (_, i) => {
-      const angle = (i * Math.PI) / 6
-      return { x: p.x + Math.cos(angle) * padding, y: p.y + Math.sin(angle) * padding }
-    }),
+  // Convex expansion depends only on the boundary; interior points add no shape.
+  const expanded = convexHull([...local, center]).flatMap((p) =>
+    paddingDirections.map((direction) => ({
+      x: p.x + direction.x * padding,
+      y: p.y + direction.y * padding,
+    })),
   )
   const hull = convexHull(expanded)
   // Fixed-angle ray samples retain correspondence when a hull vertex enters or leaves.
-  const outline = Array.from({ length: 64 }, (_, i) => {
-    const angle = (i * Math.PI) / 32,
-      dx = Math.cos(angle),
-      dy = Math.sin(angle)
+  const outline = outlineDirections.map(({ x: dx, y: dy }) => {
     let length = Infinity
     for (let j = 0; j < hull.length; j++) {
       const a = hull[j],
@@ -192,6 +226,58 @@ export function communityFootprint(
   const opacity =
     community.coherence * (0.22 + 0.78 * Math.sqrt(support)) * (0.18 + farScale(scale) * 0.6)
   return { points: outline, opacity }
+}
+
+/** Allocate once; Line.computeLineDistances() replaces its attribute on every call. */
+export function createRelationGeometry(dashed: boolean) {
+  const geometry = new THREE.BufferGeometry()
+  geometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(new Float32Array(25 * 3), 3).setUsage(THREE.DynamicDrawUsage),
+  )
+  if (dashed)
+    geometry.setAttribute(
+      "lineDistance",
+      new THREE.BufferAttribute(new Float32Array(25), 1).setUsage(THREE.DynamicDrawUsage),
+    )
+  return geometry
+}
+
+/** Update the same curve buffers, preserving the installed Three.js dashed-line convention. */
+export function updateRelationGeometry(
+  geometry: THREE.BufferGeometry,
+  a: Point,
+  b: Point,
+  width: number,
+  height: number,
+) {
+  const dx = b.x - a.x,
+    dy = b.y - a.y,
+    len = Math.max(1, Math.hypot(dx, dy)),
+    bend = Math.min(40, len * 0.09),
+    cx = (a.x + b.x) / 2 - (dy / len) * bend,
+    cy = (a.y + b.y) / 2 + (dx / len) * bend
+  const position = geometry.getAttribute("position") as THREE.BufferAttribute
+  const distance = geometry.getAttribute("lineDistance") as THREE.BufferAttribute | undefined
+  let length = 0
+  for (let i = 0; i <= 24; i++) {
+    const t = i / 24,
+      q = 1 - t,
+      x = q * q * a.x + 2 * q * t * cx + t * t * b.x,
+      y = q * q * a.y + 2 * q * t * cy + t * t * b.y
+    position.setXYZ(i, x - width / 2, height / 2 - y, -500)
+    if (distance) {
+      if (i > 0)
+        length += Math.hypot(
+          position.getX(i) - position.getX(i - 1),
+          position.getY(i) - position.getY(i - 1),
+        )
+      distance.setX(i, length)
+    }
+  }
+  position.needsUpdate = true
+  if (distance) distance.needsUpdate = true
+  return { cx, cy }
 }
 
 /** Only this layer knows WebGL. Semantic inference and forces live elsewhere. */
@@ -221,18 +307,18 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
   const meshes = new Map<string, { point: THREE.Mesh; ring: THREE.Mesh }>()
   const edges = new Map<string, EdgeMesh>()
   const hulls = new Map<string, CommunityMesh>()
+  const concepts = new Map(model.concepts.map((concept) => [concept.id, concept]))
   const targetAppearance = createAppearanceModel(model)
   const nodeAppearances = new Map<string, ConceptAppearance>()
   function appearance(node: FieldNode, context: Context): ConceptAppearance {
     const current = nodeAppearances.get(node.id)
-    return current
-      ? { ...current, major: targetAppearance(node, context).major }
-      : targetAppearance(node, context)
+    return current ?? targetAppearance(node, context)
   }
   const pointGeometry = new THREE.CircleGeometry(1, 32)
   const squareGeometry = new THREE.PlaneGeometry(1.7, 1.7)
   const triangleGeometry = new THREE.CircleGeometry(1, 3)
   const ringGeometry = new THREE.RingGeometry(0.91, 1, 64)
+  const arrowGeometry = new THREE.CircleGeometry(4.5, 3)
   for (const concept of model.concepts) {
     const point = new THREE.Mesh(
       concept.kind === "construction"
@@ -256,6 +342,7 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
       }),
     )
     scene.add(point, ring)
+    point.visible = ring.visible = false
     meshes.set(concept.id, { point, ring })
   }
   for (const edge of model.relations) {
@@ -276,14 +363,22 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
             opacity: 0,
             depthWrite: false,
           })
-    const geometry = new THREE.BufferGeometry()
-    geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(25 * 3), 3))
+    const geometry = createRelationGeometry(style === "dashed")
     const line = new THREE.Line(geometry, material)
+    // Its vertices change in screen space; an initial cached zero-radius sphere is stale.
+    line.frustumCulled = false
     const arrow = new THREE.Mesh(
-      new THREE.CircleGeometry(4.5, 3),
+      arrowGeometry,
       new THREE.MeshBasicMaterial({ color: ink, transparent: true, opacity: 0, depthWrite: false }),
     )
-    edges.set(edge.id, { line, arrow, opacity: 0 })
+    line.visible = arrow.visible = false
+    edges.set(edge.id, {
+      line,
+      arrow,
+      opacity: 0,
+      style,
+      endpoints: [NaN, NaN, NaN, NaN, NaN, NaN],
+    })
     scene.add(line, arrow)
   }
   function resize() {
@@ -317,9 +412,33 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
     mesh.position.set(p.x - width / 2, height / 2 - p.y, z)
   }
   const nodeMap = new Map<string, FieldNode>()
+  const projected = new Map<string, Point>()
+  const communityTargets = new Map<
+    string,
+    {
+      members: string[]
+      input: Float64Array
+      footprint: ReturnType<typeof communityFootprint>
+    }
+  >()
+  let lastContext: Context | undefined
+  let visibleRelations = new Set<string>()
+  let activeCommunities = new Set<string>()
+  let visibleNodes: Set<string> | undefined
   function draw(nodes: FieldNode[], context: Context, dt: number) {
-    nodeMap.clear()
-    for (const n of nodes) nodeMap.set(n.id, n)
+    for (const n of nodes) {
+      nodeMap.set(n.id, n)
+      const point = projected.get(n.id) ?? { x: 0, y: 0 }
+      point.x = width / 2 + (n.x + view.x + n.z * parallax.x * 0.07) * view.zoom
+      point.y = height * centerY + (n.y + view.y + n.z * parallax.y * 0.04) * view.zoom
+      projected.set(n.id, point)
+    }
+    if (lastContext !== context) {
+      lastContext = context
+      visibleRelations = new Set(context.relations.map((relation) => relation.id))
+      activeCommunities = new Set(context.communities.map((community) => community.id))
+      visibleNodes = context.visibleIDs ? new Set(context.visibleIDs) : undefined
+    }
     if (fallback) {
       fallback.fillStyle = "#f4f2ed"
       fallback.fillRect(0, 0, width, height)
@@ -343,17 +462,17 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
       nodeAppearances.set(node.id, current)
     }
     for (const [id, entry] of hulls) {
-      if (context.communities.some((c) => c.id === id)) continue
+      if (activeCommunities.has(id)) continue
       const material = entry.line.material as THREE.Material
       material.opacity *= Math.max(0, 1 - dt * 3)
       if (material.opacity < 0.001) material.opacity = 0
       entry.visual.opacity = material.opacity
+      entry.line.visible = material.opacity > 0
       changing ||= material.opacity > 0
       if (fallback && material.opacity > 0) paintCommunity(entry)
     }
     for (const community of context.communities)
       changing = drawCommunity(community, nodes, dt, context.scale) || changing
-    const visible = new Set(context.relations.map((e) => e.id))
     for (const relation of model.relations) {
       const source = nodeMap.get(relation.source)!,
         target = nodeMap.get(relation.target)!
@@ -361,32 +480,46 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
       const entry = edges.get(relation.id)!
       const directly = relation.source === context.focus || relation.target === context.focus
       const bothMajor =
-        targetAppearance(source, context).major && targetAppearance(target, context).major
+        nodeAppearances.get(source.id)!.major && nodeAppearances.get(target.id)!.major
       const edgeResolution = 1 - farScale(context.scale) * (bothMajor ? 0.35 : 0.96)
-      const targetOpacity = visible.has(relation.id)
+      const targetOpacity = visibleRelations.has(relation.id)
         ? (directly ? 0.49 : 0.15) * Math.min(source.relevance, target.relevance) * edgeResolution
         : 0
       entry.opacity += (targetOpacity - entry.opacity) * Math.min(1, dt * 5)
-      changing ||= Math.abs(targetOpacity - entry.opacity) > 0.003
-      const a = project(source),
-        b = project(target)
+      const fading = Math.abs(targetOpacity - entry.opacity) > 0.003
+      if (!fading) entry.opacity = targetOpacity
+      changing ||= fading
+      entry.line.visible = entry.arrow.visible = entry.opacity > 0.001
+      ;(entry.line.material as THREE.Material).opacity = entry.opacity
+      ;(entry.arrow.material as THREE.Material).opacity =
+        entry.opacity * (entry.style === "dashed" ? 0.3 : 0.85)
+      if (!entry.line.visible) continue
+      const a = projected.get(source.id)!,
+        b = projected.get(target.id)!
       const dx = b.x - a.x,
         dy = b.y - a.y,
         len = Math.max(1, Math.hypot(dx, dy))
       const bend = Math.min(40, len * 0.09)
       const cx = (a.x + b.x) / 2 - (dy / len) * bend,
         cy = (a.y + b.y) / 2 + (dx / len) * bend
-      const arr = entry.line.geometry.getAttribute("position") as THREE.BufferAttribute
-      for (let i = 0; i <= 24; i++) {
-        const t = i / 24,
-          q = 1 - t
-        const x = q * q * a.x + 2 * q * t * cx + t * t * b.x,
-          y = q * q * a.y + 2 * q * t * cy + t * t * b.y
-        arr.setXYZ(i, x - width / 2, height / 2 - y, -500)
+      const previous = entry.endpoints
+      if (
+        !fallback &&
+        (previous[0] !== a.x ||
+          previous[1] !== a.y ||
+          previous[2] !== b.x ||
+          previous[3] !== b.y ||
+          previous[4] !== width ||
+          previous[5] !== height)
+      ) {
+        updateRelationGeometry(entry.line.geometry, a, b, width, height)
+        previous[0] = a.x
+        previous[1] = a.y
+        previous[2] = b.x
+        previous[3] = b.y
+        previous[4] = width
+        previous[5] = height
       }
-      arr.needsUpdate = true
-      entry.line.computeLineDistances()
-      ;(entry.line.material as THREE.Material).opacity = entry.opacity
       const t = 0.72,
         q = 1 - t
       updatePoint(
@@ -398,12 +531,10 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
         -495,
       )
       entry.arrow.rotation.z = Math.atan2(-dy, dx) - Math.PI / 2
-      ;(entry.arrow.material as THREE.Material).opacity =
-        entry.opacity * (edgeStyle(relation) === "dashed" ? 0.3 : 0.85)
       if (fallback && entry.opacity > 0.01) {
         fallback.globalAlpha = entry.opacity
         fallback.strokeStyle = "#456e80"
-        fallback.setLineDash(edgeStyle(relation) === "dashed" ? [6, 6] : [])
+        fallback.setLineDash(entry.style === "dashed" ? [6, 6] : [])
         fallback.beginPath()
         fallback.moveTo(a.x, a.y)
         fallback.quadraticCurveTo(cx, cy, b.x, b.y)
@@ -412,13 +543,14 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
     }
     for (const node of nodes) {
       const mesh = meshes.get(node.id)!,
-        p = project(node)
-      const visual = appearance(node, context),
+        p = projected.get(node.id)!
+      const visual = nodeAppearances.get(node.id)!,
         r = visual.radius
       updatePoint(mesh.point, p, node.z)
       mesh.point.scale.setScalar(r)
       ;(mesh.point.material as THREE.MeshBasicMaterial).opacity = visual.opacity
-      const visible = !context.visibleIDs || context.visibleIDs.includes(node.id)
+      mesh.point.visible = visual.opacity > 0.001
+      const visible = !visibleNodes || visibleNodes.has(node.id)
       const emphasis = !visible
         ? 0
         : node.id === context.focus
@@ -432,12 +564,13 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
         (emphasis * 0.48 - (mesh.ring.material as THREE.Material).opacity) * Math.min(1, dt * 7)
       changing ||=
         Math.abs(emphasis * 0.48 - (mesh.ring.material as THREE.Material).opacity) > 0.001
+      mesh.ring.visible = (mesh.ring.material as THREE.Material).opacity > 0.001
       if (fallback) {
         fallback.globalAlpha = visual.opacity
-        fallback.fillStyle = model.concepts.find((c) => c.id === node.id)?.color ?? "#355f76"
+        const concept = concepts.get(node.id)
+        fallback.fillStyle = concept?.color ?? "#355f76"
         fallback.setLineDash([])
         fallback.beginPath()
-        const concept = model.concepts.find((c) => c.id === node.id)
         if (concept?.kind === "construction")
           fallback.rect(p.x - r * 0.85, p.y - r * 0.85, r * 1.7, r * 1.7)
         else if (concept?.kind === "example") {
@@ -472,12 +605,48 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
     fallback.stroke()
   }
   function drawCommunity(community: Community, nodes: FieldNode[], dt: number, scale: number) {
-    const footprint = communityFootprint(community, nodes, project, scale)
+    let cached = communityTargets.get(community.id)
+    if (!cached || cached.members !== community.members) {
+      cached = {
+        members: community.members,
+        input: new Float64Array(community.members.length * 3 + 2).fill(NaN),
+        footprint: undefined,
+      }
+      communityTargets.set(community.id, cached)
+    }
+    let changed = cached.input[0] !== scale || cached.input[1] !== community.coherence
+    cached.input[0] = scale
+    cached.input[1] = community.coherence
+    for (let i = 0; i < community.members.length; i++) {
+      const id = community.members[i],
+        point = projected.get(id),
+        node = nodeMap.get(id)
+      if (!point || !node) continue
+      const offset = i * 3 + 2
+      changed ||=
+        cached.input[offset] !== point.x ||
+        cached.input[offset + 1] !== point.y ||
+        cached.input[offset + 2] !== node.relevance
+      cached.input[offset] = point.x
+      cached.input[offset + 1] = point.y
+      cached.input[offset + 2] = node.relevance
+    }
+    if (changed || !cached.footprint)
+      cached.footprint = communityFootprint(
+        community,
+        nodes,
+        (node) => projected.get(node.id)!,
+        scale,
+      )
+    const footprint = cached.footprint
     if (!footprint) return false
     let entry = hulls.get(community.id)
     if (!entry) {
       const geometry = new THREE.BufferGeometry()
-      geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(64 * 3), 3))
+      geometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(new Float32Array(64 * 3), 3).setUsage(THREE.DynamicDrawUsage),
+      )
       const line = new THREE.LineLoop(
         geometry,
         new THREE.LineBasicMaterial({
@@ -487,6 +656,7 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
           depthWrite: false,
         }),
       )
+      line.frustumCulled = false
       entry = {
         line,
         points: footprint.points.map((p) => ({ ...p })),
@@ -496,11 +666,14 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
       scene.add(line)
     }
     let changing = false
+    let geometryChanged = false
     const blend = Math.min(1, dt * 6)
     const attribute = entry.line.geometry.getAttribute("position") as THREE.BufferAttribute
     for (let i = 0; i < entry.points.length; i++) {
       const current = entry.points[i],
         target = footprint.points[i]
+      const oldX = current.x,
+        oldY = current.y
       current.x += (target.x - current.x) * blend
       current.y += (target.y - current.y) * blend
       const active = Math.hypot(target.x - current.x, target.y - current.y) > 0.08
@@ -509,17 +682,36 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
         current.y = target.y
       }
       changing ||= active
-      attribute.setXYZ(i, current.x - width / 2, height / 2 - current.y, -650)
+      // Upload only when screen positions or the viewport origin actually changed.
+      const x = current.x - width / 2,
+        y = height / 2 - current.y
+      if (
+        oldX !== current.x ||
+        oldY !== current.y ||
+        attribute.getX(i) !== Math.fround(x) ||
+        attribute.getY(i) !== Math.fround(y) ||
+        attribute.getZ(i) !== -650
+      ) {
+        attribute.setXYZ(i, x, y, -650)
+        geometryChanged = true
+      }
     }
-    attribute.needsUpdate = true
+    if (geometryChanged && !fallback) attribute.needsUpdate = true
     const material = entry.line.material as THREE.Material
     material.opacity += (footprint.opacity - material.opacity) * Math.min(1, dt * 3)
     if (Math.abs(footprint.opacity - material.opacity) > 0.001) changing = true
     else material.opacity = footprint.opacity
-    const minX = Math.min(...entry.points.map((p) => p.x)),
-      maxX = Math.max(...entry.points.map((p) => p.x))
-    const minY = Math.min(...entry.points.map((p) => p.y)),
-      maxY = Math.max(...entry.points.map((p) => p.y))
+    entry.line.visible = material.opacity > 0.001
+    let minX = Infinity,
+      maxX = -Infinity,
+      minY = Infinity,
+      maxY = -Infinity
+    for (const point of entry.points) {
+      minX = Math.min(minX, point.x)
+      maxX = Math.max(maxX, point.x)
+      minY = Math.min(minY, point.y)
+      maxY = Math.max(maxY, point.y)
+    }
     Object.assign(entry.visual, {
       x: (minX + maxX) / 2,
       y: (minY + maxY) / 2,
@@ -530,10 +722,11 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
     paintCommunity(entry)
     return changing
   }
-  canvas.addEventListener("webglcontextlost", (event) => {
+  const contextLost = (event: Event) => {
     event.preventDefault()
     canvas.dispatchEvent(new Event("topos-context-lost"))
-  })
+  }
+  canvas.addEventListener("webglcontextlost", contextLost)
   resize()
   return {
     draw,
@@ -550,6 +743,13 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
     get backend() {
       return gpu ? "webgl2" : "canvas2d"
     },
+    get renderStats() {
+      return {
+        calls: gpu?.info.render.calls ?? 0,
+        geometries: gpu?.info.memory.geometries ?? 0,
+        visibleEdges: [...edges.values()].filter((edge) => edge.line.visible).length,
+      }
+    },
     setCenterY(y: number) {
       centerY = y
     },
@@ -560,16 +760,35 @@ export function createRenderer(canvas: HTMLCanvasElement, model: KnowledgeModel)
       return { width, height }
     },
     dispose() {
-      gpu?.dispose()
+      canvas.removeEventListener("webglcontextlost", contextLost)
+      for (const geometry of [
+        pointGeometry,
+        squareGeometry,
+        triangleGeometry,
+        ringGeometry,
+        arrowGeometry,
+      ])
+        geometry.dispose()
       for (const m of meshes.values()) {
-        m.point.geometry.dispose()
-        m.ring.geometry.dispose()
+        ;(m.point.material as THREE.Material).dispose()
+        ;(m.ring.material as THREE.Material).dispose()
       }
-      for (const e of edges.values()) e.line.geometry.dispose()
+      for (const e of edges.values()) {
+        e.line.geometry.dispose()
+        ;(e.line.material as THREE.Material).dispose()
+        ;(e.arrow.material as THREE.Material).dispose()
+      }
       for (const h of hulls.values()) {
         h.line.geometry.dispose()
         ;(h.line.material as THREE.Material).dispose()
       }
+      gpu?.dispose()
+      fallback?.canvas.remove()
+      scene.clear()
+      communityTargets.clear()
+      meshes.clear()
+      edges.clear()
+      hulls.clear()
     },
   }
 }

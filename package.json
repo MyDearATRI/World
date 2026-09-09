@@ -53,7 +53,8 @@
     "check:ontology": "node scripts/validate-ontology.mjs",
     "test:topic-map": "node scripts/verify-topic-map.mjs",
     "test:topics": "node scripts/verify-topic-browser.mjs",
-    "test:topic-interactions": "node scripts/verify-topic-interactions.mjs"
+    "test:topic-interactions": "node scripts/verify-topic-interactions.mjs",
+    "test:motion": "node scripts/verify-topos-performance.mjs"
   },
   "engines": {
     "npm": ">=10.9.2",

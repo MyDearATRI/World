@@ -1,6 +1,9 @@
 {
   "version": 1,
   "newFiles": [
+    "quartz/util/topos/field.test.ts",
+    "quartz/util/topos/renderer.test.ts",
+    "scripts/verify-topos-performance.mjs",
     "docs/acceptance-criteria.md",
     "docs/adr/0001-reuse-and-evidence-boundaries.md",
     "docs/adr/0002-tool-candidates.md",

@@ -1,5 +1,11 @@
 # Website acceptance
 
+## Animation responsiveness
+
+Run `npm run test:motion -- --output artifacts/motion/current` on a built site. The script records an unchanged baseline and candidate with the same real pointer/touch tasks, browser version, rendered-resource hashes and viewport. It distinguishes application callback time, callback intervals, input dispatch delay, event-to-completed-render time, long tasks and finite settling. Thresholds are declared by the diagnostic before measurements; no headless measurement is labelled as physical-screen FPS, field INP or an actual phone test. CI keeps deterministic functional and content checks; machine-specific timing is a local diagnostic.
+
+Recheck drag without accidental opening, neighbor response, coalesced zoom, direct navigation superseding pending wheel input, history/scroll/focus restoration, topic unions, text/MathML visibility and fallback. Preserve raw failures and review actual screenshots. A speed improvement cannot compensate for lost mathematics or changed relationships.
+
 ## Theme sidebar and Phase 0 / Phase 1
 
 Phase completion is recorded in `docs/phases/phase-00/acceptance.json`, `docs/phases/phase-01/acceptance.json` and `docs/phase-status.json`. UI checks cannot substitute for missing contract or mathematical-source evidence. Later-phase results remain NOT_RUN.

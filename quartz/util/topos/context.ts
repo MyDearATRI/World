@@ -10,9 +10,15 @@ import type {
 
 const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n))
 const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)
-const communityCache = new WeakMap<
+type Adjacency = Map<string, Map<string, number>>
+interface Analysis {
+  adjacency: Adjacency
+  communities?: Community[]
+  distances: Map<string, Map<string, number>>
+}
+const analysisCache = new WeakMap<
   KnowledgeModel,
-  Map<Lens, { signature: string; communities: Community[] }>
+  { signature: string; lenses: Map<Lens, Analysis> }
 >()
 
 const cloneCommunities = (communities: Community[]) =>
@@ -68,10 +74,9 @@ function hash(value: string) {
   return (n >>> 0).toString(36)
 }
 
-/** Deterministic weighted modularity agglomeration; no taxonomy/folder input exists here. */
-export function deriveCommunities(model: KnowledgeModel, lens: Lens): Community[] {
-  // Focus and zoom alter local relevance, not the graph's global modularity.
-  // Validate graph semantics so in-place edits cannot leave a stale grouping.
+function analysisFor(model: KnowledgeModel, lens: Lens): Analysis {
+  // Focus and zoom do not change adjacency, paths or graph communities. Retain
+  // an O(V+E) semantic signature so edits made in place still invalidate caches.
   const signature = JSON.stringify([
     model.concepts.map(({ id, title, terms }) => [id, title, terms]),
     model.relations.map(({ source, target, type, strength, lenses }) => [
@@ -82,18 +87,31 @@ export function deriveCommunities(model: KnowledgeModel, lens: Lens): Community[
       lenses,
     ]),
   ])
-  const cached = communityCache.get(model)?.get(lens)
-  if (cached?.signature === signature) return cloneCommunities(cached.communities)
-  const communities = computeCommunities(model, lens)
-  const byLens = communityCache.get(model) ?? new Map()
-  byLens.set(lens, { signature, communities })
-  communityCache.set(model, byLens)
-  return cloneCommunities(communities)
+  let cached = analysisCache.get(model)
+  if (!cached || cached.signature !== signature) {
+    cached = { signature, lenses: new Map() }
+    analysisCache.set(model, cached)
+  }
+  let analysis = cached.lenses.get(lens)
+  if (!analysis) {
+    analysis = { adjacency: graph(model, lens), distances: new Map() }
+    cached.lenses.set(lens, analysis)
+  }
+  return analysis
 }
 
-function computeCommunities(model: KnowledgeModel, lens: Lens): Community[] {
-  const adj = graph(model, lens),
-    ids = [...adj.keys()].sort(compare)
+function communitiesFor(model: KnowledgeModel, analysis: Analysis): Community[] {
+  analysis.communities ??= computeCommunities(model, analysis.adjacency)
+  return cloneCommunities(analysis.communities)
+}
+
+/** Deterministic weighted modularity agglomeration; no taxonomy/folder input exists here. */
+export function deriveCommunities(model: KnowledgeModel, lens: Lens): Community[] {
+  return communitiesFor(model, analysisFor(model, lens))
+}
+
+function computeCommunities(model: KnowledgeModel, adj: Adjacency): Community[] {
+  const ids = [...adj.keys()].sort(compare)
   const degree = new Map(
     ids.map((id) => [id, [...adj.get(id)!.values()].reduce((a, b) => a + b, 0)]),
   )
@@ -177,7 +195,8 @@ function computeCommunities(model: KnowledgeModel, lens: Lens): Community[] {
 
 /** Every concept survives a context change; semantic distance changes its role and relevance. */
 export function deriveContext(model: KnowledgeModel, view: ViewState): Context {
-  const adj = graph(model, view.lens)
+  const analysis = analysisFor(model, view.lens),
+    adj = analysis.adjacency
   const focus = adj.has(view.focus)
     ? view.focus
     : adj.has(model.initial)
@@ -187,20 +206,7 @@ export function deriveContext(model: KnowledgeModel, view: ViewState): Context {
   const previous = [...view.trail].reverse().find((id) => id !== focus && adj.has(id))
   const scale = clamp(Number.isFinite(view.scale) ? view.scale : 1, 0, 3)
   const fine = scale / 3
-  const distance = new Map<string, number>([[focus, 0]]),
-    done = new Set<string>()
-  while (done.size < adj.size) {
-    const next = [...distance]
-      .filter(([id]) => !done.has(id))
-      .sort((a, b) => a[1] - b[1] || compare(a[0], b[0]))[0]
-    if (!next) break
-    const [id, d] = next
-    done.add(id)
-    for (const [target, weight] of adj.get(id)!) {
-      const nd = d + 1 / (0.35 + 0.65 * weight)
-      if (nd < (distance.get(target) ?? Infinity)) distance.set(target, nd)
-    }
-  }
+  const distance = distancesFrom(analysis, focus)
   const direct = adj.get(focus)!
   const nodes = model.concepts.map((concept) => {
     const d = distance.get(concept.id) ?? model.concepts.length + 1
@@ -239,6 +245,34 @@ export function deriveContext(model: KnowledgeModel, view: ViewState): Context {
     scale,
     nodes,
     relations,
-    communities: deriveCommunities(model, view.lens),
+    communities: communitiesFor(model, analysis),
   }
+}
+
+function distancesFrom(analysis: Analysis, focus: string): Map<string, number> {
+  const cached = analysis.distances.get(focus)
+  if (cached) return cached
+  const distance = new Map<string, number>([[focus, 0]]),
+    done = new Set<string>()
+  while (done.size < analysis.adjacency.size) {
+    let id: string | undefined,
+      d = Infinity
+    for (const [candidate, value] of distance)
+      if (!done.has(candidate) && (value < d || (value === d && compare(candidate, id!) < 0))) {
+        id = candidate
+        d = value
+      }
+    if (id === undefined) break
+    done.add(id)
+    for (const [target, weight] of analysis.adjacency.get(id)!) {
+      const nd = d + 1 / (0.35 + 0.65 * weight)
+      if (nd < (distance.get(target) ?? Infinity)) distance.set(target, nd)
+    }
+  }
+  // A reader may traverse a large atlas. Bound retained source-path maps while
+  // preserving the hot focus through arbitrarily many semantic zoom updates.
+  if (analysis.distances.size >= 32)
+    analysis.distances.delete(analysis.distances.keys().next().value!)
+  analysis.distances.set(focus, distance)
+  return distance
 }

@@ -181,6 +181,15 @@ export function createTopicSidebar(
   mobile.addEventListener("change", resize)
   return {
     update(selection: string[] | undefined, focus: string) {
+      if (
+        focus === focused &&
+        (selection === selected ||
+          (selection !== undefined &&
+            selected !== undefined &&
+            selection.length === selected.length &&
+            selection.every((id, i) => id === selected![i])))
+      )
+        return
       selected = selection
       focused = focus
       for (const [id, input] of inputs)

@@ -1,5 +1,11 @@
 # Design specification
 
+## Responsive movement
+
+Continuous wheel, pinch and depth-slider input is coalesced into the next animation frame. Pointer panning follows the pointer directly; camera changes use short time-based easing, and concept labels follow their actual anchors on every paint. Collision placement is independent from anchor tracking. Direct navigation supersedes any queued zoom from the previous context.
+
+Cache graph analysis, text measurements and reusable GPU buffers with explicit invalidation. Hidden geometry and invisible text must not impose continuous drawing or layer costs. Do not animate font size, reading width or maximum height while the same properties are being recalculated each frame; use position and brief opacity/color transitions. Preserve exact mathematical relationships, node identity, finite settling, reduced motion and Canvas2D fallback.
+
 ## Theme navigation
 
 The latest explicit sidebar request supersedes the historical sidebar prohibition. A 272px warm-gray rail (235px at intermediate desktop widths) contains six actual-note themes or twelve atlas regions, using stable colors, readable names, native checkboxes and counts. Color is not the sole state signal. Multi-selection is a union, shared objects occur once, and an empty selection has guidance. The selected-node directory can filter names and provides access to every identity.

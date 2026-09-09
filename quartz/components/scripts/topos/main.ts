@@ -153,6 +153,7 @@ async function start() {
     context = deriveContext(model, state)
   const field = createField(model, context),
     renderer = createRenderer(canvas, model)
+  const fieldNodes = new Map(field.nodes.map((node) => [node.id, node]))
   function restoreSaved(value: Saved) {
     const view = value.view
     state = {
@@ -215,6 +216,7 @@ async function start() {
   const edgeLabels = new Map<string, HTMLButtonElement>()
   let frame = 0,
     raf = 0,
+    inFrame = false,
     last = 0,
     idle = false,
     pointer = { x: 0, y: 0 },
@@ -232,6 +234,8 @@ async function start() {
           startX: number
           startY: number
           distance: number
+          grabX: number
+          grabY: number
         }
       | undefined
   const touches = new Map<number, { x: number; y: number }>()
@@ -239,6 +243,23 @@ async function start() {
   let suppressedClick = 0
   let transitionTime = 0
   let annotationTime = -Infinity
+  let pendingScale: number | undefined
+  let layoutVersion = ""
+  let measurements = new WeakMap<HTMLElement, { width: number; height: number }>()
+  const measure = (node: HTMLElement) => {
+    let size = measurements.get(node)
+    if (!size) {
+      size = { width: node.offsetWidth, height: node.offsetHeight }
+      measurements.set(node, size)
+    }
+    return size
+  }
+  const style = (node: HTMLElement | SVGElement, name: string, value: string) => {
+    if (node.style.getPropertyValue(name) !== value) node.style.setProperty(name, value)
+  }
+  const annotationAnchors = new Map<string, { x: number; y: number }>()
+  const communityTargets = new Map<string, AnnotationPlacement>()
+  const communityAnchors = new Map<string, { x: number; y: number }>()
   const annotationTargets = new Map<string, AnnotationPlacement>(),
     annotationPositions = new Map<string, { x: number; y: number }>()
   const leaderLayer = document.createElementNS("http://www.w3.org/2000/svg", "svg")
@@ -286,46 +307,58 @@ async function start() {
       labelNodes.get(id)?.focus({ preventScroll: true })
     },
   })
-  const isVisible = (id: string) => !context.visibleIDs || context.visibleIDs.includes(id)
+  let visibilityContext: typeof context | undefined
+  let visibleIDs: Set<string> | undefined
+  const isVisible = (id: string) => {
+    if (visibilityContext !== context) {
+      visibilityContext = context
+      visibleIDs = context.visibleIDs ? new Set(context.visibleIDs) : undefined
+    }
+    return !visibleIDs || visibleIDs.has(id)
+  }
 
-  const snapshot = () => ({
-    time: performance.now(),
-    frame,
-    focus: state.focus,
-    lens: state.lens,
-    scale: state.scale,
-    unfoldedIDs: state.unfolded.map((u) => u.section),
-    trail: [...state.trail],
-    settled: idle,
-    renderer: renderer.backend,
-    mode: model.mode ?? "demo",
-    objectCount: model.concepts.length,
-    modelStats: model.stats,
-    topics: state.topics,
-    visibleIDs: context.visibleIDs ?? model.concepts.map((n) => n.id),
-    camera: { ...renderer.view },
-    modelSignature,
-    nodes: field.nodes.map((n) => ({
-      ...n,
-      ...renderer.appearance(n, context),
-      screenX: renderer.project(n).x + world.getBoundingClientRect().left,
-      screenY: renderer.project(n).y + world.getBoundingClientRect().top,
-    })),
-    relations: context.relations.map((r) => ({
-      id: r.id,
-      source: r.source,
-      target: r.target,
-      type: r.type,
-      provenance: r.provenance,
-      evidenceHref: r.evidenceHref,
-    })),
-    communities: context.communities.map((c) => ({
-      ...c,
-      strength: c.coherence,
-      visual: renderer.communityVisuals.find((v) => v.id === c.id),
-    })),
-    stats: { ...stats },
-  })
+  const snapshot = () => {
+    const bounds = world.getBoundingClientRect()
+    return {
+      time: performance.now(),
+      frame,
+      focus: state.focus,
+      lens: state.lens,
+      scale: state.scale,
+      unfoldedIDs: state.unfolded.map((u) => u.section),
+      trail: [...state.trail],
+      settled: idle,
+      renderer: renderer.backend,
+      renderStats: renderer.renderStats,
+      mode: model.mode ?? "demo",
+      objectCount: model.concepts.length,
+      modelStats: model.stats,
+      topics: state.topics,
+      visibleIDs: context.visibleIDs ?? model.concepts.map((n) => n.id),
+      camera: { ...renderer.view },
+      modelSignature,
+      nodes: field.nodes.map((n) => ({
+        ...n,
+        ...renderer.appearance(n, context),
+        screenX: renderer.project(n).x + bounds.left,
+        screenY: renderer.project(n).y + bounds.top,
+      })),
+      relations: context.relations.map((r) => ({
+        id: r.id,
+        source: r.source,
+        target: r.target,
+        type: r.type,
+        provenance: r.provenance,
+        evidenceHref: r.evidenceHref,
+      })),
+      communities: context.communities.map((c) => ({
+        ...c,
+        strength: c.coherence,
+        visual: renderer.communityVisuals.find((v) => v.id === c.id),
+      })),
+      stats: { ...stats },
+    }
+  }
   const serialize = (): Saved => {
     const reading = unfoldings.get(state.focus)
     if (
@@ -369,9 +402,13 @@ async function start() {
   function wake() {
     idle = false
     requested = Math.max(requested, 2)
-    if (!raf) raf = requestAnimationFrame(tick)
+    if (!raf && !inFrame) {
+      last = 0
+      raf = requestAnimationFrame(tick)
+    }
   }
   function commit(next: ViewState, push = true) {
+    pendingScale = undefined
     remember()
     state = next
     context = deriveContext(model, state)
@@ -409,6 +446,7 @@ async function start() {
       : `${concepts.get(id)!.zh}成为当前语境。观察邻域变化，或向内展开解释。`
   }
   function zoom(value: number, push = false) {
+    pendingScale = undefined
     const scale = clamp(value, 0, 3)
     if (Math.abs(scale - state.scale) < 0.005) return
     stats.scaleChanges++
@@ -422,6 +460,11 @@ async function start() {
       wake()
       laterRemember()
     }
+  }
+  // Continuous input is consumed once by the next paint, never as a backlog of graph rebuilds.
+  function queueZoom(value: number) {
+    pendingScale = clamp(value, 0, 3)
+    wake()
   }
   function setLens(lens: Lens) {
     if (lens === state.lens) return
@@ -1102,13 +1145,32 @@ async function start() {
   function update() {
     sidebar?.update(state.topics, state.focus)
     empty.hidden = !context.visibleIDs || context.visibleIDs.length > 0
-    world.dataset.focus = state.focus
-    world.dataset.lens = state.lens
-    world.dataset.depth = String(Math.floor(state.scale))
-    world.dataset.summary = String(state.scale >= 1.35 && state.scale < 1.7)
-    world.dataset.explaining = String(state.scale >= 1.7)
+    const nextLayout = [
+      state.focus,
+      context.previous,
+      state.lens,
+      state.topics?.join(","),
+      Math.floor(state.scale),
+      state.scale >= 0.75,
+      state.scale >= 0.9,
+      state.scale >= 1.35,
+      state.scale >= 1.7,
+      renderer.size.width,
+      renderer.size.height,
+    ].join("/")
+    const layoutChanged = layoutVersion !== nextLayout
+    if (layoutChanged) {
+      layoutVersion = nextLayout
+      world.dataset.focus = state.focus
+      world.dataset.lens = state.lens
+      world.dataset.depth = String(Math.floor(state.scale))
+      world.dataset.summary = String(state.scale >= 1.35 && state.scale < 1.7)
+      world.dataset.explaining = String(state.scale >= 1.7)
+      measurements = new WeakMap()
+      annotationTime = -Infinity
+    }
     depth.value = String(state.scale)
-    output.textContent =
+    const depthTitle =
       state.scale < 0.75
         ? "结构与聚合"
         : state.scale < 1.7
@@ -1120,31 +1182,70 @@ async function start() {
                 : "原文与公式"
               : "定义与公式"
             : "递归展开"
+    if (output.textContent !== depthTitle) output.textContent = depthTitle
     targetZoom = innerWidth < 600 ? 0.45 + state.scale * 0.065 : 0.79 + state.scale * 0.09
-    for (const b of document.querySelectorAll<HTMLElement>("button[data-lens]"))
-      b.setAttribute("aria-pressed", String(b.dataset.lens === state.lens))
-    for (const n of field.nodes)
-      field.setRadius(n.id, n.id === state.focus ? (state.scale >= 1.7 ? 300 : 130) : 72)
-    for (const [id, a] of labelNodes) {
-      a.dataset.focus = String(id === state.focus)
-      a.dataset.previous = String(id === context.previous)
-      a.setAttribute("aria-current", id === state.focus ? "true" : "false")
+    if (layoutChanged) {
+      for (const b of document.querySelectorAll<HTMLElement>("button[data-lens]"))
+        b.setAttribute("aria-pressed", String(b.dataset.lens === state.lens))
+      for (const n of field.nodes)
+        field.setRadius(n.id, n.id === state.focus ? (state.scale >= 1.7 ? 300 : 130) : 72)
+      const focusedWidth = Math.min(published ? 650 : 360, renderer.size.width - 28)
+      for (const [id, a] of labelNodes) {
+        a.dataset.focus = String(id === state.focus)
+        a.dataset.previous = String(id === context.previous)
+        a.setAttribute("aria-current", id === state.focus ? "true" : "false")
+        style(a, "width", `${id === state.focus ? focusedWidth : innerWidth < 600 ? 128 : 185}px`)
+      }
     }
     updateContent()
-    annotationTime = -Infinity
   }
-  function drawLabels() {
+  function drawLabels(dt: number) {
     let annotationsMoving = false
     const activeUnfold = unfoldings.get(state.focus)
     const showUnfold = state.scale >= 1.7
     const mobileReading = published && innerWidth < 600 && showUnfold
     const now = performance.now()
     const focusedWidth = Math.min(published ? 650 : 360, renderer.size.width - 28)
-    for (const n of field.nodes) {
-      const a = labelNodes.get(n.id)!
-      a.style.width = `${n.id === state.focus ? focusedWidth : innerWidth < 600 ? 128 : 185}px`
+    const focused = fieldNodes.get(state.focus)!
+    const focusedPoint = renderer.project(focused)
+    const focusSize = measure(labelNodes.get(state.focus)!)
+    const focusBox = {
+      id: state.focus,
+      x: clamp(
+        focusedPoint.x - focusSize.width / 2,
+        14,
+        renderer.size.width - focusSize.width - 14,
+      ),
+      y: clamp(
+        focusedPoint.y - focusSize.height - 28,
+        98,
+        renderer.size.height - focusSize.height - 160,
+      ),
+      width: focusSize.width,
+      height: focusSize.height,
     }
-    if (now - annotationTime > 220) {
+    // Anchor tracking runs every paint; only the expensive collision search is throttled.
+    for (const [id, box] of annotationTargets) {
+      const node = fieldNodes.get(id)
+      const anchor = annotationAnchors.get(id)
+      if (!node || !anchor) continue
+      const point = renderer.project(node)
+      const dx = point.x - anchor.x,
+        dy = point.y - anchor.y
+      box.x += dx
+      box.y += dy
+      const previous = annotationPositions.get(id)
+      if (previous) {
+        previous.x += dx
+        previous.y += dy
+      }
+      annotationAnchors.set(id, point)
+    }
+    annotationTargets.set(state.focus, focusBox)
+    annotationPositions.set(state.focus, { x: focusBox.x, y: focusBox.y })
+    annotationAnchors.set(state.focus, focusedPoint)
+    const solveAnnotations = now - annotationTime > 160
+    if (solveAnnotations) {
       annotationTime = now
       const candidates = field.nodes
         .filter(
@@ -1160,27 +1261,9 @@ async function start() {
             (a.id === state.focus ? 100 : a.id === context.previous ? 90 : a.relevance),
         )
         .slice(0, mobileReading ? 0 : innerWidth < 600 ? (showUnfold ? 4 : 6) : 12)
-      const focused = field.nodes.find((n) => n.id === state.focus)!
-      const focusedPoint = renderer.project(focused),
-        focusedLabel = labelNodes.get(state.focus)!
-      const focusBox = {
-        id: state.focus,
-        x: clamp(
-          focusedPoint.x - focusedLabel.offsetWidth / 2,
-          14,
-          renderer.size.width - focusedLabel.offsetWidth - 14,
-        ),
-        y: clamp(
-          focusedPoint.y - focusedLabel.offsetHeight - 28,
-          98,
-          renderer.size.height - focusedLabel.offsetHeight - 160,
-        ),
-        width: focusedLabel.offsetWidth,
-        height: focusedLabel.offsetHeight,
-      }
       const excluded: { x: number; y: number; width: number; height: number }[] = [focusBox]
       if (showUnfold) {
-        const p = renderer.project(field.nodes.find((n) => n.id === state.focus)!)
+        const p = focusedPoint
         const w = Math.min(
           innerWidth < 600 ? innerWidth - 28 : published ? 720 : 465,
           renderer.size.width - 32,
@@ -1197,8 +1280,8 @@ async function start() {
             id: n.id,
             anchorX: p.x,
             anchorY: p.y,
-            width: a.offsetWidth,
-            height: a.offsetHeight,
+            width: measure(a).width,
+            height: measure(a).height,
             priority:
               n.id === state.focus ? 100 : n.id === context.previous ? 90 : n.relevance * 10,
           }
@@ -1212,7 +1295,9 @@ async function start() {
         excluded,
       )
       annotationTargets.clear()
+      annotationAnchors.clear()
       annotationTargets.set(state.focus, focusBox)
+      annotationAnchors.set(state.focus, focusedPoint)
       for (const box of placed) {
         if (
           published &&
@@ -1226,8 +1311,11 @@ async function start() {
         )
           continue
         annotationTargets.set(box.id, box)
+        annotationAnchors.set(box.id, renderer.project(fieldNodes.get(box.id)!))
       }
     }
+    const visibleLabelBoxes: { x: number; y: number; width: number; height: number }[] = []
+    const labelBlend = reduce.matches ? 1 : 1 - Math.exp(-dt * 18)
     for (const n of field.nodes) {
       const a = labelNodes.get(n.id)!,
         p = renderer.project(n)
@@ -1240,43 +1328,61 @@ async function start() {
       const box = isVisible(n.id) ? annotationTargets.get(n.id) : undefined
       if (box) {
         const previous = annotationPositions.get(n.id) ?? { x: box.x, y: box.y }
-        previous.x += (box.x - previous.x) * (reduce.matches ? 1 : 0.18)
-        previous.y += (box.y - previous.y) * (reduce.matches ? 1 : 0.18)
+        previous.x += (box.x - previous.x) * labelBlend
+        previous.y += (box.y - previous.y) * labelBlend
         annotationsMoving ||= Math.abs(previous.x - box.x) + Math.abs(previous.y - box.y) > 0.2
         annotationPositions.set(n.id, previous)
         x = previous.x
         y = previous.y
       }
-      a.style.transform = `translate(${x}px,${y}px) scale(${box ? 1 : size})`
-      a.style.width = `${labelWidth}px`
       const appearance = renderer.appearance(n, context)
       const farVisibility = appearance.major ? 1 : clamp((state.scale - 0.45) / 0.65, 0, 1)
-      a.style.opacity = String(
+      const opacity =
         labelsHidden || !isVisible(n.id)
           ? 0
           : farVisibility *
-              (box
-                ? clamp(0.45 + n.relevance * 0.65, 0, 1)
-                : published
-                  ? 0
-                  : n.relevance * (showUnfold ? 0.08 : 0.5)),
-      )
-      a.style.filter = n.relevance < 0.28 ? `blur(${(0.28 - n.relevance) * 3}px)` : "none"
-      a.style.zIndex = isFocus ? "8" : String(Math.floor(n.relevance * 5))
-      a.tabIndex = box && !labelsHidden ? 0 : -1
-      a.style.pointerEvents = box && !labelsHidden ? "auto" : "none"
-      a.dataset.relevance = n.relevance.toFixed(3)
+            (box
+              ? clamp(0.45 + n.relevance * 0.65, 0, 1)
+              : published
+                ? 0
+                : n.relevance * (showUnfold ? 0.08 : 0.5))
+      style(a, "opacity", String(opacity))
+      style(a, "visibility", opacity > 0.005 ? "visible" : "hidden")
+      style(a, "will-change", opacity > 0.005 ? "transform, opacity" : "auto")
+      if (opacity > 0.005) {
+        style(a, "transform", `translate3d(${x}px,${y}px,0) scale(${box ? 1 : size})`)
+        style(a, "filter", n.relevance < 0.28 ? `blur(${(0.28 - n.relevance) * 3}px)` : "none")
+        style(a, "z-index", isFocus ? "8" : String(Math.floor(n.relevance * 5)))
+        if (opacity > 0.3)
+          visibleLabelBoxes.push({
+            x,
+            y,
+            width: labelWidth * (box ? 1 : size),
+            height: measure(a).height * (box ? 1 : size),
+          })
+      }
+      const tabIndex = box && !labelsHidden ? 0 : -1
+      if (a.tabIndex !== tabIndex) a.tabIndex = tabIndex
+      style(a, "pointer-events", box && !labelsHidden ? "auto" : "none")
       let leader = leaders.get(n.id)
-      if (!leader) {
+      if (!leader && box) {
         leader = document.createElementNS("http://www.w3.org/2000/svg", "line")
         leaders.set(n.id, leader)
         leaderLayer.append(leader)
       }
-      leader.setAttribute("x1", String(p.x))
-      leader.setAttribute("y1", String(p.y))
-      leader.setAttribute("x2", String(clamp(p.x, x, x + labelWidth)))
-      leader.setAttribute("y2", String(clamp(p.y, y, y + a.offsetHeight)))
-      leader.style.opacity = labelsHidden || !box ? "0" : String(n.relevance * 0.28 * farVisibility)
+      if (leader) {
+        if (box && !labelsHidden) {
+          leader.setAttribute("x1", String(p.x))
+          leader.setAttribute("y1", String(p.y))
+          leader.setAttribute("x2", String(clamp(p.x, x, x + labelWidth)))
+          leader.setAttribute("y2", String(clamp(p.y, y, y + box.height)))
+        }
+        style(
+          leader,
+          "opacity",
+          labelsHidden || !box ? "0" : String(n.relevance * 0.28 * farVisibility),
+        )
+      }
       const root = unfoldings.get(n.id)
       if (root) {
         const active = isVisible(n.id) && isFocus && showUnfold,
@@ -1296,21 +1402,28 @@ async function start() {
           ? clamp(p.x - maxWidth / 2, 14, renderer.size.width - maxWidth - 14)
           : clamp(p.x + 20, 14, renderer.size.width - 236)
         const top = active ? clamp(p.y + 20, 130, renderer.size.height - 180) : p.y + 18
-        root.style.transform = `translate(${left}px,${top}px) scale(${active ? 1 : 0.72})`
-        root.style.width = `${active ? maxWidth : 230}px`
-        root.style.maxHeight = active
-          ? `${Math.max(120, renderer.size.height - top - (innerWidth < 600 ? 145 : 96))}px`
-          : "100px"
+        style(root, "transform", `translate3d(${left}px,${top}px,0) scale(${active ? 1 : 0.72})`)
+        style(root, "width", `${active ? maxWidth : 230}px`)
+        style(
+          root,
+          "max-height",
+          active
+            ? `${Math.max(120, renderer.size.height - top - (innerWidth < 600 ? 145 : 96))}px`
+            : "100px",
+        )
       }
     }
     if (activeUnfold && !showUnfold) {
       activeUnfold.style.opacity = "0"
       activeUnfold.inert = true
     }
-    const showCommunities = new Set(context.communities.map((c) => c.id))
+    const showCommunities = new Set(
+      state.scale < 0.9 && !labelsHidden ? context.communities.map((c) => c.id) : [],
+    )
     for (const [id, node] of communityNodes) if (!showCommunities.has(id)) node.style.opacity = "0"
     const communityItems = []
     for (const c of context.communities) {
+      if (!showCommunities.has(c.id)) continue
       const visual = renderer.communityVisuals.find((v) => v.id === c.id)
       if (!visual) continue
       let label = communityNodes.get(c.id)
@@ -1320,13 +1433,31 @@ async function start() {
         communityNodes.set(c.id, label)
         communityLabels.append(label)
       }
-      label.textContent = c.label
+      if (label.textContent !== c.label) {
+        label.textContent = c.label
+        measurements.delete(label)
+      }
+      const nextAnchor = { x: visual.x, y: visual.y - visual.ry - 24 }
+      const oldAnchor = communityAnchors.get(c.id)
+      const target = communityTargets.get(c.id)
+      if (oldAnchor && target) {
+        const dx = nextAnchor.x - oldAnchor.x,
+          dy = nextAnchor.y - oldAnchor.y
+        target.x += dx
+        target.y += dy
+        const previous = annotationPositions.get(c.id)
+        if (previous) {
+          previous.x += dx
+          previous.y += dy
+        }
+      }
+      communityAnchors.set(c.id, nextAnchor)
       communityItems.push({
         id: c.id,
         anchorX: visual.x,
         anchorY: visual.y - visual.ry - 24,
-        width: label.offsetWidth || 210,
-        height: label.offsetHeight || 36,
+        width: measure(label).width || 210,
+        height: measure(label).height || 36,
         priority: visual.opacity,
       })
       label.style.opacity = String(
@@ -1334,20 +1465,25 @@ async function start() {
       )
       label.dataset.coherence = String(c.coherence)
     }
-    const communityBoxes = computeAnnotations(
-      communityItems,
-      {
-        left: 14,
-        top: 100,
-        right: renderer.size.width - 14,
-        bottom: renderer.size.height - (innerWidth < 600 ? 167 : 110),
-      },
-      [...annotationTargets.values()],
-    )
-    for (const box of communityBoxes) {
+    if (solveAnnotations && communityItems.length) {
+      const communityBoxes = computeAnnotations(
+        communityItems,
+        {
+          left: 14,
+          top: 100,
+          right: renderer.size.width - 14,
+          bottom: renderer.size.height - (innerWidth < 600 ? 167 : 110),
+        },
+        [...annotationTargets.values()],
+      )
+      communityTargets.clear()
+      for (const box of communityBoxes) communityTargets.set(box.id, box)
+    }
+    for (const box of communityTargets.values()) {
+      if (!showCommunities.has(box.id)) continue
       const previous = annotationPositions.get(box.id) ?? { x: box.x, y: box.y }
-      previous.x += (box.x - previous.x) * (reduce.matches ? 1 : 0.12)
-      previous.y += (box.y - previous.y) * (reduce.matches ? 1 : 0.12)
+      previous.x += (box.x - previous.x) * labelBlend
+      previous.y += (box.y - previous.y) * labelBlend
       annotationsMoving ||= Math.abs(previous.x - box.x) + Math.abs(previous.y - box.y) > 0.2
       annotationPositions.set(box.id, previous)
       communityNodes.get(box.id)!.style.transform = `translate(${previous.x}px,${previous.y}px)`
@@ -1373,22 +1509,23 @@ async function start() {
         edgeLabels.set(r.id, label)
         relationLabels.append(label)
       }
-      const a = renderer.project(field.nodes.find((n) => n.id === r.source)!),
-        b = renderer.project(field.nodes.find((n) => n.id === r.target)!)
+      const a = renderer.project(fieldNodes.get(r.source)!),
+        b = renderer.project(fieldNodes.get(r.target)!)
       const other = r.source === state.focus ? b : a,
         origin = r.source === state.focus ? a : b
-      label.style.transform = `translate(${clamp(origin.x * 0.26 + other.x * 0.74, 12, innerWidth - 140)}px,${clamp(origin.y * 0.26 + other.y * 0.74 + 14, 100, innerHeight - 160)}px)`
-      const rect = label.getBoundingClientRect()
-      const occluded = [...labelNodes.values()]
-        .filter((node) => Number(node.style.opacity) > 0.3)
-        .map((node) => node.getBoundingClientRect())
-        .some(
-          (box) =>
-            rect.x < box.x + box.width + 9 &&
-            rect.x + rect.width > box.x - 9 &&
-            rect.y < box.y + box.height + 9 &&
-            rect.y + rect.height > box.y - 9,
-        )
+      const rect = {
+        x: clamp(origin.x * 0.26 + other.x * 0.74, 12, renderer.size.width - 140),
+        y: clamp(origin.y * 0.26 + other.y * 0.74 + 14, 100, renderer.size.height - 160),
+        ...measure(label),
+      }
+      style(label, "transform", `translate3d(${rect.x}px,${rect.y}px,0)`)
+      const occluded = visibleLabelBoxes.some(
+        (box) =>
+          rect.x < box.x + box.width + 9 &&
+          rect.x + rect.width > box.x - 9 &&
+          rect.y < box.y + box.height + 9 &&
+          rect.y + rect.height > box.y - 9,
+      )
       // Decide first, then assign once. Reading geometry between two opacity
       // assignments restarts CSS transitions every frame and prevents hiding.
       label.style.opacity = labelsHidden || occluded ? "0" : "0.7"
@@ -1472,6 +1609,12 @@ async function start() {
     const dt = last ? Math.min((now - last) / 1000, 0.04) : 1 / 60
     last = now
     if (document.hidden) return
+    inFrame = true
+    if (pendingScale !== undefined) {
+      const scale = pendingScale
+      pendingScale = undefined
+      zoom(scale)
+    }
     frame++
     if (reduce.matches) {
       field.settle()
@@ -1481,23 +1624,34 @@ async function start() {
     }
     const moving = field.step(dt)
     const zoomDelta = targetZoom - renderer.view.zoom
-    renderer.view.zoom += zoomDelta * Math.min(1, dt * 7)
-    renderer.view.x += (pan.x - renderer.view.x) * Math.min(1, dt * 8)
-    renderer.view.y += (pan.y - renderer.view.y) * Math.min(1, dt * 8)
+    const cameraBlend = reduce.matches ? 1 : 1 - Math.exp(-dt * 16)
+    renderer.view.zoom += zoomDelta * cameraBlend
+    const directPan = !!pinch || (drag && !drag.id)
+    renderer.view.x += (pan.x - renderer.view.x) * (directPan ? 1 : cameraBlend)
+    renderer.view.y += (pan.y - renderer.view.y) * (directPan ? 1 : cameraBlend)
     const desiredCenter =
       state.scale >= 1.7 ? (published ? 0.235 : innerWidth < 600 ? 0.29 : 0.31) : 0.47
-    currentCenter += (desiredCenter - currentCenter) * Math.min(1, dt * 4)
+    currentCenter += (desiredCenter - currentCenter) * (reduce.matches ? 1 : 1 - Math.exp(-dt * 12))
     renderer.setCenterY(currentCenter)
     renderer.setParallax(pointer.x, pointer.y)
     const rendering = renderer.draw(field.nodes, context, reduce.matches ? 1 : dt)
-    const annotationsMoving = drawLabels()
+    const annotationsMoving = drawLabels(dt)
     requested--
     const cameraMoving =
       Math.abs(zoomDelta) > 0.001 ||
       Math.abs(pan.x - renderer.view.x) > 0.1 ||
       Math.abs(pan.y - renderer.view.y) > 0.1 ||
       Math.abs(desiredCenter - currentCenter) > 0.001
-    if (moving || rendering || annotationsMoving || cameraMoving || requested > 0 || drag) {
+    inFrame = false
+    if (
+      moving ||
+      rendering ||
+      annotationsMoving ||
+      cameraMoving ||
+      requested > 0 ||
+      drag ||
+      pendingScale !== undefined
+    ) {
       raf = requestAnimationFrame(tick)
     } else {
       idle = true
@@ -1539,6 +1693,9 @@ async function start() {
     }
     const id =
       target.closest<HTMLElement>("[data-concept]")?.dataset.concept ?? hit(e.clientX, e.clientY)
+    const bounds = world.getBoundingClientRect()
+    const grabbed = renderer.unproject(e.clientX - bounds.left, e.clientY - bounds.top)
+    const node = id ? fieldNodes.get(id) : undefined
     drag = {
       pointer: e.pointerId,
       id,
@@ -1547,6 +1704,8 @@ async function start() {
       startX: e.clientX,
       startY: e.clientY,
       distance: 0,
+      grabX: node ? grabbed.x - node.x : 0,
+      grabY: node ? grabbed.y - node.y : 0,
     }
     canvas.setPointerCapture(e.pointerId)
     wake()
@@ -1559,7 +1718,7 @@ async function start() {
         distance = Math.hypot(a.x - b.x, a.y - b.y),
         x = (a.x + b.x) / 2,
         y = (a.y + b.y) / 2
-      zoom(pinch.scale + Math.log2(Math.max(1, distance) / Math.max(1, pinch.distance)) * 1.5)
+      queueZoom(pinch.scale + Math.log2(Math.max(1, distance) / Math.max(1, pinch.distance)) * 1.5)
       pan.x += (x - pinch.x) / renderer.view.zoom
       pan.y += (y - pinch.y) / renderer.view.zoom
       pinch.x = x
@@ -1583,7 +1742,7 @@ async function start() {
       if (drag.id) {
         const bounds = world.getBoundingClientRect()
         const p = renderer.unproject(e.clientX - bounds.left, e.clientY - bounds.top)
-        field.drag(drag.id, p.x, p.y)
+        field.drag(drag.id, p.x - drag.grabX, p.y - drag.grabY)
       } else {
         pan.x += (e.clientX - drag.x) / renderer.view.zoom
         pan.y += (e.clientY - drag.y) / renderer.view.zoom
@@ -1629,7 +1788,8 @@ async function start() {
       )
         return
       e.preventDefault()
-      zoom(state.scale - e.deltaY * 0.003)
+      const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? renderer.size.height : 1
+      queueZoom((pendingScale ?? state.scale) - e.deltaY * unit * 0.003)
     },
     { passive: false },
   )
@@ -1643,7 +1803,7 @@ async function start() {
         zoom(state.scale + (b.dataset.zoom === "in" ? 0.65 : -0.65), true),
       ),
     )
-  depth.addEventListener("input", () => zoom(Number(depth.value)))
+  depth.addEventListener("input", () => queueZoom(Number(depth.value)))
   $("[data-back]").addEventListener("click", () => {
     if (state.trail.length || history.state?.toposCanBack) history.back()
     else {
@@ -1704,6 +1864,7 @@ async function start() {
     }
   })
   window.addEventListener("popstate", (e) => {
+    pendingScale = undefined
     pendingAnchor = undefined
     const s = e.state?.topos as Saved | undefined
     if (s && concepts.has(s.view.focus)) {
@@ -1744,11 +1905,13 @@ async function start() {
   reduce.addEventListener("change", wake)
   // Re-measure real text bounds when fonts or the title-size transition finish.
   document.fonts.ready.then(() => {
+    measurements = new WeakMap()
     annotationTime = -Infinity
     wake()
   })
   labels.addEventListener("transitionend", (event) => {
     if ((event as TransitionEvent).propertyName === "font-size") {
+      measurements = new WeakMap()
       annotationTime = -Infinity
       wake()
     }

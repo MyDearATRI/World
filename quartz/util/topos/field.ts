@@ -65,11 +65,34 @@ export function createField(model: KnowledgeModel, initial: Context) {
     pinned = new Map<string, { x: number; y: number }>()
   let sleeping = false
   let coolingTime = 0
-  let links: { source: FieldNode; target: FieldNode; gain: number }[] = []
+  let targetsDirty = false
+  type Body = {
+    node: FieldNode
+    force: { x: number; y: number; z: number }
+    target: Target
+    radius: number
+  }
+  // Compile identities once. Inner force loops use direct references and reuse their
+  // accumulators; visibility checks and string-keyed lookups belong to context changes.
+  const bodies: Body[] = nodes.map((node) => ({
+    node,
+    force: { x: 0, y: 0, z: 0 },
+    target: { x: 0, y: 0, z: 0, relevance: 0, role: "horizon" },
+    radius: node.radius,
+  }))
+  const bodyById = new Map(bodies.map((body) => [body.node.id, body]))
+  let active = bodies
+  let inactive: Body[] = []
+  let links: { source: Body; target: Body; gain: number }[] = []
+  let communities: { members: Body[]; coherence: number }[] = []
   const getRadius = (node: FieldNode) => clamp(node.radius, 12, 600)
 
   function updateTargets() {
+    targetsDirty = false
     const focus = byId.get(context.focus)!
+    const visible = context.visibleIDs ? new Set(context.visibleIDs) : undefined
+    active = visible ? bodies.filter(({ node }) => visible.has(node.id)) : bodies
+    inactive = visible ? bodies.filter(({ node }) => !visible.has(node.id)) : []
     const roles = new Map(context.nodes.map((n) => [n.id, n]))
     const near = context.nodes.filter((n) => n.role === "neighbor" || n.role === "previous")
     // Preserve approach directions. Springs and collision forces may reorganize these;
@@ -93,7 +116,7 @@ export function createField(model: KnowledgeModel, initial: Context) {
             : r.role === "neighbor"
               ? Math.max(230 + (1 - r.relevance) * 190, minimum)
               : 660 + (1 - r.relevance) * 200
-      targets.set(n.id, {
+      const target: Target = {
         x: Math.cos(angle) * preferred,
         y: Math.sin(angle) * preferred * 0.8,
         z:
@@ -106,26 +129,31 @@ export function createField(model: KnowledgeModel, initial: Context) {
                 : -230 - (1 - r.relevance) * 100,
         relevance: r.relevance,
         role: r.role,
-      })
+      }
+      targets.set(n.id, target)
+      bodyById.get(n.id)!.target = target
       n.targetRelevance = r.relevance
       n.mass = r.role === "focus" ? 4 : 1
     }
     links = model.relations.flatMap((edge) => {
-      if (
-        context.visibleIDs &&
-        (!context.visibleIDs.includes(edge.source) || !context.visibleIDs.includes(edge.target))
-      )
-        return []
-      const source = byId.get(edge.source),
-        target = byId.get(edge.target)
+      if (visible && (!visible.has(edge.source) || !visible.has(edge.target))) return []
+      const source = bodyById.get(edge.source),
+        target = bodyById.get(edge.target)
       if (!source || !target || source === target) return []
       const affinity = relationAffinity(edge, context.lens)
       const relevance = Math.min(
-        roles.get(source.id)?.relevance ?? 0,
-        roles.get(target.id)?.relevance ?? 0,
+        roles.get(source.node.id)?.relevance ?? 0,
+        roles.get(target.node.id)?.relevance ?? 0,
       )
       return [{ source, target, gain: affinity * (physicalGain[edge.type] ?? 0.65) * relevance }]
     })
+    communities = context.communities.map((community) => ({
+      coherence: community.coherence,
+      members: community.members
+        .filter((id) => !visible || visible.has(id))
+        .map((id) => bodyById.get(id))
+        .filter((body): body is Body => !!body),
+    }))
     sleeping = false
     coolingTime = 0
   }
@@ -143,7 +171,11 @@ export function createField(model: KnowledgeModel, initial: Context) {
     const next = clamp(radius, 12, 600)
     if (Math.abs(next - n.radius) < 0.1) return
     n.radius = next
-    updateTargets()
+    // A label pass can resize every concept. Rebuild the shared targets once at
+    // the next simulation/history boundary instead of once for every label.
+    targetsDirty = true
+    sleeping = false
+    coolingTime = 0
   }
 
   function integrate(dt: number) {
@@ -152,12 +184,12 @@ export function createField(model: KnowledgeModel, initial: Context) {
     // gently remove residual force. Damping completes the motion without a snap.
     const cooling = clamp((coolingTime - 3) / 5, 0, 1),
       heat = 1 - cooling * cooling * (3 - 2 * cooling)
-    const force = new Map(nodes.map((n) => [n.id, { x: 0, y: 0, z: 0 }]))
     const focus = byId.get(context.focus)!
-    for (const n of nodes) {
-      const t = targets.get(n.id)!,
-        f = force.get(n.id)!
-      if (context.visibleIDs && !context.visibleIDs.includes(n.id)) continue
+    const focusRadius = getRadius(focus)
+    for (const body of active) {
+      const { node: n, target: t, force: f } = body
+      f.x = f.y = f.z = 0
+      body.radius = getRadius(n)
       const attraction =
         t.role === "focus" ? 36 : t.role === "previous" ? 9 : t.role === "neighbor" ? 9 : 5.5
       if (t.role === "focus" || t.role === "previous") {
@@ -179,7 +211,7 @@ export function createField(model: KnowledgeModel, initial: Context) {
         const dx = n.x - focus.x,
           dy = n.y - focus.y,
           d = Math.hypot(dx, dy) || 0.01,
-          min = getRadius(focus) + getRadius(n) + 38
+          min = focusRadius + body.radius + 38
         if (d < min) {
           const push = (min - d) * 36
           f.x += (dx / d) * push
@@ -187,75 +219,79 @@ export function createField(model: KnowledgeModel, initial: Context) {
         }
       }
     }
-    for (let i = 0; i < nodes.length; i++)
-      for (let j = i + 1; j < nodes.length; j++) {
-        const a = nodes[i],
-          b = nodes[j],
+    for (let i = 0; i < active.length; i++)
+      for (let j = i + 1; j < active.length; j++) {
+        const first = active[i],
+          second = active[j],
+          a = first.node,
+          b = second.node,
           dx = b.x - a.x,
           dy = b.y - a.y,
           d = Math.hypot(dx, dy)
-        if (
-          context.visibleIDs &&
-          (!context.visibleIDs.includes(a.id) || !context.visibleIDs.includes(b.id))
-        )
-          continue
         const angle = d < 0.01 ? seed(`${a.id}:${b.id}`) * Math.PI * 2 : 0,
           ux = d < 0.01 ? Math.cos(angle) : dx / d,
           uy = d < 0.01 ? Math.sin(angle) : dy / d
-        const min = getRadius(a) + getRadius(b) + 24
+        const min = first.radius + second.radius + 24
         const collision = Math.max(0, min - d) * 32
         const repulsion =
           (160000 / (d * d + 2500)) * Math.max(0.08, Math.min(a.relevance, b.relevance))
         const amount = collision + repulsion
         if (a.id !== context.focus) {
-          force.get(a.id)!.x -= ux * amount
-          force.get(a.id)!.y -= uy * amount
+          first.force.x -= ux * amount
+          first.force.y -= uy * amount
         }
         if (b.id !== context.focus) {
-          force.get(b.id)!.x += ux * amount
-          force.get(b.id)!.y += uy * amount
+          second.force.x += ux * amount
+          second.force.y += uy * amount
         }
       }
-    for (const { source: a, target: b, gain } of links) {
-      const dx = b.x - a.x,
+    for (const { source, target, gain } of links) {
+      const a = source.node,
+        b = target.node,
+        dx = b.x - a.x,
         dy = b.y - a.y,
         d = Math.hypot(dx, dy) || 0.01
-      const rest = getRadius(a) + getRadius(b) + 125
+      const rest = source.radius + target.radius + 125
       const amount = (d - rest) * gain * 2.4
       // Opposition remains eligible for informative adjacency, never an automatic repulsion.
       if (a.id !== context.focus) {
-        force.get(a.id)!.x += (dx / d) * amount
-        force.get(a.id)!.y += (dy / d) * amount
+        source.force.x += (dx / d) * amount
+        source.force.y += (dy / d) * amount
       }
       if (b.id !== context.focus) {
-        force.get(b.id)!.x -= (dx / d) * amount
-        force.get(b.id)!.y -= (dy / d) * amount
+        target.force.x -= (dx / d) * amount
+        target.force.y -= (dy / d) * amount
       }
     }
-    for (const community of context.communities) {
-      const members = community.members.map((id) => byId.get(id)).filter((n): n is FieldNode => !!n)
-      const total = members.reduce((sum, n) => sum + n.relevance, 0)
+    for (const community of communities) {
+      const members = community.members
+      let total = 0,
+        cx = 0,
+        cy = 0
+      for (const { node: n } of members) {
+        total += n.relevance
+        cx += n.x * n.relevance
+        cy += n.y * n.relevance
+      }
       if (!total) continue
-      const cx = members.reduce((sum, n) => sum + n.x * n.relevance, 0) / total,
-        cy = members.reduce((sum, n) => sum + n.y * n.relevance, 0) / total
-      for (const n of members) {
+      cx /= total
+      cy /= total
+      for (const { node: n, force: f } of members) {
         if (n.id === context.focus) continue
         const gain = community.coherence * n.relevance * 0.7
-        force.get(n.id)!.x += (cx - n.x) * gain
-        force.get(n.id)!.y += (cy - n.y) * gain
+        f.x += (cx - n.x) * gain
+        f.y += (cy - n.y) * gain
       }
     }
     let activity = 0
     const damping = Math.exp(-7.8 * dt),
       blend = 1 - Math.exp(-4.2 * dt)
-    for (const n of nodes) {
-      const f = force.get(n.id)!,
-        pin = pinned.get(n.id)
-      if (context.visibleIDs && !context.visibleIDs.includes(n.id)) {
-        n.vx = n.vy = n.vz = 0
-        n.relevance = 0
-        continue
-      }
+    for (const { node: n } of inactive) {
+      n.vx = n.vy = n.vz = 0
+      n.relevance = 0
+    }
+    for (const { node: n, force: f } of active) {
+      const pin = pinned.get(n.id)
       if (pin) {
         n.x = pin.x
         n.y = pin.y
@@ -281,14 +317,15 @@ export function createField(model: KnowledgeModel, initial: Context) {
     return activity
   }
   function step(dtSeconds: number): boolean {
+    if (targetsDirty) updateTargets()
     if (sleeping) return false
     if (!Number.isFinite(dtSeconds) || dtSeconds <= 0) return true
     const dt = Math.min(dtSeconds, 0.1),
       steps = Math.max(1, Math.ceil(dt / (1 / 120)))
     let activity = 0
     for (let i = 0; i < steps; i++) activity = integrate(dt / steps)
-    if (activity < 0.08 && !pinned.size) {
-      for (const n of nodes) {
+    if (activity < 0.08) {
+      for (const { node: n } of active) {
         n.vx = n.vy = n.vz = 0
         n.relevance = n.targetRelevance
       }
@@ -300,6 +337,8 @@ export function createField(model: KnowledgeModel, initial: Context) {
   function drag(id: string, x: number, y: number) {
     const n = byId.get(id)
     if (!n || ![x, y].every(Number.isFinite)) return
+    const pin = pinned.get(id)
+    if (pin?.x === x && pin.y === y) return
     pinned.set(id, { x, y })
     n.x = x
     n.y = y
@@ -308,7 +347,7 @@ export function createField(model: KnowledgeModel, initial: Context) {
     coolingTime = 0
   }
   function release(id: string) {
-    pinned.delete(id)
+    if (!pinned.delete(id)) return
     sleeping = false
     coolingTime = 0
   }
@@ -318,6 +357,7 @@ export function createField(model: KnowledgeModel, initial: Context) {
     return snapshot()
   }
   function snapshot(): FieldSnapshot {
+    if (targetsDirty) updateTargets()
     return {
       version: 1,
       focus: context.focus,
