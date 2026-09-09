@@ -1,5 +1,11 @@
 # Project brief
 
+## Actual notes in a continuous knowledge field
+
+The current follow-up connects the approved mathematical notes to Topos rather than retaining an isolated demonstration as the main experience. The root and `topos.html` expose existing mathematical objects and complete source notes. Book-independent context and relationship exploration become the default; books remain useful provenance and optional reading routes under `library.html`. The Group demonstration remains separately available at `topos-demo.html`.
+
+Source prose can already be reused through the formal Markdown/HAST pipeline. Necessary writing-template and governance changes are local, incremental, and do not authorize publication of excluded files. The full existing public object set must remain accessible, including notes without extracted atoms; no new proof, authorship or completion claim follows from indexing or visual grouping.
+
 ## Knowledge Topos — current direction
 
 The September 10 specification replaces page-centered exploration with continuous context transformations. The immediate deliverable is one Group → Group Action → Representation vertical prototype, not a whole-site migration. In one persistent field, selected concepts become the focus, old contexts remain perceivable, nearby concepts approach and irrelevant concepts recede. Source explanations unfold in place rather than opening an article.

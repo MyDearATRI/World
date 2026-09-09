@@ -1,5 +1,11 @@
 # Design specification
 
+## Default field of the author's published mathematics
+
+The actual-note follow-up uses the same continuous 2.5D field at `/` and `topos.html`. Focus, type, provenance and proof status identify the active object. Local search supports the actual titles, aliases, bilingual prose and literal LaTeX, without a mandatory book selection. The context model uses actual relationships; books and chapters do not determine positions or communities. Lens captions describe their real filtering/weighting purpose for these notes rather than reusing group-theory-specific names.
+
+Formal objects and complete notes unfold from their existing rendered content in the field, with readable local headings, mathematical overflow containers and retained source context. Native independent-page links remain available. Structural occurrences and references are labelled distinctly from authored mathematical relations. The full original textbook interface is secondary at `library.html`, and the synthetic vertical prototype is secondary at `topos-demo.html`.
+
 ## Knowledge Topos — continuous contexts
 
 The current vertical prototype uses a full-viewport field at `topos.html`, with small secondary lens/depth controls. There is no primary folder sidebar, top navigation, card grid or article transition. Click changes the force field while preserving node position and velocity. GPU marks, typed arrows, graph-derived boundaries, anchored DOM labels and mathematical sections belong to the same space. Screen-space annotation collision/leader placement is separate from semantic relationships.

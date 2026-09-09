@@ -9,6 +9,7 @@ import remarkMath from "remark-math"
 import { visit } from "unist-util-visit"
 import { listFiles, sha256, verifyManifest } from "./lib/export-boundary.mjs"
 import { webSlug } from "./lib/export-canvas.mjs"
+import { verifyPublishedTopos } from "./lib/verify-topos-output.mjs"
 
 const root = fileURLToPath(new URL("../", import.meta.url))
 const publicRoot = path.join(root, "public")
@@ -43,7 +44,7 @@ const fullSlug = (output) => {
   const simplified = webSlug(output)
   return simplified === "" ? "index" : simplified.endsWith("/") ? simplified + "index" : simplified
 }
-const htmlPath = (output) => fullSlug(output) + ".html"
+const htmlPath = (output) => (fullSlug(output) === "index" ? "library" : fullSlug(output)) + ".html"
 const stringArray = (value) =>
   Array.isArray(value) && value.every((item) => typeof item === "string")
 const metadataArray = (value) =>
@@ -62,9 +63,19 @@ try {
   const publishedSet = new Set(published)
   const expectedPages = new Map(manifest.notes.map((note) => [htmlPath(note.output), note]))
   const knowledge = JSON.parse(await readFile(path.join(root, "knowledge/index.json"), "utf8"))
+  const fieldIndex = JSON.parse(
+    await readFile(path.join(publicRoot, "static/topos/index.json"), "utf8"),
+  )
+  const fieldSectionPaths = Object.values(fieldIndex.sectionFiles ?? {}).map((value) => {
+    if (!/^\.\/static\/topos\/sections\/[a-f0-9]{64}\.json$/.test(value))
+      throw new Error("Invalid Topos section resource path")
+    return value.slice(2)
+  })
   const derivedPages = new Set([
+    "index.html",
     "explore.html",
     "topos.html",
+    "topos-demo.html",
     ...knowledge.objects.filter((object) => object.kind === "atom").map((object) => object.href),
     ...(knowledge.aliases ?? []).map((alias) => alias.href),
   ])
@@ -84,6 +95,7 @@ try {
   const staticFile =
     /^(?:index\.css|prescript\.js|postscript\.js|static\/(?:contentIndex|bookIndex)\.json|static\/fonts\/(?:serif\.css|LICENSE\.txt|files\/[\w-]+\.woff2)|static\/katex\/(?:katex\.min\.css|LICENSE\.txt|fonts\/[\w-]+\.(?:ttf|woff2?)))$/
   const knowledgeResources = new Set([
+    ...fieldSectionPaths,
     "static/knowledge-index.json",
     "static/semantic.json",
     "static/semantic/worker.js",
@@ -99,6 +111,7 @@ try {
     "static/topos/topos.js",
     "static/topos/topos.css",
     "static/topos/index.json",
+    "static/topos/demo.json",
     "static/topos/three-LICENSE.txt",
   ])
   check(
@@ -755,10 +768,10 @@ try {
   const toposModel = JSON.parse(
     await readFile(path.join(root, "knowledge/topos/prototype.json"), "utf8"),
   )
-  const topos = JSON.parse(await readFile(path.join(publicRoot, "static/topos/index.json"), "utf8"))
+  const topos = JSON.parse(await readFile(path.join(publicRoot, "static/topos/demo.json"), "utf8"))
   check(
-    JSON.stringify(topos.model) === JSON.stringify(toposModel),
-    "Topos published ontology matches its approved prototype",
+    JSON.stringify(topos.model) === JSON.stringify({ ...toposModel, mode: "demo" }),
+    "The independent Topos demonstration matches its approved prototype",
   )
   check(
     sameSet(new Set(Object.keys(topos.sections)), new Set(toposModel.sections.map((s) => s.id))),
@@ -815,6 +828,13 @@ try {
         )
     }
   }
+  const publishedTopos = await verifyPublishedTopos({
+    root,
+    publicRoot,
+    check,
+    verifyHref,
+    sourceBySlug,
+  })
   const report = {
     version: 1,
     pages: expectedPages.size,
@@ -833,6 +853,7 @@ try {
       relations: toposModel.relations.length,
       formulas: toposFormulas,
     },
+    publishedTopos,
     checks,
     passed: checks - failures.length,
     failed: failures.length,

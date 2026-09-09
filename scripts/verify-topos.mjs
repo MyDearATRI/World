@@ -29,7 +29,7 @@ const { chromium } = await import("playwright")
 const ffmpeg = path.join(process.env.PLAYWRIGHT_BROWSERS_PATH, "ffmpeg-1011/ffmpeg-win64.exe")
 const report = {
   startedAt: new Date().toISOString(),
-  target: process.env.TOPOS_SITE_URL ?? "local /World/topos.html",
+  target: process.env.TOPOS_SITE_URL ?? "local /World/topos-demo.html",
   methods: [
     "Independent Knowledge Topos requirements; no old graph acceptance counts are inherited",
     "All navigation uses real UI input; the runtime API is read only",
@@ -1349,7 +1349,7 @@ try {
   await mkdir(path.join(output, "videos/raw"), { recursive: true })
   await mkdir(path.join(output, "frames"), { recursive: true })
   preview = process.env.TOPOS_SITE_URL ? undefined : await startPreview({ port: 0 })
-  const base = process.env.TOPOS_SITE_URL ?? `${preview.url}/World/topos.html`
+  const base = process.env.TOPOS_SITE_URL ?? `${preview.url}/World/topos-demo.html`
   browser = await chromium.launch({
     channel: "msedge",
     headless: true,

@@ -48,7 +48,8 @@
     "sync:site": "node scripts/sync-site.mjs",
     "sync:preview": "node scripts/sync-site.mjs --preview-only",
     "prepare:topos-runtime": "node scripts/prepare-topos-runtime.mjs",
-    "test:topos": "node scripts/verify-topos.mjs"
+    "test:topos": "node scripts/verify-topos.mjs",
+    "test:topos-published": "node scripts/verify-topos-published.mjs"
   },
   "engines": {
     "npm": ">=10.9.2",

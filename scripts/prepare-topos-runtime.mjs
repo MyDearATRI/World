@@ -27,4 +27,6 @@ await copyFile(
   path.join(root, "node_modules/three/LICENSE"),
   path.join(output, "three-LICENSE.txt"),
 )
-console.log("Prepared the bounded Knowledge Topos interaction prototype.")
+console.log(
+  "Prepared the Knowledge Topos reader for the approved notes and separate demonstration.",
+)

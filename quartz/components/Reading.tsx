@@ -151,16 +151,19 @@ export const ReadingRail: QuartzComponent = (props) => {
           <a class="rail-knowledge-link" href={`${href(slug, book.slug)}#knowledge-index`}>
             查找本书知识点
           </a>
-          <a class="rail-shelf-link" href={pathToRoot(slug)}>
+          <a class="rail-shelf-link" href={joinSegments(pathToRoot(slug), "library.html")}>
             返回书架
           </a>
         </nav>
       ) : (
         <nav class="shelf-navigation" aria-label="网站导航">
-          <a href={pathToRoot(slug)} aria-current={slug === "index" ? "page" : undefined}>
+          <a
+            href={joinSegments(pathToRoot(slug), "library.html")}
+            aria-current={slug === "index" ? "page" : undefined}
+          >
             书架
           </a>
-          <a href={`${pathToRoot(slug)}/#about-notes`}>关于这些笔记</a>
+          <a href={`${joinSegments(pathToRoot(slug), "library.html")}#about-notes`}>关于这些笔记</a>
         </nav>
       )}
       {!landing && (props.fileData.toc?.length ?? 0) > 0 && (
@@ -169,7 +172,7 @@ export const ReadingRail: QuartzComponent = (props) => {
           <Contents {...props} />
         </nav>
       )}
-      <a class="rail-explore-link" href={joinSegments(pathToRoot(slug), "explore.html")}>
+      <a class="rail-explore-link" href={joinSegments(pathToRoot(slug), "topos.html")}>
         探索知识空间 →
       </a>
       <SpatialReading {...props} />
@@ -459,7 +462,7 @@ export const ReadingContent: QuartzComponent = (props) => {
               <strong>按书阅读 →</strong>
               <small>保留完整论述，沿章节逐步展开。</small>
             </a>
-            <a href={joinSegments(pathToRoot(slug), "explore.html")}>
+            <a href={joinSegments(pathToRoot(slug), "topos.html")}>
               <span class="entry-number">02 / EXPLORE</span>
               <strong>探索知识 →</strong>
               <small>从定义、定理与证明，走向相关笔记。</small>
@@ -712,6 +715,8 @@ export const ReadingConnections: QuartzComponent = (props) => {
 export const ReadingFooter: QuartzComponent = ({ fileData }) => (
   <footer class="reading-footer">
     <a href={pathToRoot(fileData.slug!)}>Notes &amp; Knowledge</a>
-    <a href={`${pathToRoot(fileData.slug!)}/#about-notes`}>关于这些笔记</a>
+    <a href={`${joinSegments(pathToRoot(fileData.slug!), "library.html")}#about-notes`}>
+      关于这些笔记
+    </a>
   </footer>
 )

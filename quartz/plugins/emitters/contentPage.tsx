@@ -5,7 +5,7 @@ import HeaderConstructor from "../../components/Header"
 import BodyConstructor from "../../components/Body"
 import { pageResources, renderPage } from "../../components/renderPage"
 import { FullPageLayout } from "../../cfg"
-import { pathToRoot } from "../../util/path"
+import { pathToRoot, FullSlug } from "../../util/path"
 import { defaultContentPageLayout, sharedPageComponents } from "../../../quartz.layout"
 import { Content } from "../../components"
 import { styleText } from "util"
@@ -22,6 +22,7 @@ async function processContent(
   allFiles: QuartzPluginData[],
   opts: FullPageLayout,
   resources: StaticResources,
+  homeSlug?: FullSlug,
 ) {
   const slug = fileData.slug!
   const cfg = ctx.cfg.configuration
@@ -40,12 +41,14 @@ async function processContent(
   return write({
     ctx,
     content,
-    slug,
+    slug: slug === "index" && homeSlug ? homeSlug : slug,
     ext: ".html",
   })
 }
 
-export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout>> = (userOpts) => {
+export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout> & { homeSlug?: FullSlug }> = (
+  userOpts,
+) => {
   const opts: FullPageLayout = {
     ...sharedPageComponents,
     ...defaultContentPageLayout,
@@ -85,7 +88,7 @@ export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout>> = (userOp
 
         // only process home page, non-tag pages, and non-index pages
         if (slug.endsWith("/index") || slug.startsWith("tags/")) continue
-        yield processContent(ctx, tree, file.data, allFiles, opts, resources)
+        yield processContent(ctx, tree, file.data, allFiles, opts, resources, userOpts?.homeSlug)
       }
 
       if (!containsIndex) {
@@ -114,7 +117,7 @@ export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout>> = (userOp
         if (!changedSlugs.has(slug)) continue
         if (slug.endsWith("/index") || slug.startsWith("tags/")) continue
 
-        yield processContent(ctx, tree, file.data, allFiles, opts, resources)
+        yield processContent(ctx, tree, file.data, allFiles, opts, resources, userOpts?.homeSlug)
       }
     },
   }

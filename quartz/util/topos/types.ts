@@ -18,6 +18,10 @@ export type RelationType =
   | "decategorification"
   | "historical"
   | "definition"
+  | "references"
+  | "appears-in"
+  | "appears-in-section"
+  | "proves"
 
 export type Lens = "structural" | "action" | "linear"
 export interface Concept {
@@ -29,6 +33,20 @@ export interface Concept {
   symbol: string
   terms: string[]
   sections: string[]
+  /** Published identity and provenance; absent on the synthetic demonstration. */
+  objectKind?: "atom" | "note"
+  mathType?: string
+  href?: string
+  sourceHref?: string
+  sourceTitle?: string
+  sourceBook?: string
+  sourceStatus?: string
+  sourceLayer?: string
+  proofStatus?: string
+  searchText?: string
+  aliases?: string[]
+  occurrences?: { slug: string; anchor: string; href: string }[]
+  relatedNotes?: string[]
 }
 export interface Relation {
   id: string
@@ -40,14 +58,19 @@ export interface Relation {
   explanation: string
   evidence: string
   lenses: Partial<Record<Lens, number>>
+  provenance?: "authored" | "reference" | "structure"
+  evidenceHref?: string
 }
 export interface Section {
   id: string
   concept: string
   title: string
   level: 1 | 2 | 3
-  markdown: string
+  /** Only the website-authored demonstration reads standalone section Markdown. */
+  markdown?: string
   children: string[]
+  sourceHref?: string
+  role?: "summary" | "body" | "context"
 }
 export interface KnowledgeModel {
   version: 1
@@ -57,6 +80,10 @@ export interface KnowledgeModel {
   relations: Relation[]
   sections: Section[]
   sources: { id: string; title: string; url: string }[]
+  mode?: "published" | "demo"
+  snapshotHash?: string
+  lenses?: { id: Lens; label: string; description?: string }[]
+  stats?: { atoms: number; notes: number; unregisteredNotes: number; relations: number }
 }
 export interface Unfolding {
   concept: string

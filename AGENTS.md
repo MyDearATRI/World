@@ -1,5 +1,13 @@
 # Website implementation rules
 
+## Published knowledge field and source-independent writing
+
+The user has now requested their actual notes in the continuous knowledge field, and permits necessary restructuring of writing rules/templates without centering one textbook. The Group prototype has completed its own acceptance; its synthetic content moves to `topos-demo.html`. The site root and `topos.html` now target the existing approved KnowledgeIndex and formally rendered source trees. `library.html` preserves the previous home exposition and book reading entry. Existing note and atom URLs remain valid.
+
+Do not rewrite mathematical prose merely to satisfy the UI: the existing 119 atoms and 73 complete notes are compatible with the context/section model. Derive displayed content from the approved HAST, preserve prerequisites, mathematical state, footnotes and source identity, and retain complete notes that have no registered atoms. The knowledge field must include every eligible public object; book/chapter metadata is provenance, not a layout skeleton. Authored mathematical relations, citations and structural occurrences remain distinguishable. New default search covers real concepts and prose; plans, writing documents and demonstrations stay secondary.
+
+The user's governance/template work is authorized in the relevant local Vault files and must follow the root writing agreement. It does not expand publication permission: prompts, templates, logs, backups and unapproved source files remain excluded. This website change uses the existing exported snapshot and does not run a new export. Keep synthetic demo acceptance separate from actual-note field acceptance.
+
 ## Current Knowledge Topos vertical prototype
 
 The user's September 10 specification supersedes the page-centered and full-3D directions below. First establish Group → Action → Representation at `topos.html`; do not migrate the whole textbook before that interaction succeeds. Concept, Relation, Context, Section, Lens and ViewState are independent primitives. Ordinary concept activation deforms the existing field around a new focus, with persistent node identity/position/velocity; it must not open an article page or replace the scene.

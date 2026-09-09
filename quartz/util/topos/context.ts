@@ -10,6 +10,13 @@ import type {
 
 const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n))
 const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)
+const communityCache = new WeakMap<
+  KnowledgeModel,
+  Map<Lens, { signature: string; communities: Community[] }>
+>()
+
+const cloneCommunities = (communities: Community[]) =>
+  communities.map((community) => ({ ...community, members: [...community.members] }))
 const emphasis: Record<Lens, Partial<Record<RelationType, number>>> = {
   structural: {
     prerequisite: 1,
@@ -63,6 +70,28 @@ function hash(value: string) {
 
 /** Deterministic weighted modularity agglomeration; no taxonomy/folder input exists here. */
 export function deriveCommunities(model: KnowledgeModel, lens: Lens): Community[] {
+  // Focus and zoom alter local relevance, not the graph's global modularity.
+  // Validate graph semantics so in-place edits cannot leave a stale grouping.
+  const signature = JSON.stringify([
+    model.concepts.map(({ id, title, terms }) => [id, title, terms]),
+    model.relations.map(({ source, target, type, strength, lenses }) => [
+      source,
+      target,
+      type,
+      strength,
+      lenses,
+    ]),
+  ])
+  const cached = communityCache.get(model)?.get(lens)
+  if (cached?.signature === signature) return cloneCommunities(cached.communities)
+  const communities = computeCommunities(model, lens)
+  const byLens = communityCache.get(model) ?? new Map()
+  byLens.set(lens, { signature, communities })
+  communityCache.set(model, byLens)
+  return cloneCommunities(communities)
+}
+
+function computeCommunities(model: KnowledgeModel, lens: Lens): Community[] {
   const adj = graph(model, lens),
     ids = [...adj.keys()].sort(compare)
   const degree = new Map(

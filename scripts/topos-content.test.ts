@@ -18,7 +18,11 @@ const model: KnowledgeModel = JSON.parse(await readFile(path.join(root, "prototy
 const conceptById = new Map(model.concepts.map((concept) => [concept.id, concept]))
 const sectionById = new Map(model.sections.map((section) => [section.id, section]))
 const sourceById = new Map(model.sources.map((source) => [source.id, source]))
-const text = async (id: string) => readFile(path.join(root, sectionById.get(id)!.markdown), "utf8")
+const text = async (id: string) => {
+  const markdown = sectionById.get(id)?.markdown
+  assert.ok(markdown, `The demonstration section ${id} must declare a Markdown file`)
+  return readFile(path.join(root, markdown), "utf8")
+}
 const relationTypes: Record<RelationType, true> = {
   prerequisite: true,
   generalization: true,
@@ -38,6 +42,10 @@ const relationTypes: Record<RelationType, true> = {
   decategorification: true,
   historical: true,
   definition: true,
+  references: true,
+  "appears-in": true,
+  "appears-in-section": true,
+  proves: true,
 }
 
 test("prototype identities, metadata, and typed evidence all resolve", () => {
@@ -88,6 +96,7 @@ test("section files are ordinary bounded Markdown, with no hidden extra manuscri
     .sort()
   assert.deepEqual([...paths].sort(), listed)
   for (const section of model.sections) {
+    assert.ok(section.markdown, `The demonstration section ${section.id} needs Markdown`)
     assert.match(section.markdown, /^sections\/[a-z0-9-]+\.md$/)
     const resolved = path.resolve(root, section.markdown)
     assert.ok(resolved.startsWith(path.resolve(root) + path.sep))

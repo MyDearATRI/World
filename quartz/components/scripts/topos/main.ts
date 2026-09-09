@@ -5,7 +5,13 @@ import { computeAnnotations, type AnnotationPlacement } from "../../../util/topo
 import type { Concept, KnowledgeModel, Lens, Section, ViewState } from "../../../util/topos/types"
 import "../../styles/topos.css"
 
-type Saved = { view: ViewState; field: FieldSnapshot; camera: CameraState }
+type Saved = {
+  view: ViewState
+  field: FieldSnapshot
+  camera: CameraState
+  readingScroll?: Record<string, number>
+  modelSignature?: string
+}
 const $ = <T extends HTMLElement = HTMLElement>(selector: string) =>
   document.querySelector<T>(selector)!
 const world = $("#topos-world"),
@@ -20,6 +26,13 @@ const depth = $<HTMLInputElement>(".topos-depth input"),
   output = $(".topos-depth output")
 const reduce = matchMedia("(prefers-reduced-motion: reduce)")
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v))
+const decodeAnchor = (value: string) => {
+  try {
+    return decodeURIComponent(value)
+  } catch {
+    return value
+  }
+}
 const element = <K extends keyof HTMLElementTagNameMap>(
   tag: K,
   className?: string,
@@ -32,14 +45,78 @@ const element = <K extends keyof HTMLElementTagNameMap>(
 }
 
 async function start() {
-  const response = await fetch(new URL("./index.json", import.meta.url))
+  const response = await fetch(
+    document.body.dataset.toposIndex
+      ? new URL(document.body.dataset.toposIndex, location.href)
+      : new URL(
+          location.pathname.endsWith("topos-demo.html") ? "./demo.json" : "./index.json",
+          import.meta.url,
+        ),
+  )
   if (!response.ok) throw new Error("概念数据暂时不可用，请重新载入。")
-  const { model, sections: rendered } = (await response.json()) as {
+  const {
+    model,
+    sections: rendered,
+    sectionFiles = {},
+  } = (await response.json()) as {
     model: KnowledgeModel
     sections: Record<string, string>
+    sectionFiles?: Record<string, string>
   }
   const concepts = new Map(model.concepts.map((c) => [c.id, c])),
     sections = new Map(model.sections.map((s) => [s.id, s]))
+  const published = model.mode === "published"
+  world.dataset.mode = published ? "published" : "demo"
+  const siteRoot = new URL("./", location.href)
+  const sourceURL = (href: string) => new URL(href, siteRoot).href
+  const pendingSections = new Map<string, Promise<void>>()
+  const sectionErrors = new Map<string, string>()
+  const modelSignature = (() => {
+    let value = 2166136261
+    const source = JSON.stringify([
+      model.snapshotHash,
+      model.concepts.map((c) => c.id),
+      model.relations,
+    ])
+    for (let i = 0; i < source.length; i++)
+      value = Math.imul(value ^ source.charCodeAt(i), 16777619)
+    return (value >>> 0).toString(36)
+  })()
+  const typeNames: Record<string, string> = {
+    note: "完整笔记",
+    definition: "定义",
+    "definition-group": "定义组",
+    theorem: "定理",
+    lemma: "引理",
+    proposition: "命题",
+    proof: "证明",
+    "proof-strategy": "证明策略",
+    example: "例子",
+    observation: "观察",
+    question: "问题",
+    concept: "概念",
+  }
+  const typeLabel = (c: Concept) =>
+    c.objectKind === "note" ? "完整笔记" : (typeNames[c.mathType ?? c.kind] ?? c.mathType ?? c.kind)
+  const relationCategory = (r: KnowledgeModel["relations"][number]) =>
+    r.provenance === "authored"
+      ? "原文论证"
+      : r.provenance === "reference"
+        ? "正文引用"
+        : r.provenance === "structure"
+          ? "出处关联"
+          : "原文关系"
+  if (model.lenses) {
+    const lenses = $(".topos-lenses")
+    lenses.replaceChildren(element("span", undefined, "联系"))
+    for (const lens of model.lenses) {
+      const button = element("button", undefined, lens.label)
+      button.type = "button"
+      button.dataset.lens = lens.id
+      if (lens.description) button.title = lens.description
+      lenses.append(button)
+    }
+  }
   const fromHash = () => {
     const hash = new URLSearchParams(location.hash.slice(1))
     const focus = hash.get("focus") ?? model.initial
@@ -52,7 +129,9 @@ async function start() {
       version: 1,
       focus: concepts.has(focus) ? focus : model.initial,
       lens: ["structural", "action", "linear"].includes(lens) ? lens : "structural",
-      scale: clamp(Number(hash.get("depth") ?? 1), 0, 3),
+      scale: Number.isFinite(Number(hash.get("depth") ?? 1))
+        ? clamp(Number(hash.get("depth") ?? 1), 0, 3)
+        : 1,
       trail: [],
       unfolded,
     } as ViewState
@@ -61,6 +140,48 @@ async function start() {
     context = deriveContext(model, state)
   const field = createField(model, context),
     renderer = createRenderer(canvas, model)
+  function restoreSaved(value: Saved) {
+    const view = value.view
+    state = {
+      version: 1,
+      focus: concepts.has(view?.focus) ? view.focus : model.initial,
+      lens: ["structural", "action", "linear"].includes(view?.lens) ? view.lens : "structural",
+      scale: Number.isFinite(view?.scale) ? clamp(view.scale, 0, 3) : 1,
+      trail: Array.isArray(view?.trail) ? view.trail.filter((id) => concepts.has(id)) : [],
+      unfolded: Array.isArray(view?.unfolded)
+        ? view.unfolded
+            .filter((u) => sections.has(u.section))
+            .map((u) => ({
+              concept: sections.get(u.section)!.concept,
+              section: u.section,
+              parent: u.parent && sections.has(u.parent) ? u.parent : undefined,
+            }))
+        : [],
+    }
+    context = deriveContext(model, state)
+    field.setContext(context)
+    const compatible =
+      value.modelSignature === modelSignature &&
+      Array.isArray(value.field?.nodes) &&
+      value.field.nodes.length === concepts.size &&
+      new Set(value.field.nodes.map((n) => n.id)).size === concepts.size &&
+      value.field.nodes.every((node) => concepts.has(node.id))
+    try {
+      if (!compatible) throw new Error("The published model changed")
+      field.restore(value.field)
+    } catch {
+      // Old content and coordinates are optional history, never a startup dependency.
+      field.settle()
+    }
+    if (
+      compatible &&
+      value.camera &&
+      [value.camera.x, value.camera.y, value.camera.zoom].every(Number.isFinite) &&
+      value.camera.zoom > 0
+    )
+      Object.assign(renderer.view, value.camera)
+    else Object.assign(renderer.view, { x: 0, y: 0, zoom: 1 })
+  }
   const key = `topos:${location.pathname}:v1`
   let saved: Saved | undefined = history.state?.topos
   if (!saved && !location.hash)
@@ -70,11 +191,7 @@ async function start() {
       /* Invalid old browser state does not block the field. */
     }
   if (saved && concepts.has(saved.view?.focus)) {
-    state = saved.view
-    context = deriveContext(model, state)
-    field.setContext(context)
-    field.restore(saved.field)
-    Object.assign(renderer.view, saved.camera)
+    restoreSaved(saved)
   } else field.settle()
   const labelNodes = new Map<string, HTMLAnchorElement>(),
     unfoldings = new Map<string, HTMLElement>(),
@@ -120,6 +237,9 @@ async function start() {
     rendererInstances: 1,
   }
   let historyTimer: ReturnType<typeof setTimeout> | undefined
+  const readingScroll = new Map<string, number>(Object.entries(saved?.readingScroll ?? {}))
+  const restoringScroll = new Set<string>()
+  let pendingAnchor: { concept: string; anchor: string } | undefined
 
   const snapshot = () => ({
     time: performance.now(),
@@ -131,7 +251,11 @@ async function start() {
     trail: [...state.trail],
     settled: idle,
     renderer: renderer.backend,
+    mode: model.mode ?? "demo",
+    objectCount: model.concepts.length,
+    modelStats: model.stats,
     camera: { ...renderer.view },
+    modelSignature,
     nodes: field.nodes.map((n) => ({
       ...n,
       ...renderer.appearance(n, context),
@@ -143,6 +267,8 @@ async function start() {
       source: r.source,
       target: r.target,
       type: r.type,
+      provenance: r.provenance,
+      evidenceHref: r.evidenceHref,
     })),
     communities: context.communities.map((c) => ({
       ...c,
@@ -151,11 +277,23 @@ async function start() {
     })),
     stats: { ...stats },
   })
-  const serialize = (): Saved => ({
-    view: structuredClone(state),
-    field: field.snapshot(),
-    camera: { ...renderer.view },
-  })
+  const serialize = (): Saved => {
+    const reading = unfoldings.get(state.focus)
+    if (
+      reading &&
+      reading.dataset.active === "true" &&
+      !restoringScroll.has(state.focus) &&
+      reading.querySelector(".topos-section .topos-prose")
+    )
+      readingScroll.set(state.focus, reading.scrollTop)
+    return {
+      view: structuredClone(state),
+      field: field.snapshot(),
+      camera: { ...renderer.view },
+      modelSignature,
+      readingScroll: Object.fromEntries(readingScroll),
+    }
+  }
   function hash() {
     const params = new URLSearchParams({
       focus: state.focus,
@@ -192,8 +330,11 @@ async function start() {
     update()
     wake()
   }
-  function focus(id: string) {
+  function focus(id: string, anchor?: string) {
     if (!concepts.has(id)) return
+    pendingAnchor = anchor
+      ? { concept: id, anchor: decodeAnchor(anchor.replace(/^#/, "")) }
+      : undefined
     if (id === state.focus) {
       zoom(Math.min(3, state.scale + 0.65))
       return
@@ -209,7 +350,9 @@ async function start() {
       true,
     )
     document.title = `${concepts.get(id)!.title} · Knowledge Topos`
-    guide.textContent = `${concepts.get(id)!.zh}成为当前语境。观察邻域变化，或向内展开解释。`
+    guide.textContent = published
+      ? `${typeLabel(concepts.get(id)!)} · 点击当前对象展开原文，或查找另一个知识点。`
+      : `${concepts.get(id)!.zh}成为当前语境。观察邻域变化，或向内展开解释。`
   }
   function zoom(value: number, push = false) {
     const scale = clamp(value, 0, 3)
@@ -245,18 +388,31 @@ async function start() {
       true,
     )
   }
+  function fold(id: string) {
+    const descendants = new Set([id])
+    let added = true
+    while (added) {
+      added = false
+      for (const u of state.unfolded)
+        if (u.parent && descendants.has(u.parent) && !descendants.has(u.section)) {
+          descendants.add(u.section)
+          added = true
+        }
+    }
+    commit({ ...state, unfolded: state.unfolded.filter((u) => !descendants.has(u.section)) }, true)
+  }
   const preferredSection = (concept: Concept, level: number) =>
     concept.sections.map((id) => sections.get(id)!).find((s) => s?.level === level) ??
     concept.sections.map((id) => sections.get(id)!).find(Boolean)
   for (const concept of model.concepts) {
     const a = element("a", "topos-concept")
-    a.href = `#focus=${concept.id}&depth=1`
+    a.href = published && concept.href ? sourceURL(concept.href) : `#focus=${concept.id}&depth=1`
     a.dataset.concept = concept.id
     a.setAttribute("aria-label", `${concept.title} · ${concept.zh}`)
-    const small = element("span", "concept-zh", concept.zh),
+    const small = element("span", "concept-zh", published ? typeLabel(concept) : concept.zh),
       title = element("span", "concept-title", concept.title),
       summary = element("span", "concept-summary", concept.summary)
-    const action = element("span", "concept-unfold", "展开含义 ↘")
+    const action = element("span", "concept-unfold", published ? "展开原文 ↘" : "展开含义 ↘")
     a.append(small, title, summary, action)
     a.addEventListener("click", (e) => {
       if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return
@@ -267,20 +423,246 @@ async function start() {
     labels.append(a)
     labelNodes.set(concept.id, a)
   }
+  const search = element("dialog", "topos-search")
+  search.setAttribute("aria-label", "查找公开笔记与知识点")
+  const searchHeader = element("header"),
+    searchTitle = element("h2", undefined, "查找知识点"),
+    searchClose = element("button", undefined, "关闭"),
+    searchInput = element("input"),
+    searchResults = element("div", "topos-search-results"),
+    searchStatus = element("p", "topos-search-status"),
+    searchFilter = element("select"),
+    searchTrigger = element("button", "topos-search-trigger", "查找知识点")
+  searchInput.type = "search"
+  searchInput.placeholder = "名称、别名、正文或 LaTeX"
+  searchInput.setAttribute("aria-label", "搜索公开数学内容")
+  searchInput.autocomplete = "off"
+  searchInput.dataset.toposSearchInput = "true"
+  searchFilter.setAttribute("aria-label", "搜索对象类型")
+  for (const [value, label] of [
+    ["all", "全部对象"],
+    ["atom", "知识点"],
+    ["note", "完整笔记"],
+  ]) {
+    const option = element("option", undefined, label)
+    option.value = value
+    searchFilter.append(option)
+  }
+  searchClose.type = searchTrigger.type = "button"
+  searchTrigger.dataset.toposSearch = "true"
+  searchTrigger.setAttribute("aria-keyshortcuts", "Control+K Meta+K")
+  searchHeader.append(searchTitle, searchClose)
+  const searchControls = element("div", "topos-search-controls")
+  searchControls.append(searchInput, searchFilter)
+  searchStatus.setAttribute("role", "status")
+  search.append(searchHeader, searchControls, searchStatus, searchResults)
+  world.append(search)
+  if (published) $(".topos-utility").prepend(searchTrigger)
+  const normalize = (value: string) =>
+    value
+      .normalize("NFKC")
+      .toLowerCase()
+      .replace(/\\(?:left|right|mathrm|mathbf|operatorname)/g, "")
+      .replace(
+        /\\(?:alpha|beta|gamma|delta|epsilon|lambda|mu|sigma|phi|omega|infty|forall|exists)/g,
+        (v) =>
+          ({
+            "\\alpha": "α",
+            "\\beta": "β",
+            "\\gamma": "γ",
+            "\\delta": "δ",
+            "\\epsilon": "ε",
+            "\\lambda": "λ",
+            "\\mu": "μ",
+            "\\sigma": "σ",
+            "\\phi": "φ",
+            "\\omega": "ω",
+            "\\infty": "∞",
+            "\\forall": "∀",
+            "\\exists": "∃",
+          })[v] ?? v,
+      )
+      .replace(/[{}$]/g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+  const searchIndex = model.concepts.map((concept) => ({
+    concept,
+    title: normalize(concept.title),
+    aliases: normalize([concept.zh, ...(concept.aliases ?? []), ...concept.terms].join(" ")),
+    body: normalize(concept.searchText ?? concept.summary),
+  }))
+  function renderSearch() {
+    const query = normalize(searchInput.value),
+      terms = query.split(" ").filter(Boolean)
+    const matches = searchIndex
+      .filter(
+        ({ concept }) => searchFilter.value === "all" || concept.objectKind === searchFilter.value,
+      )
+      .map((entry) => ({
+        ...entry,
+        score: terms.length
+          ? terms.reduce(
+              (score, term) =>
+                score +
+                (entry.title.includes(term) ? 12 : 0) +
+                (entry.aliases.includes(term) ? 7 : 0) +
+                (entry.body.includes(term) ? 1 : 0),
+              0,
+            )
+          : 1,
+      }))
+      .filter(
+        (entry) =>
+          entry.score > 0 &&
+          terms.every(
+            (term) =>
+              entry.title.includes(term) ||
+              entry.aliases.includes(term) ||
+              entry.body.includes(term),
+          ),
+      )
+      .sort(
+        (a, b) =>
+          b.score - a.score ||
+          model.concepts.indexOf(a.concept) - model.concepts.indexOf(b.concept),
+      )
+    searchResults.replaceChildren()
+    searchStatus.textContent = `${matches.length} 个结果 · 本地检索 ${model.concepts.length} 个公开对象`
+    if (!matches.length)
+      searchResults.append(
+        element("p", "topos-empty", "没有匹配内容。可试试英文术语、别名或公式中的符号。"),
+      )
+    for (const { concept, title, aliases, body } of matches.slice(0, 60)) {
+      const link = element("a", "topos-search-result")
+      link.href = concept.href ? sourceURL(concept.href) : `#focus=${concept.id}&depth=2.1`
+      link.dataset.searchConcept = concept.id
+      const summary = concept.summary.trim(),
+        match = terms.length ? Math.max(0, body.indexOf(terms[0])) : 0,
+        summaryStart = body.indexOf(normalize(summary)),
+        namesMatch = terms.some((term) => title.includes(term) || aliases.includes(term)),
+        original = (concept.searchText ?? concept.summary).replace(/\s+/g, " ").trim(),
+        originalStart = original.indexOf(summary),
+        originalMatch = terms.length ? original.toLowerCase().indexOf(terms[0]) : -1
+      // The search index includes aliases and source metadata. Show the actual
+      // introductory prose for name matches, and preserve source casing in body excerpts.
+      const snippet =
+        !terms.length ||
+        namesMatch ||
+        match < summaryStart ||
+        originalMatch < Math.max(0, originalStart)
+          ? summary
+          : original.slice(Math.max(originalStart, originalMatch - 45, 0), originalMatch + 125)
+      link.append(
+        element("small", undefined, typeLabel(concept)),
+        element("strong", undefined, concept.title),
+        element("span", "topos-search-source", concept.sourceTitle ?? ""),
+        element("p", undefined, snippet),
+      )
+      link.addEventListener("click", (e) => {
+        if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return
+        e.preventDefault()
+        search.close()
+        focus(concept.id)
+        zoom(2.1)
+        requestAnimationFrame(() => unfoldings.get(concept.id)?.focus({ preventScroll: true }))
+      })
+      searchResults.append(link)
+    }
+    if (matches.length > 60)
+      searchResults.append(element("p", "topos-empty", "显示前60项，输入名称可缩小范围。"))
+  }
+  let searchReturn: HTMLElement | null = null
+  function openSearch() {
+    searchReturn =
+      document.activeElement instanceof HTMLElement ? document.activeElement : searchTrigger
+    renderSearch()
+    search.showModal()
+    searchInput.focus()
+  }
+  searchTrigger.addEventListener("click", openSearch)
+  searchClose.addEventListener("click", () => search.close())
+  search.addEventListener("close", () => searchReturn?.focus({ preventScroll: true }))
+  searchInput.addEventListener("input", renderSearch)
+  searchFilter.addEventListener("change", renderSearch)
+  searchInput.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault()
+      searchResults.querySelector<HTMLAnchorElement>("a")?.focus()
+    }
+    if (event.key === "Enter") {
+      event.preventDefault()
+      searchResults.querySelector<HTMLAnchorElement>("a")?.click()
+    }
+  })
   function sectionNode(section: Section, path: Set<string>, placed: Set<string>): HTMLElement {
     placed.add(section.id)
     const root = element("section", "topos-section")
     root.dataset.sectionId = section.id
     const heading = element("h3", undefined, section.title)
     const prose = element("div", "topos-prose")
+    if (!(section.id in rendered)) {
+      root.append(heading)
+      const message = element(
+        "p",
+        "topos-section-loading",
+        sectionErrors.get(section.id) ?? "正在读取这段公开原文…",
+      )
+      message.setAttribute("role", "status")
+      message.dataset.sectionLoading = section.id
+      root.append(message)
+      if (sectionErrors.has(section.id)) {
+        const retry = element("button", "topos-unfold-button", "重新读取")
+        retry.type = "button"
+        retry.dataset.retrySection = section.id
+        retry.addEventListener("click", () => {
+          sectionErrors.delete(section.id)
+          contentVersion = ""
+          updateContent()
+          wake()
+        })
+        root.append(retry)
+        const href = section.sourceHref ?? concepts.get(section.concept)?.href
+        if (href) {
+          const fallback = element("a", "topos-source-fallback", "打开原文独立页面 ↗")
+          fallback.href = sourceURL(href)
+          root.append(fallback)
+        }
+      } else requestSection(section.id)
+      return root
+    }
     prose.innerHTML = rendered[section.id] ?? ""
+    const anchors = new Map<string, string>()
+    for (const node of prose.querySelectorAll<HTMLElement>("[id]")) {
+      const id = `${state.focus}--${section.id}--${node.id}`
+      anchors.set(node.id, id)
+      node.id = id
+    }
+    for (const node of prose.querySelectorAll<HTMLElement>("[aria-labelledby],[aria-describedby]"))
+      for (const name of ["aria-labelledby", "aria-describedby"])
+        if (node.hasAttribute(name))
+          node.setAttribute(
+            name,
+            node
+              .getAttribute(name)!
+              .split(/\s+/)
+              .map((id) => anchors.get(id) ?? id)
+              .join(" "),
+          )
     for (const link of prose.querySelectorAll<HTMLAnchorElement>("a")) {
       const target = link.getAttribute("href") ?? ""
+      const localId = target.startsWith("#") ? decodeAnchor(target.slice(1)) : ""
+      if (target.startsWith("#") && anchors.has(localId)) {
+        link.href = `#${encodeURIComponent(anchors.get(localId)!)}`
+        link.dataset.localAnchor = anchors.get(localId)
+      }
       if (target.startsWith("concept:") || target.startsWith("#concept=")) {
         const id = target.replace(/^(concept:|#concept=)/, "")
         if (concepts.has(id)) {
           link.dataset.conceptTarget = id
-          link.href = `#${new URLSearchParams({ focus: id, lens: state.lens, depth: "2.1" })}`
+          link.href =
+            published && concepts.get(id)?.href
+              ? sourceURL(concepts.get(id)!.href!)
+              : `#${new URLSearchParams({ focus: id, lens: state.lens, depth: "2.1" })}`
         }
       } else if (target.startsWith("section:")) {
         const id = target.slice(8),
@@ -314,13 +696,43 @@ async function start() {
       button.dataset.openSection = id
       const expanded = state.unfolded.some((u) => u.section === id)
       button.setAttribute("aria-expanded", String(expanded))
-      button.addEventListener("click", () => unfold(id, section.id))
+      button.addEventListener("click", () => (expanded ? fold(id) : unfold(id, section.id)))
       branch.append(button)
       if (expanded && !placed.has(child.id)) branch.append(sectionNode(child, nextPath, placed))
       children.append(branch)
     }
     if (children.childElementCount) root.append(children)
     return root
+  }
+  function requestSection(id: string) {
+    if (pendingSections.has(id) || id in rendered) return
+    const request = Promise.resolve().then(async () => {
+      try {
+        if (!sectionFiles[id]) throw new Error("未找到这段原文的数据位置。")
+        const url = new URL(sectionFiles[id], siteRoot)
+        if (
+          url.origin !== siteRoot.origin ||
+          !url.pathname.startsWith(new URL("./static/topos/sections/", siteRoot).pathname)
+        )
+          throw new Error("原文数据地址不属于本站公开内容。")
+        const response = await fetch(url)
+        if (!response.ok) throw new Error(`原文读取暂时失败（${response.status}）。`)
+        const result = await response.json()
+        if (result.id !== id || typeof result.html !== "string")
+          throw new Error("原文数据不匹配，请重新读取。")
+        rendered[id] = result.html
+        sectionErrors.delete(id)
+      } catch (error) {
+        sectionErrors.set(id, error instanceof Error ? error.message : "原文读取暂时失败。")
+      } finally {
+        pendingSections.delete(id)
+        contentVersion = ""
+        updateContent()
+        annotationTime = -Infinity
+        wake()
+      }
+    })
+    pendingSections.set(id, request)
   }
   let contentVersion = ""
   function updateContent() {
@@ -351,7 +763,8 @@ async function start() {
       unfoldings.set(concept.id, root)
       explanations.append(root)
     }
-    const previousScroll = root.scrollTop
+    const previousScroll = readingScroll.get(concept.id) ?? root.scrollTop
+    restoringScroll.add(concept.id)
     root.dataset.active = "true"
     root.dataset.memory = "false"
     const oldFocus =
@@ -360,20 +773,86 @@ async function start() {
         : undefined
     root.replaceChildren()
     const header = element("header", "topos-unfolding-header")
-    const label = element("span", undefined, "局部展开"),
+    const label = element("span", undefined, published ? typeLabel(concept) : "局部展开"),
       close = element("button", undefined, "收拢 ↗")
     close.type = "button"
     close.dataset.fold = "true"
-    close.addEventListener("click", () =>
+    close.addEventListener("click", () => {
       commit(
         { ...state, scale: 1, unfolded: state.unfolded.filter((u) => u.concept !== concept.id) },
         true,
-      ),
-    )
+      )
+      labelNodes.get(concept.id)?.focus({ preventScroll: true })
+    })
     header.append(label, close)
     root.append(header)
+    if (published) {
+      const meta = element("div", "topos-source-meta")
+      meta.dataset.objectType = concept.mathType ?? concept.kind
+      if (concept.sourceStatus)
+        meta.append(
+          element("span", "topos-maintenance-status", `整理状态：${concept.sourceStatus}`),
+        )
+      if (concept.sourceLayer)
+        meta.append(element("span", "topos-maintenance-layer", `维护阶段：${concept.sourceLayer}`))
+      if (concept.proofStatus) {
+        const proof = element("span", "topos-proof-status", concept.proofStatus)
+        proof.dataset.proofStatus = concept.proofStatus
+        meta.append(proof)
+      }
+      if (concept.sourceTitle)
+        meta.append(element("span", "topos-source-title", `来源 · ${concept.sourceTitle}`))
+      const source = element("a", "topos-original-source", "原文位置 ↗")
+      if (concept.sourceHref ?? concept.href) {
+        source.href = sourceURL((concept.sourceHref ?? concept.href)!)
+        const owner =
+          model.concepts.find(
+            (candidate) =>
+              candidate.objectKind === "note" &&
+              candidate.href &&
+              new URL(sourceURL(candidate.href)).pathname === new URL(source.href).pathname,
+          )?.id ?? concept.relatedNotes?.find((id) => concepts.has(id))
+        source.dataset.conceptTarget = owner ?? concept.id
+        source.dataset.sourceAnchor = new URL(source.href).hash.slice(1)
+        meta.append(source)
+      }
+      if (concept.occurrences && concept.occurrences.length > 1) {
+        const occurrences = element("details", "topos-occurrences")
+        occurrences.append(
+          element("summary", undefined, `${concept.occurrences.length} 处原文出现位置`),
+        )
+        for (const occurrence of concept.occurrences) {
+          const note = model.concepts.find(
+            (candidate) =>
+              candidate.objectKind === "note" &&
+              candidate.href &&
+              new URL(sourceURL(candidate.href)).pathname ===
+                new URL(sourceURL(occurrence.href)).pathname,
+          )
+          const occurrenceLink = element(
+            "a",
+            undefined,
+            note?.title ?? occurrence.slug.split("/").at(-1),
+          )
+          occurrenceLink.href = sourceURL(occurrence.href)
+          if (note) occurrenceLink.dataset.conceptTarget = note.id
+          occurrenceLink.dataset.sourceAnchor = occurrence.anchor
+          occurrences.append(occurrenceLink)
+        }
+        meta.append(occurrences)
+      }
+      for (const id of concept.relatedNotes ?? []) {
+        const note = concepts.get(id)
+        if (!note || id === concept.id) continue
+        const link = element("a", "topos-source-note", `完整笔记 · ${note.title}`)
+        link.dataset.conceptTarget = id
+        link.href = note.href ? sourceURL(note.href) : `#focus=${encodeURIComponent(id)}&depth=2.1`
+        meta.append(link)
+      }
+      root.append(meta)
+    }
     const lead = element("p", "topos-explanation-lead", concept.summary)
-    root.append(lead)
+    if (!published) root.append(lead)
     const placed = new Set<string>()
     if (formal && state.scale >= 2) {
       root.append(sectionNode(formal, new Set(), placed))
@@ -385,7 +864,11 @@ async function start() {
         if (s && !placed.has(s.id)) root.append(sectionNode(s, new Set(), placed))
       }
     } else if (formal) {
-      const open = element("button", "topos-unfold-button", "展开正式定义")
+      const open = element(
+        "button",
+        "topos-unfold-button",
+        published ? "展开完整原文" : "展开正式定义",
+      )
       open.dataset.openSection = formal.id
       open.type = "button"
       open.addEventListener("click", () => unfold(formal.id))
@@ -393,7 +876,7 @@ async function start() {
     }
     if (state.scale >= 2.7) {
       const related = element("div", "topos-recursive-options")
-      related.append(element("p", undefined, "继续展开相关构造"))
+      related.append(element("p", undefined, published ? "原文中的联系" : "继续展开相关构造"))
       const targets = context.relations
         .filter((r) => r.source === concept.id || r.target === concept.id)
         .slice(0, 4)
@@ -403,6 +886,20 @@ async function start() {
         )!
         const s = preferredSection(other, 2)
         if (!s) continue
+        if (published) {
+          const link = element(
+            "a",
+            "topos-related-object",
+            `${relationCategory(relation)} · ${other.title}`,
+          )
+          link.dataset.conceptTarget = other.id
+          link.dataset.provenance = relation.provenance ?? "reference"
+          link.href = other.href
+            ? sourceURL(other.href)
+            : `#focus=${encodeURIComponent(other.id)}&depth=2.1`
+          related.append(link)
+          continue
+        }
         const button = element("button", "topos-unfold-button", `${relation.label} · ${other.zh}`)
         button.type = "button"
         button.dataset.openSection = s.id
@@ -413,18 +910,102 @@ async function start() {
       }
       root.append(related)
     }
-    root.scrollTop = previousScroll
+    if (published && state.scale >= 2) {
+      const headings = [
+        ...root.querySelectorAll<HTMLElement>(
+          ".topos-prose h1,.topos-prose h2,.topos-prose h3,.topos-prose h4",
+        ),
+      ]
+      if (headings.length > (concept.objectKind === "note" ? 0 : 2)) {
+        const toc = element("details", "topos-reading-toc"),
+          summary = element("summary", undefined, `本文目录 · ${headings.length} 节`),
+          nav = element("nav")
+        nav.setAttribute("aria-label", "原位正文目录")
+        headings.forEach((heading, index) => {
+          heading.id ||= `${concept.id}--heading-${index}`
+          const button = element("button", undefined, heading.textContent?.replace(/#$/, "").trim())
+          button.type = "button"
+          button.addEventListener("click", () => {
+            heading.tabIndex = -1
+            heading.focus({ preventScroll: true })
+            root!.scrollTo({
+              top:
+                root!.scrollTop +
+                heading.getBoundingClientRect().top -
+                root!.getBoundingClientRect().top -
+                20,
+              behavior: reduce.matches ? "instant" : "smooth",
+            })
+            toc.open = false
+          })
+          nav.append(button)
+        })
+        toc.append(summary, nav)
+        header.after(toc)
+      }
+    }
+    root.onscroll = () => {
+      if (
+        state.focus !== concept.id ||
+        root!.dataset.active !== "true" ||
+        restoringScroll.has(concept.id) ||
+        !root!.querySelector(".topos-section .topos-prose")
+      )
+        return
+      readingScroll.set(concept.id, root!.scrollTop)
+      laterRemember()
+    }
+    if (root.querySelector(".topos-section .topos-prose"))
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          if (state.focus !== concept.id || root!.dataset.active !== "true") return
+          root!.scrollTo({ top: previousScroll, behavior: "instant" })
+          restoringScroll.delete(concept.id)
+          readingScroll.set(concept.id, root!.scrollTop)
+          applyPendingAnchor()
+        }),
+      )
     if (oldFocus)
       root
         .querySelector<HTMLElement>(`[data-open-section="${CSS.escape(oldFocus)}"]`)
         ?.focus({ preventScroll: true })
+    applyPendingAnchor()
+  }
+  function applyPendingAnchor() {
+    if (!pendingAnchor || pendingAnchor.concept !== state.focus || restoringScroll.has(state.focus))
+      return
+    const root = unfoldings.get(pendingAnchor.concept)
+    const target = root?.querySelector<HTMLElement>(
+      `[data-source-id="${CSS.escape(pendingAnchor.anchor)}"]`,
+    )
+    if (!root || !target) return
+    target.tabIndex = -1
+    target.focus({ preventScroll: true })
+    root.scrollTo({
+      top:
+        root.scrollTop + target.getBoundingClientRect().top - root.getBoundingClientRect().top - 16,
+      behavior: reduce.matches ? "instant" : "smooth",
+    })
+    pendingAnchor = undefined
   }
   explanations.addEventListener("click", (e) => {
     const anchor = (e.target as HTMLElement).closest<HTMLAnchorElement>("a")
-    if (!anchor || e.ctrlKey || e.metaKey || e.shiftKey) return
+    if (!anchor || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return
+    if (anchor.dataset.localAnchor) {
+      e.preventDefault()
+      const target = document.getElementById(anchor.dataset.localAnchor)
+      if (target) {
+        target.tabIndex = -1
+        target.focus({ preventScroll: true })
+        target.scrollIntoView({ block: "nearest", behavior: reduce.matches ? "instant" : "smooth" })
+      }
+      return
+    }
     if (anchor.dataset.conceptTarget) {
       e.preventDefault()
-      focus(anchor.dataset.conceptTarget)
+      focus(anchor.dataset.conceptTarget, anchor.dataset.sourceAnchor)
+      zoom(Math.max(2.1, state.scale))
+      applyPendingAnchor()
       return
     }
     if (anchor.dataset.sectionTarget) {
@@ -458,10 +1039,12 @@ async function start() {
         : state.scale < 1.7
           ? "概念与关系"
           : state.scale < 2.7
-            ? "定义与公式"
+            ? published
+              ? "原文与公式"
+              : "定义与公式"
             : "递归展开"
     targetZoom = innerWidth < 600 ? 0.45 + state.scale * 0.065 : 0.79 + state.scale * 0.09
-    for (const b of document.querySelectorAll<HTMLElement>("[data-lens]"))
+    for (const b of document.querySelectorAll<HTMLElement>("button[data-lens]"))
       b.setAttribute("aria-pressed", String(b.dataset.lens === state.lens))
     for (const n of field.nodes)
       field.setRadius(n.id, n.id === state.focus ? (state.scale >= 1.7 ? 300 : 130) : 72)
@@ -477,8 +1060,9 @@ async function start() {
     let annotationsMoving = false
     const activeUnfold = unfoldings.get(state.focus)
     const showUnfold = state.scale >= 1.7
+    const mobileReading = published && innerWidth < 600 && showUnfold
     const now = performance.now()
-    const focusedWidth = Math.min(360, renderer.size.width - 28)
+    const focusedWidth = Math.min(published ? 650 : 360, renderer.size.width - 28)
     for (const n of field.nodes) {
       const a = labelNodes.get(n.id)!
       a.style.width = `${n.id === state.focus ? focusedWidth : innerWidth < 600 ? 128 : 185}px`
@@ -497,7 +1081,7 @@ async function start() {
             (b.id === state.focus ? 100 : b.id === context.previous ? 90 : b.relevance) -
             (a.id === state.focus ? 100 : a.id === context.previous ? 90 : a.relevance),
         )
-        .slice(0, innerWidth < 600 && showUnfold ? 4 : 12)
+        .slice(0, mobileReading ? 0 : innerWidth < 600 && showUnfold ? 4 : 12)
       const focused = field.nodes.find((n) => n.id === state.focus)!
       const focusedPoint = renderer.project(focused),
         focusedLabel = labelNodes.get(state.focus)!
@@ -519,7 +1103,10 @@ async function start() {
       const excluded: { x: number; y: number; width: number; height: number }[] = [focusBox]
       if (showUnfold) {
         const p = renderer.project(field.nodes.find((n) => n.id === state.focus)!)
-        const w = Math.min(innerWidth < 600 ? innerWidth - 28 : 465, renderer.size.width - 32)
+        const w = Math.min(
+          innerWidth < 600 ? innerWidth - 28 : published ? 720 : 465,
+          renderer.size.width - 32,
+        )
         const x = clamp(p.x - w / 2, 14, renderer.size.width - w - 14),
           y = clamp(p.y + 20, 130, renderer.size.height - 180)
         excluded.push({ x, y, width: w, height: Math.max(120, renderer.size.height - y - 96) })
@@ -548,7 +1135,20 @@ async function start() {
       )
       annotationTargets.clear()
       annotationTargets.set(state.focus, focusBox)
-      for (const box of placed) annotationTargets.set(box.id, box)
+      for (const box of placed) {
+        if (
+          published &&
+          excluded.some(
+            (obstacle) =>
+              box.x < obstacle.x + obstacle.width + 7 &&
+              box.x + box.width > obstacle.x - 7 &&
+              box.y < obstacle.y + obstacle.height + 7 &&
+              box.y + box.height > obstacle.y - 7,
+          )
+        )
+          continue
+        annotationTargets.set(box.id, box)
+      }
     }
     for (const n of field.nodes) {
       const a = labelNodes.get(n.id)!,
@@ -579,7 +1179,9 @@ async function start() {
           : farVisibility *
               (box
                 ? clamp(0.45 + n.relevance * 0.65, 0, 1)
-                : n.relevance * (showUnfold ? 0.08 : 0.5)),
+                : published
+                  ? 0
+                  : n.relevance * (showUnfold ? 0.08 : 0.5)),
       )
       a.style.filter = n.relevance < 0.28 ? `blur(${(0.28 - n.relevance) * 3}px)` : "none"
       a.style.zIndex = isFocus ? "8" : String(Math.floor(n.relevance * 5))
@@ -601,11 +1203,15 @@ async function start() {
       if (root) {
         const active = isFocus && showUnfold,
           memory = n.id === context.previous && showUnfold
-        root.style.opacity = active ? "1" : memory ? String(n.relevance * 0.3) : "0"
+        root.style.opacity = active
+          ? "1"
+          : memory && !mobileReading
+            ? String(n.relevance * 0.3)
+            : "0"
         root.style.pointerEvents = active ? "auto" : "none"
         root.inert = !active
         const maxWidth = Math.min(
-          innerWidth < 600 ? innerWidth - 28 : 465,
+          innerWidth < 600 ? innerWidth - 28 : published ? 720 : 465,
           renderer.size.width - 32,
         )
         const left = active
@@ -615,7 +1221,7 @@ async function start() {
         root.style.transform = `translate(${left}px,${top}px) scale(${active ? 1 : 0.72})`
         root.style.width = `${active ? maxWidth : 230}px`
         root.style.maxHeight = active
-          ? `${Math.max(120, renderer.size.height - top - 96)}px`
+          ? `${Math.max(120, renderer.size.height - top - (innerWidth < 600 ? 145 : 96))}px`
           : "100px"
       }
     }
@@ -727,11 +1333,51 @@ async function start() {
     })
     relationPopover.append(
       close,
-      element("small", undefined, r.type),
-      element("h2", undefined, `${concepts.get(r.source)!.zh} → ${concepts.get(r.target)!.zh}`),
+      element("small", undefined, published ? `${relationCategory(r)} · ${r.type}` : r.type),
+      element(
+        "h2",
+        undefined,
+        published
+          ? `${concepts.get(r.source)!.title} → ${concepts.get(r.target)!.title}`
+          : `${concepts.get(r.source)!.zh} → ${concepts.get(r.target)!.zh}`,
+      ),
       element("p", undefined, r.explanation),
     )
+    if (published)
+      for (const [position, id] of [
+        ["起点", r.source],
+        ["终点", r.target],
+      ]) {
+        const concept = concepts.get(id)!
+        if (concept.proofStatus)
+          relationPopover.append(
+            element(
+              "p",
+              "topos-relation-proof-status",
+              `${position}证明状态：${concept.proofStatus}`,
+            ),
+          )
+      }
     const source = model.sources.find((s) => r.evidence.startsWith(s.id))
+    if (r.evidenceHref) {
+      const evidence = element("a", undefined, "查看原文依据 ↗")
+      evidence.href = sourceURL(r.evidenceHref)
+      const target = model.concepts.find(
+        (candidate) =>
+          candidate.objectKind === "note" &&
+          candidate.href &&
+          new URL(sourceURL(candidate.href)).pathname === new URL(evidence.href).pathname,
+      )
+      if (target)
+        evidence.addEventListener("click", (event) => {
+          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+          event.preventDefault()
+          relationPopover.hidden = true
+          focus(target.id)
+          zoom(2.1)
+        })
+      relationPopover.append(evidence)
+    }
     if (source) {
       const a = element("a", undefined, source.title)
       a.href = source.url
@@ -760,7 +1406,8 @@ async function start() {
     renderer.view.zoom += zoomDelta * Math.min(1, dt * 7)
     renderer.view.x += (pan.x - renderer.view.x) * Math.min(1, dt * 8)
     renderer.view.y += (pan.y - renderer.view.y) * Math.min(1, dt * 8)
-    const desiredCenter = state.scale >= 1.7 ? (innerWidth < 600 ? 0.29 : 0.31) : 0.47
+    const desiredCenter =
+      state.scale >= 1.7 ? (published ? 0.235 : innerWidth < 600 ? 0.29 : 0.31) : 0.47
     currentCenter += (desiredCenter - currentCenter) * Math.min(1, dt * 4)
     renderer.setCenterY(currentCenter)
     renderer.setParallax(pointer.x, pointer.y)
@@ -792,7 +1439,7 @@ async function start() {
     const target = e.target as HTMLElement
     if (
       target.closest(
-        ".topos-instruments,.topos-unfolding,.topos-help,.topos-utility,.topos-relation-detail,.topos-relation",
+        ".topos-instruments,.topos-unfolding,.topos-help,.topos-utility,.topos-relation-detail,.topos-relation,.topos-search",
       )
     )
       return
@@ -893,7 +1540,11 @@ async function start() {
   world.addEventListener(
     "wheel",
     (e) => {
-      if ((e.target as HTMLElement).closest(".topos-unfolding,.topos-help,.topos-relation-detail"))
+      if (
+        (e.target as HTMLElement).closest(
+          ".topos-unfolding,.topos-help,.topos-relation-detail,.topos-search",
+        )
+      )
         return
       e.preventDefault()
       zoom(state.scale - e.deltaY * 0.003)
@@ -901,7 +1552,7 @@ async function start() {
     { passive: false },
   )
   document
-    .querySelectorAll<HTMLElement>("[data-lens]")
+    .querySelectorAll<HTMLElement>("button[data-lens]")
     .forEach((b) => b.addEventListener("click", () => setLens(b.dataset.lens as Lens)))
   document
     .querySelectorAll<HTMLElement>("[data-zoom]")
@@ -929,7 +1580,14 @@ async function start() {
     wake()
   })
   document.addEventListener("keydown", (e) => {
-    if ((e.target as HTMLElement).matches("input,textarea") || help.open) return
+    if (published && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault()
+      if (search.open) search.close()
+      else openSearch()
+      return
+    }
+    if ((e.target as HTMLElement).matches("input,textarea,select") || help.open || search.open)
+      return
     if (e.key === "Escape") {
       if (!relationPopover.hidden) {
         relationPopover.hidden = true
@@ -962,14 +1620,13 @@ async function start() {
     }
   })
   window.addEventListener("popstate", (e) => {
+    pendingAnchor = undefined
     const s = e.state?.topos as Saved | undefined
     if (s && concepts.has(s.view.focus)) {
-      state = s.view
-      context = deriveContext(model, state)
-      field.setContext(context)
-      field.restore(s.field)
-      pan = { x: s.camera.x, y: s.camera.y }
-      Object.assign(renderer.view, s.camera)
+      restoreSaved(s)
+      pan = { x: renderer.view.x, y: renderer.view.y }
+      readingScroll.clear()
+      for (const [id, top] of Object.entries(s.readingScroll ?? {})) readingScroll.set(id, top)
     } else {
       state = fromHash()
       context = deriveContext(model, state)

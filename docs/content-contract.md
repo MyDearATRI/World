@@ -1,5 +1,13 @@
 # Content contract
 
+## Approved notes as Topos source
+
+The current default Topos model is derived from the exact committed KnowledgeIndex and the same manifest-bounded Quartz HAST used by complete note and atom pages. It contains every existing eligible object, not a curated subset replacing the user's notes. Stable atom identities, multi-location provenance, proof qualifications and complete notes with no extracted atom remain intact. Book/chapter fields describe provenance only. No source note is rewritten, renamed or exported by this adapter.
+
+Published explanatory sections preserve the formal atom's required setting, body and available context, or the complete source-note tree. Links and local identifiers are relocated without changing mathematics, citations or footnote returns. Known object links activate the same field; independent source pages and non-object resources keep valid real destinations. Relations retain their exact original type, direction and provenance instead of translating references into inferred prerequisites.
+
+The Group demonstration remains separately emitted from `knowledge/topos/prototype.json` to the demo route and demo index. It does not enter actual-note search or counts. The site root is a knowledge-field shell; the former home Markdown remains fully rendered at `library.html`. Template and governance edits are local authoring work and stay outside the public content/asset boundary.
+
 ## Bounded Topos prototype content
 
 `knowledge/topos/prototype.json` declares 22 concepts, 40 sourced typed relations, 67 Markdown sections and nine public references. The Quartz Topos emitter renders the real section Markdown through remark/GFM/math/KaTeX with HTML and MathML. `concept:` changes field focus, while `section:` unfolds an explanation in place. The UI does not hard-code mathematical prose or attribute synthetic examples to the author's notes.

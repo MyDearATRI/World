@@ -9,6 +9,7 @@ import { ReaderMetadata } from "./quartz/plugins/transformers/readerMetadata"
 import { Atoms } from "./quartz/plugins/transformers/atoms"
 import { Knowledge } from "./quartz/plugins/emitters/knowledge"
 import { Topos } from "./quartz/plugins/emitters/topos"
+import type { FullSlug } from "./quartz/util/path"
 
 // Quartz 4.5.2 — d25a6eabf96751ffca56f8a8139272def7a65041.
 // Only the manifest-verified website/content export is an input.
@@ -64,7 +65,7 @@ const config: QuartzConfig = {
     filters: [Plugin.RemoveDrafts()],
     emitters: [
       Plugin.ComponentResources(),
-      Plugin.ContentPage({ pageBody: ReadingContent }),
+      Plugin.ContentPage({ pageBody: ReadingContent, homeSlug: "library" as FullSlug }),
       Plugin.ContentIndex({ enableSiteMap: false, enableRSS: false }),
       BookIndex(),
       Knowledge(),

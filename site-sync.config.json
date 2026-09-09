@@ -1,6 +1,10 @@
 {
   "version": 1,
   "newFiles": [
+    "quartz/util/topos/published.ts",
+    "quartz/util/topos/published.test.ts",
+    "scripts/verify-topos-published.mjs",
+    "scripts/lib/verify-topos-output.mjs",
     "docs/topos-acceptance.md",
     "knowledge/topos/README.md",
     "knowledge/topos/prototype.json",

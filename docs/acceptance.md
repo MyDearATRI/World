@@ -1,5 +1,13 @@
 # Website acceptance
 
+## Actual-note field follow-up
+
+Verify the default root/Topos model exactly covers the committed eligible KnowledgeIndex: all canonical atoms and complete mathematical notes, all typed relationships, and every note without extracted objects. Confirm source snapshot hashes remain unchanged. Compare source HAST prose, mathematics, prerequisites, proof qualifications, citations and local targets against the field's actual rendered explanations. Books/chapters cannot be the grouping or positioning input. The independent demo remains available and outside default search.
+
+Use real source-derived tasks: find the metric definition and a continuity result through Chinese/English/alias/LaTeX search; open the original complete discussion in the same field; open another object; return, refresh and use native modifier-click. Confirm persistent scene and object identity, type/provenance visibility, long prose navigation, formula-local scrolling and source state. Check 1440×1000, 1024×900 and 390×844 with actual screenshots, keyboard, reduced motion and fallback, and evaluate behavior at the real object count rather than using demo tests as proof.
+
+Run type, format, unit, upstream, formal build, all-content and knowledge checks. Validate original note URLs, `library.html`, demo/default index separation and exact public output boundaries. Update the synchronization whitelist only for reviewed website code; authoring rules/templates and their backups remain local. Publish through the existing ordinary-push workflow and verify the exact Pages commit and live actual-note route before claiming completion.
+
 ## Knowledge Topos prototype acceptance
 
 The current Group → Action → Representation prototype must satisfy the independent T01–T13 matrix in `topos-acceptance.md`. It requires persistent scene identity and real context-dependent node motion, semantic levels 0–3, source Markdown with MathML, recursive local unfolding, typed relations, graph-computed communities and both labelled and label-free screen recordings. Screenshots or older map test results alone are insufficient. Scope is this vertical prototype, not full textbook migration. Record failures, fixes, actual video/frame observations and untested limitations separately.

@@ -6,6 +6,21 @@ import { createField, type FieldSnapshot } from "./field"
 import { createAppearanceModel, communityFootprint } from "../../components/scripts/topos/renderer"
 import type { KnowledgeModel, Lens, Relation, RelationType, ViewState } from "./types"
 
+test("repeated context evaluation cannot mutate cached communities or ignore graph edits", () => {
+  const model = fixture()
+  const initial = deriveCommunities(model, "structural")
+  assert.ok(initial.length > 0)
+  const changedOutput = deriveCommunities(model, "structural")
+  changedOutput[0].members.splice(0)
+  changedOutput[0].label = "not a source label"
+  assert.deepEqual(deriveCommunities(model, "structural"), initial)
+  const edges = model.relations
+  model.relations = []
+  assert.deepEqual(deriveCommunities(model, "structural"), [])
+  model.relations = edges
+  assert.deepEqual(deriveCommunities(model, "structural"), initial)
+})
+
 // Deliberately small test ontology. These labels do not provide production mathematical content.
 function fixture(): KnowledgeModel {
   const titles = [
