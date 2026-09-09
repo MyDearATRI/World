@@ -6,6 +6,7 @@ artifacts
 quartz/static/fonts
 quartz/static/katex
 quartz/static/semantic
+quartz/static/graph
 .cache
 knowledge/index.json
 knowledge/semantic.json

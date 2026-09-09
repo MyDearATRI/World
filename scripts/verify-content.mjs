@@ -92,6 +92,9 @@ try {
     "static/semantic/model-manifest.json",
     "static/semantic/TRANSFORMERS-LICENSE.txt",
     "static/semantic/ONNX-LICENSE.txt",
+    "static/graph/knowledgeGraph3d.js",
+    "static/graph/three-LICENSE.txt",
+    "static/graph/d3-force-3d-LICENSE.txt",
   ])
   check(
     published.every(

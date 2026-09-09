@@ -1,5 +1,13 @@
 # Design specification
 
+## Three-dimensional tree and flat reading
+
+The current map uses Three.js 0.185.1 and d3-force-3d 3.0.6. A stable book → chapter → section skeleton separates local neighborhoods. Collections have hollow geometry; mathematical objects have solid nodes and camera-facing labels. One atom keeps one identity and spatial position even when associated with several sections. The earliest explicit section in the catalog supplies its initial layout anchor, while all memberships remain visible. Chapter-level fallback retains unassigned objects and sections without atoms still link to their full reading.
+
+Pointer dragging a node adjusts its layout; clicking reads. Empty-space dragging rotates; Shift/right dragging pans; wheel zooms. Camera and navigation controls have explicit keyboard alternatives. Mobile starts with grouped lists and opens a full-screen map deliberately; touch supports rotation, node-position mode and two-finger pan/zoom. Short damping settles after interaction, idle/hidden maps stop rendering, and reduced motion goes directly to stable states. WebGL2 failure exposes the same tree and object links as an accessible fallback.
+
+Original mathematical relations and references attract more strongly than bounded, separately labelled model recommendations. Similarity starts enabled for layout and can be switched off, while relation paths still require explicit inclusion of recommendations. Direction markers identify actual directed relations; structure and similarity do not become proofs. The flat reader, original formulas, source context and native links retain the existing interaction contract.
+
 ## Current knowledge-space design
 
 Home exposes book reading and exploration as two explicit destinations. Warm gray (#f1f0ec) supports near-white (#fffefa) reading surfaces, dark ink and a restrained blue. Object type, source title, proof status, source location and mathematical prose use separate typographic levels. Prose retains the existing serif and KaTeX keeps its own fonts. The focused desktop reader has context, central reading and related-content regions; narrower screens put context into compact controls and use a single reading flow.

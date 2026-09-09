@@ -6,6 +6,15 @@ import { selectKnowledgeFormula } from "../../util/knowledgeGraph"
 import { computePosition, flip, shift, offset } from "@floating-ui/dom"
 import katex from "katex"
 import { semanticCacheName } from "../../util/semantic"
+import type { GraphRelation } from "../../util/knowledgeGraph"
+
+type GraphController = {
+  setFocus: (id: string) => void
+  getState: () => unknown
+  restoreState: (state: unknown) => void
+  setRecommendations: (relations: GraphRelation[]) => void
+  destroy: () => void
+}
 
 type SemanticIndex = {
   version: number
@@ -22,6 +31,7 @@ type SpaceState = {
   depth?: number
   map?: unknown
   focusTarget?: { href?: string; id?: string; objectId?: string; area?: string }
+  returnFocus?: { objectId?: string; href?: string; graph: boolean; node: boolean }
   expanded?: number[]
   returnHref: string
   returnTitle: string
@@ -93,6 +103,7 @@ async function initializeSpace() {
   document.body.append(shell, command, preview)
   const siteRoot = new URL(`${(context.dataset.root || ".").replace(/\/$/, "")}/`, location.href)
   const pageRoot = document.querySelector<HTMLElement>("#quartz-root")!
+  const documentPath = location.pathname
   const q = <T extends Element = HTMLElement>(selector: string) => shell.querySelector<T>(selector)!
   const cq = <T extends Element = HTMLElement>(selector: string) =>
     command.querySelector<T>(selector)!
@@ -117,7 +128,9 @@ async function initializeSpace() {
   }
   const objects = new Map(index.objects.map((object) => [object.id, object]))
   let catalog: ReaderCatalog | undefined
-  const catalogRequest = fetch(new URL("static/bookIndex.json", siteRoot))
+  const catalogRequest = fetch(new URL("static/bookIndex.json", siteRoot), {
+    signal: AbortSignal.timeout(10_000),
+  })
     .then(async (response) => {
       if (response.ok) catalog = (await response.json()).catalog
     })
@@ -173,9 +186,10 @@ async function initializeSpace() {
   let opening = 0
   let abort: AbortController | undefined
   let initialTrigger: HTMLElement | SVGElement | undefined
-  let localGraph: ReturnType<typeof mountKnowledgeGraph> | undefined
+  let localGraph: GraphController | undefined
+  let localGraphRequest: Promise<GraphController> | undefined
   const htmlCache = new Map<string, string>()
-  const rootGraphs: ReturnType<typeof mountKnowledgeGraph>[] = []
+  const rootGraphs: GraphController[] = []
   const reduced = matchMedia("(prefers-reduced-motion: reduce)")
   const writeState = (replace = true, href = location.href) =>
     history[replace ? "replaceState" : "pushState"](
@@ -407,6 +421,18 @@ async function initializeSpace() {
     preview!.hidden = true
     const old = state.focus
     if (mode === "push") {
+      if (!old && trigger) {
+        state.returnFocus = {
+          objectId:
+            trigger.getAttribute("data-object-id") ??
+            trigger.getAttribute("data-knowledge-id") ??
+            trigger.getAttribute("data-atom-id") ??
+            id,
+          href: trigger instanceof HTMLAnchorElement ? trigger.href : undefined,
+          graph: !!trigger.closest(".knowledge-map-3d,.knowledge-map"),
+          node: !!trigger.closest(".kg3d-node"),
+        }
+      }
       remember()
       if (!old) {
         initialTrigger = trigger
@@ -551,6 +577,13 @@ async function initializeSpace() {
     }
   }
   function restoreBase(next: SpaceState) {
+    // After refreshing an atom URL, this document contains that atom's static
+    // page, not the original explorer. Reload the restored history entry so its
+    // real HTML and saved map/focus state are reconstructed together.
+    if (new URL(next.returnHref, siteRoot).pathname !== documentPath) {
+      location.reload()
+      return
+    }
     opening++
     abort?.abort()
     preview!.hidden = true
@@ -562,7 +595,35 @@ async function initializeSpace() {
     window.scrollTo(0, state.outerScroll)
     if (state.map && rootGraphs[0])
       rootGraphs[0].restoreState(state.map as Parameters<(typeof rootGraphs)[0]["restoreState"]>[0])
-    initialTrigger?.focus({ preventScroll: true })
+    restoreReturnFocus()
+  }
+  function restoreReturnFocus() {
+    if (initialTrigger?.isConnected) initialTrigger.focus({ preventScroll: true })
+    else if (state.returnFocus) {
+      const identity = state.returnFocus
+      const host = identity.graph
+        ? (pageRoot.querySelector("[data-knowledge-map]") ?? pageRoot)
+        : pageRoot
+      const id = CSS.escape(identity.objectId ?? "")
+      const selectors = identity.node
+        ? [
+            `.kg3d-node[data-node-id="${id}"] a`,
+            `[data-knowledge-id="${id}"]`,
+            `[data-object-id="${id}"]`,
+          ]
+        : [`[data-knowledge-id="${id}"]`, `[data-object-id="${id}"]`, `[data-atom-id="${id}"]`]
+      const restore = () => {
+        const candidates = selectors.flatMap((selector) => [
+          ...host.querySelectorAll<HTMLElement>(selector),
+        ])
+        const target = candidates.find(
+          (node) => node.getClientRects().length && !node.closest("[hidden],[inert]"),
+        )
+        target?.focus({ preventScroll: true })
+      }
+      restore()
+      requestAnimationFrame(restore)
+    }
   }
   window.addEventListener("popstate", (event) => {
     const next = event.state?.knowledge as SpaceState | undefined
@@ -595,40 +656,110 @@ async function initializeSpace() {
   const graphSelect = (id: string, trigger: HTMLElement | SVGElement) => {
     void show(id, trigger)
   }
+  let graphModule: Promise<typeof import("./knowledgeGraph3d") | undefined> | undefined
+  async function createGraph(
+    host: HTMLElement,
+    onStateChange: (map: unknown) => void,
+    initialFocus?: string,
+  ): Promise<GraphController> {
+    host.setAttribute("aria-busy", "true")
+    await catalogRequest
+    graphModule ??= import(new URL("static/graph/knowledgeGraph3d.js", siteRoot).href).catch(
+      () => undefined,
+    )
+    const module = await graphModule
+    const recommendations = Object.entries(semantic?.recommendations ?? {}).flatMap(
+      ([source, entries]) =>
+        entries.map((entry) => ({
+          id: `similar:${source}:${entry.id}`,
+          source,
+          target: entry.id,
+          type: "similar_to",
+          provenance: "similarity" as const,
+          score: entry.score,
+          evidenceHref: objects.get(source)?.href,
+        })),
+    )
+    const options = {
+      onSelect: graphSelect,
+      siteRoot: siteRoot.href,
+      onStateChange,
+      initialFocus,
+      recommendations,
+      initialBookId: host.dataset.bookId,
+      initialChapterId: host.dataset.chapterId,
+    }
+    try {
+      if (module && catalog) return module.mountKnowledgeGraph(host, index, { ...options, catalog })
+      const graph = mountKnowledgeGraph(host, index, options)
+      return {
+        ...graph,
+        restoreState: (value) => {
+          // A 3D camera cannot be interpreted as an SVG pixel transform.
+          if (value && (value as { version?: number }).version !== 2)
+            graph.restoreState(value as Parameters<typeof graph.restoreState>[0])
+        },
+      }
+    } finally {
+      host.removeAttribute("aria-busy")
+    }
+  }
   const initialMap = state.map
-  for (const host of document.querySelectorAll<HTMLElement>("[data-knowledge-map]"))
-    rootGraphs.push(
-      mountKnowledgeGraph(host, index, {
-        onSelect: graphSelect,
-        siteRoot: siteRoot.href,
-        onStateChange: (map) => {
+  for (const host of document.querySelectorAll<HTMLElement>("[data-knowledge-map]")) {
+    let request: Promise<GraphController> | undefined
+    const mount = async () => {
+      if (request) return
+      request = createGraph(
+        host,
+        (map) => {
           if (!state.focus) {
             state.map = map
             writeState()
           }
         },
-      }),
-    )
-  if (!state.focus && initialMap && rootGraphs[0])
-    rootGraphs[0].restoreState(initialMap as Parameters<(typeof rootGraphs)[0]["restoreState"]>[0])
+        host.dataset.initialFocus,
+      )
+      const graph = await request
+      rootGraphs.push(graph)
+      if (!state.focus && initialMap) {
+        graph.restoreState(initialMap)
+        restoreReturnFocus()
+      }
+    }
+    const disclosure = host.closest<HTMLDetailsElement>("details.knowledge-map-entry")
+    if (disclosure && !state.focus && initialMap && state.returnFocus?.graph) disclosure.open = true
+    if (disclosure && !disclosure.open)
+      disclosure.addEventListener("toggle", () => {
+        if (disclosure.open)
+          void mount().catch(() => {
+            host.removeAttribute("aria-busy")
+            host.prepend(el("p", "地图暂时无法载入；原文和目录仍可使用。"))
+          })
+      })
+    else
+      void mount().catch(() => {
+        host.removeAttribute("aria-busy")
+        host.prepend(el("p", "地图暂时无法载入；下方目录与普通搜索仍可使用。"))
+      })
+  }
   shell.querySelectorAll("[data-space-map-toggle]").forEach((button) =>
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
       const region = q<HTMLElement>(".space-map-region")
       region.hidden = !region.hidden
       if (!region.hidden) {
         const savedMap = state.map
-        localGraph ??= mountKnowledgeGraph(q("[data-space-local-map]"), index, {
-          onSelect: graphSelect,
-          initialFocus: state.focus ?? undefined,
-          siteRoot: siteRoot.href,
-          recommendations: graphRecommendations(),
-          onStateChange: (map) => {
+        localGraphRequest ??= createGraph(
+          q("[data-space-local-map]"),
+          (map) => {
             if (state.focus) {
               state.map = map
               writeState()
             }
           },
-        })
+          state.focus ?? undefined,
+        )
+        localGraph = await localGraphRequest
+        if (region.hidden) return
         if (state.focus) localGraph.setFocus(state.focus)
         if (savedMap)
           localGraph.restoreState(savedMap as Parameters<typeof localGraph.restoreState>[0])
@@ -683,12 +814,20 @@ async function initializeSpace() {
     option.value = type
     typeFilter.append(option)
   }
-  await catalogRequest
-  for (const book of catalog?.books ?? []) {
-    const option = el("option", book.title)
-    option.value = `book:${book.id}`
-    scope.append(option)
-  }
+  void catalogRequest.then(() => {
+    for (const book of catalog?.books ?? []) {
+      const option = el("option", book.title)
+      option.value = `book:${book.id}`
+      scope.append(option)
+    }
+    if (
+      !scope.value &&
+      context.dataset.bookId &&
+      catalog?.books.some((b) => b.id === context.dataset.bookId)
+    )
+      scope.value = `book:${context.dataset.bookId}`
+    if (state.focus && objects.has(state.focus)) renderContext(objects.get(state.focus)!)
+  })
   for (const group of index.groups) {
     const option = el("option", group.title)
     option.value = group.id
@@ -854,7 +993,9 @@ async function initializeSpace() {
         !command!.open &&
         !(
           event.target instanceof Element &&
-          event.target.closest(".kg-path-dialog, .knowledge-map.is-fullscreen")
+          event.target.closest(
+            ".kg-path-dialog, .knowledge-map.is-fullscreen, .kg3d-path, .knowledge-map-3d.is-fullscreen",
+          )
         )
       ) {
         preview!.hidden = true
@@ -880,7 +1021,8 @@ async function initializeSpace() {
         return
       }
       const a = target?.closest<HTMLAnchorElement>("a")
-      if (a?.hasAttribute("data-knowledge-id") && a.closest(".knowledge-map")) return
+      if (a?.hasAttribute("data-knowledge-id") && a.closest(".knowledge-map,.knowledge-map-3d"))
+        return
       if (
         !a ||
         event.button !== 0 ||
@@ -932,6 +1074,7 @@ async function initializeSpace() {
   })
 
   let previewTimer: ReturnType<typeof setTimeout> | undefined
+  let keyboardPreviewTarget: HTMLElement | undefined
   let hideTimer: ReturnType<typeof setTimeout> | undefined
   async function showPreview(a: HTMLElement, object: KnowledgeObject) {
     preview!.querySelector(".space-type")!.textContent = label(object)
@@ -978,6 +1121,7 @@ async function initializeSpace() {
         : null
     const object = a ? objects.get(a.dataset.atomId ?? a.dataset.objectId ?? "") : undefined
     if (!a || object?.kind !== "atom") return
+    keyboardPreviewTarget = event.type === "focusin" ? a : undefined
     clearTimeout(hideTimer)
     clearTimeout(previewTimer)
     previewTimer = setTimeout(
@@ -988,8 +1132,20 @@ async function initializeSpace() {
   if (matchMedia("(hover: hover)").matches) document.addEventListener("pointerover", previewTarget)
   document.addEventListener("focusin", previewTarget)
   document.addEventListener("pointerout", (event) => {
+    // A delayed touch pointerout must not cancel a keyboard-focused preview.
+    if (keyboardPreviewTarget === document.activeElement) return
     if (event.relatedTarget instanceof Node && preview!.contains(event.relatedTarget)) return
     clearTimeout(previewTimer)
+    hideTimer = setTimeout(() => {
+      preview!.hidden = true
+    }, 220)
+  })
+  document.addEventListener("focusout", (event) => {
+    if (!keyboardPreviewTarget || event.target !== keyboardPreviewTarget) return
+    if (event.relatedTarget instanceof Node && preview!.contains(event.relatedTarget)) return
+    keyboardPreviewTarget = undefined
+    clearTimeout(previewTimer)
+    clearTimeout(hideTimer)
     hideTimer = setTimeout(() => {
       preview!.hidden = true
     }, 220)

@@ -1,0 +1,376 @@
+.knowledge-map-3d {
+  --map-blue: #28689e;
+  color: #26394a;
+  min-width: 0;
+  width: 100%;
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  .kg3d-toolbar,
+  .kg3d-camera-tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .kg3d-toolbar {
+    position: relative;
+    margin: 14px 0 8px;
+  }
+  .kg3d-current {
+    flex: 1 1 170px;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+  button,
+  select,
+  summary {
+    font: inherit;
+  }
+  button,
+  select {
+    color: inherit;
+  }
+  .kg3d-control {
+    background: #fffefa;
+    border: 1px solid #cdd5dc;
+    border-radius: 5px;
+    padding: 7px 10px;
+    min-height: 36px;
+    cursor: pointer;
+    text-align: left;
+    line-height: 1.45;
+  }
+  .kg3d-control:hover,
+  .kg3d-control[aria-current],
+  .kg3d-control[aria-pressed="true"] {
+    background: #e9eff4;
+    border-color: #86a9c5;
+  }
+  .kg3d-control:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+  :is(a, button, select, input, summary, canvas):focus-visible {
+    outline: 2px solid var(--map-blue);
+    outline-offset: 3px;
+  }
+  .kg3d-help,
+  .kg3d-legend,
+  .kg3d-status {
+    font-size: 12px;
+    line-height: 1.65;
+    margin: 8px 0;
+    color: #526676;
+  }
+  .kg3d-stage {
+    height: clamp(340px, 50vw, 590px);
+    min-height: 340px;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid #d7dcdf;
+    border-radius: 6px;
+    background: #f5f5f1;
+  }
+  .kg3d-canvas {
+    // Labels stay in the viewport; the scene may extend beyond it while panning.
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+    cursor: grab;
+  }
+  &[data-scope="overview"] .kg3d-stage,
+  &[data-scope="book"] .kg3d-stage {
+    height: 300px;
+    min-height: 300px;
+  }
+  &[data-scope="chapter"] .kg3d-stage {
+    height: 440px;
+    min-height: 340px;
+  }
+  .kg3d-canvas:active {
+    cursor: grabbing;
+  }
+  .kg3d-labels {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .kg3d-label-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .kg3d-label-lines line {
+    stroke: #91a5b5;
+    stroke-width: 1;
+    opacity: 0.7;
+  }
+  .kg3d-node {
+    position: absolute;
+    pointer-events: auto;
+    transform: translateX(-50%);
+    max-width: 185px;
+    width: max-content;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 4px 6px;
+    font-size: 12px;
+    line-height: 1.4;
+    min-height: 0;
+    max-height: 44px;
+    overflow: hidden;
+    color: #244a6a;
+    text-decoration: none;
+    background: #f5f5f1e8;
+    border: 1px solid transparent;
+    border-radius: 3px;
+  }
+  .kg3d-node[data-kind="book"],
+  .kg3d-node[data-kind="chapter"] {
+    font-weight: 650;
+    border-color: #bdcbd5;
+    background: #fffefa;
+  }
+  .kg3d-node:hover {
+    text-decoration: underline;
+    color: #134e80;
+    background: white;
+  }
+  .kg3d-node.has-leader {
+    border-color: #c5d2db;
+    background: #fffefa;
+    max-height: 50px;
+    min-height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .kg3d-node[hidden] {
+    display: none;
+  }
+  .kg3d-camera-tools {
+    margin-top: 8px;
+    gap: 5px;
+  }
+  .kg3d-camera-tools button {
+    font-size: 12px;
+    min-height: 32px;
+    padding: 4px 8px;
+  }
+  .kg3d-settings {
+    position: relative;
+  }
+  .kg3d-settings > summary {
+    cursor: pointer;
+    padding: 8px;
+  }
+  .kg3d-settings-body {
+    position: absolute;
+    z-index: 5;
+    top: 100%;
+    right: 0;
+    width: 250px;
+    max-width: calc(100vw - 42px);
+    padding: 14px;
+    background: #fffefa;
+    border: 1px solid #cdd5dc;
+    border-radius: 5px;
+    box-shadow: 0 8px 25px #26394a13;
+  }
+  .kg3d-settings:not([open]) > .kg3d-settings-body {
+    display: none;
+  }
+  .kg3d-settings-body > * {
+    margin: 7px 0;
+    max-width: 100%;
+  }
+  .kg3d-layer {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .kg3d-lists {
+    display: grid;
+    grid-template-columns: minmax(190px, 0.9fr) minmax(0, 1.5fr);
+    gap: 22px;
+    border-top: 1px solid #d7dcdf;
+    margin-top: 20px;
+    padding-top: 16px;
+  }
+  .kg3d-lists h3 {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0 0 12px;
+  }
+  .kg3d-tree,
+  .kg3d-contents,
+  .kg3d-related {
+    min-width: 0;
+  }
+  .kg3d-branch > button {
+    width: 100%;
+    font-size: 13px;
+    border: 0;
+    background: transparent;
+    padding: 6px 2px;
+  }
+  .kg3d-branch details {
+    margin-left: 9px;
+    padding-left: 9px;
+    border-left: 1px solid #d1d9e0;
+  }
+  .kg3d-branch summary {
+    font-size: 12px;
+    cursor: pointer;
+    color: #637785;
+    margin-bottom: 6px;
+  }
+  .kg3d-lists ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .kg3d-lists li {
+    margin: 0 0 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e1e5e7;
+    overflow-wrap: anywhere;
+  }
+  .kg3d-lists small {
+    display: block;
+    color: #627383;
+    font-size: 11px;
+    line-height: 1.6;
+    margin: 4px 0;
+  }
+  .kg3d-type {
+    display: block;
+    font-size: 11px;
+    color: #637e92;
+    margin-bottom: 3px;
+  }
+  .kg3d-lists a {
+    color: #235f93;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .kg3d-count {
+    color: #61717c;
+    font-size: 12px;
+  }
+  .kg3d-related {
+    grid-column: 1 / -1;
+  }
+  .kg3d-related ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .kg3d-evidence {
+    margin-right: 8px;
+  }
+  .kg3d-fallback {
+    padding: 30px;
+    line-height: 1.8;
+  }
+  &[data-renderer="fallback"] .kg3d-stage {
+    height: auto;
+    min-height: 100px;
+  }
+  &.is-fullscreen {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    width: auto;
+    height: auto;
+    overflow: auto;
+    background: #f5f5f1;
+    padding: 16px 24px;
+    box-sizing: border-box;
+  }
+  &.is-fullscreen .kg3d-stage {
+    height: calc(100dvh - 220px);
+    min-height: 320px;
+  }
+  .kg3d-path {
+    border: 1px solid #ccd6df;
+    border-radius: 7px;
+    background: #fffefa;
+    color: inherit;
+    width: min(620px, calc(100vw - 42px));
+    max-height: calc(100dvh - 50px);
+    overflow: auto;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+  .kg3d-path::backdrop {
+    background: #273c4e66;
+  }
+  .kg3d-path h2 {
+    font-size: 20px;
+  }
+  .kg3d-path > select,
+  .kg3d-path > label {
+    display: block;
+    width: 100%;
+    margin: 14px 0;
+    padding: 6px 0;
+  }
+  .kg3d-path-results {
+    margin: 18px 0;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+  }
+  .kg3d-path-results li {
+    margin: 12px 0;
+  }
+  .kg3d-path-results small {
+    display: block;
+  }
+  @media (max-width: 700px) {
+    .kg3d-lists {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .kg3d-related ul {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .kg3d-camera-tools {
+      display: none;
+    }
+    &.is-fullscreen .kg3d-camera-tools {
+      display: flex;
+    }
+    &:not(.is-fullscreen) .kg3d-stage {
+      display: none;
+    }
+    &.is-fullscreen {
+      padding: 10px;
+    }
+    &.is-fullscreen .kg3d-stage {
+      height: calc(100dvh - 255px);
+      min-height: 280px;
+    }
+    .kg3d-current {
+      font-size: 13px;
+    }
+    .kg3d-toolbar {
+      gap: 5px;
+    }
+    .kg3d-control {
+      min-height: 40px;
+    }
+    .kg3d-settings-body {
+      position: fixed;
+      top: auto;
+      right: 12px;
+    }
+    &[data-renderer="fallback"] .kg3d-stage {
+      display: block;
+    }
+  }
+}

@@ -1,5 +1,11 @@
 # Website acceptance
 
+## Three-dimensional map acceptance
+
+Validate the real book/chapter/section tree, multi-section identity, empty 3.7 section, unmapped objects, finite attractive/repulsive physics and explicit relation provenance. Test scene persistence after filtering, drag versus click, native links, camera controls, back/forward/refresh, keyboard focus, mobile grouped lists, simulated touch, reduced motion and WebGL initialization/context-loss fallback. Check at 1440×1000, 1024×900 and 390×844 and inspect actual screenshots. Preserve ordinary search, Markdown, source state, MathML and local formula scrolling.
+
+Run type/format/unit/build/content checks and compare preparation under Chinese and English host sort rules. Validate one-click website synchronization with isolated Git repositories, including preview drift, unrelated staging, divergence, rejected pushes and same-commit retries. After the authorized ordinary push, wait for the exact SHA's Pages success and verify hosted /World/ routes and graph resources. Record results separately; this section states acceptance requirements only.
+
 ## Current atomic knowledge-space acceptance
 
 This section supersedes earlier bookshelf-only expectations. Test the book route and the object route against the same approved export: home → Simon → §1.2, and explore/search → a metric definition or continuity object. Definitions, mathematical examples, observations, and questions retain their distinct meanings; plans and demonstrations stay outside the default mathematical index.

@@ -37,7 +37,8 @@ const manifest: { notes: { output: string; outputSha256: string }[] } = await ve
 // Reading input is the approved snapshot, never a wildcard over the export directory.
 for (const entry of manifest.notes
   .filter((item) => item.output.endsWith(".md"))
-  .sort((a, b) => a.output.localeCompare(b.output))) {
+  // Stable publication order must not depend on the host's ICU locale.
+  .sort((a, b) => (a.output < b.output ? -1 : a.output > b.output ? 1 : 0))) {
   const raw = await fs.readFile(path.join(folder, entry.output), "utf8")
   if (digest(raw) !== entry.outputSha256)
     throw new Error(`Approved content changed while preparing atoms: ${entry.output}`)

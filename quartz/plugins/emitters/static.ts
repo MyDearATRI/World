@@ -26,6 +26,9 @@ export const Static: QuartzEmitterPlugin = () => ({
         "semantic/model-manifest.json",
         "semantic/TRANSFORMERS-LICENSE.txt",
         "semantic/ONNX-LICENSE.txt",
+        "graph/knowledgeGraph3d.js",
+        "graph/three-LICENSE.txt",
+        "graph/d3-force-3d-LICENSE.txt",
       ],
       {
         cwd: staticPath,

@@ -1,5 +1,9 @@
 # Project brief
 
+## Three-dimensional exploration follow-up
+
+The map is a spatial reading interface built around the actual book, chapter and section sequence. Readers progressively enter a section, inspect named mathematical objects and follow typed, sourced relations into the existing flat reading space. The tree gives orientation; local attraction and repulsion make relationships visible without asserting mathematical significance for geometric distance. Model similarity is a weaker, explicitly labelled and switchable discovery layer. This follow-up does not change writing conventions, public content scope or canonical article/atom URLs.
+
 ## Current mathematical knowledge space
 
 The approved product is a connected research notebook with two entrances: read a book in chapter order, or explore source-derived mathematical objects. Complete notes remain the sole mathematical writing source. The website registers definitions, definition groups, theorems, propositions, proofs, observations and questions without requiring changes to Vault titles, folders or frontmatter.

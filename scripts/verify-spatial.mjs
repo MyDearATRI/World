@@ -99,36 +99,36 @@ const activeObject = (page) =>
   )
 
 async function verifyMapReload(page, width) {
-  const graph = page.locator("[data-knowledge-map].knowledge-map").first()
-  await graph.locator(".kg-group-list-item").first().click()
-  const groupName = await graph.locator(".kg-current").innerText()
-  const objectCount = await graph.locator(".kg-list-item").count()
-  const camera = () =>
-    graph.locator(".kg-viewport").evaluate((e) => {
-      const m = e.transform.baseVal.consolidate().matrix
-      return { x: m.e, y: m.f, k: Math.hypot(m.a, m.b) }
-    })
+  const graph = page.locator("[data-knowledge-map].knowledge-map-3d").first()
+  await graph
+    .locator('[data-kg-scope^="collection:chapter:"]')
+    .filter({ visible: true })
+    .first()
+    .click()
+  const groupName = await graph.locator(".kg3d-current").innerText()
+  const objectCount = await graph.locator("[data-list-node-id]").count()
+  const camera = () => graph.evaluate((e) => e.knowledgeMapState.camera)
   let before
   if (width > 600) {
     await graph.getByRole("button", { name: "放大地图", exact: true }).click()
-    await graph.locator(".kg-svg").focus()
+    await graph.locator(".kg3d-canvas").focus()
     await page.keyboard.press("ArrowRight")
     before = await camera()
   }
   await page.reload()
-  await graph.locator(".kg-list-item").first().waitFor()
+  await graph.locator(".kg3d-current").waitFor()
   check(
-    (await graph.locator(".kg-current").innerText()) === groupName &&
-      (await graph.locator(".kg-list-item").count()) === objectCount,
-    `${width}: 刷新探索页保留已进入章节与对象列表`,
+    (await graph.locator(".kg3d-current").innerText()) === groupName &&
+      (await graph.locator("[data-list-node-id]").count()) === objectCount,
+    width + ": 刷新探索页保留已进入章节与对象列表",
   )
   if (before) {
     const after = await camera()
     check(
-      Math.abs(before.x - after.x) < 0.01 &&
-        Math.abs(before.y - after.y) < 0.01 &&
-        Math.abs(before.k - after.k) < 0.001,
-      `${width}: 刷新探索页保留缩放与平移后的地图镜头`,
+      ["position", "target", "up"].every((key) =>
+        before[key].every((v, i) => Math.abs(v - after[key][i]) < 0.01),
+      ),
+      width + ": 刷新探索页保留三维镜头",
       { before, after },
     )
   }
@@ -497,7 +497,7 @@ try {
     )
     await snapshot(page, `${width}-home`)
     await page.locator(".spatial-entry a").nth(1).click()
-    await page.locator(".knowledge-map").waitFor()
+    await page.locator(".knowledge-map-3d").waitFor()
     check(page.url().includes("explore.html"), `${width}: 探索页为可直接访问的静态地址`)
     await snapshot(page, `${width}-explore`)
     await verifyMapReload(page, width)
@@ -579,7 +579,7 @@ try {
       `${width}: 阅读栏没有横向溢出`,
     )
     await page.getByRole("button", { name: "局部地图", exact: true }).click()
-    await page.locator("[data-space-local-map].knowledge-map").waitFor()
+    await page.locator("[data-space-local-map].knowledge-map-3d").waitFor()
     await snapshot(page, `${width}-local-map`)
     await page.getByRole("button", { name: "收起地图", exact: true }).click()
     check(

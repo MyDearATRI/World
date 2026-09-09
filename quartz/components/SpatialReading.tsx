@@ -2,6 +2,7 @@ import type { QuartzComponent } from "./types"
 // @ts-ignore
 import script from "./scripts/spatialReading.inline"
 import style from "./styles/spatialReading.scss"
+import graphStyle from "../styles/knowledgeGraph3d.scss"
 
 export const KnowledgeSearch: QuartzComponent = () => (
   <button class="space-search-launch" type="button" data-space-command>
@@ -162,5 +163,5 @@ export const SpatialReading: QuartzComponent = () => (
     </aside>
   </>
 )
-SpatialReading.css = style
+SpatialReading.css = style + graphStyle
 SpatialReading.afterDOMLoaded = script

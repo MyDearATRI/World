@@ -1,5 +1,11 @@
 # Content contract
 
+## Three-dimensional scene contract
+
+`buildKnowledgeScene` derives a structural collection tree and many-to-many memberships from ReaderCatalog and the prepared KnowledgeIndex. It never reads the Vault, creates mathematical prose or changes atom IDs. Section collections reuse the section note identity; book/chapter collections have separate navigation IDs. A primary geometric anchor is not exclusive content membership. Version 2 map history stores XYZ positions, expanded context, selection, layers and camera position/target/up; old 2D camera pixels are replaced by a fitted 3D view while valid selections survive.
+
+Generated graph bundles and license files have a fixed static allowlist; model weights remain excluded. Website synchronization verifies the existing manifest and only commits reviewed website files; notes and the manifest cannot be changed through that entry. The independent notes publisher remains responsible for later approved exports.
+
 ## Current atomic knowledge-space contract
 
 This section supersedes earlier reader-interface descriptions. Obsidian and the approved export remain the writing source. Website-owned identities and relations add object-level navigation without changing source prose, filenames, titles, mathematical conditions, or maintenance stages.

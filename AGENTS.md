@@ -1,5 +1,13 @@
 # Website implementation rules
 
+## Current authorized three-dimensional knowledge map
+
+Use the existing approved snapshot only. The map combines a ReaderCatalog book/chapter/section tree with one spatial entity per KnowledgeIndex ID; many-to-many membership is retained separately from each atom's primary layout anchor. Empty sections remain navigable and unmapped atoms remain at chapter level. Three.js 0.185.1 and d3-force-3d 3.0.6 are bundled into explicitly allowed static resources and loaded on demand. Full Markdown reading and canonical atom URLs remain unchanged.
+
+The structural tree is anchored; local objects repel and linked objects attract with damping. Authored/reference attraction is stronger than separately labelled, bounded model similarity. Similarity is enabled by default for layout but still opt-in for path finding. It does not require reader-model download. Do not interpret layout distance, missing edges or ordinary citations as mathematical dependence. Preserve v2 XYZ/camera history, DOM links, keyboard focus, native modifier-click, reduced motion, finite rendering, touch gestures and WebGL failure fallback.
+
+`同步到GitHub.cmd` synchronizes reviewed website source without exporting the Vault; `发布博客.cmd` retains the notes-export workflow. Keep exact selection, current-snapshot verification, preview confirmation, ordinary push and exact-commit Pages verification. Unknown untracked files, model weights and caches are never implicitly staged. Preparation order must not depend on the host locale; check the public indices in both English and Chinese sorting environments.
+
 ## Current authorized knowledge space
 
 The latest approved interface adds stable mathematical objects above the existing ReaderCatalog. Home offers book reading and knowledge exploration. `knowledge/registry.json` persists identity; `knowledge/index.json` describes public objects, occurrences and evidenced relationships. Atoms are extracted from the same rendered Markdown tree as full notes and have real `atoms/<id>.html` pages. Reviewed duplicate occurrences share identity; retired duplicate addresses remain explicit static aliases. Do not rewrite mathematical prose or infer completed proofs.

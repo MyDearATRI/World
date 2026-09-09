@@ -13,6 +13,7 @@ artifacts/
 quartz/static/fonts/
 quartz/static/katex/
 quartz/static/semantic/
+quartz/static/graph/
 .cache/semantic/
 
 # Local environment values and private key material are not source files.

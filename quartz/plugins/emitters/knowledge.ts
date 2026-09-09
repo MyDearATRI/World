@@ -175,7 +175,9 @@ export const Knowledge: QuartzEmitterPlugin = () => ({
       type: "root",
       children: [
         element("p", {}, [
-          text("从定义、定理和证明进入笔记。选择对象以阅读原文，并循有出处的关系继续探索。"),
+          text(
+            "先选章节，再展开定义、定理与证明。拖动感受联系，点击阅读原文；箭头的类型和出处说明对象如何相连。",
+          ),
         ]),
         element("div", { "data-knowledge-map": "", className: ["knowledge-map-host"] }, []),
         element("details", { className: ["knowledge-list-fallback"] }, [
