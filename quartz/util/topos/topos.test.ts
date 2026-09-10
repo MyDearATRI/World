@@ -272,7 +272,7 @@ test("the field settles finitely and does not keep drifting or reawaken for unch
   assert.ok(field.nodes.every((n) => n.vx === 0 && n.vy === 0 && n.vz === 0))
 })
 
-test("unfolded content changes exclusion forces continuously and leaves usable focus clearance", () => {
+test("unfolded content leaves point positions and collision radii unchanged", () => {
   const model = fixture(),
     field = createField(model, deriveContext(model, view()))
   field.settle()
@@ -281,27 +281,15 @@ test("unfolded content changes exclusion forces continuously and leaves usable f
   for (let i = 0; i < field.nodes.length; i++)
     assert.deepEqual([field.nodes[i].x, field.nodes[i].y], [before.nodes[i].x, before.nodes[i].y])
   field.settle()
-  const focus = node(field, "g")
-  assert.ok(
-    field.nodes
-      .filter((n) => n.id !== "g")
-      .every((n) => distance(n, focus) >= focus.radius + n.radius + 20),
-  )
-  assert.ok(
-    distance(node(field, "a"), focus) >
-      distance(before.nodes.find((n) => n.id === "a")!, before.nodes.find((n) => n.id === "g")!),
-  )
   assert.deepEqual(
-    [node(field, "island").x, node(field, "island").y],
-    [
-      before.nodes.find((n) => n.id === "island")!.x,
-      before.nodes.find((n) => n.id === "island")!.y,
-    ],
-    "unrelated remote objects do not move to make local reading clearance",
+    field.snapshot(),
+    before,
+    "the independent reading surface does not consume graph space",
   )
+  assert.equal(field.step(1 / 60), false)
 })
 
-test("dragging one concept gently influences its neighbors and preserves the released position", () => {
+test("dragging onto a neighbor clears occupied space while preserving the held and released position", () => {
   const model = fixture(),
     field = createField(model, deriveContext(model, view("a")))
   field.settle()
@@ -318,7 +306,12 @@ test("dragging one concept gently influences its neighbors and preserves the rel
     [node(field, "g").x, node(field, "g").y],
     [oldNeighbor.x + 30, oldNeighbor.y + 30],
   )
-  assert.ok(distance(node(field, "h"), oldNeighbor) <= 20)
+  assert.ok(
+    distance(node(field, "g"), node(field, "h")) >=
+      node(field, "g").radius + node(field, "h").radius + 7.9,
+    "contact clearance takes priority over the small non-contact neighbor-follow distance",
+  )
+  assert.ok(distance(node(field, "h"), oldNeighbor) < 250, "contact remains local")
 })
 
 test("snapshots restore an in-flight trajectory exactly and validate all nodes before mutation", () => {

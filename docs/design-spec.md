@@ -1,5 +1,11 @@
 # Design specification
 
+## Independent nodes and labels
+
+Node marks and their hit targets occupy a layer independent from name labels. Give marks a restrained paper halo and visible keyboard focus. Resolve name/node conflicts by placing or receding the name, never by removing the mark. Keep visible relationship endpoints even when one full name cannot fit; focus, pointer inspection and the locator still disclose the full name.
+
+Motion expresses a bounded layout equilibrium: stable topic positions, individual preferred positions and masses, springs derived from recorded relation kinds, and collision separation. The pointer owns the dragged node while neighbors respond; after release, damping converges and rendering stops. Hover does not restart physics. Layout coefficients and distances describe presentation, not the truth or significance of a mathematical claim. Existing relation explanations and provenance must be readable without relying on line color alone.
+
 ## Full reading surface and directional context
 
 For published notes and audited Atlas titles, opening an object replaces the full field with a stationary reading surface. Keep only its title/type above the source body. At 1440px the central surface is roughly 1000px wide with a 760px inner prose column and 190px directional rails; at 1024px the rails narrow to 140px and the reading surface remains about 696px. At 900px and below, directions become two collapsed bottom disclosures and reading uses the available single column. The theme selector remains accessible as a drawer. No full field, horizon points or automatic motion stays behind the body.

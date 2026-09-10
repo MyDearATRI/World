@@ -73,6 +73,7 @@ button[aria-pressed="true"] {
   pointer-events: none;
 }
 #topos-world[data-overview="true"] > #topos-labels,
+#topos-world[data-overview="true"] > .topos-node-marks,
 #topos-world[data-overview="true"] > #topos-explanations,
 #topos-world[data-overview="true"] > #topos-communities,
 #topos-world[data-overview="true"] > #topos-relations,
@@ -120,6 +121,77 @@ button[aria-pressed="true"] {
 #topos-labels {
   z-index: 5;
 }
+.topos-node-marks {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+}
+.topos-node-mark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--topic-color, #447484);
+  border: 3px solid var(--paper);
+  box-sizing: border-box;
+  box-shadow: 0 0 0 1px var(--topic-color, #447484);
+  pointer-events: auto;
+  touch-action: none;
+  cursor: grab;
+  transition: none;
+}
+.topos-node-mark[hidden] {
+  display: none;
+}
+.topos-node-mark[data-dragging="true"] {
+  cursor: grabbing;
+}
+.topos-node-mark:focus-visible {
+  outline: 3px solid #244f67;
+  outline-offset: 4px;
+}
+.topos-node-mark[data-focus="true"] {
+  box-shadow: 0 0 0 2px var(--topic-color, #447484);
+}
+.topos-node-reasons {
+  pointer-events: auto;
+  background: var(--paper);
+  border: 1px solid #c6d1d0;
+  border-radius: 3px;
+  padding: 7px 10px;
+}
+.topos-node-reasons summary {
+  cursor: pointer;
+  font-size: 12px;
+}
+.topos-node-reason-list {
+  max-height: 145px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.topos-node-reason-list button {
+  display: block;
+  text-align: left;
+  width: 100%;
+  padding: 8px 0;
+  border-top: 1px solid #dce2df;
+  line-height: 1.5;
+}
+.topos-guide:has(.topos-node-reasons[open]) {
+  top: 104px;
+  bottom: auto;
+  width: min(300px, calc(100% - 40px));
+}
+.topos-node-reasons[open] .topos-node-reason-list {
+  max-height: min(260px, 36svh);
+}
+.topos-node-reason-list small {
+  display: block;
+  color: #617983;
+}
 #topos-relations {
   z-index: 6;
 }
@@ -139,7 +211,7 @@ button[aria-pressed="true"] {
   text-align: center;
 }
 [data-explaining="true"] .topos-guide {
-  opacity: 0;
+  visibility: hidden;
 }
 [data-depth="1"] .topos-community,
 [data-depth="2"] .topos-community,
@@ -572,6 +644,7 @@ button[aria-pressed="true"] {
 .topos-no-labels .topos-utility,
 .topos-no-labels .topos-relation-detail {
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
 }
 
@@ -1227,7 +1300,7 @@ button[aria-pressed="true"] {
   padding: 25px;
   background: var(--paper);
 }
-[data-mode="atlas"] .topos-guide {
+[data-mode="atlas"] .topos-guide:not(.has-node-reasons) {
   display: none;
 }
 .topos-topics-empty h2 {

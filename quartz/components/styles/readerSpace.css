@@ -14,6 +14,7 @@ body[data-reader="true"] #topos-world {
 #topos-world[data-reader="true"]
   > :is(
     #topos-labels,
+    .topos-node-marks,
     #topos-communities,
     #topos-relations,
     .topos-annotation-leaders,

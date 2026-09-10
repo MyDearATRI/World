@@ -169,7 +169,35 @@
   stroke-width: 2;
 }
 .global-map-node.is-dim .global-map-dot {
-  opacity: 0.43;
+  opacity: 0.72;
+}
+.global-map-label {
+  cursor: pointer;
+}
+.global-map-label rect {
+  fill: #f4f7f5;
+  fill-opacity: 0.94;
+}
+.global-map-label text {
+  fill: #405761;
+  font-family: system-ui, "Noto Sans SC", sans-serif;
+}
+.global-map-label.is-active text {
+  fill: #143f55;
+  font-weight: 600;
+}
+.global-map-label-leader {
+  fill: none;
+  stroke: #728d9a;
+  stroke-width: 0.65;
+  opacity: 0.6;
+  pointer-events: none;
+}
+.global-map-inspector p.global-map-reason {
+  margin: 2px 0 4px;
+  font-size: 12px;
+  line-height: 1.65;
+  color: #405b68;
 }
 .global-map-node.is-dim text {
   opacity: 0.48;

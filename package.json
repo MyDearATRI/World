@@ -56,7 +56,8 @@
     "test:topic-interactions": "node scripts/verify-topic-interactions.mjs",
     "test:motion": "node scripts/verify-topos-performance.mjs",
     "test:stable-field": "node scripts/verify-stable-field.mjs",
-    "test:reading-space": "node scripts/verify-reading-space.mjs"
+    "test:reading-space": "node scripts/verify-reading-space.mjs",
+    "test:node-space": "node scripts/verify-node-space.mjs"
   },
   "engines": {
     "npm": ">=10.9.2",

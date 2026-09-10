@@ -15,17 +15,38 @@ interface Motion {
   velocity: Point
   elapsed: number
   duration: number
+  local?: boolean
+}
+interface LayoutForces {
+  mass: number
+  anchorGain: number
+  attractionGain: number
+  repulsionGain: number
+  damping: number
+  degree: number
+  relationTypes: RelationType[]
 }
 export interface FieldSnapshot {
   version: 1
   focus: string
   nodes: FieldNode[]
   targets?: Record<string, Point>
+  preferredTargets?: Record<string, Point>
   sleeping?: boolean
   /** Retained for old history records; this is now elapsed transition time, not heat. */
   coolingTime?: number
   manualAnchors?: Record<string, Point>
   motions?: Record<string, Motion>
+  /** Recomputed, observable layout diagnostics; never mathematical importance. */
+  layout?: Record<
+    string,
+    LayoutForces & {
+      preferredTarget: Point
+      resolvedTarget: Point
+      held: boolean
+      readable: boolean
+    }
+  >
 }
 interface Link {
   source: string
@@ -35,7 +56,22 @@ interface Link {
 interface DragSession {
   origin: Point
   neighbors: Map<string, { origin: Pose; weight: number }>
+  origins: Map<string, Point>
+  affected: Set<string>
 }
+/** Layout coefficients, not claims about mathematical importance or dependence. */
+export const fieldForceSettings = {
+  clearance: 8,
+  anchor: 0.16,
+  manualAnchor: 0.32,
+  attraction: 0.44,
+  repulsion: 1,
+  damping: 0.68,
+  integrationPasses: 24,
+  contactPasses: 24,
+  neighborReach: 18,
+  markerRadius: 38,
+} as const
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v))
 function seed(id: string) {
   let n = 2166136261
@@ -79,16 +115,18 @@ export function createField(model: KnowledgeModel, initial: Context) {
       vz: 0,
       relevance: role.relevance,
       targetRelevance: role.relevance,
-      radius: 52,
+      radius: fieldForceSettings.markerRadius,
       mass: role.role === "focus" ? 4 : 1,
     }
   })
   const byId = new Map(nodes.map((n) => [n.id, n]))
   const targets = new Map<string, Point>()
+  const preferredTargets = new Map<string, Point>()
   const manualAnchors = new Map<string, Point>()
   const dragging = new Map<string, DragSession>()
   const motions = new Map<string, Motion>()
   const resized = new Set<string>()
+  const profiles = new Map<string, LayoutForces>()
   let active = nodes
   let activeIDs = new Set(nodes.map((n) => n.id))
   let readable = nodes
@@ -120,17 +158,47 @@ export function createField(model: KnowledgeModel, initial: Context) {
     )
     readable = active.filter((n) => readableIDs.has(n.id))
     links = []
+    const adjacency = new Map(nodes.map((n) => [n.id, new Set<string>()]))
+    const edgeTypes = new Map(nodes.map((n) => [n.id, new Set<RelationType>()]))
+    const gains = new Map(nodes.map((n) => [n.id, 0]))
     for (const edge of model.relations) {
       if (!activeIDs.has(edge.source) || !activeIDs.has(edge.target) || edge.source === edge.target)
         continue
       const gain = relationAffinity(edge, context.lens) * (physicalGain[edge.type] ?? 0.65)
-      if (gain > 0) links.push({ source: edge.source, target: edge.target, gain })
+      if (gain > 0) {
+        links.push({ source: edge.source, target: edge.target, gain })
+        for (const [id, other] of [
+          [edge.source, edge.target],
+          [edge.target, edge.source],
+        ]) {
+          adjacency.get(id)!.add(other)
+          edgeTypes.get(id)!.add(edge.type)
+          gains.set(id, gains.get(id)! + gain)
+        }
+      }
     }
     for (const role of context.nodes) {
       const n = byId.get(role.id)
       if (!n) continue
       n.targetRelevance = activeIDs.has(n.id) ? role.relevance : 0
-      n.mass = role.role === "focus" ? 4 : 1
+      const degree = adjacency.get(n.id)!.size
+      const relationTypes = [...edgeTypes.get(n.id)!].sort()
+      const density = Math.min(3, Math.log2(1 + degree))
+      // These small bounded variations support differently connected objects
+      // without making degree a statement of mathematical value or precedence.
+      n.mass = (role.role === "focus" ? 4 : 1) + density * 0.12
+      profiles.set(n.id, {
+        mass: n.mass,
+        anchorGain: fieldForceSettings.anchor * (1 + density * 0.05),
+        attractionGain:
+          fieldForceSettings.attraction *
+          (0.8 + 0.2 * Math.min(1, gains.get(n.id)! / Math.max(1, degree))),
+        repulsionGain:
+          fieldForceSettings.repulsion * (1 + Math.min(5, relationTypes.length) * 0.04),
+        damping: fieldForceSettings.damping,
+        degree,
+        relationTypes,
+      })
       if (!activeIDs.has(n.id)) {
         motions.delete(n.id)
         n.vx = n.vy = n.vz = 0
@@ -139,7 +207,7 @@ export function createField(model: KnowledgeModel, initial: Context) {
     }
   }
 
-  function schedule(n: FieldNode, to: Pose, duration: number) {
+  function schedule(n: FieldNode, to: Pose, duration: number, local = false) {
     targets.set(n.id, point(to))
     if (
       [n.x - to.x, n.y - to.y, n.z - to.z, n.relevance - to.relevance].every(
@@ -158,46 +226,89 @@ export function createField(model: KnowledgeModel, initial: Context) {
       y: clamp(n.vy, (-2 * Math.abs(to.y - n.y)) / duration, (2 * Math.abs(to.y - n.y)) / duration),
       z: clamp(n.vz, (-2 * Math.abs(to.z - n.z)) / duration, (2 * Math.abs(to.z - n.z)) / duration),
     }
-    motions.set(n.id, { from: pose(n), to: { ...to }, velocity, elapsed: 0, duration })
+    motions.set(n.id, { from: pose(n), to: { ...to }, velocity, elapsed: 0, duration, local })
     sleeping = false
   }
 
-  function resolveCollisions(work: Map<string, Point>, movable: Set<string>, passes: number) {
+  function forces(n: FieldNode) {
+    const profile = profiles.get(n.id)!
+    const mass = clamp(n.mass, 0.5, 16)
+    return {
+      mass,
+      anchor:
+        profile.anchorGain *
+        (manualAnchors.has(n.id)
+          ? fieldForceSettings.manualAnchor / fieldForceSettings.anchor
+          : 1) *
+        Math.sqrt(mass),
+      attraction: profile.attractionGain * Math.max(0.25, n.targetRelevance),
+      repulsion: profile.repulsionGain,
+      damping: profile.damping,
+    }
+  }
+
+  function resolveCollisions(
+    work: Map<string, Point>,
+    movable: Set<string>,
+    passes: number,
+    contactPinned?: string,
+    footprint = (n: FieldNode) => n.radius,
+    gap = fieldForceSettings.clearance as number,
+  ) {
     for (let pass = 0; pass < passes; pass++) {
       let maximum = 0
       for (let i = 0; i < readable.length; i++)
         for (let j = i + 1; j < readable.length; j++) {
           const a = readable[i],
             b = readable[j]
-          const moveA = movable.has(a.id),
+          let moveA = movable.has(a.id),
             moveB = movable.has(b.id)
-          if (!moveA && !moveB) continue
+          if (!moveA && !moveB && a.id !== contactPinned && b.id !== contactPinned) continue
           const p = work.get(a.id)!,
             q = work.get(b.id)!
           const dx = q.x - p.x,
             dy = q.y - p.y
           const d = Math.hypot(dx, dy)
-          const overlap = a.radius + b.radius + 24 - d
+          const overlap = footprint(a) + footprint(b) + gap - d
           if (overlap <= 0.05) continue
+          if (contactPinned) {
+            // Enrol a new contact before projecting it. Otherwise treating the
+            // next object as fixed would push its neighbour back into the drag.
+            if (a.id !== contactPinned) {
+              movable.add(a.id)
+              moveA = true
+            }
+            if (b.id !== contactPinned) {
+              movable.add(b.id)
+              moveB = true
+            }
+          }
           maximum = Math.max(maximum, overlap)
           const angle = d < 0.01 ? seed(`${a.id}:${b.id}`) * Math.PI * 2 : 0
           const ux = d < 0.01 ? Math.cos(angle) : dx / d,
             uy = d < 0.01 ? Math.sin(angle) : dy / d
-          const amount = overlap / (moveA && moveB ? 2 : 1)
+          const inverseA = moveA ? forces(a).repulsion / forces(a).mass : 0
+          const inverseB = moveB ? forces(b).repulsion / forces(b).mass : 0
+          const inverseTotal = inverseA + inverseB
           if (moveA) {
-            p.x -= ux * amount
-            p.y -= uy * amount
+            p.x -= (ux * overlap * inverseA) / inverseTotal
+            p.y -= (uy * overlap * inverseA) / inverseTotal
           }
           if (moveB) {
-            q.x += ux * amount
-            q.y += uy * amount
+            q.x += (ux * overlap * inverseB) / inverseTotal
+            q.y += (uy * overlap * inverseB) / inverseTotal
           }
         }
       if (maximum < 0.1) break
     }
   }
 
-  function finishClearance(work: Map<string, Point>, movable: Set<string>) {
+  function finishClearance(
+    work: Map<string, Point>,
+    movable: Set<string>,
+    footprint = (n: FieldNode) => n.radius,
+    gap = fieldForceSettings.clearance as number,
+  ) {
     const placed = readable
       .filter((n) => !movable.has(n.id))
       .map((n) => ({ node: n, p: work.get(n.id)! }))
@@ -212,7 +323,7 @@ export function createField(model: KnowledgeModel, initial: Context) {
         placed.every(({ node, p: other }) => {
           const dx = x - other.x,
             dy = y - other.y
-          return dx * dx + dy * dy >= (n.radius + node.radius + 23.95) ** 2
+          return dx * dx + dy * dy >= (footprint(n) + footprint(node) + gap - 0.05) ** 2
         })
       if (!free(p.x, p.y)) {
         let best: { x: number; y: number } | undefined,
@@ -229,7 +340,7 @@ export function createField(model: KnowledgeModel, initial: Context) {
         for (const { node, p: other } of placed) {
           const dx = p.x - other.x,
             dy = p.y - other.y
-          const radius = n.radius + node.radius + 24
+          const radius = footprint(n) + footprint(node) + gap
           if (dx * dx + dy * dy > (radius + 48) ** 2) continue
           const angle = dx || dy ? Math.atan2(dy, dx) : seed(`${n.id}:${node.id}`) * Math.PI * 2
           for (const offset of [0, 1, -1, 2, -2, 3, -3, 6, -6, 12]) {
@@ -248,8 +359,8 @@ export function createField(model: KnowledgeModel, initial: Context) {
         // The world is not clipped to the viewport. Even an unusually large
         // footprint has a deterministic, finite non-overlapping fallback.
         if (!best) {
-          const right = Math.max(...placed.map(({ node, p: other }) => other.x + node.radius))
-          best = { x: right + n.radius + 24, y: p.y }
+          const right = Math.max(...placed.map(({ node, p: other }) => other.x + footprint(node)))
+          best = { x: right + footprint(n) + gap, y: p.y }
         }
         p.x = best.x
         p.y = best.y
@@ -265,9 +376,7 @@ export function createField(model: KnowledgeModel, initial: Context) {
     const nextRoles = new Map(context.nodes.map((n) => [n.id, n]))
     const preferred = new Map<string, Point>()
     const work = new Map<string, Point>()
-    const movable = new Set(
-      readable.filter((n) => n.id !== context.focus && !manualAnchors.has(n.id)).map((n) => n.id),
-    )
+    const movable = new Set(readable.filter((n) => n.id !== context.focus).map((n) => n.id))
     for (const n of active) {
       const role = nextRoles.get(n.id)!
       const angle = Math.atan2(n.y - currentFocus.y, n.x - currentFocus.x)
@@ -297,6 +406,7 @@ export function createField(model: KnowledgeModel, initial: Context) {
                       : -230 - (1 - role.relevance) * 100,
             })
       preferred.set(n.id, { ...desired })
+      preferredTargets.set(n.id, { ...desired })
       work.set(n.id, { ...desired })
     }
     // A bounded, deterministic layout job. Edges retain their actual typed gains;
@@ -306,8 +416,9 @@ export function createField(model: KnowledgeModel, initial: Context) {
         if (movable.has(n.id)) {
           const p = work.get(n.id)!,
             desired = preferred.get(n.id)!
-          p.x += (desired.x - p.x) * 0.09
-          p.y += (desired.y - p.y) * 0.09
+          const force = forces(n)
+          p.x += ((desired.x - p.x) * force.anchor * 0.5) / force.mass
+          p.y += ((desired.y - p.y) * force.anchor * 0.5) / force.mass
         }
       for (const edge of links) {
         if (!readableIDs.has(edge.source) || !readableIDs.has(edge.target)) continue
@@ -326,13 +437,13 @@ export function createField(model: KnowledgeModel, initial: Context) {
           -24,
           24,
         )
-        if (movable.has(a.id)) {
-          p.x += (dx / d) * amount
-          p.y += (dy / d) * amount
+        if (movable.has(a.id) && !manualAnchors.has(a.id)) {
+          p.x += ((dx / d) * amount) / forces(a).mass
+          p.y += ((dy / d) * amount) / forces(a).mass
         }
-        if (movable.has(b.id)) {
-          q.x -= (dx / d) * amount
-          q.y -= (dy / d) * amount
+        if (movable.has(b.id) && !manualAnchors.has(b.id)) {
+          q.x -= ((dx / d) * amount) / forces(b).mass
+          q.y -= ((dy / d) * amount) / forces(b).mass
         }
       }
       resolveCollisions(work, movable, 1)
@@ -364,7 +475,8 @@ export function createField(model: KnowledgeModel, initial: Context) {
             n.id !== id &&
             n.id !== context.focus &&
             !manualAnchors.has(n.id) &&
-            Math.hypot(n.x - changed.x, n.y - changed.y) < n.radius + changed.radius + 24
+            Math.hypot(n.x - changed.x, n.y - changed.y) <
+              n.radius + changed.radius + fieldForceSettings.clearance
           )
             movable.add(n.id)
       }
@@ -373,7 +485,7 @@ export function createField(model: KnowledgeModel, initial: Context) {
       finishClearance(work, movable)
       for (const id of movable) {
         const n = byId.get(id)!
-        schedule(n, { ...work.get(id)!, relevance: n.targetRelevance }, 0.5)
+        schedule(n, { ...work.get(id)!, relevance: n.targetRelevance }, 0.5, true)
       }
     }
     sleeping = motions.size === 0
@@ -410,7 +522,9 @@ export function createField(model: KnowledgeModel, initial: Context) {
   function setRadius(id: string, radius: number) {
     const n = byId.get(id)
     if (!n || !Number.isFinite(radius)) return
-    const next = clamp(radius, 12, 600)
+    // Legacy callers report label or reading-surface footprints. Labels have
+    // their own layout now: no title can become a 300-world-unit solid sphere.
+    const next = clamp(radius, 12, fieldForceSettings.markerRadius)
     if (Math.abs(next - n.radius) < 0.1) return
     n.radius = next
     resized.add(id)
@@ -448,8 +562,83 @@ export function createField(model: KnowledgeModel, initial: Context) {
         motions.delete(id)
       }
     }
+    protectMarkers()
     sleeping = motions.size === 0
     return !sleeping
+  }
+
+  function protectMarkers() {
+    const pinned = [...manualAnchors.keys()].at(-1)
+    if (!pinned || !readableIDs.has(pinned)) return
+    const movable = new Set([...motions].filter(([, motion]) => motion.local).map(([id]) => id))
+    for (const session of dragging.values()) for (const id of session.affected) movable.add(id)
+    movable.delete(pinned)
+    if (!movable.size) return
+    const work = new Map(readable.map((n) => [n.id, point(n)]))
+    const marker = (n: FieldNode) => Math.min(n.radius, fieldForceSettings.markerRadius)
+    // The small circle margin eases into its safe goal. Painted markers cannot
+    // pass through one another while that easing is underway.
+    resolveCollisions(work, movable, 12, pinned, marker, 2)
+    finishClearance(work, movable, marker, 2)
+    for (const id of movable) {
+      const n = byId.get(id)!,
+        safe = work.get(id)!
+      if (Math.hypot(safe.x - n.x, safe.y - n.y) < 0.01) continue
+      const motion = motions.get(id)
+      n.x = safe.x
+      n.y = safe.y
+      if (motion) schedule(n, motion.to, Math.max(1 / 120, motion.duration - motion.elapsed), true)
+      else {
+        targets.set(id, point(n))
+        n.vx = n.vy = n.vz = 0
+      }
+    }
+  }
+
+  function dragGoals(id: string, session: DragSession) {
+    const dragged = byId.get(id)!
+    const work = new Map(
+      readable.map((node) => [node.id, { ...(session.origins.get(node.id) ?? point(node)) }]),
+    )
+    work.set(id, point(dragged))
+    const movable = new Set(session.affected)
+    const velocity = new Map<string, Point>()
+    const dx = dragged.x - session.origin.x,
+      dy = dragged.y - session.origin.y,
+      distance = Math.hypot(dx, dy)
+    const reach = Math.min(fieldForceSettings.neighborReach, distance * 0.12)
+    // Collision contact can spread through touching local objects, regardless of
+    // whether a mathematical edge exists. Distant unrelated objects never join.
+    const contact = () => resolveCollisions(work, movable, 1, id)
+    for (let pass = 0; pass < fieldForceSettings.integrationPasses; pass++) {
+      for (const other of movable) {
+        const node = byId.get(other)!,
+          p = work.get(other)!
+        const anchor = session.origins.get(other) ?? point(node)
+        const force = forces(node)
+        const neighbor = session.neighbors.get(other)
+        const attraction = neighbor ? force.attraction * neighbor.weight : 0
+        const targetX = anchor.x + (distance ? (dx / distance) * reach : 0)
+        const targetY = anchor.y + (distance ? (dy / distance) * reach : 0)
+        const v = velocity.get(other) ?? { x: 0, y: 0, z: 0 }
+        v.x =
+          (v.x + ((anchor.x - p.x) * force.anchor + (targetX - p.x) * attraction) / force.mass) *
+          force.damping
+        v.y =
+          (v.y + ((anchor.y - p.y) * force.anchor + (targetY - p.y) * attraction) / force.mass) *
+          force.damping
+        p.x += clamp(v.x, -20, 20)
+        p.y += clamp(v.y, -20, 20)
+        velocity.set(other, v)
+      }
+      contact()
+    }
+    for (let pass = 0; pass < fieldForceSettings.contactPasses; pass++) contact()
+    finishClearance(work, movable)
+    session.affected = movable
+    for (const other of movable)
+      preferredTargets.set(other, { ...(session.origins.get(other) ?? point(byId.get(other)!)) })
+    return work
   }
 
   function drag(id: string, x: number, y: number) {
@@ -462,6 +651,11 @@ export function createField(model: KnowledgeModel, initial: Context) {
     if (!session) {
       // Direct manipulation takes priority. Unrelated objects freeze where they
       // already are; a pointer does not restart the global layout job.
+      const pendingContacts = new Map(
+        [...motions].filter(
+          ([other, motion]) => other !== id && motion.local && readableIDs.has(other),
+        ),
+      )
       motions.clear()
       for (const other of nodes) {
         other.vx = other.vy = other.vz = 0
@@ -477,6 +671,12 @@ export function createField(model: KnowledgeModel, initial: Context) {
       const largest = Math.max(...weights.values(), 1e-9)
       session = {
         origin: point(n),
+        // Finish previous local contact even if another drag starts before its
+        // release transition ends; do not freeze an overlap halfway to safety.
+        origins: new Map(
+          readable.map((node) => [node.id, point(pendingContacts.get(node.id)?.to ?? node)]),
+        ),
+        affected: new Set([...weights.keys(), ...pendingContacts.keys()]),
         neighbors: new Map(
           [...weights].map(([other, weight]) => [
             other,
@@ -489,22 +689,22 @@ export function createField(model: KnowledgeModel, initial: Context) {
     n.x = x
     n.y = y
     n.vx = n.vy = n.vz = 0
+    // Retain the requested point as this object's own target. More recent direct
+    // manipulation wins contact, while earlier targets can yield local space.
+    manualAnchors.delete(id)
     manualAnchors.set(id, point(n))
     targets.set(id, point(n))
     motions.delete(id)
-    const dx = x - session.origin.x,
-      dy = y - session.origin.y,
-      distance = Math.hypot(dx, dy)
-    for (const [other, neighbor] of session.neighbors) {
-      if (manualAnchors.has(other)) continue
-      const amount = Math.min(18, distance * 0.12) * neighbor.weight
-      const target = {
-        ...neighbor.origin,
-        x: neighbor.origin.x + (distance ? (dx / distance) * amount : 0),
-        y: neighbor.origin.y + (distance ? (dy / distance) * amount : 0),
-      }
+    const goals = dragGoals(id, session)
+    for (const other of session.affected) {
       const candidate = byId.get(other)!
-      schedule(candidate, { ...target, relevance: candidate.targetRelevance }, 0.16)
+      const duration = 0.22 + 0.04 * Math.sqrt(forces(candidate).mass)
+      schedule(
+        candidate,
+        { ...goals.get(other)!, relevance: candidate.targetRelevance },
+        duration,
+        true,
+      )
     }
     sleeping = motions.size === 0
   }
@@ -513,19 +713,22 @@ export function createField(model: KnowledgeModel, initial: Context) {
     const session = dragging.get(id)
     if (!session) return
     dragging.delete(id)
-    // The drop point is a durable reader-owned anchor, not a spring stretched
-    // away from a hidden target. Only the existing local response finishes.
+    // The requested drop target persists. Attraction and geometric contact finish
+    // locally with finite damping; neither becomes a continuously running force.
     const n = byId.get(id)!
     n.vx = n.vy = n.vz = 0
-    for (const other of session.neighbors.keys()) {
+    for (const other of session.affected) {
       const motion = motions.get(other)
-      if (motion && !manualAnchors.has(other)) schedule(byId.get(other)!, motion.to, 0.3)
+      if (motion) {
+        const candidate = byId.get(other)!
+        schedule(candidate, motion.to, 0.32 + 0.04 * Math.sqrt(forces(candidate).mass), true)
+      }
     }
     sleeping = motions.size === 0
   }
 
-  function settle() {
-    dragging.clear()
+  function settle(preserveDrag = false) {
+    if (!preserveDrag) dragging.clear()
     flushLayout()
     for (const [id, motion] of motions) {
       const n = byId.get(id)!
@@ -543,6 +746,9 @@ export function createField(model: KnowledgeModel, initial: Context) {
       focus: context.focus,
       nodes: nodes.map((n) => ({ ...n })),
       targets: Object.fromEntries([...targets].map(([id, value]) => [id, { ...value }])),
+      preferredTargets: Object.fromEntries(
+        [...preferredTargets].map(([id, value]) => [id, { ...value }]),
+      ),
       sleeping,
       coolingTime,
       manualAnchors: Object.fromEntries(
@@ -558,6 +764,30 @@ export function createField(model: KnowledgeModel, initial: Context) {
             velocity: { ...value.velocity },
           },
         ]),
+      ),
+      layout: Object.fromEntries(
+        nodes.map((n) => {
+          const force = forces(n)
+          return [
+            n.id,
+            {
+              ...profiles.get(n.id)!,
+              mass: force.mass,
+              anchorGain: force.anchor,
+              attractionGain: force.attraction,
+              repulsionGain: force.repulsion,
+              preferredTarget: {
+                ...(manualAnchors.get(n.id) ??
+                  preferredTargets.get(n.id) ??
+                  targets.get(n.id) ??
+                  point(n)),
+              },
+              resolvedTarget: { ...(targets.get(n.id) ?? point(n)) },
+              held: dragging.has(n.id),
+              readable: readableIDs.has(n.id),
+            },
+          ]
+        }),
       ),
     }
   }
@@ -589,7 +819,11 @@ export function createField(model: KnowledgeModel, initial: Context) {
       )
         throw new Error(`Invalid field snapshot node: ${n.id}`)
     }
-    for (const values of [saved.targets ?? {}, saved.manualAnchors ?? {}])
+    for (const values of [
+      saved.targets ?? {},
+      saved.preferredTargets ?? {},
+      saved.manualAnchors ?? {},
+    ])
       for (const [id, value] of Object.entries(values))
         if (!byId.has(id) || !finitePoint(value))
           throw new Error(`Invalid field snapshot target: ${id}`)
@@ -602,6 +836,7 @@ export function createField(model: KnowledgeModel, initial: Context) {
         ![value.from.relevance, value.to.relevance, value.elapsed, value.duration].every(
           Number.isFinite,
         ) ||
+        (value.local !== undefined && typeof value.local !== "boolean") ||
         value.duration <= 0 ||
         value.elapsed < 0 ||
         value.elapsed > value.duration
@@ -611,6 +846,7 @@ export function createField(model: KnowledgeModel, initial: Context) {
     motions.clear()
     manualAnchors.clear()
     targets.clear()
+    preferredTargets.clear()
     resized.clear()
     fullLayoutPending = false
     compile()
@@ -622,10 +858,12 @@ export function createField(model: KnowledgeModel, initial: Context) {
         vy: value.vy,
         vz: value.vz,
         relevance: clamp(value.relevance, 0, 1),
-        radius: clamp(value.radius, 12, 600),
+        radius: clamp(value.radius, 12, fieldForceSettings.markerRadius),
       })
     }
     for (const [id, value] of Object.entries(saved.targets ?? {})) targets.set(id, { ...value })
+    for (const [id, value] of Object.entries(saved.preferredTargets ?? saved.targets ?? {}))
+      preferredTargets.set(id, { ...value })
     for (const [id, value] of Object.entries(saved.manualAnchors ?? {}))
       manualAnchors.set(id, { ...value })
     for (const [id, value] of Object.entries(saved.motions ?? {}))
@@ -642,5 +880,5 @@ export function createField(model: KnowledgeModel, initial: Context) {
     sleeping = motions.size === 0
   }
   compile()
-  return { nodes, setContext, step, drag, release, settle, snapshot, restore, setRadius }
+  return { nodes, setContext, step, drag, release, settle, snapshot, restore, setRadius, forces }
 }

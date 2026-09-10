@@ -1,5 +1,11 @@
 # Website acceptance
 
+## Node occupancy, dragging and relationship reasons
+
+Drag real published nodes across another node and its name. Verify the objects remain rendered and independently hittable; a label-hidden flag must not remove a node or link. Check per-node target/force parameters, direct pointer following, related-neighbor response, collision separation including unlinked contact, finite release settling, and persistence across filtering, Back and refresh. Inspect the actual reason and evidence for highlighted relations against the source model. Never equate physical collision response with a new relation.
+
+Run the dedicated node-space browser checks at 1440, 1024 and 390px, with keyboard, simulated touch, reduced motion and fallback. Preserve the prior static-layout failures as baseline; update outdated assertions only when this request intentionally changes their contract. Re-run the unchanged reading/scroll/math regressions, required build/type/unit/content checks and the authorized exact-commit Pages verification before calling the site updated.
+
 ## Reading surface and complete selected graph
 
 Run `npm run test:reading-space` after the production build. Verify published notes and Atlas at 1440×1000, 1024×900 and 390×844: the stationary reading surface uses the main width/height; the full map, labels and controls do not remain behind it; the selected title stays visible. Source prose, proof state, MathML and local formula scrolling remain unchanged. Check actual incoming/outgoing mini-map edges and accessible destinations, pagination and mobile disclosures.

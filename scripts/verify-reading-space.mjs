@@ -569,6 +569,9 @@ try {
           Math.hypot(moved.x - selected.x, moved.y - selected.y) > 2,
         { id: selected.id, before: selected, after: moved },
       )
+      // The graph now has bounded physical response after release. Camera and
+      // history checks begin only once that actual response has settled.
+      await mapReady(page)
       const zoomBefore = dragged.camera.k
       await page.locator('[data-global-map-zoom="in"]').click()
       await mapReady(page)
@@ -583,7 +586,7 @@ try {
               if (
                 hit &&
                 stage.contains(hit) &&
-                !hit.closest("[data-global-map-node]") &&
+                !hit.closest("[data-global-map-node],[data-global-map-label]") &&
                 positions.every(
                   (node) => Math.hypot(node.screenX - x, node.screenY - y) > (mobile ? 38 : 20),
                 )
@@ -604,8 +607,11 @@ try {
             window.__readingSpacePanTarget = {
               tag: event.target.tagName,
               node: event.target
-                .closest("[data-global-map-node]")
+                .closest("[data-global-map-node],[data-global-map-label]")
                 ?.getAttribute("data-global-map-node"),
+              label: event.target
+                .closest("[data-global-map-label]")
+                ?.getAttribute("data-global-map-label"),
               x: event.clientX,
               y: event.clientY,
             }
@@ -818,10 +824,26 @@ try {
         { topics: subTopics, expected: subsetExpected, actual: subset.nodeIDs },
       )
       check(
-        `${name}: changing selected topics retains a shared node's manual coordinates`,
+        `${name}: changing selected topics retains the shared node's manual anchor`,
         sharedAfter &&
-          Math.hypot(sharedAfter.x - sharedBefore.x, sharedAfter.y - sharedBefore.y) < 0.1,
+          Number.isFinite(sharedBefore.anchorX) &&
+          Number.isFinite(sharedAfter.anchorX) &&
+          Math.hypot(
+            sharedAfter.anchorX - sharedBefore.anchorX,
+            sharedAfter.anchorY - sharedBefore.anchorY,
+          ) < 0.1,
         { id: selected.id, before: sharedBefore, after: sharedAfter },
+      )
+      await page.waitForTimeout(350)
+      const sharedRest = (await snap(page)).globalMap
+      const settledShared = sharedRest.positions.find((p) => p.id === selected.id)
+      check(
+        `${name}: retained shared identity has a stable resolved position in its new selection`,
+        sharedRest.settled &&
+          settledShared &&
+          Math.hypot(settledShared.x - sharedAfter.x, settledShared.y - sharedAfter.y) < 0.01 &&
+          sharedRest.nodeIDs.filter((id) => id === selected.id).length === 1,
+        { id: selected.id, before: sharedAfter, after: settledShared },
       )
       await page.locator("[data-global-map-close]").click()
       if (mode === "atlas") {

@@ -1,6 +1,8 @@
 {
   "version": 1,
   "newFiles": [
+    "quartz/util/topos/globalMapField.ts",
+    "scripts/verify-node-space.mjs",
     "quartz/components/scripts/topos/globalMap.ts",
     "quartz/components/styles/globalMap.css",
     "quartz/util/topos/globalMap.ts",

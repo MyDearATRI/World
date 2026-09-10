@@ -1,5 +1,11 @@
 # Project brief
 
+## Node occupancy and relational movement
+
+The current correction separates node bodies from annotation visibility. Dragging across a label must not delete, fade out or disable a semantically eligible node. Names can move or become secondary while the mark and canonical target remain accessible. Each node has bounded layout coefficients and its own preferred position; actual edges pull locally, physical contact repels, and damping ends the response. A collision between unlinked objects is a spatial event, never a newly asserted mathematical relationship.
+
+The complete map should have a stable but nonuniform distribution within the selected themes. Existing typed links expose their recorded explanations and evidence directly when inspected. These changes preserve the large reading surface, node identities, approved content and same-reader navigation; they do not rewrite the Vault or expand publication.
+
 ## Large reading space and optional global map
 
 Opening a published object gives reading the main surface, without a full graph behind it. Its title remains the context; the theme selector becomes a drawer and small directional maps preserve readable incoming and outgoing destinations on the sides. Mobile keeps these directions in two explicit disclosures below the reading surface. Mathematical content still comes from the identical rendered source tree.

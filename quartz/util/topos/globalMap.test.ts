@@ -9,9 +9,11 @@ import {
   mapTitleLines,
   mapZoom,
   readGlobalMapCache,
+  placeMapLabels,
 } from "./globalMap"
+import { createGlobalMapField } from "./globalMapField"
 import { topicIDs } from "./topics"
-import type { KnowledgeModel } from "./types"
+import type { KnowledgeModel, Relation } from "./types"
 
 function fixture(): KnowledgeModel {
   const model = JSON.parse(readFileSync("knowledge/topos/prototype.json", "utf8")) as KnowledgeModel
@@ -105,6 +107,21 @@ test("directed curves terminate near their real targets and long bilingual names
   assert.equal(lines.join(""), title)
 })
 
+test("English map titles wrap at word boundaries while CJK and oversized words remain lossless", () => {
+  const title = "Separation and Continuous Extension — Definitions 度量空间"
+  const lines = mapTitleLines(title, 12)
+  assert.equal(lines.join(""), title)
+  for (const word of ["Separation", "Continuous", "Extension", "Definitions"])
+    assert.ok(
+      lines.some((line) => line.includes(word)),
+      `${word} was broken across lines`,
+    )
+  const long = "Supercalifragilisticexpialidocious 拓扑空间𝔛"
+  const wrapped = mapTitleLines(long, 8)
+  assert.equal(wrapped.join(""), long)
+  assert.ok(wrapped.length > 3, "an oversized word still needs bounded lines")
+})
+
 test("session restoration rejects obsolete identities, nonfinite coordinates and invalid cameras", () => {
   const model = fixture(),
     signature = globalMapSignature(model)
@@ -177,4 +194,222 @@ test("a new narrow-screen map uses two named region columns while keeping all id
     new Set(scene.nodes.map((node) => node.id)),
   )
   assert.deepEqual(cache.views[0].layout, layout)
+})
+
+function mechanicalEdge(source: string, target: string): Relation {
+  return {
+    id: `${source}-${target}`,
+    source,
+    target,
+    type: "references",
+    strength: 0.8,
+    label: "测试引用",
+    explanation: "仅用于力学测试的已声明边",
+    evidence: "fixture",
+    provenance: "reference",
+    lenses: {},
+  }
+}
+function stop(field: ReturnType<typeof createGlobalMapField>) {
+  let ticks = 0
+  while (!field.settled && ticks++ < 720) field.step(1 / 60)
+  assert.ok(field.settled, `mechanical scene did not settle in ${ticks} steps`)
+  return ticks
+}
+function separated(field: ReturnType<typeof createGlobalMapField>) {
+  for (let i = 0; i < field.nodes.length; i++)
+    for (let j = i + 1; j < field.nodes.length; j++) {
+      const a = field.nodes[i],
+        b = field.nodes[j]
+      assert.ok(
+        Math.hypot(a.x - b.x, a.y - b.y) >= a.radius + b.radius + 7.8,
+        `${a.id}/${b.id} physically overlap`,
+      )
+    }
+}
+
+test("a real declared edge attracts its endpoints more than an unrelated control without center collapse", () => {
+  const points = [
+    { id: "a", x: 0, y: 0 },
+    { id: "b", x: 240, y: 0 },
+  ]
+  const linked = createGlobalMapField(points, [mechanicalEdge("a", "b")]),
+    control = createGlobalMapField(points, [])
+  stop(linked)
+  stop(control)
+  assert.ok(linked.nodes[1].x - linked.nodes[0].x < control.nodes[1].x - control.nodes[0].x - 10)
+  separated(linked)
+  assert.ok(linked.nodes.every((node) => Math.abs(node.x - node.anchorX) < 40))
+  assert.deepEqual(points, [
+    { id: "a", x: 0, y: 0 },
+    { id: "b", x: 240, y: 0 },
+  ])
+})
+
+test("the held body follows its pointer, neighbors respond, and releasing keeps the intended anchor with finite cooling", () => {
+  const field = createGlobalMapField(
+    [
+      { id: "a", x: 0, y: 0 },
+      { id: "b", x: 180, y: 0 },
+      { id: "far", x: 1700, y: 800 },
+    ],
+    [mechanicalEdge("a", "b")],
+  )
+  stop(field)
+  const before = field.nodes.map((node) => ({ ...node }))
+  assert.notEqual(before[0].mass, before[2].mass)
+  assert.notEqual(before[0].attraction, before[2].attraction)
+  assert.notEqual(before[0].charge, before[2].charge)
+  field.drag("a", 165, 15)
+  assert.equal(field.nodes[0].x, 165)
+  assert.equal(field.nodes[0].y, 15)
+  separated(field)
+  for (let i = 0; i < 40; i++) field.step(1 / 60)
+  assert.equal(field.nodes[0].x, 165)
+  assert.equal(field.heldID, "a")
+  assert.ok(Math.hypot(field.nodes[1].x - before[1].x, field.nodes[1].y - before[1].y) > 8)
+  assert.ok(Math.hypot(field.nodes[2].x - before[2].x, field.nodes[2].y - before[2].y) < 0.1)
+  field.release("a")
+  stop(field)
+  separated(field)
+  assert.equal(field.nodes[0].anchorX, 165)
+  assert.equal(field.nodes[0].anchorY, 15)
+  assert.ok(Math.hypot(field.nodes[0].x - 165, field.nodes[0].y - 15) < 65)
+  const settled = field.snapshot()
+  for (let i = 0; i < 30; i++) assert.equal(field.step(1 / 60), false)
+  assert.deepEqual(field.snapshot(), settled)
+})
+
+test("coincident bodies separate deterministically; empty and filtered scenes never gain identities", () => {
+  const points = Array.from({ length: 5 }, (_, i) => ({ id: `same-${i}`, x: 0, y: 0 }))
+  const a = createGlobalMapField(points, []),
+    b = createGlobalMapField(points, [])
+  stop(a)
+  stop(b)
+  separated(a)
+  assert.deepEqual(a.snapshot(), b.snapshot())
+  const empty = createGlobalMapField([], [mechanicalEdge("excluded", "other")])
+  empty.drag("excluded", 20, 20)
+  assert.deepEqual(empty.nodes, [])
+  assert.equal(empty.step(1 / 60), false)
+})
+
+test("imperceptible residual motion cools promptly without truncating a visible collision response", () => {
+  const field = createGlobalMapField(
+    [
+      { id: "moving", x: 0, y: 0 },
+      { id: "neighbor", x: 180, y: 0 },
+    ],
+    [],
+  )
+  stop(field)
+  field.drag("moving", 165, 15)
+  separated(field)
+  field.release("moving")
+  const initial = field.snapshot()
+  assert.equal(field.step(1 / 60), true, "visible collision response must remain active")
+  assert.notDeepEqual(field.snapshot().nodes, initial.nodes)
+  stop(field)
+  separated(field)
+  const resting = field.snapshot()
+  // A low-amplitude residual comparable to the measured browser tail: at 4×
+  // zoom this 0.05-world offset is just 0.2px, while identity and contact remain.
+  resting.nodes[0].x += 0.05
+  resting.nodes[0].vx = 0.4
+  resting.settled = false
+  assert.equal(field.restore(resting), true)
+  const start = field.snapshot()
+  let ticks = 0
+  while (!field.settled && ticks++ < 12) field.step(1 / 60)
+  assert.ok(field.settled, "subpixel residuals should not schedule a long animation tail")
+  separated(field)
+  for (const [i, node] of field.nodes.entries())
+    assert.ok(Math.hypot(node.x - start.nodes[i].x, node.y - start.nodes[i].y) * 4 < 1)
+  const finished = field.snapshot()
+  for (let i = 0; i < 60; i++) assert.equal(field.step(1 / 60), false)
+  assert.deepEqual(field.snapshot(), finished)
+})
+
+test("a 192-identity physical fixture settles without collisions and restores its camera-independent positions exactly", () => {
+  const points = Array.from({ length: 192 }, (_, i) => ({
+    id: `fixture-${i}`,
+    x: (i % 16) * 160,
+    y: Math.floor(i / 16) * 115,
+  }))
+  const edges = points.slice(1).map((node, i) => mechanicalEdge(points[i].id, node.id))
+  const field = createGlobalMapField(points, edges)
+  stop(field)
+  separated(field)
+  const snapshot = field.snapshot(),
+    restored = createGlobalMapField(points, edges)
+  assert.equal(restored.restore(snapshot), true)
+  assert.deepEqual(restored.snapshot(), snapshot)
+  assert.equal(restored.step(1 / 60), false)
+  assert.equal(restored.restore({ ...snapshot, nodes: snapshot.nodes.slice(1) }), false)
+  assert.equal(restored.nodes.length, 192)
+})
+
+test("rapid pointer sweeps preserve contacts and cool within two seconds across frame rates", () => {
+  for (const hz of [30, 60, 120]) {
+    const points = Array.from({ length: 12 }, (_, i) => ({
+      id: `sweep-${i}`,
+      x: (i % 4) * 100,
+      y: Math.floor(i / 4) * 110,
+    }))
+    const field = createGlobalMapField(
+      points,
+      points.slice(1).map((node, i) => mechanicalEdge(points[i].id, node.id)),
+    )
+    stop(field)
+    for (const target of [
+      { x: 299, y: 111 },
+      { x: 102, y: 219 },
+      { x: 195, y: 6 },
+      { x: 99, y: 108 },
+    ]) {
+      field.drag(points[0].id, target.x, target.y)
+      field.step(1 / hz)
+      assert.equal(field.nodes[0].x, target.x)
+      assert.equal(field.nodes[0].y, target.y)
+      separated(field)
+      assert.ok(
+        field.nodes.every((node) => [node.x, node.y, node.vx, node.vy].every(Number.isFinite)),
+      )
+    }
+    field.release(points[0].id)
+    for (let i = 0; i < hz * 2; i++) field.step(1 / hz)
+    assert.equal(field.settled, true, `rapid drag still moving after two seconds at ${hz}Hz`)
+    separated(field)
+    const stopped = field.snapshot()
+    for (let i = 0; i < hz; i++) assert.equal(field.step(1 / hz), false)
+    assert.deepEqual(field.snapshot(), stopped)
+  }
+})
+
+test("label placement never covers physical circles or removes their identities, even when no label fits", () => {
+  const circles = [
+    { x: 100, y: 100, radius: 13 },
+    { x: 130, y: 150, radius: 13 },
+    { x: 220, y: 100, radius: 13 },
+  ]
+  const before = structuredClone(circles)
+  const labels = [
+    { id: "a", x: 100, y: 100, width: 125, height: 42, priority: 100 },
+    { id: "b", x: 130, y: 150, width: 130, height: 60, priority: 1 },
+  ]
+  const result = placeMapLabels(labels, 390, 400, circles)
+  assert.equal(result.boxes.length, 2)
+  for (const box of result.boxes)
+    for (const circle of circles) {
+      const x = Math.max(box.x, Math.min(box.x + box.width, circle.x)),
+        y = Math.max(box.y, Math.min(box.y + box.height, circle.y))
+      assert.ok(Math.hypot(circle.x - x, circle.y - y) >= circle.radius + 5)
+    }
+  assert.deepEqual(placeMapLabels(labels, 390, 400, circles, result.boxes).boxes, result.boxes)
+  const cramped = placeMapLabels([{ ...labels[0], width: 80, height: 80 }], 100, 100, [
+    { x: 50, y: 50, radius: 40 },
+  ])
+  assert.deepEqual(cramped.omitted, ["a"])
+  assert.equal(cramped.boxes.length, 0)
+  assert.deepEqual(circles, before)
 })

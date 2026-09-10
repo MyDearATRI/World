@@ -1,5 +1,9 @@
 # Content contract
 
+## Layout forces are not knowledge assertions
+
+The node-space correction may derive bounded visual mass, anchoring and spring coefficients from the existing public graph. It cannot add or reinterpret an edge. Occupancy repulsion applies even to objects without a recorded link and does not prove mathematical independence. Every displayed reason must be the existing relation's explanation, category, direction and evidence, with an explicit absence state where no explanation was recorded.
+
 ## Complete maps and reading directions
 
 Global-map nodes are exactly the unique union returned by the existing theme model; edges are exactly source model relations with both endpoints in that union. Overview pagination never filters this graph. Reading mini maps keep actual incoming/outgoing endpoints, parallel relation identities, types and evidence, including explicitly marked destinations outside the selected themes. No title, ordering, layout attraction or absence of an edge becomes a new mathematical assertion. Both views open the same rendered reading source and use the same canonical object links.

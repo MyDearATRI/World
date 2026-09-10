@@ -238,6 +238,10 @@ async function start() {
     unfoldings = new Map<string, HTMLElement>(),
     communityNodes = new Map<string, HTMLElement>()
   const edgeLabels = new Map<string, HTMLButtonElement>()
+  const pointLinks = new Map<string, HTMLAnchorElement>()
+  const pointLayer = element("div", "topos-node-marks")
+  pointLayer.setAttribute("aria-label", "知识节点")
+  world.append(pointLayer)
   let frame = 0,
     raf = 0,
     inFrame = false,
@@ -473,6 +477,7 @@ async function start() {
         visual: renderer.communityVisuals.find((v) => v.id === c.id),
       })),
       stats: { ...stats },
+      layout: field.snapshot().layout,
     }
   }
   const serialize = (): Saved => {
@@ -584,9 +589,10 @@ async function start() {
     document.title = `${concepts.get(id)!.title} · Knowledge Topos`
     const target = field.snapshot().targets?.[id]
     if (target) pan = { x: -target.x, y: -target.y }
-    guide.textContent = published
-      ? `${typeLabel(concepts.get(id)!)} · 点击当前对象${atlas ? "查看分类与来源" : "展开原文"}，或查找另一个知识点。`
-      : `${concepts.get(id)!.zh}成为当前语境。观察邻域变化，或向内展开解释。`
+    if (published) {
+      describedNode = undefined
+      describeNode(id)
+    } else guide.textContent = `${concepts.get(id)!.zh}成为当前语境。观察邻域变化，或向内展开解释。`
   }
   function zoom(value: number, push = false) {
     pendingScale = undefined
@@ -646,6 +652,7 @@ async function start() {
     concept.sections.map((id) => sections.get(id)!).find(Boolean)
   for (const concept of model.concepts) {
     const a = element("a", "topos-concept")
+    a.draggable = false
     a.href = published && concept.href ? sourceURL(concept.href) : `#focus=${concept.id}&depth=1`
     a.dataset.concept = concept.id
     if (concept.color) a.style.setProperty("--topic-color", concept.color)
@@ -664,9 +671,33 @@ async function start() {
       e.preventDefault()
       if (performance.now() < suppressedClick) return
       focus(concept.id)
+      if (isReading()) focusReading()
     })
+    a.addEventListener("focus", () => describeNode(concept.id))
+    a.addEventListener("pointerenter", () => describeNode(concept.id))
     labels.append(a)
     labelNodes.set(concept.id, a)
+    if (published) {
+      const point = element("a", "topos-node-mark")
+      point.draggable = false
+      point.href = a.href
+      point.dataset.nodeMark = point.dataset.concept = concept.id
+      point.title = `${typeLabel(concept)} · ${concept.title}`
+      point.setAttribute("aria-label", point.title)
+      if (concept.color) point.style.setProperty("--topic-color", concept.color)
+      point.hidden = true
+      point.addEventListener("click", (event) => {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+        event.preventDefault()
+        if (performance.now() < suppressedClick) return
+        focus(concept.id)
+        if (isReading()) focusReading()
+      })
+      point.addEventListener("focus", () => describeNode(concept.id))
+      point.addEventListener("pointerenter", () => describeNode(concept.id))
+      pointLayer.append(point)
+      pointLinks.set(concept.id, point)
+    }
   }
   const search = element("dialog", "topos-search")
   search.setAttribute("aria-label", "查找公开笔记与知识点")
@@ -1431,6 +1462,105 @@ async function start() {
       height: focusSize.height,
     }
     const protectedBoxes = [focusBox as { x: number; y: number; width: number; height: number }]
+    // Marks have their own eligibility and hit targets. A missing text slot must
+    // never remove the object or its relations from the scene.
+    const pointIDs = new Set<string>()
+    const pointBoxes: { x: number; y: number; width: number; height: number }[] = []
+    for (const node of field.nodes) {
+      const p = renderer.project(node)
+      const eligible =
+        isVisible(node.id) &&
+        (node.id === state.focus || node.relevance > 0.3) &&
+        (state.scale >= 0.75 || priorityAppearance(node, context).major) &&
+        p.x >= 12 &&
+        p.x <= renderer.size.width - 12 &&
+        p.y >= 94 &&
+        p.y <= renderer.size.height - (innerWidth < 600 ? 158 : 108)
+      const point = pointLinks.get(node.id)
+      if (point) {
+        point.hidden = !eligible
+        point.tabIndex = eligible ? 0 : -1
+        if (eligible) {
+          style(point, "transform", `translate3d(${p.x - 10}px,${p.y - 10}px,0)`)
+          point.dataset.focus = String(node.id === state.focus)
+          point.dataset.dragging = String(drag?.id === node.id)
+        }
+      }
+      if (eligible) {
+        pointIDs.add(node.id)
+        pointBoxes.push({ x: p.x - 13, y: p.y - 13, width: 26, height: 26 })
+      }
+    }
+    let focusHasSlot = true
+    if (published) {
+      const natural = { ...focusBox }
+      const left = 14,
+        right = renderer.size.width - focusBox.width - 14,
+        top = 98,
+        bottom = renderer.size.height - focusBox.height - (innerWidth < 600 ? 167 : 160)
+      const clear = (box: typeof focusBox) =>
+        box.x >= left &&
+        box.x <= right &&
+        box.y >= top &&
+        box.y <= bottom &&
+        pointBoxes.every(
+          (point) =>
+            box.x + box.width <= point.x - 8 ||
+            box.x >= point.x + point.width + 8 ||
+            box.y + box.height <= point.y - 8 ||
+            box.y >= point.y + point.height + 8,
+        )
+      const old = annotationTargets.get(state.focus)
+      const oldAnchor = annotationAnchors.get(state.focus)
+      const remembered =
+        old && oldAnchor
+          ? {
+              ...focusBox,
+              x: old.x + focusedPoint.x - oldAnchor.x,
+              y: old.y + focusedPoint.y - oldAnchor.y,
+            }
+          : undefined
+      // Keep a valid slot throughout a gesture. Only an intentional annotation
+      // refresh may prefer the natural position again; no timer shuffles titles.
+      if (remembered && (annotationTime !== -Infinity || drag) && clear(remembered))
+        Object.assign(focusBox, remembered)
+      else if (!clear(focusBox)) {
+        const candidates: (typeof focusBox)[] = []
+        const candidate = (x: number, y: number) =>
+          candidates.push({ ...natural, x: clamp(x, left, right), y: clamp(y, top, bottom) })
+        if (remembered) candidates.push(remembered)
+        candidate(natural.x, top)
+        candidate(natural.x, bottom)
+        candidate(left, natural.y)
+        candidate(right, natural.y)
+        candidate(natural.x, focusedPoint.y + 28)
+        // Six local boundary candidates plus the fixed alternatives above are
+        // sufficient for a bounded title-only search, not a new graph layout.
+        const closest = [...pointBoxes]
+          .sort(
+            (a, b) =>
+              Math.hypot(a.x - natural.x - natural.width / 2, a.y - natural.y) -
+              Math.hypot(b.x - natural.x - natural.width / 2, b.y - natural.y),
+          )
+          .slice(0, 3)
+        for (const point of closest) {
+          candidate(natural.x, point.y - focusBox.height - 8)
+          candidate(natural.x, point.y + point.height + 8)
+        }
+        const slot = candidates
+          .filter(clear)
+          .sort(
+            (a, b) =>
+              Math.hypot(a.x - natural.x, a.y - natural.y) -
+              Math.hypot(b.x - natural.x, b.y - natural.y),
+          )[0]
+        if (slot) Object.assign(focusBox, slot)
+        else {
+          focusHasSlot = false
+          describeNode(state.focus)
+        }
+      }
+    }
     if (showUnfold) {
       const width = Math.min(
         innerWidth < 600 ? innerWidth - 28 : published ? 720 : 465,
@@ -1483,7 +1613,10 @@ async function start() {
             (a.id === state.focus ? 100 : a.id === context.previous ? 90 : a.relevance),
         )
         .slice(0, mobileReading ? 0 : innerWidth < 600 ? (showUnfold ? 4 : 6) : 12)
-      const excluded: { x: number; y: number; width: number; height: number }[] = [focusBox]
+      const excluded: { x: number; y: number; width: number; height: number }[] = [
+        focusBox,
+        ...pointBoxes,
+      ]
       if (showUnfold) {
         const p = focusedPoint
         const w = Math.min(
@@ -1577,9 +1710,8 @@ async function start() {
         y < heldBox.y + heldBox.height + 8 &&
         y + measure(a).height > heldBox.y - 8,
       )
-      // A name must remain in the usable reading area, not underneath the fixed
-      // controls. Anchor following can temporarily move an otherwise valid slot
-      // out of bounds during a drag; its point and edges must recede with it.
+      // Names may recede or find another slot. Their associated marks and
+      // connections remain available independently of this text decision.
       const outsideReadingArea = Boolean(
         box &&
         (x < 13 ||
@@ -1599,7 +1731,13 @@ async function start() {
         !isFocus &&
         n.id !== heldID &&
         (protectedBoxes.some(intersects) || visibleLabelBoxes.some(intersects))
-      const concealed = occludedByDrag || outsideReadingArea || occludedByReading
+      const occludedByPoint = pointBoxes.some(intersects)
+      const concealed =
+        occludedByDrag ||
+        outsideReadingArea ||
+        occludedByReading ||
+        occludedByPoint ||
+        (isFocus && !focusHasSlot)
       const farVisibility = appearance.major ? 1 : clamp((state.scale - 0.45) / 0.65, 0, 1)
       const opacity =
         labelsHidden || !isVisible(n.id) || concealed
@@ -1755,8 +1893,10 @@ async function start() {
       communityNodes.get(box.id)!.style.transform = `translate(${previous.x}px,${previous.y}px)`
     }
     const direct = context.relations
-      .filter((r) => !published || (painted.has(r.source) && painted.has(r.target)))
-      .filter((r) => r.source === state.focus || r.target === state.focus)
+      .filter((r) => !published || (pointIDs.has(r.source) && pointIDs.has(r.target)))
+      .filter(
+        (r) => r.source === (drag?.id ?? state.focus) || r.target === (drag?.id ?? state.focus),
+      )
       .sort((a, b) => b.strength - a.strength)
       .slice(0, state.scale < 0.7 || state.scale > 1.7 ? 0 : innerWidth < 600 ? 2 : 4)
     const directIds = new Set(direct.map((r) => r.id))
@@ -1778,15 +1918,15 @@ async function start() {
       }
       const a = renderer.project(fieldNodes.get(r.source)!),
         b = renderer.project(fieldNodes.get(r.target)!)
-      const other = r.source === state.focus ? b : a,
-        origin = r.source === state.focus ? a : b
+      const other = r.source === (drag?.id ?? state.focus) ? b : a,
+        origin = r.source === (drag?.id ?? state.focus) ? a : b
       const rect = {
         x: clamp(origin.x * 0.26 + other.x * 0.74, 12, renderer.size.width - 140),
         y: clamp(origin.y * 0.26 + other.y * 0.74 + 14, 100, renderer.size.height - 160),
         ...measure(label),
       }
       style(label, "transform", `translate3d(${rect.x}px,${rect.y}px,0)`)
-      const occluded = visibleLabelBoxes.some(
+      const occluded = [...visibleLabelBoxes, ...pointBoxes].some(
         (box) =>
           rect.x < box.x + box.width + 9 &&
           rect.x + rect.width > box.x - 9 &&
@@ -1798,21 +1938,56 @@ async function start() {
       label.style.opacity = labelsHidden || occluded ? "0" : "0.7"
       label.inert = labelsHidden || occluded
     }
-    presentedIDs = painted
+    presentedIDs = published ? pointIDs : painted
     return annotationsMoving
   }
   const relationPopover = element("aside", "topos-relation-detail")
   relationPopover.hidden = true
   world.append(relationPopover)
+  let describedNode: string | undefined
+  function describeNode(id: string) {
+    if (!published || describedNode === id) return
+    describedNode = id
+    const concept = concepts.get(id)!
+    const relations = model.relations.filter((edge) => edge.source === id || edge.target === id)
+    const wasOpen = guide.querySelector("details")?.open ?? false
+    const detail = element("details", "topos-node-reasons")
+    detail.open = wasOpen
+    detail.dataset.nodeReasons = id
+    detail.append(
+      element("summary", undefined, `${concept.title} · ${relations.length} 条联系 · 查看原因`),
+    )
+    const list = element("div", "topos-node-reason-list")
+    if (!relations.length)
+      list.append(element("p", undefined, "当前公开内容尚未记录这个对象的联系。"))
+    for (const relation of relations) {
+      const other = concepts.get(relation.source === id ? relation.target : relation.source)!
+      const button = element(
+        "button",
+        undefined,
+        `${relation.source === id ? "→" : "←"} ${relation.label} · ${other.title}`,
+      )
+      button.type = "button"
+      button.dataset.relationReason = relation.id
+      button.append(element("small", undefined, `${relationCategory(relation)} · 点击查看原文依据`))
+      button.addEventListener("click", () => showRelation(relation.id))
+      list.append(button)
+    }
+    detail.append(list)
+    guide.classList.add("has-node-reasons")
+    guide.replaceChildren(detail)
+  }
   function showRelation(id: string) {
     const r = model.relations.find((e) => e.id === id)
     if (!r) return
+    const origin =
+      document.activeElement instanceof HTMLElement ? document.activeElement : undefined
     relationPopover.replaceChildren()
     const close = element("button", undefined, "关闭")
     close.type = "button"
     close.addEventListener("click", () => {
       relationPopover.hidden = true
-      edgeLabels.get(id)?.focus()
+      origin?.focus({ preventScroll: true })
     })
     relationPopover.append(
       close,
@@ -1894,7 +2069,7 @@ async function start() {
     }
     frame++
     if (reduce.matches) {
-      field.settle()
+      field.settle(Boolean(drag?.id))
       renderer.view.zoom = targetZoom
       renderer.view.x = pan.x
       renderer.view.y = pan.y
@@ -1971,7 +2146,7 @@ async function start() {
     const target = e.target as HTMLElement
     if (
       target.closest(
-        ".topos-instruments,.topos-unfolding,.topos-help,.topos-utility,.topos-relation-detail,.topos-relation,.topos-search",
+        ".topos-instruments,.topos-unfolding,.topos-help,.topos-utility,.topos-relation-detail,.topos-relation,.topos-search,.topos-guide",
       )
     )
       return
@@ -1993,6 +2168,7 @@ async function start() {
     const bounds = world.getBoundingClientRect()
     const grabbed = renderer.unproject(e.clientX - bounds.left, e.clientY - bounds.top)
     const node = id ? fieldNodes.get(id) : undefined
+    if (id) describeNode(id)
     drag = {
       pointer: e.pointerId,
       id,
@@ -2053,6 +2229,7 @@ async function start() {
       if (drag.distance <= 5) {
         suppressedClick = performance.now() + 250
         focus(drag.id)
+        if (isReading()) focusReading()
       } else suppressedClick = performance.now() + 350
     }
     drag = undefined
@@ -2076,7 +2253,7 @@ async function start() {
       if (state.overview || isReading()) return
       if (
         (e.target as HTMLElement).closest(
-          ".topos-unfolding,.topos-help,.topos-relation-detail,.topos-search",
+          ".topos-unfolding,.topos-help,.topos-relation-detail,.topos-search,.topos-guide",
         )
       )
         return

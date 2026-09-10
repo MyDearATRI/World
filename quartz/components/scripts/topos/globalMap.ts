@@ -5,12 +5,15 @@ import {
   mapFit,
   mapTitleLines,
   mapZoom,
+  placeMapLabels,
   readGlobalMapCache,
   type GlobalMapScene,
   type GlobalMapLayout,
   type MapCamera,
   type MapPoint,
+  type MapLabelBox,
 } from "../../../util/topos/globalMap"
+import { createGlobalMapField } from "../../../util/topos/globalMapField"
 import { overviewKind, overviewTypeLabel } from "../../../util/topos/topicOverview"
 import type { Concept, KnowledgeModel } from "../../../util/topos/types"
 import "../../styles/globalMap.css"
@@ -23,10 +26,11 @@ type SavedMap = {
   height: number
   selected?: string
   layout?: GlobalMapLayout
+  field?: ReturnType<typeof createGlobalMapField>
 }
 let sequence = 0
 
-/** The complete selected collection; there is no pagination or force simulation here. */
+/** The complete selected collection, with bounded local physics and separate screen labels. */
 export function createGlobalMap(
   model: KnowledgeModel,
   callbacks: { open: (id: string) => void; onClose?: (reason: "dismiss" | "navigate") => void },
@@ -114,7 +118,10 @@ export function createGlobalMap(
   const cameraLayer = svgNode("g", canvas)
   const groupLayer = svgNode("g", cameraLayer)
   const edgeLayer = svgNode("g", cameraLayer)
-  const nodeLayer = svgNode("g", cameraLayer)
+  const leaderLayer = svgNode("g", canvas)
+  const labelLayer = svgNode("g", canvas)
+  const nodeCameraLayer = svgNode("g", canvas)
+  const nodeLayer = svgNode("g", nodeCameraLayer)
   const empty = html("p", "尚未选择主题。关闭地图后，勾选想浏览的领域。", stage)
   empty.className = "global-map-empty"
   empty.hidden = true
@@ -144,6 +151,9 @@ export function createGlobalMap(
   )
   const restoredViews = new Map(restored.views.map((view) => [view.key, view]))
   let saved: SavedMap | undefined
+  let field: ReturnType<typeof createGlobalMapField> | undefined
+  let lastFrame = 0
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
   let scene: GlobalMapScene = { nodes: [], relations: [], groups: [] }
   let byID = new Map<string, GlobalMapScene["nodes"][number]>()
   let camera: MapCamera = { x: 0, y: 0, k: 1 }
@@ -172,15 +182,25 @@ export function createGlobalMap(
   const nodes = new Map<string, SVGAElement>()
   const paths = new Map<string, SVGPathElement>()
   const groupLabels = new Map<string, SVGTextElement>()
+  const labels = new Map<
+    string,
+    { anchor: SVGAElement; leader: SVGPathElement; width: number; height: number }
+  >()
+  let labelBoxes: MapLabelBox[] = [],
+    omittedLabelIDs: string[] = []
+  const textContext = document.createElement("canvas").getContext("2d")
+  if (textContext) textContext.font = "14px system-ui, sans-serif"
 
   function hide(reason: CloseReason = "dismiss") {
     if (!element.open) return
+    if (field?.heldID) field.release(field.heldID)
     persist()
     activeDrag = undefined
     pinch = undefined
     pointers.clear()
     if (frame) cancelAnimationFrame(frame)
     frame = 0
+    lastFrame = 0
     element.close()
     if (reason !== "navigate") returnTo?.focus({ preventScroll: true })
     if (reason !== "history") callbacks.onClose?.(reason)
@@ -208,6 +228,7 @@ export function createGlobalMap(
           height: map.height,
           selected: map.selected,
           layout: map.layout,
+          physics: map.field?.snapshot(),
         })
     try {
       sessionStorage.setItem(
@@ -225,16 +246,40 @@ export function createGlobalMap(
   }
   function requestPaint() {
     if (!element.open || frame) return
-    frame = requestAnimationFrame(() => {
+    frame = requestAnimationFrame((time) => {
       frame = 0
+      if (!element.open || document.hidden) {
+        lastFrame = 0
+        return
+      }
+      const dt = lastFrame ? Math.min(0.05, (time - lastFrame) / 1000) : 1 / 60
+      lastFrame = time
+      if (field && !field.settled) {
+        if (reducedMotion.matches && !activeDrag) field.settle()
+        else field.step(dt)
+        for (const node of field.nodes) {
+          const target = byID.get(node.id)
+          if (target) {
+            target.x = node.x
+            target.y = node.y
+          }
+        }
+      }
       paint()
+      if (field && !field.settled) requestPaint()
+      else lastFrame = 0
     })
   }
   function paint() {
     if (!element.open) return
     renderCount++
     cameraLayer.setAttribute("transform", `translate(${camera.x} ${camera.y}) scale(${camera.k})`)
+    nodeCameraLayer.setAttribute(
+      "transform",
+      `translate(${camera.x} ${camera.y}) scale(${camera.k})`,
+    )
     const active = hovered ?? selected
+    const pointRadius = Math.max(7, Math.min(17, 3.2 / camera.k))
     const related = new Set<string>(active ? [active] : [])
     for (const edge of scene.relations)
       if (edge.source === active || edge.target === active) {
@@ -244,24 +289,15 @@ export function createGlobalMap(
     for (const node of scene.nodes) {
       const link = nodes.get(node.id)!
       const emphasized = node.id === active
-      const showLabel = camera.k >= 0.62 || (emphasized && width > 720)
       link.setAttribute("transform", `translate(${node.x} ${node.y})`)
       link.classList.toggle("is-active", emphasized)
       link.classList.toggle("is-related", related.has(node.id))
       link.classList.toggle("is-dim", Boolean(active && !related.has(node.id)))
-      link.classList.toggle("has-label", showLabel)
+      link.querySelector(".global-map-dot")!.setAttribute("r", String(pointRadius))
+      // Hit disks must not cover the centers of other bodies in a fitted overview.
       link
-        .querySelector(".global-map-dot")!
-        .setAttribute("r", String(Math.max(7, Math.min(17, 3.2 / camera.k))))
-      link.querySelector(".global-map-hit")!.setAttribute("r", String(Math.max(18, 10 / camera.k)))
-      const text = link.querySelector("text")!
-      text.style.visibility = showLabel ? "visible" : "hidden"
-      text.setAttribute("font-size", String(emphasized ? Math.max(15, 14 / camera.k) : 15))
-      const alignEnd = emphasized && camera.x + node.x * camera.k > width - 200
-      text.setAttribute("text-anchor", alignEnd ? "end" : "start")
-      text.setAttribute("x", alignEnd ? "-19" : "19")
-      for (const line of text.querySelectorAll("tspan"))
-        line.setAttribute("x", alignEnd ? "-19" : "19")
+        .querySelector(".global-map-hit")!
+        .setAttribute("r", String(Math.max(18, Math.min(32, 10 / camera.k))))
     }
     for (const edge of scene.relations) {
       const path = paths.get(edge.id)!
@@ -297,6 +333,47 @@ export function createGlobalMap(
         })
         label.dataset.lines = signature
       }
+    }
+    const visible = scene.nodes
+      .map((node) => ({ node, x: camera.x + node.x * camera.k, y: camera.y + node.y * camera.k }))
+      .filter(
+        (point) => point.x > -15 && point.x < width + 15 && point.y > -15 && point.y < height + 15,
+      )
+    const candidates = visible
+      .filter(({ node }) => camera.k >= 0.62 || (node.id === active && width > 720))
+      .map(({ node, x, y }) => ({
+        id: node.id,
+        x,
+        y,
+        width: labels.get(node.id)!.width,
+        height: labels.get(node.id)!.height,
+        priority: node.id === active ? 100 : related.has(node.id) ? 10 : 1,
+      }))
+    const obstacles = visible.map(({ x, y }) => ({
+      x,
+      y,
+      radius: Math.max(4, pointRadius * camera.k) + 4,
+    }))
+    const placement = placeMapLabels(candidates, width, height, obstacles, labelBoxes)
+    labelBoxes = placement.boxes
+    omittedLabelIDs = placement.omitted
+    for (const label of labels.values()) {
+      label.anchor.style.display = "none"
+      label.leader.style.display = "none"
+    }
+    for (const box of labelBoxes) {
+      const label = labels.get(box.id)!,
+        point = byID.get(box.id)!
+      const x = camera.x + point.x * camera.k,
+        y = camera.y + point.y * camera.k
+      label.anchor.style.display = ""
+      label.anchor.classList.toggle("is-active", box.id === active)
+      label.anchor.setAttribute("transform", `translate(${box.x} ${box.y})`)
+      label.leader.style.display = ""
+      label.leader.setAttribute(
+        "d",
+        `M ${x} ${y} L ${Math.max(box.x, Math.min(box.x + box.width, x))} ${Math.max(box.y, Math.min(box.y + box.height, y))}`,
+      )
     }
     element.dataset.renderCount = String(renderCount)
     remember()
@@ -340,6 +417,22 @@ export function createGlobalMap(
       const source = html("a", "原文出处", inspector)
       source.href = new URL(concept.sourceHref, siteRoot).href
     }
+    const physical = field?.nodes.find((item) => item.id === id)
+    if (physical) {
+      const details = html("details", "", inspector)
+      details.className = "global-map-mechanics"
+      html("summary", "位置与布局", details)
+      html(
+        "p",
+        "每个对象有自己的参考位置。拖动会更新它，真实联系提供有限牵引；碰撞边界优先保留圆点的空间。文字不会挤掉节点。这些布局参数不表示数学重要性或论证。",
+        details,
+      )
+      html(
+        "small",
+        `参考位置 (${Math.round(physical.anchorX)}, ${Math.round(physical.anchorY)}) · 质量 ${physical.mass.toFixed(2)} · 归位 ${physical.attraction.toFixed(2)} · 排斥 ${Math.round(physical.charge)} · 半径 ${physical.radius}`,
+        details,
+      )
+    }
     const relations = scene.relations.filter((edge) => edge.source === id || edge.target === id)
     html("h4", `本图中的直接联系 · ${relations.length}`, inspector)
     const list = html("ul", "", inspector)
@@ -355,6 +448,13 @@ export function createGlobalMap(
             : "原文关系"
       html("span", `${edge.source === id ? "→" : "←"} ${edge.label} · ${provenance}`, row)
       readLink(row, other, other.title)
+      const reason = html(
+        "p",
+        edge.explanation || edge.evidence || "该关系按现有记录展示；未提供进一步解释。",
+        row,
+      )
+      reason.className = "global-map-reason"
+      reason.dataset.globalMapReason = edge.id
       if (edge.evidenceHref) {
         const evidence = html("a", "查看依据", row)
         evidence.href = new URL(edge.evidenceHref, siteRoot).href
@@ -382,6 +482,10 @@ export function createGlobalMap(
     groupLayer.replaceChildren()
     edgeLayer.replaceChildren()
     nodeLayer.replaceChildren()
+    labelLayer.replaceChildren()
+    leaderLayer.replaceChildren()
+    labels.clear()
+    labelBoxes = []
     nodes.clear()
     paths.clear()
     groupLabels.clear()
@@ -438,34 +542,59 @@ export function createGlobalMap(
         class: "global-map-dot",
         "vector-effect": "non-scaling-stroke",
       })
-      const label = svgNode("text", anchor, { x: "19", y: "5" })
-      mapTitleLines(node.concept.title, 12).forEach((line, index) => {
-        const span = svgNode("tspan", label, { x: "19", dy: index ? "1.22em" : "0" })
+      const labelAnchor = svgNode("a", labelLayer, {
+        href: canonical(node.concept),
+        tabindex: "-1",
+        "data-global-map-label": node.id,
+        "aria-label": node.concept.title,
+      })
+      labelAnchor.classList.add("global-map-label")
+      const lines = mapTitleLines(node.concept.title, 12)
+      const labelWidth =
+        Math.max(...lines.map((line) => textContext?.measureText(line).width ?? line.length * 14)) +
+        8
+      const labelHeight = lines.length * 18 + 8
+      svgNode("rect", labelAnchor, {
+        width: String(labelWidth),
+        height: String(labelHeight),
+        rx: "2",
+      })
+      const label = svgNode("text", labelAnchor, { x: "4", y: "17", "font-size": "14" })
+      lines.forEach((line, index) => {
+        const span = svgNode("tspan", label, { x: "4", dy: index ? "18" : "0" })
         span.textContent = line
       })
+      const leader = svgNode("path", leaderLayer, { class: "global-map-label-leader" })
+      labels.set(node.id, { anchor: labelAnchor, leader, width: labelWidth, height: labelHeight })
       const title = svgNode("title", anchor)
       title.textContent = node.concept.title
-      anchor.addEventListener("pointerenter", () => {
+      const enter = () => {
         if (!activeDrag && !pinch) {
           hovered = node.id
           inspect(node.id)
           requestPaint()
         }
-      })
-      anchor.addEventListener("pointerleave", () => {
+      }
+      const leave = () => {
         if (hovered === node.id) {
           hovered = undefined
           inspect(selected)
           requestPaint()
         }
-      })
+      }
+      anchor.addEventListener("pointerenter", enter)
+      anchor.addEventListener("pointerleave", leave)
+      labelAnchor.addEventListener("pointerenter", enter)
+      labelAnchor.addEventListener("pointerleave", leave)
       anchor.addEventListener("focus", () => select(node.id, !activeDrag && !pointers.size))
-      anchor.addEventListener("click", (event) => {
+      const click = (event: MouseEvent) => {
         if (event.button || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
         event.preventDefault()
         if (performance.now() < suppressedUntil) return
         navigate(node.id)
-      })
+      }
+      anchor.addEventListener("click", click)
+      labelAnchor.addEventListener("click", click)
       nodes.set(node.id, anchor)
     }
     locator.replaceChildren()
@@ -518,12 +647,18 @@ export function createGlobalMap(
       maps.set(key, saved)
     }
     scene = saved.scene
-    for (const node of scene.nodes) {
+    field = saved.field ?? createGlobalMapField(scene.nodes, scene.relations)
+    if (!saved.field) field.restore(restoredViews.get(key)?.physics)
+    saved.field = field
+    for (const node of field.nodes) {
       const moved = movedPoints.get(node.id)
-      if (moved) {
-        node.x = moved.x
-        node.y = moved.y
+      if (moved && Math.hypot(moved.x - node.anchorX, moved.y - node.anchorY) > 0.001) {
+        field.drag(node.id, moved.x, moved.y)
+        field.release(node.id)
       }
+      const target = scene.nodes.find((point) => point.id === node.id)!
+      target.x = node.x
+      target.y = node.y
     }
     selected = saved.selected ?? (scene.nodes.some((node) => node.id === focus) ? focus : undefined)
     hovered = undefined
@@ -551,20 +686,32 @@ export function createGlobalMap(
       midpoint: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 },
     }
   }
+  // Linked SVG marks otherwise start a native URL drag, cancelling the pointer
+  // stream after its first movement. Only that drag is suppressed; link clicks
+  // and modifier/new-tab activation keep their browser behavior.
+  canvas.addEventListener("dragstart", (event) => {
+    if ((event.target as Element).closest("[data-global-map-node], [data-global-map-label]")) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+  })
   stage.addEventListener("pointerdown", (event) => {
     if (event.button || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
     const point = local(event)
     pointers.set(event.pointerId, point)
     stage.setPointerCapture(event.pointerId)
     if (pointers.size === 2) {
+      if (field?.heldID) field.release(field.heldID)
       const pair = midpoint()
       pinch = { ...pair, camera: { ...camera } }
       activeDrag = undefined
       pinched = true
       return
     }
-    const id = (event.target as Element).closest<SVGAElement>("[data-global-map-node]")?.dataset
-      .globalMapNode
+    const target = (event.target as Element).closest<SVGAElement>(
+      "[data-global-map-node], [data-global-map-label]",
+    )
+    const id = target?.dataset.globalMapNode ?? target?.dataset.globalMapLabel
     const node = id ? byID.get(id) : undefined
     activeDrag = {
       pointer: event.pointerId,
@@ -602,10 +749,10 @@ export function createGlobalMap(
     drag.moved ||= Math.hypot(point.x - drag.start.x, point.y - drag.start.y) > 5
     if (!drag.moved) return
     if (drag.id) {
-      const node = byID.get(drag.id)!
-      node.x = (point.x - camera.x) / camera.k + drag.offset.x
-      node.y = (point.y - camera.y) / camera.k + drag.offset.y
-      movedPoints.set(node.id, { x: node.x, y: node.y })
+      const x = (point.x - camera.x) / camera.k + drag.offset.x,
+        y = (point.y - camera.y) / camera.k + drag.offset.y
+      field?.drag(drag.id, x, y)
+      movedPoints.set(drag.id, { x, y })
     } else {
       camera.x += point.x - drag.last.x
       camera.y += point.y - drag.last.y
@@ -619,6 +766,7 @@ export function createGlobalMap(
     pointers.delete(event.pointerId)
     if (stage.hasPointerCapture(event.pointerId)) stage.releasePointerCapture(event.pointerId)
     if (drag?.pointer === event.pointerId) {
+      if (drag.id && drag.moved) field?.release(drag.id)
       if (drag.id && !drag.moved && !pinched && event.type === "pointerup") {
         suppressedUntil = performance.now() + 300
         navigate(drag.id)
@@ -729,6 +877,14 @@ export function createGlobalMap(
   })
   const observer = new ResizeObserver(resize)
   observer.observe(stage)
+  const visibility = () => {
+    if (document.hidden) {
+      if (frame) cancelAnimationFrame(frame)
+      frame = 0
+      lastFrame = 0
+    } else requestPaint()
+  }
+  document.addEventListener("visibilitychange", visibility)
   window.addEventListener("pagehide", persist)
   return {
     element,
@@ -739,7 +895,8 @@ export function createGlobalMap(
       return {
         open: element.open,
         backend: "svg",
-        settled: !frame && !activeDrag && !pinch,
+        settled: !frame && !activeDrag && !pinch && (field?.settled ?? true),
+        heldID: field?.heldID,
         selected,
         selection: selection ? [...selection] : undefined,
         eligibleIDs: scene.nodes.map((node) => node.id),
@@ -751,11 +908,28 @@ export function createGlobalMap(
           y: node.y,
           screenX: box.left + camera.x + node.x * camera.k,
           screenY: box.top + camera.y + node.y * camera.k,
+          ...(() => {
+            const physical = field?.nodes.find((point) => point.id === node.id)
+            return physical
+              ? {
+                  vx: physical.vx,
+                  vy: physical.vy,
+                  anchorX: physical.anchorX,
+                  anchorY: physical.anchorY,
+                  radius: physical.radius,
+                  mass: physical.mass,
+                  attraction: physical.attraction,
+                  charge: physical.charge,
+                }
+              : {}
+          })(),
         })),
         camera: { ...camera },
         width,
         height,
         renderCount,
+        labelPlacements: labelBoxes.map((box) => ({ ...box })),
+        omittedLabelIDs: [...omittedLabelIDs],
         groups: scene.groups.map((group) => ({
           id: group.id,
           title: group.title,
@@ -767,6 +941,7 @@ export function createGlobalMap(
       if (element.open) hide("history")
       observer.disconnect()
       window.removeEventListener("pagehide", persist)
+      document.removeEventListener("visibilitychange", visibility)
       if (frame) cancelAnimationFrame(frame)
       element.remove()
     },
