@@ -37,11 +37,74 @@ async function readingReady(page) {
       const root = document.querySelector('.topos-unfolding[data-active="true"]')
       return (
         root?.querySelector(".topos-section .topos-prose") &&
-        !root.querySelector("[data-section-loading]")
+        !root.querySelector("[data-section-loading]") &&
+        !root.inert &&
+        root.getBoundingClientRect().width > 0 &&
+        getComputedStyle(root).visibility !== "hidden"
       )
     },
     { timeout: 30000 },
   )
+}
+async function readingSurfaceEvidence(page) {
+  return page.evaluate(() => {
+    const visible = (node) => {
+      if (!node) return false
+      const rect = node.getBoundingClientRect()
+      if (rect.width < 1 || rect.height < 1) return false
+      for (let current = node; current; current = current.parentElement) {
+        const css = getComputedStyle(current)
+        if (css.display === "none" || css.visibility === "hidden" || Number(css.opacity) < 0.01)
+          return false
+      }
+      return true
+    }
+    const title = document.querySelector(".topos-reader-title")
+    const reading = document.querySelector('.topos-unfolding[data-active="true"]')
+    const box = title?.getBoundingClientRect()
+    const candidates = [
+      ...document.querySelectorAll(
+        '.topos-concept,.topos-utility button,.topos-topics-trigger,.reading-direction-rail,.topos-unfolding[data-active="true"]',
+      ),
+    ].filter(visible)
+    const overlap = !box
+      ? ["missing reader title"]
+      : candidates
+          .filter((node) => {
+            const other = node.getBoundingClientRect()
+            return (
+              other.x < box.right - 0.5 &&
+              other.right > box.x + 0.5 &&
+              other.y < box.bottom - 0.5 &&
+              other.bottom > box.y + 0.5
+            )
+          })
+          .map((node) => ({
+            element: node.dataset.concept ?? node.dataset.readingDirection ?? node.className,
+            rect: node.getBoundingClientRect().toJSON(),
+          }))
+    return {
+      reader: document.querySelector("#topos-world")?.dataset.reader === "true",
+      titleVisible: visible(title),
+      title: title?.textContent,
+      focus: box?.toJSON(),
+      inViewport: Boolean(
+        box &&
+        box.left >= 0 &&
+        box.right <= innerWidth &&
+        box.top >= 0 &&
+        box.bottom <= innerHeight,
+      ),
+      bodyVisible: visible(reading),
+      bodyInert: reading?.inert,
+      body: reading?.getBoundingClientRect().toJSON(),
+      oldFieldVisible: [
+        ...document.querySelectorAll("#topos-canvas,.topos-flat-canvas,.topos-concept"),
+      ].some(visible),
+      overlap,
+      rawSummary: reading?.querySelectorAll(".topos-explanation-lead").length ?? 0,
+    }
+  })
 }
 async function stableScroll(reading) {
   let previous = -1,
@@ -198,9 +261,10 @@ async function mainScenario(base, model, viewport) {
       return Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z) > 2
     }).length
     check(
-      `${prefix} mathematical context changes world coordinates without replacing scene`,
+      `${prefix} reading changes mathematical focus while preserving scene identities and keeping the background field still`,
       after.focus === continuity.id &&
-        movement > 2 &&
+        after.reader === true &&
+        movement === 0 &&
         (await page.evaluate(
           () =>
             window.__publishedIdentity.world === document.querySelector("#topos-world") &&
@@ -221,32 +285,18 @@ async function mainScenario(base, model, viewport) {
           .locator('.topos-unfolding[data-owner="a-000070"] [data-proof-status]')
           .innerText()) === continuity.proofStatus,
     )
-    const titleEvidence = await page.evaluate(() => {
-      const focus = document
-        .querySelector('.topos-concept[data-focus="true"]')
-        .getBoundingClientRect()
-      const overlap = [...document.querySelectorAll('.topos-concept:not([data-focus="true"])')]
-        .filter((node) => Number(node.style.opacity) > 0.3)
-        .map((node) => ({ id: node.dataset.concept, box: node.getBoundingClientRect() }))
-        .filter(
-          ({ box }) =>
-            box.x < focus.right &&
-            box.right > focus.x &&
-            box.y < focus.bottom &&
-            box.bottom > focus.y,
-        )
-        .map(({ id }) => id)
-      return {
-        focus: focus.toJSON(),
-        overlap,
-        rawSummary: document.querySelectorAll(
-          '.topos-unfolding[data-active="true"] .topos-explanation-lead',
-        ).length,
-      }
-    })
+    const titleEvidence = await readingSurfaceEvidence(page)
     check(
-      `${prefix} stable focus title is clear and published body has no duplicated raw summary`,
-      titleEvidence.overlap.length === 0 && titleEvidence.rawSummary === 0,
+      `${prefix} visible reader title is unobstructed and published body has no duplicated raw summary`,
+      titleEvidence.reader &&
+        titleEvidence.titleVisible &&
+        titleEvidence.inViewport &&
+        titleEvidence.title === continuity.title &&
+        titleEvidence.bodyVisible &&
+        !titleEvidence.bodyInert &&
+        !titleEvidence.oldFieldVisible &&
+        titleEvidence.overlap.length === 0 &&
+        titleEvidence.rawSummary === 0,
       titleEvidence,
     )
     await shot(page, `${prefix}-continuity`)
@@ -555,31 +605,56 @@ async function readingRegression(base, model, viewport) {
     await ready(page)
     await readingReady(page)
     await settled(page)
-    const boxes = await page.evaluate(() => {
-      const focus = document
-        .querySelector('.topos-concept[data-focus="true"]')
-        .getBoundingClientRect()
-      return {
-        focus: focus.toJSON(),
-        overlap: [...document.querySelectorAll('.topos-concept:not([data-focus="true"])')]
-          .filter((n) => +n.style.opacity > 0.3)
-          .map((n) => ({ id: n.dataset.concept, rect: n.getBoundingClientRect() }))
-          .filter(
-            ({ rect }) =>
-              rect.x < focus.right &&
-              rect.right > focus.x &&
-              rect.y < focus.bottom &&
-              rect.bottom > focus.y,
-          )
-          .map((n) => n.id),
-      }
-    })
+    const boxes = await readingSurfaceEvidence(page)
     check(
-      `${viewport.width} strict reading title exclusion after settling`,
-      boxes.overlap.length === 0,
+      `${viewport.width} visible reading title is unobstructed by controls, direction rails or body`,
+      boxes.reader &&
+        boxes.titleVisible &&
+        boxes.inViewport &&
+        boxes.title === model.concepts.find((c) => c.id === "a-000070").title &&
+        boxes.bodyVisible &&
+        !boxes.bodyInert &&
+        !boxes.oldFieldVisible &&
+        boxes.overlap.length === 0,
       boxes,
     )
     await shot(page, `${viewport.width}-regression-continuity`)
+    const beforeFold = await page
+      .locator('.topos-unfolding[data-active="true"]')
+      .evaluate((node) => ({
+        math: [...node.querySelectorAll("math")].map((item) => item.outerHTML),
+        proof: [...node.querySelectorAll("[data-proof-status]")].map((item) => item.textContent),
+      }))
+    await page.locator('.topos-unfolding[data-active="true"] [data-fold]').click()
+    await page.waitForFunction(
+      () => document.querySelector("#topos-world")?.dataset.reader === "false",
+    )
+    await settled(page)
+    await searchFocus(
+      page,
+      model.concepts.find((concept) => concept.id === "a-000070"),
+    )
+    await settled(page)
+    const reopened = await page
+      .locator('.topos-unfolding[data-active="true"]')
+      .evaluate((node) => ({
+        inert: node.inert,
+        math: [...node.querySelectorAll("math")].map((item) => item.outerHTML),
+        proof: [...node.querySelectorAll("[data-proof-status]")].map((item) => item.textContent),
+        sourceInteractive: Boolean(
+          node.querySelector(".topos-original-source") && !node.closest("[inert]"),
+        ),
+      }))
+    check(
+      `${viewport.width} folding and reopening restores interactive reading with identical MathML and proof state`,
+      !reopened.inert &&
+        reopened.sourceInteractive &&
+        beforeFold.math.length > 0 &&
+        JSON.stringify(reopened.math) === JSON.stringify(beforeFold.math) &&
+        JSON.stringify(reopened.proof) === JSON.stringify(beforeFold.proof) &&
+        documents.length === 1,
+      { beforeFold, reopened, documents },
+    )
     await page.locator(".topos-unfolding[data-active=true] .topos-original-source").click()
     await readingReady(page)
     await settled(page)

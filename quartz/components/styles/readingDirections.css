@@ -1,0 +1,278 @@
+.topos-reading-directions {
+  --reading-rail-width: 190px;
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  font-family: var(--topos-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  font-size: 12px;
+  color: #4f6269;
+}
+[data-reader="true"] > .topos-reading-directions {
+  display: block;
+}
+.reading-direction-rail {
+  position: absolute;
+  top: 108px;
+  bottom: 104px;
+  width: var(--reading-rail-width);
+  pointer-events: auto;
+  overflow: auto;
+  scrollbar-width: thin;
+  overscroll-behavior: contain;
+}
+.reading-direction-rail[data-reading-direction="incoming"] {
+  left: 20px;
+}
+.reading-direction-rail[data-reading-direction="outgoing"] {
+  right: 20px;
+}
+.reading-direction-rail > summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
+  color: #344d59;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+  padding: 10px 0;
+  border-top: 1px solid #bcc7c8;
+}
+.reading-direction-rail > summary::-webkit-details-marker {
+  display: none;
+}
+.reading-direction-rail > summary small {
+  font-size: 11px;
+  color: #71818a;
+  font-variant-numeric: tabular-nums;
+}
+.reading-direction-caption {
+  font-size: 10px;
+  line-height: 1.65;
+  margin: 0 0 8px;
+  color: #6e7c83;
+}
+.reading-direction-body [data-direction-map] {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  margin: 6px 0 12px;
+}
+.reading-direction-body [data-direction-map] path[data-relation-id] {
+  stroke-width: 1.2;
+  opacity: 0.75;
+}
+.reading-direction-body [data-direction-map] path[data-provenance="structure"] {
+  stroke-dasharray: 3 3;
+}
+.reading-direction-focus {
+  fill: #fbfaf7;
+  stroke: #3b6476;
+  stroke-width: 2;
+}
+.reading-direction-current-label {
+  font-size: 10px;
+  fill: #4f6269;
+}
+.reading-direction-number {
+  font-size: 9px;
+  fill: #fff;
+  font-family: sans-serif;
+  font-weight: 600;
+}
+.reading-direction-list {
+  padding: 0 0 0 21px;
+  margin: 0;
+}
+.reading-direction-list > li {
+  padding: 0 0 12px 2px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #dce1df;
+}
+.reading-direction-list > li::marker {
+  color: #809098;
+  font-size: 11px;
+}
+.reading-direction-title {
+  display: block;
+  font-size: 12px;
+  line-height: 1.65;
+  font-weight: 550;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+  color: #334f61;
+}
+.reading-direction-title:hover {
+  color: #18577c;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.reading-direction-type {
+  display: block;
+  font-size: 10px;
+  line-height: 1.6;
+  color: #758188;
+  margin-top: 4px;
+}
+.reading-direction-label {
+  font-size: 10px;
+  color: #65757b;
+  margin: 4px 0;
+  line-height: 1.7;
+}
+.reading-direction-evidence {
+  font-size: 11px;
+  line-height: 1.65;
+}
+.reading-direction-evidence > summary {
+  cursor: pointer;
+  font-size: 10px;
+  color: #687d8a;
+}
+.reading-direction-evidence > div {
+  border-left: 2px solid var(--relation-color);
+  padding-left: 7px;
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+}
+.reading-direction-evidence strong {
+  font-size: 10px;
+  color: var(--relation-color);
+  font-weight: 600;
+}
+.reading-direction-evidence p {
+  margin: 4px 0;
+}
+.reading-direction-evidence a,
+.reading-direction-footer a {
+  color: #365f78;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+.reading-direction-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3px;
+  padding: 3px 0 12px;
+}
+.reading-direction-pager[hidden] {
+  display: none;
+}
+.reading-direction-pager span {
+  font-size: 10px;
+  white-space: nowrap;
+  color: #71818a;
+}
+.reading-direction-pager button,
+.reading-direction-footer button {
+  font: inherit;
+  color: #365f78;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 5px 2px;
+}
+.reading-direction-pager button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.reading-direction-footer {
+  border-top: 1px solid #d4dcda;
+  padding-top: 6px;
+}
+.reading-direction-footer span {
+  display: block;
+  font-size: 10px;
+  margin-top: 7px;
+  line-height: 1.6;
+}
+.reading-direction-empty {
+  font-size: 12px;
+  line-height: 1.9;
+  color: #77858b;
+  padding: 12px 0;
+}
+.topos-reading-directions :is(a, button, summary):focus-visible {
+  outline: 2px solid #42728c;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+@media (min-width: 901px) and (max-width: 1199px) {
+  .topos-reading-directions {
+    --reading-rail-width: 140px;
+  }
+  .reading-direction-rail[data-reading-direction="incoming"] {
+    left: 12px;
+  }
+  .reading-direction-rail[data-reading-direction="outgoing"] {
+    right: 12px;
+  }
+  .reading-direction-list {
+    padding-left: 17px;
+  }
+  .reading-direction-title {
+    font-size: 11px;
+  }
+  .reading-direction-caption {
+    font-size: 9px;
+  }
+  .reading-direction-pager button {
+    font-size: 10px;
+  }
+}
+@media (max-width: 900px) {
+  .topos-reading-directions {
+    inset: auto 14px 16px;
+    z-index: 15;
+  }
+  [data-reader="true"] > .topos-reading-directions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-items: end;
+  }
+  .reading-direction-rail {
+    position: static;
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
+    max-height: min(50dvh, 390px);
+    background: #f4f5f1;
+    border: 1px solid #d4dddb;
+    border-radius: 8px;
+    box-shadow: 0 4px 18px #283c4509;
+  }
+  .reading-direction-rail > summary {
+    border: 0;
+    padding: 12px 10px;
+    font-size: 12px;
+  }
+  .reading-direction-rail > summary::after {
+    content: "+";
+    font-weight: 400;
+    color: #819096;
+  }
+  .reading-direction-rail[open] > summary::after {
+    content: "−";
+  }
+  .reading-direction-rail > summary small {
+    margin-left: auto;
+  }
+  .reading-direction-body {
+    padding: 0 10px 12px;
+  }
+  .reading-direction-caption {
+    font-size: 9px;
+  }
+  .reading-direction-title {
+    font-size: 11px;
+  }
+  .reading-direction-pager button {
+    font-size: 10px;
+  }
+}

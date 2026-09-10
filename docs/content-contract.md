@@ -1,5 +1,9 @@
 # Content contract
 
+## Complete maps and reading directions
+
+Global-map nodes are exactly the unique union returned by the existing theme model; edges are exactly source model relations with both endpoints in that union. Overview pagination never filters this graph. Reading mini maps keep actual incoming/outgoing endpoints, parallel relation identities, types and evidence, including explicitly marked destinations outside the selected themes. No title, ordering, layout attraction or absence of an edge becomes a new mathematical assertion. Both views open the same rendered reading source and use the same canonical object links.
+
 ## Themes and audited title data
 
 `knowledge/topos/note-topics.json` assigns explicit public note IDs to editorial navigation themes. Atoms inherit every original occurrence; unknown future notes remain in Other. Runtime classification does not guess from folders or keywords. No theme change rewrites the Vault or expands publication permission.

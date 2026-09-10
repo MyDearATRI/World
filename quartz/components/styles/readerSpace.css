@@ -1,0 +1,205 @@
+/* Reading owns the full surface. The field is preserved, but does no background work. */
+body[data-reader="true"] #topos-world {
+  margin-left: 0;
+  width: 100%;
+  --reading-rail-width: 190px;
+  --reading-inset: calc(var(--reading-rail-width) + 28px);
+  --reading-top: 130px;
+  --reading-bottom: 18px;
+}
+#topos-world[data-reader="true"] > :is(#topos-canvas, .topos-flat-canvas) {
+  visibility: hidden;
+  pointer-events: none;
+}
+#topos-world[data-reader="true"]
+  > :is(
+    #topos-labels,
+    #topos-communities,
+    #topos-relations,
+    .topos-annotation-leaders,
+    .topos-guide,
+    .topos-instruments,
+    .topos-relation-detail,
+    .topos-status,
+    .topos-identity
+  ) {
+  display: none;
+}
+.topos-reader-heading {
+  position: absolute;
+  left: var(--reading-inset);
+  right: var(--reading-inset);
+  top: 23px;
+  z-index: 10;
+  pointer-events: none;
+}
+.topos-reader-heading[hidden] {
+  display: none;
+}
+.topos-reader-type {
+  font: 11px/1.6 var(--sans);
+  color: #53727c;
+  letter-spacing: 0.1em;
+}
+.topos-reader-title {
+  margin: 7px 0 0;
+  font: 550 clamp(23px, 2.3vw, 33px)/1.35 var(--serif);
+  letter-spacing: -0.025em;
+  max-height: 2.7em;
+  overflow-y: auto;
+  pointer-events: auto;
+}
+#topos-world[data-reader="true"] .topos-unfolding {
+  display: none;
+}
+#topos-world[data-reader="true"] .topos-unfolding[data-active="true"] {
+  display: block;
+  left: var(--reading-inset) !important;
+  right: var(--reading-inset) !important;
+  top: var(--reading-top) !important;
+  bottom: var(--reading-bottom) !important;
+  width: auto !important;
+  max-width: none !important;
+  height: auto !important;
+  max-height: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  padding: 24px max(28px, calc((100% - 2 * var(--reading-inset) - 760px) / 2)) 48px;
+  border: 1px solid #d5dcd6;
+  border-radius: 4px;
+  background: #fdfcf8;
+  box-shadow: 0 4px 20px #283e4407;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+  transition: none;
+}
+#topos-world[data-reader="true"] .topos-utility {
+  top: 20px;
+  right: 16px;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  max-width: 194px;
+}
+body[data-reader="true"] .topos-topics-trigger {
+  display: block;
+  top: 24px;
+  left: 18px;
+}
+body[data-reader="true"] .topos-topic-sidebar:modal {
+  width: min(340px, 88vw);
+}
+.topos-topic-sidebar::backdrop {
+  background: #253c4655;
+}
+.topos-utility .topos-global-map-trigger {
+  width: auto;
+  min-width: 84px;
+  padding: 0 12px;
+  border: 1px solid #bfcfce;
+  border-radius: 4px;
+  font: 12px var(--sans);
+  white-space: nowrap;
+  background: #fafbf7;
+}
+.topos-global-map-trigger[hidden] {
+  display: none;
+}
+.topos-utility .topos-overview-trigger {
+  font: 12px var(--sans);
+}
+@media (min-width: 901px) and (max-width: 1199px) {
+  body[data-reader="true"] #topos-world {
+    --reading-rail-width: 140px;
+    --reading-inset: 164px;
+  }
+  #topos-world[data-reader="true"] .topos-utility {
+    max-width: 148px;
+  }
+  #topos-world[data-reader="true"] .topos-utility button {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    font-size: 16px;
+  }
+  #topos-world[data-reader="true"]
+    .topos-utility
+    :is(.topos-global-map-trigger, .topos-overview-trigger) {
+    width: auto;
+    min-width: 76px;
+    padding: 0 8px;
+    font: 11px var(--sans);
+  }
+  #topos-world[data-reader="true"] .topos-utility .topos-search-trigger {
+    width: 30px;
+    font-size: 0;
+  }
+  #topos-world[data-reader="true"] .topos-search-trigger::after {
+    content: "⌕";
+    font-size: 19px;
+  }
+  #topos-world[data-reader="true"] .topos-unfolding[data-active="true"] {
+    padding-inline: 24px;
+  }
+}
+@media (max-width: 900px) {
+  body[data-reader="true"] #topos-world {
+    --reading-inset: 14px;
+    --reading-top: 126px;
+    --reading-bottom: 76px;
+  }
+  .topos-reader-heading {
+    top: 62px;
+  }
+  .topos-reader-type {
+    display: none;
+  }
+  .topos-reader-title {
+    font-size: 23px;
+    margin: 0;
+  }
+  #topos-world[data-reader="true"] .topos-unfolding[data-active="true"] {
+    padding: 17px 20px 36px;
+  }
+  #topos-world[data-reader="true"] .topos-utility {
+    top: 15px;
+    right: 14px;
+    max-width: calc(100% - 94px);
+    flex-wrap: nowrap;
+  }
+  body[data-reader="true"] .topos-topics-trigger {
+    top: 15px;
+    left: 14px;
+  }
+  .has-topic-sidebar .topos-utility .topos-global-map-trigger {
+    width: auto;
+    min-width: 66px;
+    padding: 0 7px;
+    font-size: 11px;
+  }
+  #topos-world[data-reader="true"] .topos-prose {
+    font-size: 17px;
+  }
+}
+@media (max-width: 480px) {
+  body[data-reader="true"] #topos-world {
+    --reading-inset: 10px;
+  }
+  #topos-world[data-reader="true"] .topos-unfolding[data-active="true"] {
+    padding-inline: 15px;
+  }
+  .has-topic-sidebar #topos-world[data-overview="true"] .topos-identity {
+    top: 56px;
+    left: 14px;
+    right: 14px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .has-topic-sidebar #topos-world[data-overview="true"] .topos-identity small {
+    max-width: none;
+    margin: 0;
+  }
+}

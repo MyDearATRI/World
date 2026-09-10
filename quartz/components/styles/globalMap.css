@@ -1,0 +1,315 @@
+.global-map {
+  width: min(1500px, calc(100vw - 48px));
+  max-width: none;
+  height: min(1000px, calc(100svh - 48px));
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  color: #263d48;
+  background: #f7f8f5;
+  border: 1px solid #cdd9dc;
+  border-radius: 12px;
+  box-shadow: 0 22px 80px #122b3629;
+  font-family: system-ui, "Noto Sans SC", sans-serif;
+}
+.global-map[open] {
+  display: flex;
+  flex-direction: column;
+}
+.global-map::backdrop {
+  background: #23374170;
+}
+.global-map button,
+.global-map select {
+  font: inherit;
+  color: inherit;
+  background: #fffdf9;
+  border: 1px solid #c5d1d4;
+  border-radius: 5px;
+  padding: 7px 11px;
+  cursor: pointer;
+}
+.global-map :focus-visible {
+  outline: 2px solid #327c98;
+  outline-offset: 3px;
+}
+.global-map-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 22px 9px;
+}
+.global-map-header h2 {
+  font-size: 21px;
+  margin: 0;
+  font-weight: 600;
+}
+.global-map-header p {
+  margin: 0;
+  font-size: 12px;
+  color: #64747b;
+}
+.global-map-header button {
+  margin-left: auto;
+}
+.global-map-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 22px 13px;
+  border-bottom: 1px solid #dde3e2;
+}
+.global-map-controls label {
+  margin-left: auto;
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  font-size: 12px;
+}
+.global-map-controls select {
+  width: min(340px, 33vw);
+  text-overflow: ellipsis;
+}
+.global-map-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 265px;
+  flex: 1;
+  min-height: 0;
+}
+.global-map-stage {
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+  background: #f4f7f5;
+  cursor: grab;
+}
+.global-map-stage.is-grabbing {
+  cursor: grabbing;
+}
+.global-map-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+}
+.global-map-canvas > g > g:first-child rect {
+  fill: #edf3f12e;
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+  stroke-opacity: 0.35;
+}
+.global-map-canvas > g > g:first-child text {
+  font-weight: 600;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: #f4f7f5;
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.global-map-edge {
+  fill: none;
+  stroke: #8ba2ab;
+  stroke-width: 0.7px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+.global-map-edge[data-provenance="structure"] {
+  stroke-dasharray: 4 4;
+}
+.global-map-edge.is-active {
+  stroke: #467c93;
+  stroke-width: 1.4px;
+  opacity: 0.85;
+}
+.global-map-edge.is-dim {
+  opacity: 0.08;
+}
+.global-map-node {
+  cursor: pointer;
+  outline: none;
+}
+.global-map-hit {
+  fill: transparent;
+}
+.global-map-dot {
+  fill: #f8fbf7;
+  stroke: var(--map-node-color, #52798b);
+  stroke-width: 1.5;
+}
+.global-map-node text {
+  fill: #405761;
+  font-family: system-ui, "Noto Sans SC", sans-serif;
+  paint-order: stroke;
+  stroke: #f4f7f5;
+  stroke-width: 4px;
+  stroke-linejoin: round;
+  visibility: hidden;
+  pointer-events: visiblePainted;
+}
+.global-map-node.has-label text {
+  visibility: visible;
+}
+.global-map-node.is-active text,
+.global-map-node:focus-visible text {
+  fill: #143f55;
+  font-weight: 600;
+  visibility: visible;
+}
+.global-map-node.is-active .global-map-dot,
+.global-map-node:focus-visible .global-map-dot {
+  fill: var(--map-node-color, #52798b);
+  stroke: #24495b;
+  stroke-width: 2.5;
+}
+.global-map-node.is-related .global-map-dot {
+  stroke-width: 2;
+}
+.global-map-node.is-dim .global-map-dot {
+  opacity: 0.43;
+}
+.global-map-node.is-dim text {
+  opacity: 0.48;
+}
+.global-map-inspector {
+  overflow: auto;
+  padding: 16px 19px;
+  border-left: 1px solid #dde3e2;
+  background: #fffdf9;
+  overflow-wrap: anywhere;
+}
+.global-map-inspector h3 {
+  margin: 6px 0 12px;
+  font-size: 19px;
+  line-height: 1.45;
+  font-weight: 550;
+}
+.global-map-inspector p {
+  font-size: 12px;
+  line-height: 1.65;
+  color: #6a7a80;
+}
+.global-map-inspector .global-map-kind {
+  color: #3e7b93;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+.global-map-inspector a {
+  color: #356f89;
+  text-decoration-thickness: 0.6px;
+  text-underline-offset: 3px;
+  font-size: 13px;
+}
+.global-map-read {
+  display: inline-block;
+  margin: 2px 15px 8px 0;
+}
+.global-map-inspector h4 {
+  margin: 24px 0 11px;
+  font-size: 12px;
+  font-weight: 550;
+}
+.global-map-inspector ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.global-map-inspector li {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 0;
+  border-top: 1px solid #edf0ed;
+}
+.global-map-inspector li span,
+.global-map-inspector li small,
+.global-map-inspector a.global-map-evidence {
+  font-size: 10px;
+  line-height: 1.6;
+  color: #718187;
+}
+.global-map-hint,
+.global-map-provenance {
+  margin: 0;
+  font-size: 11px;
+  color: #718187;
+  padding: 9px 22px 0;
+}
+.global-map-provenance {
+  padding: 5px 22px 12px;
+  font-size: 10px;
+}
+.global-map-empty {
+  position: absolute;
+  inset: 40% 15% auto;
+  text-align: center;
+  color: #677c87;
+  line-height: 1.8;
+}
+@media (max-width: 720px) {
+  .global-map {
+    width: 100vw;
+    height: 100svh;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  .global-map-header {
+    padding: 13px 13px 7px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .global-map-header h2 {
+    font-size: 18px;
+  }
+  .global-map-header p {
+    font-size: 10px;
+  }
+  .global-map-header button {
+    padding: 7px 8px;
+    font-size: 12px;
+  }
+  .global-map-controls {
+    padding: 6px 12px 10px;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .global-map-controls label {
+    width: 100%;
+    margin-left: 0;
+  }
+  .global-map-controls select {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+  }
+  .global-map-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(220px, 1fr) 140px;
+  }
+  .global-map-inspector {
+    padding: 10px 15px;
+    border-left: 0;
+    border-top: 1px solid #dde3e2;
+  }
+  .global-map-inspector h3 {
+    font-size: 16px;
+    margin: 4px 0 7px;
+  }
+  .global-map-inspector h4 {
+    margin-top: 12px;
+  }
+  .global-map-inspector p {
+    margin: 5px 0;
+  }
+  .global-map-hint,
+  .global-map-provenance {
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 9px;
+  }
+}

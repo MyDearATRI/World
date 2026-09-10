@@ -1,5 +1,13 @@
 # Design specification
 
+## Full reading surface and directional context
+
+For published notes and audited Atlas titles, opening an object replaces the full field with a stationary reading surface. Keep only its title/type above the source body. At 1440px the central surface is roughly 1000px wide with a 760px inner prose column and 190px directional rails; at 1024px the rails narrow to 140px and the reading surface remains about 696px. At 900px and below, directions become two collapsed bottom disclosures and reading uses the available single column. The theme selector remains accessible as a drawer. No full field, horizon points or automatic motion stays behind the body.
+
+Left and right mini maps show actual incoming and outgoing relationships, with visible names, original edge types and evidence. Structural inclusion is not a prerequisite. Pagination keeps crowded neighborhoods readable without deleting destinations. The top-right global-map button is available from both the named overview and reading. Its separate large SVG view contains all unique objects and all real edges inside the selected theme union, irrespective of overview pagination. Labels use zoom/selection for density; controls preserve accessible destinations even at a distant zoom. Native modifier links remain native.
+
+Dragging, pan and zoom respond to input without continuing decorative animation. Opening/closing maps and navigating reader objects use the same browser history, with retained source scroll, entry focus and map camera. The Group demo retains its separate exploratory field; these new rules supersede the earlier always-visible field only for real-content and Atlas reading.
+
 ## Stable named exploration
 
 Topic selection opens a named spatial index in the existing world. Use fine colored node marks and full titles, compact type labels and real relationship counts, with restrained separation rather than thick cards. Bound the number of simultaneous labels with explicit pages and filters; show the total and current range. Query, page and clicked identity belong to navigation history. Relations are disclosed on deliberate hover or keyboard focus, with a readable list for cross-page links and sources. Never infer mathematics from spatial arrangement.

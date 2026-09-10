@@ -3,15 +3,19 @@ import { createField, type FieldSnapshot } from "../../../util/topos/field"
 import { topicContext as deriveContext, topicIDs } from "../../../util/topos/topics"
 import { createTopicSidebar } from "./sidebar"
 import { createTopicOverview } from "./overview"
+import { createGlobalMap } from "./globalMap"
+import { createReadingDirections } from "./readingDirections"
 import { computeAnnotations, type AnnotationPlacement } from "../../../util/topos/annotations"
 import type { Concept, KnowledgeModel, Lens, Section, ViewState } from "../../../util/topos/types"
 import "../../styles/topos.css"
+import "../../styles/readerSpace.css"
 
 type Saved = {
   view: ViewState
   field: FieldSnapshot
   camera: CameraState
   readingScroll?: Record<string, number>
+  directionFocus?: string
   modelSignature?: string
 }
 const $ = <T extends HTMLElement = HTMLElement>(selector: string) =>
@@ -161,6 +165,7 @@ async function start() {
   }
   let state: ViewState = fromHash(),
     context = deriveContext(model, state)
+  const initialGlobalMap = new URLSearchParams(location.hash.slice(1)).get("map") === "global"
   const field = createField(model, context),
     renderer = createRenderer(canvas, model)
   const fieldNodes = new Map(field.nodes.map((node) => [node.id, node]))
@@ -297,6 +302,7 @@ async function start() {
   let historyTimer: ReturnType<typeof setTimeout> | undefined
   const readingScroll = new Map<string, number>(Object.entries(saved?.readingScroll ?? {}))
   const restoringScroll = new Set<string>()
+  const scrollRestores = new Map<string, AbortController>()
   let pendingAnchor: { concept: string; anchor: string } | undefined
   const empty = element("section", "topos-topics-empty")
   empty.append(
@@ -326,7 +332,7 @@ async function start() {
     focus(id) {
       focus(id)
       zoom(2.1)
-      labelNodes.get(id)?.focus({ preventScroll: true })
+      focusReading()
     },
   })
   const overview = createTopicOverview(model, {
@@ -336,11 +342,11 @@ async function start() {
     open(id) {
       focus(id)
       zoom(2.1)
-      labelNodes.get(id)?.focus({ preventScroll: true })
+      focusReading()
     },
     close() {
       commit({ ...state, overview: undefined })
-      labelNodes.get(state.focus)?.focus({ preventScroll: true })
+      focusReading()
     },
   })
   world.append(overview.element)
@@ -352,6 +358,64 @@ async function start() {
   )
   $(".topos-utility").prepend(overviewButton)
   overviewButton.hidden = !published
+  const isReading = () => published && !state.overview && state.scale >= 1.7
+  const readerHeading = element("header", "topos-reader-heading")
+  const readerType = element("span", "topos-reader-type")
+  const readerTitle = element("h1", "topos-reader-title")
+  readerTitle.tabIndex = -1
+  readerHeading.append(readerType, readerTitle)
+  world.append(readerHeading)
+  const focusReading = () => {
+    if (isReading()) readerTitle.focus({ preventScroll: true })
+    else labelNodes.get(state.focus)?.focus({ preventScroll: true })
+  }
+  const openReading = (id: string) => {
+    if (history.state?.toposGlobalMap && id === state.focus && !state.overview)
+      commit({ ...state, scale: 2.1 }, true)
+    else focus(id)
+    zoom(2.1)
+    focusReading()
+  }
+  const directions = createReadingDirections(model, {
+    open: openReading,
+    overview() {
+      commit({ ...state, overview: { page: 0, query: "", kind: "all" } })
+      overview.focus(state.focus)
+    },
+  })
+  world.append(directions.element)
+  let mapDismissPending = false
+  const globalMap = createGlobalMap(model, {
+    open: openReading,
+    onClose(reason) {
+      // Navigating leaves the map as a real Back destination with its saved camera.
+      if (reason !== "dismiss" || !history.state?.toposGlobalMap) return
+      if (history.state.toposMapCanBack) {
+        mapDismissPending = true
+        history.back()
+      } else {
+        history.replaceState({ ...history.state, toposGlobalMap: false }, "")
+        remember()
+        wake()
+      }
+    },
+  })
+  document.body.append(globalMap.element)
+  const globalMapButton = element("button", "topos-global-map-trigger", "全局地图")
+  globalMapButton.type = "button"
+  globalMapButton.dataset.openGlobalMap = "true"
+  globalMapButton.setAttribute("aria-haspopup", "dialog")
+  globalMapButton.addEventListener("click", () => {
+    remember()
+    history.pushState(
+      { topos: serialize(), toposCanBack: true, toposGlobalMap: true, toposMapCanBack: true },
+      "",
+      `${hash()}&map=global`,
+    )
+    globalMap.show(state.topics, state.focus, globalMapButton)
+  })
+  $(".topos-utility").prepend(globalMapButton)
+  globalMapButton.hidden = !published
   let visibilityContext: typeof context | undefined
   let visibleIDs: Set<string> | undefined
   const isVisible = (id: string) => {
@@ -380,13 +444,16 @@ async function start() {
       modelStats: model.stats,
       topics: state.topics,
       overview: state.overview ? overview.snapshot() : undefined,
-      presentedIDs: state.overview ? [] : [...presentedIDs],
+      reader: isReading(),
+      readingDirections: isReading() ? directions.snapshot() : undefined,
+      globalMap: globalMap.snapshot(),
+      presentedIDs: state.overview || isReading() ? [] : [...presentedIDs],
       visibleIDs: context.visibleIDs ?? model.concepts.map((n) => n.id),
       camera: { ...renderer.view },
       modelSignature,
       nodes: field.nodes.map((n) => ({
         ...n,
-        ...(state.overview
+        ...(state.overview || isReading()
           ? { opacity: 0, radius: 0, major: false }
           : renderer.appearance(n, context)),
         screenX: renderer.project(n).x + bounds.left,
@@ -412,17 +479,26 @@ async function start() {
     const reading = unfoldings.get(state.focus)
     if (
       reading &&
+      !state.overview &&
       reading.dataset.active === "true" &&
       !restoringScroll.has(state.focus) &&
+      reading.getClientRects().length > 0 &&
       reading.querySelector(".topos-section .topos-prose")
     )
       readingScroll.set(state.focus, reading.scrollTop)
+    const active = document.activeElement
+    const directionFocus =
+      active instanceof Element && directions.element.contains(active)
+        ? active.closest<HTMLElement | SVGElement>("[data-direction-target]")?.dataset
+            .directionTarget
+        : undefined
     return {
       view: structuredClone(state),
       field: field.snapshot(),
       camera: { ...renderer.view },
       modelSignature,
       readingScroll: Object.fromEntries(readingScroll),
+      directionFocus,
     }
   }
   function hash() {
@@ -440,6 +516,7 @@ async function start() {
       if (state.overview.kind !== "all") params.set("kind", state.overview.kind)
       if (state.overview.anchor) params.set("entry", state.overview.anchor)
     }
+    if (history.state?.toposGlobalMap) params.set("map", "global")
     return `#${params}`
   }
   function remember() {
@@ -469,7 +546,10 @@ async function start() {
     state = next
     context = deriveContext(model, state)
     field.setContext(context)
-    if (push) history.pushState({ topos: serialize(), toposCanBack: true }, "", hash())
+    if (push) {
+      history.pushState({ topos: serialize(), toposCanBack: true }, "")
+      history.replaceState(history.state, "", hash())
+    }
     update()
     wake()
   }
@@ -911,6 +991,7 @@ async function start() {
   function updateContent() {
     const version = [
       state.focus,
+      Boolean(state.overview),
       state.scale >= 1.7,
       state.scale >= 2,
       state.scale >= 2.7,
@@ -918,10 +999,15 @@ async function start() {
     ].join("/")
     if (version === contentVersion) return
     contentVersion = version
+    for (const restore of scrollRestores.values()) restore.abort()
+    scrollRestores.clear()
+    restoringScroll.clear()
     for (const [id, root] of unfoldings) {
       root.dataset.active = String(id === state.focus)
       root.dataset.memory = String(id === context.previous)
+      root.inert = id !== state.focus
     }
+    if (state.overview) return
     const concept = concepts.get(state.focus)!
     const formal = preferredSection(concept, 2)
     if (state.scale < 1.7 && !state.unfolded.some((u) => u.concept === concept.id)) {
@@ -940,6 +1026,7 @@ async function start() {
     restoringScroll.add(concept.id)
     root.dataset.active = "true"
     root.dataset.memory = "false"
+    root.inert = false
     const oldFocus =
       document.activeElement instanceof HTMLElement
         ? document.activeElement.dataset.openSection
@@ -1126,24 +1213,62 @@ async function start() {
     root.onscroll = () => {
       if (
         state.focus !== concept.id ||
+        state.overview ||
         root!.dataset.active !== "true" ||
         restoringScroll.has(concept.id) ||
+        !root!.getClientRects().length ||
         !root!.querySelector(".topos-section .topos-prose")
       )
         return
       readingScroll.set(concept.id, root!.scrollTop)
       laterRemember()
     }
-    if (root.querySelector(".topos-section .topos-prose"))
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => {
-          if (state.focus !== concept.id || root!.dataset.active !== "true") return
-          root!.scrollTo({ top: previousScroll, behavior: "instant" })
-          restoringScroll.delete(concept.id)
-          readingScroll.set(concept.id, root!.scrollTop)
-          applyPendingAnchor()
-        }),
+    if (root.querySelector(".topos-section .topos-prose")) {
+      const restore = new AbortController()
+      scrollRestores.set(concept.id, restore)
+      const release = () => {
+        restore.abort()
+        scrollRestores.delete(concept.id)
+        restoringScroll.delete(concept.id)
+        readingScroll.set(concept.id, root!.scrollTop)
+      }
+      const cancel = () => {
+        release()
+        if (pendingAnchor?.concept === concept.id) pendingAnchor = undefined
+        laterRemember()
+      }
+      for (const type of ["wheel", "touchstart", "pointerdown"])
+        root.addEventListener(type, cancel, { passive: true, signal: restore.signal })
+      root.addEventListener("click", cancel, { capture: true, signal: restore.signal })
+      root.addEventListener(
+        "keydown",
+        (event) => {
+          if (
+            ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)
+          )
+            cancel()
+        },
+        { signal: restore.signal },
       )
+      // Newly inserted prose can request additional font subsets. Restore only
+      // after its layout settles, unless the reader has already taken control.
+      requestAnimationFrame(async () => {
+        void root!.offsetHeight
+        await document.fonts.ready
+        requestAnimationFrame(() => {
+          if (
+            restore.signal.aborted ||
+            scrollRestores.get(concept.id) !== restore ||
+            state.focus !== concept.id ||
+            root!.dataset.active !== "true"
+          )
+            return
+          root!.scrollTo({ top: previousScroll, behavior: "instant" })
+          release()
+          applyPendingAnchor()
+        })
+      })
+    }
     if (oldFocus)
       root
         .querySelector<HTMLElement>(`[data-open-section="${CSS.escape(oldFocus)}"]`)
@@ -1206,12 +1331,23 @@ async function start() {
     }
   })
   function update() {
+    const reading = isReading()
+    world.dataset.reader = String(reading)
+    document.body.dataset.reader = String(reading)
+    sidebar?.setCompact(reading)
     sidebar?.update(state.topics, state.focus)
+    readerHeading.hidden = !reading
+    if (reading) {
+      const concept = concepts.get(state.focus)!
+      readerTitle.textContent = concept.title
+      readerType.textContent = typeLabel(concept)
+      directions.update(state.focus, state.topics, state.trail)
+    }
     world.dataset.overview = String(Boolean(state.overview))
     overview.element.hidden = !state.overview
     overview.update(state.topics, state.overview)
     overviewButton.hidden = !published || Boolean(state.overview)
-    resetLayout.hidden = Boolean(state.overview)
+    resetLayout.hidden = Boolean(state.overview) || reading
     empty.hidden = !context.visibleIDs || context.visibleIDs.length > 0
     const nextLayout = [
       state.focus,
@@ -1742,7 +1878,7 @@ async function start() {
     last = now
     if (document.hidden) return
     inFrame = true
-    if (state.overview) {
+    if (state.overview || isReading() || globalMap.element.open) {
       pendingScale = undefined
       frame++
       inFrame = false
@@ -1830,7 +1966,7 @@ async function start() {
       .sort((a, b) => b.n.relevance - a.n.relevance)[0]?.n.id
   }
   function down(e: PointerEvent) {
-    if (state.overview) return
+    if (state.overview || isReading()) return
     if (e.button > 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return
     const target = e.target as HTMLElement
     if (
@@ -1937,7 +2073,7 @@ async function start() {
   world.addEventListener(
     "wheel",
     (e) => {
-      if (state.overview) return
+      if (state.overview || isReading()) return
       if (
         (e.target as HTMLElement).closest(
           ".topos-unfolding,.topos-help,.topos-relation-detail,.topos-search",
@@ -1996,7 +2132,7 @@ async function start() {
   })
   document.addEventListener("keydown", (e) => {
     // Modal navigation owns its keys; Escape must not fold the reading underneath.
-    if (document.querySelector(".topos-topic-sidebar:modal")) return
+    if (globalMap.element.open || document.querySelector(".topos-topic-sidebar:modal")) return
     if (published && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
       e.preventDefault()
       if (search.open) search.close()
@@ -2045,6 +2181,9 @@ async function start() {
     }
   })
   window.addEventListener("popstate", (e) => {
+    const mapWasOpen = globalMap.element.open || mapDismissPending
+    mapDismissPending = false
+    if (!e.state?.toposGlobalMap && mapWasOpen) globalMap.hide("history")
     pendingScale = undefined
     pendingAnchor = undefined
     const s = e.state?.topos as Saved | undefined
@@ -2061,8 +2200,12 @@ async function start() {
     contentVersion = ""
     update()
     wake()
-    if (state.overview) overview.focus(state.overview.anchor ?? state.focus)
-    else labelNodes.get(state.focus)?.focus({ preventScroll: true })
+    if (e.state?.toposGlobalMap) globalMap.show(state.topics, state.focus, globalMapButton)
+    else if (mapWasOpen) globalMapButton.focus({ preventScroll: true })
+    else if (state.overview) overview.focus(state.overview.anchor ?? state.focus)
+    else if (s?.directionFocus && directions.focus(s.directionFocus)) {
+      /* Restore the actual direction entrance. */
+    } else focusReading()
   })
   window.addEventListener("pagehide", remember)
   document.addEventListener("visibilitychange", () => {
@@ -2138,6 +2281,10 @@ async function start() {
   world.dataset.renderer = renderer.backend
   status.hidden = true
   update()
+  if (published && (initialGlobalMap || history.state?.toposGlobalMap)) {
+    history.replaceState({ ...history.state, toposGlobalMap: true }, "")
+    globalMap.show(state.topics, state.focus, globalMapButton)
+  }
   remember()
   wake()
 }

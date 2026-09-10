@@ -1,5 +1,11 @@
 # Website acceptance
 
+## Reading surface and complete selected graph
+
+Run `npm run test:reading-space` after the production build. Verify published notes and Atlas at 1440×1000, 1024×900 and 390×844: the stationary reading surface uses the main width/height; the full map, labels and controls do not remain behind it; the selected title stays visible. Source prose, proof state, MathML and local formula scrolling remain unchanged. Check actual incoming/outgoing mini-map edges and accessible destinations, pagination and mobile disclosures.
+
+From both overview and reading, the top-right global-map action must show every unique ID and every actual in-scope relation from the checked theme union, independently of overview pagination. Exercise node dragging without navigation, blank panning, wheel/two-finger zoom, fit, click/Enter to the same reader, native modifier opening, empty selection and all themes. Verify Back/Forward, refresh, original reader scroll, entry focus, remembered map positions/camera, reduced motion and fallback. The full map can use SVG; do not describe that view as a newly implemented 3D renderer. Inspect actual screenshots and preserve failed candidates separately.
+
 ## Stable knowledge positioning and immediate naming
 
 The current task is complete only when a reader can select a theme, immediately identify the displayed objects by full title/type, find every in-scope identity through explicit pages or query, inspect actual directional/evidenced relationships, and enter the unchanged mathematical reader. Verify selected themes form a unique union and every page entry has a real identity. Check no overlap, title clipping, anonymous visible points or decorative horizon remain; total counts must not confuse the current page with the full collection.

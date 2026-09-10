@@ -1,5 +1,13 @@
 # Project brief
 
+## Large reading space and optional global map
+
+Opening a published object gives reading the main surface, without a full graph behind it. Its title remains the context; the theme selector becomes a drawer and small directional maps preserve readable incoming and outgoing destinations on the sides. Mobile keeps these directions in two explicit disclosures below the reading surface. Mathematical content still comes from the identical rendered source tree.
+
+The named, filterable overview remains the default. A top-right global-map action additionally exposes the union of all objects in the checked themes, with real directed relations, node dragging, panning, zoom and fit. It is not limited to the overview page or the focused neighborhood. Both entrances share the existing reader and canonical URLs. Map coordinates and camera are presentation state; neither position nor proximity creates a mathematical claim.
+
+This follow-up uses only the existing approved snapshot. The dormant field stops calculating and drawing while reading or the separate map is open. Current verification is recorded independently of previous motion and Phase 0/1 evidence.
+
 ## Stable topic exploration
 
 Selecting a major theme must immediately disclose named knowledge objects without an unlabelled cloud. A stable spatial overview uses actual titles and object types, theme-union counts, query/type filtering and explicit pages. Every approved identity stays accessible. Activating an object enters the same mathematical reader; actual relationships remain inspectable, including off-page destinations. Focused views show only named context instead of anonymous decorative horizon points.

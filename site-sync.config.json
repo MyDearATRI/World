@@ -1,6 +1,16 @@
 {
   "version": 1,
   "newFiles": [
+    "quartz/components/scripts/topos/globalMap.ts",
+    "quartz/components/styles/globalMap.css",
+    "quartz/util/topos/globalMap.ts",
+    "quartz/util/topos/globalMap.test.ts",
+    "quartz/components/scripts/topos/readingDirections.ts",
+    "quartz/components/styles/readingDirections.css",
+    "quartz/util/topos/readingDirections.ts",
+    "quartz/util/topos/readingDirections.test.ts",
+    "quartz/components/styles/readerSpace.css",
+    "scripts/verify-reading-space.mjs",
     "quartz/components/scripts/topos/overview.ts",
     "quartz/components/styles/overview.css",
     "quartz/util/topos/topicOverview.ts",

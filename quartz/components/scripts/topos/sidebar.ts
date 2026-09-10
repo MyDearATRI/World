@@ -10,6 +10,8 @@ export function createTopicSidebar(
 ) {
   if (!model.topics?.length) return undefined
   const mobile = matchMedia("(max-width: 760px)")
+  let compact = false
+  const isDrawer = () => mobile.matches || compact
   const dialog = document.createElement("dialog")
   dialog.className = "topos-topic-sidebar"
   dialog.id = "topos-topics"
@@ -122,7 +124,7 @@ export function createTopicSidebar(
       link.addEventListener("click", (event) => {
         if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
         event.preventDefault()
-        if (mobile.matches) {
+        if (isDrawer()) {
           navigating = true
           dialog.close()
         }
@@ -143,7 +145,7 @@ export function createTopicSidebar(
   })
   close.addEventListener("click", () => dialog.close())
   dialog.addEventListener("cancel", (event) => {
-    if (!mobile.matches) event.preventDefault()
+    if (!isDrawer()) event.preventDefault()
   })
   dialog.addEventListener("keydown", (event) => {
     if (!dialog.matches(":modal") || event.key !== "Tab") return
@@ -169,17 +171,29 @@ export function createTopicSidebar(
   })
   dialog.addEventListener("close", () => {
     open.setAttribute("aria-expanded", "false")
-    if (mobile.matches && !navigating) open.focus()
+    if (isDrawer() && !navigating) open.focus()
   })
   function resize() {
     if (dialog.open) dialog.close()
-    if (!mobile.matches) dialog.show()
-    close.hidden = !mobile.matches
-    open.hidden = !mobile.matches
+    if (!isDrawer()) dialog.show()
+    close.hidden = !isDrawer()
+    open.hidden = !isDrawer()
   }
   resize()
   mobile.addEventListener("change", resize)
   return {
+    setCompact(value: boolean) {
+      if (compact === value) return
+      const wasDrawer = isDrawer()
+      compact = value
+      dialog.dataset.compact = String(value)
+      // Mobile stays a drawer while selecting several themes, even as the
+      // underlying reading changes to the overview.
+      if (wasDrawer === isDrawer()) return
+      // Switching layouts must not steal focus from the object being opened.
+      navigating = true
+      resize()
+    },
     update(selection: string[] | undefined, focus: string) {
       if (
         focus === focused &&
