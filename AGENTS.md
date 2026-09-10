@@ -1,5 +1,14 @@
 # Website implementation rules
 
+## More expressive finite motion
+
+The latest request adds visible movement to intentional interactions: smooth
+camera focus/fit/button zoom, short node arrivals, and elastic direct-neighbor
+response to dragging. Keep direct pointer, wheel and pinch input immediate;
+interrupt camera travel at the currently visible pose. Reading and history retain
+their real source, scroll and camera. Motion must finish, respect reduced motion,
+and stop entirely when the map is hidden. The continuous unboxed field remains.
+
 ## Continuous map without theme enclosures
 
 The user's latest correction removes enclosed topic regions: the map is one

@@ -581,6 +581,10 @@ async function start() {
   function commit(next: ViewState, push = true, mapTransition = false) {
     pendingScale = undefined
     remember()
+    // Save the real reading scroll before suspending its layout. The sidebar's
+    // dialog.show() can synchronously measure the page during update(), so put
+    // the outgoing reader to sleep before switching sidebar and map geometry.
+    if (mapTransition) world.dataset.map = "true"
     state = next
     context = deriveContext(model, state)
     if (!mapTransition) field.setContext(context)

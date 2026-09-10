@@ -1,5 +1,15 @@
 # Design specification
 
+## Motion attached to interaction
+
+Focus, theme location, fit and button zoom travel for 360ms with a decelerating
+camera path. Drag, wheel, pinch, resize and departure interrupt at the current
+visible pose. Newly visible node marks arrive in a short stagger; selected marks
+give one pulse, while name hit areas and mathematical coordinates stay intact.
+Directly linked neighbors receive bounded drag momentum and settle with lighter
+damping. Reading arrives in 220ms and remains still thereafter. Reduced motion
+applies final views immediately. No periodic or decorative background loop runs.
+
 ## One continuous field
 
 Themes are color and text landmarks, without enclosing lines, tinted territories

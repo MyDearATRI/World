@@ -231,3 +231,84 @@ test("rest lengths validate exact real edge IDs and positive finite values befor
   const empty = createGlobalMapField([], [])
   assert.equal(empty.restore(empty.snapshot()), true)
 })
+
+test("a drag gives actual linked neighbors a bounded elastic excursion while unrelated points stay still", () => {
+  const points = [
+    { id: "a", x: 0, y: 0 },
+    { id: "b", x: 300, y: 0 },
+    { id: "unlinked", x: 1700, y: 800 },
+  ]
+  const relation = { ...edge("a", "b", 1), strength: 0.8 }
+  for (const hz of [30, 60, 120]) {
+    const field = createGlobalMapField(points, [relation])
+    finish(field)
+    const before = field.snapshot(),
+      neighbor = field.nodes[1],
+      target = { x: -180, y: 70 }
+    field.drag("a", target.x, target.y)
+    let peak = 0
+    for (let frame = 0; frame < hz; frame++) {
+      field.step(1 / hz)
+      peak = Math.max(
+        peak,
+        Math.hypot(neighbor.x - before.nodes[1].x, neighbor.y - before.nodes[1].y),
+      )
+      assert.equal(field.nodes[0].x, target.x)
+      assert.equal(field.nodes[0].y, target.y)
+      assert.deepEqual(field.nodes[2], before.nodes[2])
+      assert.equal(neighbor.anchorX, before.nodes[1].anchorX)
+      assert.equal(neighbor.anchorY, before.nodes[1].anchorY)
+      separated(field.nodes)
+    }
+    const heldRest = Math.hypot(neighbor.x - before.nodes[1].x, neighbor.y - before.nodes[1].y)
+    assert.ok(
+      peak > 4 && peak < 12,
+      `elastic excursion should be noticeable and bounded, got ${peak}`,
+    )
+    assert.ok(
+      peak > heldRest + 3,
+      "the input response should relax instead of holding an artificial offset",
+    )
+    field.release("a")
+    for (let frame = 0; frame < hz * 2 && !field.settled; frame++) field.step(1 / hz)
+    assert.ok(field.settled)
+    assert.equal(field.nodes[0].anchorX, target.x)
+    assert.equal(field.nodes[0].anchorY, target.y)
+    const resting = field.snapshot()
+    for (let frame = 0; frame < hz; frame++) assert.equal(field.step(1 / hz), false)
+    assert.deepEqual(field.snapshot(), resting)
+  }
+})
+
+test("drag momentum is deduplicated by neighbor, capped during repeated movement, and absent on stationary input", () => {
+  const points = [
+    { id: "a", x: 0, y: 0 },
+    { id: "b", x: 400, y: 0 },
+    { id: "c", x: 900, y: 0 },
+  ]
+  const link = { ...edge("a", "b", 1), strength: 0.8 },
+    chain = edge("b", "c", 9)
+  const single = createGlobalMapField(points, [link, chain]),
+    repeated = createGlobalMapField(points, [link, { ...link, id: "same-endpoints" }, chain])
+  for (const field of [single, repeated]) {
+    field.drag("a", -180, 70)
+    assert.equal(field.nodes[2].vx, 0, "an indirect endpoint receives no artificial kick")
+    assert.equal(field.nodes[2].vy, 0)
+    const momentum = { x: field.nodes[1].vx, y: field.nodes[1].vy }
+    field.drag("a", -180, 70)
+    assert.deepEqual({ x: field.nodes[1].vx, y: field.nodes[1].vy }, momentum)
+  }
+  const a = single.nodes[1],
+    b = repeated.nodes[1]
+  assert.ok(Math.abs(a.vx * a.mass - b.vx * b.mass) < 1e-9)
+  assert.ok(Math.abs(a.vy * a.mass - b.vy * b.mass) < 1e-9)
+  for (let i = 0; i < 40; i++) {
+    const x = i % 2 ? -5000 : 5000
+    single.drag("a", x, 900)
+    assert.equal(single.nodes[0].x, x)
+    assert.equal(single.nodes[0].y, 900)
+    assert.ok(Math.hypot(single.nodes[1].vx, single.nodes[1].vy) <= 900.000000001)
+    assert.equal(single.nodes[2].vx, 0)
+    assert.equal(single.nodes[2].vy, 0)
+  }
+})

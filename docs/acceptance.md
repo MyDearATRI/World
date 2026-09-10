@@ -1,5 +1,14 @@
 # Website acceptance
 
+## Expressive finite motion
+
+Use `scripts/verify-map-motion.mjs` to record actual intermediate camera transforms,
+exact final targets, interruption by direct gestures, reduced motion, real neighbor
+response, unchanged reading/history, and absence of idle rendering/animations.
+Inspect the resulting before/middle/after frames and recordings. Keep performance
+and content regression gates. New motion results never replace original-source,
+identity or publication-boundary checks; model simulation seconds are not FPS.
+
 ## Continuous-field correction
 
 Verify theme groups contain text landmarks only, with no enclosing shapes or

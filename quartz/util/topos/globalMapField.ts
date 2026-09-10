@@ -39,6 +39,9 @@ const finite = (n: unknown): n is number =>
 // Scale stiffness/charge and damping together: the same equilibrium, reached
 // promptly in UI time rather than leaving a barely moving scene for seconds.
 const response = 12
+// Near-critical damping lets a linked neighborhood follow a drag with a small
+// elastic response. Anchors and collision separation still determine its rest.
+const dampingRate = 6.5
 // At the map's maximum 4× zoom, these bounds mean at most 0.1 CSS px
 // of movement per frame. Requiring both displacement and speed to stay small
 // for six consecutive steps avoids stopping at an oscillation's turning point.
@@ -97,9 +100,18 @@ export function createGlobalMapField(
         stiffness:
           ((2.4 + strength * 2.6) * provenance * response ** 2) /
           Math.sqrt(Math.max(1, degree.get(source.id) ?? 0, degree.get(target.id) ?? 0)),
+        follow: provenance * (0.75 + strength * 0.25),
       },
     ]
   })
+  const followers = nodes.map(() => new Map<number, number>())
+  for (const link of links) {
+    // Several recorded relations must not multiply a single neighbor's kick.
+    const add = (source: number, target: number) =>
+      followers[source].set(target, Math.max(followers[source].get(target) ?? 0, link.follow))
+    add(link.sourceIndex, link.targetIndex)
+    add(link.targetIndex, link.sourceIndex)
+  }
   let heldID: string | undefined
   let active = nodes.length > 0,
     quiet = 0
@@ -212,7 +224,7 @@ export function createGlobalMapField(
     // faster relaxation must not multiply the pairwise collision work per frame.
     const count = Math.max(1, Math.ceil(elapsed / (1 / 300))),
       h = elapsed / count,
-      damping = Math.exp(-9 * response * h)
+      damping = Math.exp(-dampingRate * response * h)
     nodes.forEach((node, i) => {
       beforeX[i] = node.x
       beforeY[i] = node.y
@@ -309,6 +321,24 @@ export function createGlobalMapField(
     drag(id: string, x: number, y: number) {
       const node = byID.get(id)
       if (!node || !finite(x) || !finite(y)) return
+      const dx = x - node.x,
+        dy = y - node.y,
+        distance = Math.hypot(dx, dy)
+      if (distance > 0.0001) {
+        // Pointer motion transfers a brief, bounded momentum only along actual
+        // direct links. It never changes anchors, creates edges, or runs on hover.
+        const gain = Math.min(1, 100 / distance) * 12
+        for (const [index, strength] of followers[indices.get(id)!]) {
+          const neighbor = nodes[index]
+          neighbor.vx += (dx * gain * strength) / neighbor.mass
+          neighbor.vy += (dy * gain * strength) / neighbor.mass
+          const speed = Math.hypot(neighbor.vx, neighbor.vy)
+          if (speed > 900) {
+            neighbor.vx *= 900 / speed
+            neighbor.vy *= 900 / speed
+          }
+        }
+      }
       heldID = id
       node.x = x
       node.y = y

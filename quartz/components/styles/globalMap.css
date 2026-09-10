@@ -81,6 +81,15 @@
   padding: 7px 11px;
   cursor: pointer;
 }
+.global-map button {
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    transform 140ms ease;
+}
+.global-map button:active {
+  transform: translateY(1px) scale(0.98);
+}
 .global-map :focus-visible {
   outline: 2px solid #327c98;
   outline-offset: 3px;
@@ -163,6 +172,9 @@
   stroke-width: 0.7px;
   opacity: 0.35;
   pointer-events: none;
+  transition:
+    opacity 170ms ease,
+    stroke 170ms ease;
 }
 .global-map-edge[data-provenance="structure"] {
   stroke-dasharray: 4 4;
@@ -186,6 +198,18 @@
   fill: #f8fbf7;
   stroke: var(--map-node-color, #52798b);
   stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    fill 170ms ease,
+    stroke 170ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .global-map button,
+  .global-map-dot,
+  .global-map-edge {
+    transition: none;
+  }
 }
 .global-map-node text {
   fill: #405761;

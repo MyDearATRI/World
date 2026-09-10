@@ -315,6 +315,16 @@ try {
       hasTouch: width === 390,
       isMobile: width === 390,
     })
+    // Register before the application: window-target popstate listeners can
+    // follow registration order even when a late listener asks for capture.
+    await context.addInitScript(() => {
+      window.addEventListener("popstate", () => {
+        if (!window.__readingCaptureDeparture) return
+        window.__readingCaptureDeparture = false
+        const map = window.__topos.snapshot().globalMap
+        window.__readingDeparture = { camera: { ...map.camera }, motion: map.cameraMotion }
+      })
+    })
     const page = await context.newPage()
     page.setDefaultTimeout(10000)
     page.on("pageerror", (error) => report.errors.push({ name, error: String(error) }))
@@ -448,13 +458,27 @@ try {
       await page.locator("[data-open-global-map]").click()
       await page.locator('[data-global-map-zoom="in"]').click()
       const immediateView = (await snap(page)).globalMap.camera
+      // A finite camera transition can advance between issuing Back and the
+      // actual native history event. Enable the handler registered by initScript
+      // before the application so it captures the actual departing rendered pose.
+      await page.evaluate(() => {
+        window.__readingDeparture = undefined
+        window.__readingCaptureDeparture = true
+      })
       await page.goBack()
+      const departingView = await page.evaluate(() => window.__readingDeparture)
       await mapReady(page)
       await page.goForward()
       await mapReady(page)
       check(
         `${name}: immediate Back and Forward retain last camera`,
-        sameCamera(immediateView, (await snap(page)).globalMap.camera),
+        Boolean(departingView) &&
+          sameCamera(departingView.camera, (await snap(page)).globalMap.camera),
+        {
+          atButtonReturn: immediateView,
+          atHistoryDeparture: departingView,
+          restored: (await snap(page)).globalMap.camera,
+        },
       )
 
       // Follow an actual outgoing structural occurrence into its formal source.

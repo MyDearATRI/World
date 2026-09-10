@@ -208,6 +208,11 @@ export function createGlobalMap(
   let scene: GlobalMapScene = { nodes: [], relations: [], groups: [] }
   let byID = new Map<string, GlobalMapScene["nodes"][number]>()
   let camera: MapCamera = { x: 0, y: 0, k: 1 }
+  let cameraMotion:
+    | { from: MapCamera; to: MapCamera; startedAt: number; duration: number }
+    | undefined
+  const effects = new Set<Animation>()
+  const enteringNodes = new Set<string>()
   let width = 1,
     height = 1
   let selected: string | undefined
@@ -283,6 +288,66 @@ export function createGlobalMap(
     pendingDrag = undefined
     work.dragApplications++
   }
+  function stopMotion() {
+    cameraMotion = undefined
+    for (const effect of effects) effect.cancel()
+    effects.clear()
+    enteringNodes.clear()
+  }
+  function animate(target: Element, keyframes: Keyframe[], options: KeyframeAnimationOptions) {
+    if (reducedMotion.matches || document.hidden || !element.open) return
+    const effect = target.animate(keyframes, options)
+    effects.add(effect)
+    const finished = () => {
+      effects.delete(effect)
+      if (element.open) notifySettledView()
+    }
+    void effect.finished.then(finished, finished)
+  }
+  function moveCamera(to: MapCamera) {
+    if (
+      cameraMotion &&
+      ["x", "y", "k"].every(
+        (key) => cameraMotion!.to[key as keyof MapCamera] === to[key as keyof MapCamera],
+      )
+    )
+      return
+    if (
+      !element.open ||
+      reducedMotion.matches ||
+      (Math.hypot(to.x - camera.x, to.y - camera.y) < 0.1 && Math.abs(to.k - camera.k) < 0.0001)
+    ) {
+      cameraMotion = undefined
+      camera = { ...to }
+    } else {
+      cameraMotion = {
+        from: { ...camera },
+        to: { ...to },
+        startedAt: performance.now(),
+        duration: 360,
+      }
+    }
+    labelDirty = true
+    requestPaint()
+  }
+  function advanceCamera(time: number) {
+    if (!cameraMotion) return
+    const { from, to, startedAt, duration } = cameraMotion
+    const progress = reducedMotion.matches
+      ? 1
+      : Math.min(1, Math.max(0, (time - startedAt) / duration))
+    const t = 1 - (1 - progress) ** 4
+    const k = from.k * Math.exp(Math.log(to.k / from.k) * t)
+    const cx = width / 2,
+      cy = height / 2
+    const x = ((cx - from.x) / from.k) * (1 - t) + ((cx - to.x) / to.k) * t
+    const y = ((cy - from.y) / from.k) * (1 - t) + ((cy - to.y) / to.k) * t
+    camera = { x: cx - x * k, y: cy - y * k, k }
+    if (progress === 1) {
+      camera = { ...to }
+      cameraMotion = undefined
+    }
+  }
   function notifySettledView() {
     if (!callbacks.onViewChange || viewRevision === notifiedRevision || activeDrag || pinch) return
     if (viewChangeTimer && queuedRevision === viewRevision) return
@@ -292,7 +357,16 @@ export function createGlobalMap(
     // final view once after input quiets, not one serialized history entry/frame.
     viewChangeTimer = setTimeout(() => {
       viewChangeTimer = undefined
-      if (!element.open || frame || activeDrag || pinch || (field && !field.settled)) return
+      if (
+        !element.open ||
+        frame ||
+        cameraMotion ||
+        effects.size ||
+        activeDrag ||
+        pinch ||
+        (field && !field.settled)
+      )
+        return
       notifiedRevision = viewRevision
       callbacks.onViewChange?.()
     }, 160)
@@ -300,6 +374,7 @@ export function createGlobalMap(
   function hide(reason: CloseReason = "dismiss") {
     pendingActivation = undefined
     if (!element.open) return
+    stopMotion()
     flushDrag()
     if (field?.heldID) field.release(field.heldID)
     persist()
@@ -366,6 +441,7 @@ export function createGlobalMap(
       }
       const dt = lastFrame ? Math.min(0.05, (time - lastFrame) / 1000) : 1 / 60
       lastFrame = time
+      advanceCamera(time)
       // Only the latest pointer pose enters physics on this frame. Native
       // high-frequency input cannot queue a backlog of collision passes.
       flushDrag()
@@ -381,7 +457,7 @@ export function createGlobalMap(
         }
       }
       paint()
-      if (field && !field.settled) requestPaint()
+      if (cameraMotion || (field && !field.settled)) requestPaint()
       else {
         lastFrame = 0
         notifySettledView()
@@ -598,6 +674,30 @@ export function createGlobalMap(
     previousPaintCamera = { ...camera }
     previousActive = active
     previousSize = `${width}/${height}`
+    if (enteringNodes.size) {
+      const visible = [...enteringNodes].filter((id) => {
+        const node = byID.get(id)
+        return (
+          node &&
+          camera.x + node.x * camera.k >= 0 &&
+          camera.x + node.x * camera.k <= width &&
+          camera.y + node.y * camera.k >= 0 &&
+          camera.y + node.y * camera.k <= height
+        )
+      })
+      visible.slice(0, 32).forEach((id, i) =>
+        animate(
+          nodeCircles.get(id)!.dot,
+          [
+            { transform: "scale(.65)", opacity: 0.45 },
+            { transform: "scale(1.16)", opacity: 1, offset: 0.65 },
+            { transform: "scale(1)", opacity: 1 },
+          ],
+          { duration: 320, delay: (i % 6) * 16, easing: "cubic-bezier(.2,.75,.25,1)" },
+        ),
+      )
+      enteringNodes.clear()
+    }
     element.dataset.renderCount = String(renderCount)
     remember()
   }
@@ -740,26 +840,37 @@ export function createGlobalMap(
   }
   function select(id: string, center = false) {
     if (!byID.has(id)) return
+    const changed = selected !== id
     selected = id
     locator.value = id
     inspect(id)
     if (center) {
       const node = byID.get(id)!
-      camera.k = Math.max(0.85, camera.k)
-      camera.x = width * 0.42 - node.x * camera.k
-      camera.y = height * 0.35 - node.y * camera.k
-      labelDirty = true
+      const k = Math.max(0.85, camera.k)
+      moveCamera({ k, x: width * 0.42 - node.x * k, y: height * 0.35 - node.y * k })
     }
+    if (changed && nodeCircles.has(id))
+      animate(
+        nodeCircles.get(id)!.dot,
+        [
+          { transform: "scale(1)" },
+          { transform: "scale(1.5)", offset: 0.35 },
+          { transform: "scale(1)" },
+        ],
+        { duration: 300, easing: "cubic-bezier(.2,.75,.25,1)" },
+      )
     requestPaint()
   }
   function locateGroup(id: string) {
     const current = scene.groups.find((item) => item.id === id)
     if (!current) return
     const ids = new Set(current.ids)
-    camera = mapFit(
-      scene.nodes.filter((node) => ids.has(node.id)),
-      width,
-      height,
+    moveCamera(
+      mapFit(
+        scene.nodes.filter((node) => ids.has(node.id)),
+        width,
+        height,
+      ),
     )
     labelDirty = true
     requestPaint()
@@ -844,13 +955,17 @@ export function createGlobalMap(
     for (const node of scene.nodes) {
       const existing = nodes.get(node.id)
       if (existing) {
-        if (existing.parentNode !== nodeLayer) nodeLayer.append(existing)
+        if (existing.parentNode !== nodeLayer) {
+          nodeLayer.append(existing)
+          enteringNodes.add(node.id)
+        }
         const label = labels.get(node.id)!
         if (label.anchor.parentNode !== labelLayer) labelLayer.append(label.anchor)
         if (label.leader.parentNode !== leaderLayer) leaderLayer.append(label.leader)
         continue
       }
       work.nodesCreated++
+      enteringNodes.add(node.id)
       const anchor = svgNode("a", nodeLayer, {
         href: canonical(node.concept),
         tabindex: "0",
@@ -943,6 +1058,7 @@ export function createGlobalMap(
     const nextWidth = box.width,
       nextHeight = box.height
     if (nextWidth === width && nextHeight === height) return
+    cameraMotion = undefined
     if (saved?.camera) {
       camera.x += (nextWidth - width) / 2
       camera.y += (nextHeight - height) / 2
@@ -981,6 +1097,7 @@ export function createGlobalMap(
       if (!wasOpen) {
         if (callbacks.embedded) element.show()
         else element.showModal()
+        animate(canvas, [{ opacity: 0.65 }, { opacity: 1 }], { duration: 200, easing: "ease-out" })
       }
       resize()
       requestPaint()
@@ -988,6 +1105,7 @@ export function createGlobalMap(
       return
     }
     flushDrag()
+    stopMotion()
     const liveCamera = { ...camera }
     const liveSize = { width, height }
     const keepLive = wasOpen && !options.restoreView
@@ -1079,6 +1197,7 @@ export function createGlobalMap(
     if (!wasOpen) {
       if (callbacks.embedded) element.show()
       else element.showModal()
+      animate(canvas, [{ opacity: 0.65 }, { opacity: 1 }], { duration: 200, easing: "ease-out" })
     }
     canvas.setAttribute("viewBox", `0 0 ${width} ${height}`)
     resize()
@@ -1108,6 +1227,7 @@ export function createGlobalMap(
   stage.addEventListener("pointerdown", (event) => {
     pendingActivation = undefined
     if (event.button || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+    stopMotion()
     const point = local(event)
     pointers.set(event.pointerId, point)
     stage.setPointerCapture(event.pointerId)
@@ -1241,6 +1361,7 @@ export function createGlobalMap(
     (event) => {
       event.preventDefault()
       event.stopPropagation()
+      stopMotion()
       camera = mapZoom(
         camera,
         Math.exp(-Math.max(-200, Math.min(200, event.deltaY)) * 0.002),
@@ -1328,7 +1449,12 @@ export function createGlobalMap(
     if (["+", "=", "-"].includes(event.key)) {
       event.preventDefault()
       event.stopPropagation()
-      camera = mapZoom(camera, event.key === "-" ? 0.8 : 1.25, { x: width / 2, y: height / 2 })
+      moveCamera(
+        mapZoom(cameraMotion?.to ?? camera, event.key === "-" ? 0.8 : 1.25, {
+          x: width / 2,
+          y: height / 2,
+        }),
+      )
       requestPaint()
     } else if (event.key === "Home") {
       event.preventDefault()
@@ -1337,6 +1463,7 @@ export function createGlobalMap(
     } else if (event.key.startsWith("Arrow")) {
       event.preventDefault()
       event.stopPropagation()
+      stopMotion()
       camera.x += event.key === "ArrowLeft" ? 45 : event.key === "ArrowRight" ? -45 : 0
       camera.y += event.key === "ArrowUp" ? 45 : event.key === "ArrowDown" ? -45 : 0
       labelDirty = true
@@ -1362,7 +1489,7 @@ export function createGlobalMap(
     target?.focus({ preventScroll: true })
   })
   fit.addEventListener("click", () => {
-    camera = mapFit(scene.nodes, width, height)
+    moveCamera(mapFit(scene.nodes, width, height))
     labelDirty = true
     requestPaint()
   })
@@ -1373,10 +1500,12 @@ export function createGlobalMap(
       related.add(relation.source)
       related.add(relation.target)
     }
-    camera = mapFit(
-      scene.nodes.filter((node) => related.has(node.id)),
-      width,
-      height,
+    moveCamera(
+      mapFit(
+        scene.nodes.filter((node) => related.has(node.id)),
+        width,
+        height,
+      ),
     )
     labelDirty = true
     requestPaint()
@@ -1386,7 +1515,7 @@ export function createGlobalMap(
     [plus, 1.333333],
   ] as const)
     button.addEventListener("click", () => {
-      camera = mapZoom(camera, factor, { x: width / 2, y: height / 2 })
+      moveCamera(mapZoom(cameraMotion?.to ?? camera, factor, { x: width / 2, y: height / 2 }))
       requestPaint()
     })
   locator.addEventListener("change", () => {
@@ -1401,8 +1530,18 @@ export function createGlobalMap(
     if (!compactScreen.matches && inspectorExpanded) setInspectorExpanded(false)
   }
   compactScreen.addEventListener("change", screenChanged)
+  const motionPreferenceChanged = () => {
+    if (!reducedMotion.matches) return
+    const target = cameraMotion?.to
+    stopMotion()
+    if (target) camera = { ...target }
+    labelDirty = true
+    requestPaint()
+  }
+  reducedMotion.addEventListener("change", motionPreferenceChanged)
   const visibility = () => {
     if (document.hidden) {
+      stopMotion()
       if (frame) cancelAnimationFrame(frame)
       frame = 0
       lastFrame = 0
@@ -1444,6 +1583,7 @@ export function createGlobalMap(
       }
     },
     restoreView(value: unknown) {
+      stopMotion()
       if (!value || typeof value !== "object") return false
       const view = value as Partial<GlobalMapViewSnapshot>
       const finite = (n: unknown): n is number =>
@@ -1512,7 +1652,17 @@ export function createGlobalMap(
       return {
         open: element.open,
         backend: "svg",
-        settled: !frame && !activeDrag && !pinch && (field?.settled ?? true),
+        settled:
+          !frame &&
+          !cameraMotion &&
+          !effects.size &&
+          !activeDrag &&
+          !pinch &&
+          (field?.settled ?? true),
+        cameraMotion: cameraMotion
+          ? { ...cameraMotion, from: { ...cameraMotion.from }, to: { ...cameraMotion.to } }
+          : undefined,
+        visualEffects: effects.size,
         heldID: field?.heldID,
         selected,
         selection: selection ? [...selection] : undefined,
@@ -1564,6 +1714,7 @@ export function createGlobalMap(
       if (element.open) hide("history")
       observer.disconnect()
       compactScreen.removeEventListener("change", screenChanged)
+      reducedMotion.removeEventListener("change", motionPreferenceChanged)
       window.removeEventListener("pagehide", persist)
       document.removeEventListener("visibilitychange", visibility)
       if (frame) cancelAnimationFrame(frame)
