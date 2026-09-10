@@ -1,5 +1,16 @@
 # Website implementation rules
 
+## Continuous map without theme enclosures
+
+The user's latest correction removes enclosed topic regions: the map is one
+continuous field. Theme colors and text landmarks give orientation without frames,
+filled zones or invisible whole-region hit targets. Initial coordinates must not
+recreate a rectangular topic grid after the frames disappear. Membership is a
+navigation filter; it never confines nodes to a region. Preserve unique identities,
+manual drops, readable sourced relations, independent node/label layers and finite
+drag response. No continuous decorative drift or new source export is authorized.
+Migrate old cached default layouts while retaining explicit user-positioned nodes.
+
 ## Resumed map and performance work (WO-005)
 
 The user resumed this work after adopting the local MASTER_PROMPT_v2. Execute

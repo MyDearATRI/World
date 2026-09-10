@@ -18,7 +18,9 @@ import prepared from "../../../knowledge/index.json"
 import mapping from "../../../knowledge/topos/note-topics.json"
 import type { KnowledgeIndex } from "../knowledge"
 import { createPublishedModel } from "./published"
-import { attachNoteTopics } from "./atlas"
+import { attachNoteTopics, createAtlas, type AtlasRegistry } from "./atlas"
+import atlasRegistry from "../../../ontology/math_registry.json"
+import atlasSources from "../../../ontology/sources.json"
 
 function fixture(): KnowledgeModel {
   const model = JSON.parse(readFileSync("knowledge/topos/prototype.json", "utf8")) as KnowledgeModel
@@ -40,6 +42,11 @@ test("the entire selected union is drawn once, not bounded by an overview page",
   assert.equal(new Set(scene.nodes.map((node) => node.id)).size, model.concepts.length)
   assert.deepEqual(scene.relations, model.relations)
   assert.deepEqual(model, original)
+  for (const theme of model.topics!) {
+    const actual = scene.groups.find((group) => group.id === theme.id)!
+    const expected = model.concepts.filter((node) => node.topicIDs?.includes(theme.id))
+    assert.deepEqual(new Set(actual.ids), new Set(expected.map((node) => node.id)))
+  }
   const one = globalMapScene(model, ["first"])
   const expected = topicIDs(model, ["first"])
   assert.deepEqual(new Set(one.nodes.map((node) => node.id)), expected)
@@ -50,6 +57,16 @@ test("the entire selected union is drawn once, not bounded by an overview page",
       .map((edge) => edge.id),
   )
   assert.deepEqual(globalMapScene(model, []), { nodes: [], groups: [], relations: [] })
+})
+
+test("a theme containing only shared objects remains a real landmark without duplicating nodes", () => {
+  const model = fixture()
+  for (const node of model.concepts) node.topicIDs = ["first", "second"]
+  const scene = globalMapScene(model, undefined)
+  assert.equal(scene.nodes.length, model.concepts.length)
+  assert.equal(scene.groups.length, 2)
+  for (const group of scene.groups)
+    assert.deepEqual(new Set(group.ids), new Set(model.concepts.map((node) => node.id)))
 })
 
 test("layout stays deterministic under model/selection order and preserves manual positions without mutating content", () => {
@@ -70,15 +87,72 @@ test("layout stays deterministic under model/selection order and preserves manua
   assert.equal(new Set(first.nodes.map(({ x, y }) => `${x}/${y}`)).size, first.nodes.length)
 })
 
-test("enabling an earlier topic leaves the later topic's reserved world slot unchanged", () => {
+test("theme toggles preserve every shared world position, including multi-theme identities", () => {
   const model = fixture()
   const only = globalMapScene(model, ["second"])
   const both = globalMapScene(model, ["first", "second"])
   for (const node of only.nodes) {
-    if (node.concept.topicIDs?.includes("first")) continue
     const expanded = both.nodes.find((other) => other.id === node.id)!
     assert.deepEqual({ x: expanded.x, y: expanded.y }, { x: node.x, y: node.y })
   }
+})
+
+test("continuous neighborhoods overlap without topic slots, and title changes never re-seed identities", () => {
+  const model = fixture()
+  const scene = globalMapScene(model, undefined)
+  const [a, b] = scene.groups
+  assert.ok(a.x < b.x + b.width && b.x < a.x + a.width)
+  assert.ok(a.y < b.y + b.height && b.y < a.y + a.height)
+  const common = model.concepts.filter((node) => node.topicIDs?.length === 2)
+  assert.ok(common.length > 1)
+  for (const node of common) {
+    const first = globalMapScene(model, ["first"]).nodes.find((item) => item.id === node.id)!
+    const second = globalMapScene(model, ["second"]).nodes.find((item) => item.id === node.id)!
+    assert.deepEqual({ x: first.x, y: first.y }, { x: second.x, y: second.y })
+  }
+  const positions = scene.nodes.map(({ id, x, y }) => ({ id, x, y }))
+  for (const node of model.concepts) node.title = `Renamed ${node.id}`
+  model.topics!.reverse()
+  model.relations.reverse()
+  assert.deepEqual(
+    globalMapScene(model, undefined).nodes.map(({ id, x, y }) => ({ id, x, y })),
+    positions,
+  )
+  // Physical occupancy is independent from labels and group extents.
+  for (let i = 0; i < scene.nodes.length; i++)
+    for (let j = i + 1; j < scene.nodes.length; j++) {
+      const a = scene.nodes[i],
+        b = scene.nodes[j]
+      assert.ok(Math.hypot(a.x - b.x, a.y - b.y) >= 109.999)
+    }
+})
+
+test("real graph changes bend the initial neighborhood without inventing or rewriting relations", () => {
+  const model = fixture()
+  const unlinked: KnowledgeModel = { ...model, relations: [] }
+  const before = globalMapScene(unlinked, undefined)
+  const linked = globalMapScene(model, undefined)
+  const length = (nodes: typeof linked.nodes) => {
+    const byID = new Map(nodes.map((node) => [node.id, node]))
+    return model.relations.reduce((sum, edge) => {
+      const a = byID.get(edge.source)!,
+        b = byID.get(edge.target)!
+      return sum + Math.hypot(a.x - b.x, a.y - b.y)
+    }, 0)
+  }
+  assert.ok(
+    length(linked.nodes) < length(before.nodes),
+    "existing links should draw their neighborhoods together",
+  )
+  assert.deepEqual(linked.relations, model.relations)
+  const modified = structuredClone(unlinked)
+  globalMapScene(modified, undefined)
+  modified.relations = model.relations
+  assert.deepEqual(
+    globalMapScene(modified, undefined),
+    linked,
+    "cached geometry must respect actual graph edits",
+  )
 })
 
 test("the actual 86-to-159 public expansion preserves old anchors and gives incoming nodes free territory", () => {
@@ -154,6 +228,49 @@ test("the actual 86-to-159 public expansion preserves old anchors and gives inco
     const resting = field.snapshot()
     for (let frame = 0; frame < 60; frame++) assert.equal(field.step(1 / 60), false)
     assert.deepEqual(field.snapshot(), resting)
+  }
+})
+
+test("the complete published notes and Atlas settle in the open field after real neighbor contact", () => {
+  const notes = createPublishedModel(prepared as KnowledgeIndex)
+  attachNoteTopics(notes, mapping)
+  const atlas = createAtlas(atlasRegistry as AtlasRegistry, atlasSources.sources).model
+  for (const model of [notes, atlas]) {
+    const source = structuredClone(model)
+    for (const layout of [{}, { columns: 2, headingSpace: 240 }]) {
+      const scene = globalMapScene(model, undefined, new Map(), layout)
+      assert.equal(scene.nodes.length, model.concepts.length)
+      assert.deepEqual(scene.relations, model.relations)
+      for (const hz of [30, 60, 120]) {
+        const field = createGlobalMapField(scene.nodes, scene.relations)
+        for (let i = 0; i < hz * 2 && !field.settled; i++) field.step(1 / hz)
+        assert.ok(field.settled, `${model.mode} initial field did not settle at ${hz}Hz`)
+        separated(field)
+        const held = field.nodes.find((node) => node.id === model.initial) ?? field.nodes[0]
+        const neighbor = field.nodes
+          .filter((node) => node !== held)
+          .sort(
+            (a, b) =>
+              Math.hypot(a.x - held.x, a.y - held.y) - Math.hypot(b.x - held.x, b.y - held.y),
+          )[0]
+        const target = { x: neighbor.x + 8, y: neighbor.y + 7 }
+        field.drag(held.id, target.x, target.y)
+        for (let i = 0; i < 8; i++) field.step(1 / hz)
+        assert.equal(held.x, target.x)
+        assert.equal(held.y, target.y)
+        separated(field)
+        field.release(held.id)
+        for (let i = 0; i < hz * 2 && !field.settled; i++) field.step(1 / hz)
+        assert.ok(field.settled, `${model.mode} release did not settle at ${hz}Hz`)
+        separated(field)
+        assert.equal(held.anchorX, target.x)
+        assert.equal(held.anchorY, target.y)
+        const resting = field.snapshot()
+        for (let i = 0; i < hz; i++) assert.equal(field.step(1 / hz), false)
+        assert.deepEqual(field.snapshot(), resting)
+      }
+    }
+    assert.deepEqual(model, source)
   }
 })
 
@@ -246,7 +363,7 @@ test("session restoration rejects obsolete identities, nonfinite coordinates and
   assert.notEqual(globalMapSignature(changed), signature)
 })
 
-test("a new narrow-screen map uses two named region columns while keeping all identities and retained drops", () => {
+test("a narrow-screen field uses a continuous tall aspect while keeping all identities and retained drops", () => {
   const model = fixture()
   model.topics = Array.from({ length: 12 }, (_, i) => ({
     id: `topic-${i}`,
@@ -261,7 +378,10 @@ test("a new narrow-screen map uses two named region columns while keeping all id
   const scene = globalMapScene(model, undefined, new Map(), layout)
   assert.equal(scene.nodes.length, model.concepts.length)
   assert.deepEqual(scene.relations, model.relations)
-  assert.equal(new Set(scene.groups.map((group) => group.x)).size, 2)
+  assert.ok(
+    new Set(scene.groups.map((group) => group.x)).size > 2,
+    "themes must not fall into two reserved columns",
+  )
   const camera = mapFit(scene.nodes, 390, 505)
   const span =
     (Math.max(...scene.nodes.map((node) => node.y)) -
@@ -476,6 +596,23 @@ test("rapid pointer sweeps preserve contacts and cool within two seconds across 
     for (let i = 0; i < hz; i++) assert.equal(field.step(1 / hz), false)
     assert.deepEqual(field.snapshot(), stopped)
   }
+})
+
+test("mathematical names cannot cover reserved theme text, including a previously occupied slot", () => {
+  const theme = { id: "theme", x: 150, y: 80, width: 150, height: 40 }
+  const item = { id: "note", x: 130, y: 100, width: 140, height: 36, priority: 100 }
+  const prior = { id: "note", x: 155, y: 82, width: 140, height: 36 }
+  const result = placeMapLabels([item], 500, 350, [], [prior], [theme])
+  assert.equal(result.boxes.length, 1)
+  assert.equal(result.boxes[0].id, "note")
+  const box = result.boxes[0]
+  assert.ok(
+    box.x + box.width + 6 <= theme.x ||
+      box.x >= theme.x + theme.width + 6 ||
+      box.y + box.height + 6 <= theme.y ||
+      box.y >= theme.y + theme.height + 6,
+  )
+  assert.deepEqual(theme, { id: "theme", x: 150, y: 80, width: 150, height: 40 })
 })
 
 test("label placement never covers physical circles or removes their identities, even when no label fits", () => {

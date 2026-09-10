@@ -1,5 +1,16 @@
 # Website acceptance
 
+## Continuous-field correction
+
+Verify theme groups contain text landmarks only, with no enclosing shapes or
+whole-region pointer targets. Theme text supports mouse, touch, Enter and Space;
+dragging the same text pans rather than opening a reader or snapping to a theme.
+Check member points fit after deliberate theme activation and that node marks
+remain above annotations. Initial layout is nonrectangular, multiple memberships
+remain one object, and filtering preserves shared coordinates and manual drops.
+Retain the existing reading/history, collision/settling and performance gates;
+record this correction's actual checks independently of the earlier WO-005 results.
+
 ## WO-005 map and reading tasks
 
 Use `node scripts/verify-map-workflow.mjs` for fresh all-theme timing diagnostics

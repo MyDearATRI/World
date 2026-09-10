@@ -28,6 +28,8 @@ export interface GlobalMapGroup {
   labelWidth: number
 }
 export interface GlobalMapLayout {
+  // Kept for saved-view compatibility. A narrow-screen aspect hint, never
+  // a request to partition concepts into columns or bounded topic territories.
   columns?: number
   headingSpace?: number
 }
@@ -38,7 +40,147 @@ export interface GlobalMapScene {
 }
 const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)
 
-/** Editorial theme regions organize browsing, never model mathematical attraction. */
+const goldenAngle = Math.PI * (3 - Math.sqrt(5))
+function fraction(id: string) {
+  let hash = 2166136261
+  for (const char of id) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619)
+  return (hash >>> 0) / 0x100000000
+}
+
+function freePosition(seed: MapPoint, occupied: readonly MapPoint[], id: string): MapPoint {
+  const point = { ...seed },
+    clearance = 132,
+    phase = fraction(id) * Math.PI * 2
+  const intersects = () =>
+    occupied.some((other) => (point.x - other.x) ** 2 + (point.y - other.y) ** 2 < clearance ** 2)
+  // Only actual point occupancy constrains placement. There are no topic walls
+  // and no label-sized exclusion regions; existing manual positions never move.
+  for (let attempt = 1; intersects() && attempt <= 1024; attempt++) {
+    const radius = 18 * Math.sqrt(attempt),
+      angle = phase + attempt * goldenAngle
+    point.x = seed.x + radius * Math.cos(angle)
+    point.y = seed.y + radius * Math.sin(angle)
+  }
+  if (intersects()) {
+    const radius =
+      Math.max(0, ...occupied.map((other) => Math.hypot(other.x - seed.x, other.y - seed.y))) +
+      clearance
+    point.x = seed.x + radius * Math.cos(phase)
+    point.y = seed.y + radius * Math.sin(phase)
+  }
+  return point
+}
+
+const initialFields = new WeakMap<
+  KnowledgeModel,
+  { signature: string; variants: Map<boolean, ReadonlyMap<string, MapPoint>> }
+>()
+
+function continuousPositions(model: KnowledgeModel, narrow: boolean) {
+  const concepts = [...model.concepts].sort((a, b) => compare(a.id, b.id)),
+    themes = [...(model.topics ?? [])].sort((a, b) => compare(a.id, b.id)),
+    relations = [...model.relations].sort((a, b) => compare(a.id, b.id))
+  const signature = JSON.stringify([
+    concepts.map((node) => [node.id, [...(node.topicIDs ?? [])].sort(compare)]),
+    themes.map((theme) => theme.id),
+    relations.map((edge) => [edge.id, edge.source, edge.target, edge.provenance, edge.strength]),
+  ])
+  let cached = initialFields.get(model)
+  if (!cached || cached.signature !== signature) {
+    cached = { signature, variants: new Map() }
+    initialFields.set(model, cached)
+  }
+  const previous = cached.variants.get(narrow)
+  if (previous) return previous
+
+  // One shared field. Topic directions are weak, overlapping reading cues; a
+  // multi-theme object mixes all of its memberships rather than owning a box.
+  const extent = Math.max(210, Math.sqrt(concepts.length) * 116),
+    aspect = narrow ? { x: 0.78, y: 1.28 } : { x: 1.14, y: 0.88 }
+  const centers = new Map(
+    themes.map((theme, i) => {
+      const radius = Math.sqrt((i + 0.5) / Math.max(1, themes.length)) * extent * 0.56,
+        angle = i * goldenAngle + 0.35
+      return [theme.id, { x: Math.cos(angle) * radius, y: Math.sin(angle) * radius }]
+    }),
+  )
+  const ranks = new Map(
+    [...concepts]
+      .sort((a, b) => fraction(a.id) - fraction(b.id) || compare(a.id, b.id))
+      .map((node, i) => [node.id, i]),
+  )
+  const base = new Map(
+    concepts.map((concept) => {
+      const memberships = [...new Set(concept.topicIDs ?? [])]
+        .sort(compare)
+        .flatMap((id) => (centers.has(id) ? [centers.get(id)!] : []))
+      const center = memberships.reduce(
+        (sum, p) => ({ x: sum.x + p.x / memberships.length, y: sum.y + p.y / memberships.length }),
+        { x: 0, y: 0 },
+      )
+      // A full-field sunflower seed avoids a random central pile with isolated
+      // distant outliers. Theme directions only bend this even shared footprint.
+      const rank = ranks.get(concept.id)!,
+        radius = Math.sqrt((rank + 0.5) / Math.max(1, concepts.length)) * extent * 0.82,
+        angle = rank * goldenAngle + 0.35
+      return [
+        concept.id,
+        {
+          x: center.x * 0.34 + Math.cos(angle) * radius,
+          y: center.y * 0.34 + Math.sin(angle) * radius,
+        },
+      ]
+    }),
+  )
+  const adjacency = new Map(
+    concepts.map((node) => [node.id, [] as { id: string; weight: number }[]]),
+  )
+  for (const edge of relations) {
+    if (edge.source === edge.target || !base.has(edge.source) || !base.has(edge.target)) continue
+    const weight =
+      edge.provenance === "structure" ? 0.45 : edge.provenance === "reference" ? 0.7 : 1
+    adjacency.get(edge.source)!.push({ id: edge.target, weight })
+    adjacency.get(edge.target)!.push({ id: edge.source, weight })
+  }
+  // A bounded graph-derived bend joins neighborhoods without an iterative UI
+  // simulation. The actual directed relations below remain unchanged: spatial
+  // averaging is presentation only, never an inferred mathematical dependency.
+  let bent = base
+  for (let pass = 0; pass < 2; pass++) {
+    const prior = bent
+    bent = new Map(
+      concepts.map((node) => {
+        const seed = base.get(node.id)!,
+          neighbors = adjacency.get(node.id)!,
+          weight = neighbors.reduce((sum, item) => sum + item.weight, 0)
+        if (!weight) return [node.id, seed]
+        const centroid = neighbors.reduce(
+          (sum, item) => ({
+            x: sum.x + (prior.get(item.id)!.x * item.weight) / weight,
+            y: sum.y + (prior.get(item.id)!.y * item.weight) / weight,
+          }),
+          { x: 0, y: 0 },
+        )
+        return [
+          node.id,
+          { x: seed.x * 0.82 + centroid.x * 0.18, y: seed.y * 0.82 + centroid.y * 0.18 },
+        ]
+      }),
+    )
+  }
+  const positions = new Map<string, MapPoint>(),
+    occupied: MapPoint[] = []
+  for (const node of concepts) {
+    const seed = bent.get(node.id)!,
+      point = freePosition({ x: seed.x * aspect.x, y: seed.y * aspect.y }, occupied, node.id)
+    positions.set(node.id, point)
+    occupied.push(point)
+  }
+  cached.variants.set(narrow, positions)
+  return positions
+}
+
+/** A continuous reading field: themes label memberships, never enclose nodes. */
 export function globalMapScene(
   model: KnowledgeModel,
   selection: string[] | undefined,
@@ -46,141 +188,59 @@ export function globalMapScene(
   layout: GlobalMapLayout = {},
 ): GlobalMapScene {
   const allowed = topicIDs(model, selection)
+  if (!allowed.size) return { nodes: [], groups: [], relations: [] }
   const topics = (model.topics ?? []).filter(
     (topic) => selection === undefined || selection.includes(topic.id),
   )
-  const nodes: GlobalMapNode[] = []
-  const groups: GlobalMapGroup[] = []
-  const members = new Map<string, Concept[]>()
-  for (const concept of model.concepts) {
-    if (!allowed.has(concept.id)) continue
-    const group = topics.find((topic) => concept.topicIDs?.includes(topic.id))?.id ?? "map-other"
-    const list = members.get(group) ?? []
-    list.push(concept)
-    members.set(group, list)
-  }
-  const definitions = [
-    ...(model.topics ?? []),
-    { id: "map-other", title: "其他已公开对象", color: "#6c7f84" },
-  ]
-  // A topic owns the same world-space slot even when earlier topics are hidden.
-  // Reserving it from the complete public model prevents newly enabled branches
-  // from acquiring the origin already occupied by the retained current branch.
-  const regions = definitions
-    .map((topic) => {
-      const entries = model.concepts
-        .filter((concept) =>
-          topic.id === "map-other"
-            ? !(model.topics ?? []).some((known) => concept.topicIDs?.includes(known.id))
-            : concept.topicIDs?.includes(topic.id),
-        )
-        .sort((a, b) => compare(a.title, b.title) || compare(a.id, b.id))
-      const columns = Math.max(1, Math.ceil(Math.sqrt(entries.length * 1.4)))
-      return {
-        topic,
-        entries,
-        columns,
-        width: columns * 220 + 90,
-        height: Math.ceil(entries.length / columns) * 150 + (layout.headingSpace ?? 75) + 55,
-      }
-    })
-    .filter((region) => region.entries.length)
-  const columns = Math.max(
-    1,
-    Math.min(
-      regions.length || 1,
-      Math.floor(layout.columns ?? Math.ceil(Math.sqrt(regions.length))),
-    ),
+  const positions = continuousPositions(model, (layout.columns ?? Infinity) <= 2)
+  const preserved = new Map(
+    [...retained].filter(([, point]) => Number.isFinite(point.x) && Number.isFinite(point.y)),
   )
-  const columnWidths = Array.from({ length: columns }, (_, column) =>
-    Math.max(0, ...regions.filter((_, i) => i % columns === column).map((region) => region.width)),
-  )
-  const rows = Math.ceil(regions.length / columns)
-  const rowHeights = Array.from({ length: rows }, (_, row) =>
-    Math.max(
-      0,
-      ...regions.slice(row * columns, (row + 1) * columns).map((region) => region.height),
-    ),
-  )
-  regions.forEach((region, index) => {
-    const visible = members.get(region.topic.id)
-    if (!visible?.length) return
-    const visibleIDs = new Set(visible.map((concept) => concept.id))
-    const left = columnWidths.slice(0, index % columns).reduce((sum, width) => sum + width + 100, 0)
-    const top = rowHeights
-      .slice(0, Math.floor(index / columns))
-      .reduce((sum, height) => sum + height + 100, 0)
-    const items = region.entries.flatMap((concept, i) => {
-      if (!visibleIDs.has(concept.id)) return []
-      const saved = retained.get(concept.id)
-      // A stable phyllotactic seed gives the physical solver room in two dimensions,
-      // rather than pinning every concept to an identical rectangular row.
-      const extentX = Math.max(160, (region.columns - 1) * 220)
-      const extentY = Math.max(150, (Math.ceil(region.entries.length / region.columns) - 1) * 150)
-      const radius =
-        region.entries.length === 1 ? 0 : Math.sqrt((i + 0.5) / region.entries.length) * 0.9
-      const angle = i * Math.PI * (3 - Math.sqrt(5))
-      const point =
-        saved && Number.isFinite(saved.x) && Number.isFinite(saved.y)
-          ? saved
-          : {
-              x: left + 55 + extentX / 2 + (Math.cos(angle) * radius * extentX) / 2,
-              y:
-                top +
-                (layout.headingSpace ?? 75) +
-                15 +
-                extentY / 2 +
-                (Math.sin(angle) * radius * extentY) / 2,
-            }
-      return [{ id: concept.id, concept, group: region.topic.id, ...point }]
-    })
-    nodes.push(...items)
-    const minX = Math.min(left + 10, Math.min(...items.map((node) => node.x)) - 45)
-    const minY = Math.min(
-      top + 15,
-      Math.min(...items.map((node) => node.y)) - (layout.headingSpace ?? 75),
-    )
-    groups.push({
-      id: region.topic.id,
-      title: region.topic.title,
-      color: region.topic.color,
-      ids: items.map((node) => node.id),
-      x: minX,
-      y: minY,
-      width: Math.max(...items.map((node) => node.x)) - minX + 210,
-      height: Math.max(...items.map((node) => node.y)) - minY + 95,
-      labelWidth: columnWidths[index % columns] - 60,
-    })
-  })
-  // A retained drop can sit in another topic's reserved slot. Keep every old
-  // identity in place and find free reference positions only for incoming nodes.
-  const occupied = nodes.filter((node) => retained.has(node.id))
+  const nodes: GlobalMapNode[] = [...model.concepts]
+    .sort((a, b) => compare(a.id, b.id))
+    .filter((concept) => allowed.has(concept.id))
+    .map((concept) => ({
+      id: concept.id,
+      concept,
+      group: topics.find((topic) => concept.topicIDs?.includes(topic.id))?.id ?? "map-other",
+      ...(preserved.get(concept.id) ?? positions.get(concept.id)!),
+    }))
+  const occupied: MapPoint[] = nodes.filter((node) => preserved.has(node.id))
   if (occupied.length) {
-    const clearance = 110
     for (const node of nodes) {
-      if (retained.has(node.id)) continue
-      const seed = { x: node.x, y: node.y }
-      const intersects = () =>
-        occupied.some((point) => (node.x - point.x) ** 2 + (node.y - point.y) ** 2 < clearance ** 2)
-      for (let attempt = 1; intersects() && attempt <= 1024; attempt++) {
-        const radius = 24 * Math.sqrt(attempt)
-        const angle = attempt * Math.PI * (3 - Math.sqrt(5))
-        node.x = seed.x + radius * Math.cos(angle)
-        node.y = seed.y + radius * Math.sin(angle)
-      }
-      if (intersects()) node.x = Math.max(...occupied.map((point) => point.x)) + clearance
+      if (preserved.has(node.id)) continue
+      Object.assign(node, freePosition(node, occupied, node.id))
       occupied.push(node)
     }
-    for (const group of groups) {
-      const items = nodes.filter((node) => node.group === group.id)
-      const right = Math.max(group.x + group.width, ...items.map((node) => node.x + 210))
-      const bottom = Math.max(group.y + group.height, ...items.map((node) => node.y + 95))
-      group.x = Math.min(group.x, ...items.map((node) => node.x - 45))
-      group.y = Math.min(group.y, ...items.map((node) => node.y - (layout.headingSpace ?? 75)))
-      group.width = right - group.x
-      group.height = bottom - group.y
-    }
   }
+  // Bounds are compatibility metadata for camera fitting, not reserved space.
+  // Membership extents may overlap freely; physical forces see only points/edges.
+  const groups = [
+    ...topics,
+    { id: "map-other", title: "其他已公开对象", color: "#6c7f84" },
+  ].flatMap((topic) => {
+    const items = nodes.filter((node) =>
+      topic.id === "map-other"
+        ? node.group === "map-other"
+        : node.concept.topicIDs?.includes(topic.id),
+    )
+    if (!items.length) return []
+    const x = Math.min(...items.map((node) => node.x)) - 45,
+      y = Math.min(...items.map((node) => node.y)) - 75
+    return [
+      {
+        id: topic.id,
+        title: topic.title,
+        color: topic.color,
+        ids: items.map((node) => node.id),
+        x,
+        y,
+        width: Math.max(...items.map((node) => node.x)) - x + 45,
+        height: Math.max(...items.map((node) => node.y)) - y + 45,
+        labelWidth: 280,
+      },
+    ]
+  })
   return {
     nodes,
     groups,
@@ -309,6 +369,7 @@ export function placeMapLabels(
   height: number,
   obstacles: readonly MapLabelCircle[],
   previous: readonly MapLabelBox[] = [],
+  reserved: readonly MapLabelBox[] = [],
 ) {
   const boxes: MapLabelBox[] = [],
     omitted: string[] = []
@@ -361,13 +422,17 @@ export function placeMapLabels(
     }
     return true
   }
-  const retain = (box: MapLabelBox) => {
-    boxes.push(box)
+  const occupy = (box: MapLabelBox) => {
     for (const key of cells(box.x - 6, box.y - 6, box.width + 12, box.height + 12)) {
       const entries = boxCells.get(key) ?? []
       entries.push(box)
       boxCells.set(key, entries)
     }
+  }
+  for (const box of reserved) occupy(box)
+  const retain = (box: MapLabelBox) => {
+    boxes.push(box)
+    occupy(box)
   }
   for (const item of ordered) {
     if (item.width > width - 16 || item.height > height - 16) {

@@ -1,5 +1,15 @@
 # Design specification
 
+## One continuous field
+
+Themes are color and text landmarks, without enclosing lines, tinted territories
+or rectangular reserved slots. Their neighborhoods may overlap and share objects;
+actual relation links remain visible across memberships. A theme name locates its
+current member points. Only its text receives pointer input; dragging across the
+rest of the field is uninterrupted. Nodes stay above names and can move freely
+between neighborhoods. Movement responds to input and settles rather than drifting
+continuously. Existing manual positions survive the layout update.
+
 ## Persistent reading geography
 
 Place the selected-theme map beside the topic rail, on the page canvas. Keep a

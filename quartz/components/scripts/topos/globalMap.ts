@@ -21,6 +21,7 @@ import "../../styles/globalMap.css"
 type CloseReason = "dismiss" | "navigate" | "history"
 export interface GlobalMapViewSnapshot {
   version: 1
+  arrangement?: "continuous-1"
   signature: string
   selection?: string[]
   selected?: string
@@ -165,7 +166,7 @@ export function createGlobalMap(
   instruction.className = "global-map-hint"
   const scopeNote = html(
     "p",
-    "主题分区用于定位；箭头按原记录方向显示。引用、目录关联与数学关系分别标注，不把空间距离当作论证。",
+    "颜色与主题名称帮助定位，节点共享同一空间；箭头按原记录方向显示。引用、目录关联与数学关系分别标注，距离不代表论证。",
   )
   scopeNote.className = "global-map-provenance"
   const maps = new Map<string, SavedMap>()
@@ -188,7 +189,16 @@ export function createGlobalMap(
   const movedPoints = new Map(
     restored.points.map((point) => [point.id, { x: point.x, y: point.y }]),
   )
-  const restoredViews = new Map(restored.views.map((view) => [view.key, view]))
+  // Keep explicit manual drops from the prior map, but do not let its cached
+  // rectangular default scene override the new continuous arrangement.
+  const continuousCache =
+    stored &&
+    typeof stored === "object" &&
+    "arrangement" in stored &&
+    stored.arrangement === "continuous-1"
+  const restoredViews = new Map(
+    (continuousCache ? restored.views : []).map((view) => [view.key, view]),
+  )
   let saved: SavedMap | undefined
   let field: ReturnType<typeof createGlobalMapField> | undefined
   let lastFrame = 0
@@ -207,12 +217,13 @@ export function createGlobalMap(
   let frame = 0
   let renderCount = 0
   let suppressedUntil = 0
-  let pendingActivation: string | undefined
+  let pendingActivation: { kind: "node" | "theme"; id: string } | undefined
   let pinched = false
   let activeDrag:
     | {
         pointer: number
         id?: string
+        group?: string
         start: MapPoint
         last: MapPoint
         offset: MapPoint
@@ -227,6 +238,8 @@ export function createGlobalMap(
   const paths = new Map<string, SVGPathElement>()
   const groupNodes = new Map<string, SVGGElement>()
   const groupLabels = new Map<string, SVGTextElement>()
+  let themeBoxes: MapLabelBox[] = []
+  let themeCamera: MapCamera = { x: 0, y: 0, k: 1 }
   const labels = new Map<
     string,
     { anchor: SVGAElement; leader: SVGPathElement; width: number; height: number }
@@ -333,6 +346,7 @@ export function createGlobalMap(
         storageKey,
         JSON.stringify({
           version: 1,
+          arrangement: "continuous-1",
           signature,
           points: [...movedPoints].map(([id, point]) => ({ id, ...point })),
           views: [...views.values()].slice(-32),
@@ -435,29 +449,76 @@ export function createGlobalMap(
         )
       }
     }
-    if (scaleChanged || sceneDirty)
-      for (const group of scene.groups) {
+    if (scaleChanged || sceneDirty || labelDirty || moved.size) {
+      const screenFont = Math.max(13, Math.min(18, 20 * camera.k))
+      const themeItems = scene.groups.map((group) => {
         const label = groupLabels.get(group.id)!
-        const fontSize = Math.max(22, 14 / camera.k)
-        label.setAttribute("font-size", String(fontSize))
-        label.setAttribute("y", String(group.y + fontSize * 1.12))
-        const screenWidth = Math.max(16, Math.min(group.labelWidth * camera.k, width - 16))
-        const lines = mapTitleLines(
-          group.title,
-          Math.max(1, screenWidth / (fontSize * camera.k * 1.05)),
+        const points = group.ids.map((id) => byID.get(id)!).filter(Boolean)
+        const x = points.reduce((sum, point) => sum + point.x, 0) / points.length
+        const y = points.reduce((sum, point) => sum + point.y, 0) / points.length
+        const spreadY = Math.sqrt(
+          points.reduce((sum, point) => sum + (point.y - y) ** 2, 0) / points.length,
         )
+        // A name is a light landmark in the shared field, never a container or
+        // an invisible drag barrier. It follows its neighborhood's actual pose.
+        const fontSize = screenFont / camera.k
+        label.setAttribute("font-size", String(fontSize))
+        const lines = mapTitleLines(group.title, 15)
         const signature = JSON.stringify(lines)
         if (label.dataset.lines !== signature) {
           label.replaceChildren()
           lines.forEach((line, i) => {
             svgNode("tspan", label, {
-              x: String(group.x + 22),
+              x: "0",
               dy: i ? "1.18em" : "0",
             }).textContent = line
           })
           label.dataset.lines = signature
         }
+        return {
+          id: group.id,
+          x: camera.x + x * camera.k,
+          y: camera.y + (y - spreadY) * camera.k - 24,
+          width:
+            Math.max(
+              ...lines.map((line) => textContext?.measureText(line).width ?? line.length * 14),
+            ) *
+              (screenFont / 14) +
+            10,
+          height: lines.length * screenFont * 1.18 + 6,
+          priority: 1,
+        }
+      })
+      const previous = themeBoxes.map((box) => ({
+        ...box,
+        x: camera.x + ((box.x - themeCamera.x) * camera.k) / themeCamera.k,
+        y: camera.y + ((box.y - themeCamera.y) * camera.k) / themeCamera.k,
+      }))
+      // Prefer clear space beside marks, but never hide a theme entrance merely
+      // because a dense overview has no large annotation-sized empty patch.
+      const themeObstacles = scene.nodes.map((node) => ({
+        x: camera.x + node.x * camera.k,
+        y: camera.y + node.y * camera.k,
+        radius: pointRadius * camera.k + 2,
+      }))
+      const clearPlacement = placeMapLabels(themeItems, width, height, themeObstacles, previous)
+      const placement = clearPlacement.omitted.length
+        ? placeMapLabels(themeItems, width, height, [], previous)
+        : clearPlacement
+      themeBoxes = placement.boxes
+      themeCamera = { ...camera }
+      for (const item of themeItems) {
+        // Never move a mathematical node to fit a navigation annotation.
+        const box = themeBoxes.find((box) => box.id === item.id)
+        const group = groupNodes.get(item.id)!
+        group.style.visibility = box ? "" : "hidden"
+        if (box)
+          group.setAttribute(
+            "transform",
+            `translate(${(box.x + box.width / 2 - camera.x) / camera.k} ${(box.y + screenFont - camera.y) / camera.k})`,
+          )
       }
+    }
     const needsLabels =
       sceneDirty || labelDirty || scaleChanged || emphasisChanged || moved.size > 0
     if (!needsLabels && cameraChanged) {
@@ -495,7 +556,12 @@ export function createGlobalMap(
         x: box.x + labelPan.x,
         y: box.y + labelPan.y,
       }))
-      const placement = placeMapLabels(candidates, width, height, obstacles, previous)
+      const themeNames = themeBoxes.map((box) => ({
+        ...box,
+        x: camera.x + ((box.x - themeCamera.x) * camera.k) / themeCamera.k,
+        y: camera.y + ((box.y - themeCamera.y) * camera.k) / themeCamera.k,
+      }))
+      const placement = placeMapLabels(candidates, width, height, obstacles, previous, themeNames)
       labelBoxes = placement.boxes
       omittedLabelIDs = placement.omitted
       const nextLabels = new Set(labelBoxes.map((box) => box.id))
@@ -686,6 +752,18 @@ export function createGlobalMap(
     }
     requestPaint()
   }
+  function locateGroup(id: string) {
+    const current = scene.groups.find((item) => item.id === id)
+    if (!current) return
+    const ids = new Set(current.ids)
+    camera = mapFit(
+      scene.nodes.filter((node) => ids.has(node.id)),
+      width,
+      height,
+    )
+    labelDirty = true
+    requestPaint()
+  }
   function renderScene() {
     work.sceneJoins++
     sceneDirty = true
@@ -709,32 +787,19 @@ export function createGlobalMap(
           "data-global-map-group": group.id,
           tabindex: "0",
           role: "button",
-          "aria-label": `进入${group.title}分区`,
+          "aria-label": `定位主题：${group.title}`,
         })
         collection.classList.add("global-map-group")
-        svgNode("rect", collection)
-        const label = svgNode("text", collection, { fill: group.color, "aria-label": group.title })
+        const label = svgNode("text", collection, {
+          fill: group.color,
+          "aria-label": group.title,
+          "text-anchor": "middle",
+          x: "0",
+          y: "0",
+        })
         label.textContent = group.title
         groupLabels.set(group.id, label)
         groupNodes.set(group.id, collection)
-        const locateGroup = () => {
-          const current = scene.groups.find((item) => item.id === group.id)
-          if (!current) return
-          const ids = new Set(current.ids)
-          camera = mapFit(
-            [
-              ...scene.nodes.filter((node) => ids.has(node.id)),
-              { x: current.x - 12, y: current.y - 12 },
-              { x: current.x + current.width + 12, y: current.y - 12 },
-              { x: current.x - 12, y: current.y + current.height + 12 },
-              { x: current.x + current.width + 12, y: current.y + current.height + 12 },
-            ],
-            width,
-            height,
-          )
-          labelDirty = true
-          requestPaint()
-        }
         collection.addEventListener("click", (event) => {
           if (
             event.ctrlKey ||
@@ -745,28 +810,16 @@ export function createGlobalMap(
           )
             return
           event.preventDefault()
-          locateGroup()
+          locateGroup(group.id)
         })
         collection.addEventListener("keydown", (event) => {
           if (event.key !== "Enter" && event.key !== " ") return
           event.preventDefault()
           event.stopPropagation()
-          locateGroup()
+          locateGroup(group.id)
         })
       } else if (collection.parentNode !== groupLayer) groupLayer.append(collection)
-      const rect = collection.firstElementChild!
-      for (const [name, value] of Object.entries({
-        x: String(group.x),
-        y: String(group.y),
-        width: String(group.width),
-        height: String(group.height),
-        rx: "0",
-        stroke: group.color,
-      }))
-        rect.setAttribute(name, value)
       const label = groupLabels.get(group.id)!
-      label.setAttribute("x", String(group.x + 22))
-      label.setAttribute("y", String(group.y + 32))
       delete label.dataset.lines
     }
     for (const edge of scene.relations) {
@@ -1067,14 +1120,23 @@ export function createGlobalMap(
       pinched = true
       return
     }
-    const target = (event.target as Element).closest<SVGAElement>(
-      "[data-global-map-node], [data-global-map-label]",
-    )
+    // Chromium can retarget a touch on a theme glyph to a nearby small link.
+    // Use the actual topmost painted hit: visible node marks still win, while
+    // a visibly touched theme name cannot silently open a neighboring article.
+    const hit =
+      event.pointerType === "touch"
+        ? (document.elementFromPoint(event.clientX, event.clientY) ?? (event.target as Element))
+        : (event.target as Element)
+    const target = hit.closest<SVGAElement>("[data-global-map-node], [data-global-map-label]")
     const id = target?.dataset.globalMapNode ?? target?.dataset.globalMapLabel
+    const group = id
+      ? undefined
+      : hit.closest<SVGGElement>("[data-global-map-group]")?.dataset.globalMapGroup
     const node = id ? byID.get(id) : undefined
     activeDrag = {
       pointer: event.pointerId,
       id,
+      group,
       start: point,
       last: point,
       offset: node
@@ -1129,11 +1191,13 @@ export function createGlobalMap(
     if (stage.hasPointerCapture(event.pointerId)) stage.releasePointerCapture(event.pointerId)
     if (drag?.pointer === event.pointerId) {
       if (drag.id && drag.moved) field?.release(drag.id)
-      if (drag.id && !drag.moved && !pinched && event.type === "pointerup") {
+      if ((drag.id || drag.group) && !drag.moved && !pinched && event.type === "pointerup") {
         // Keep the original surface until its compatibility click is consumed.
         // Hiding it during pointerup can retarget a touch click to a prose link
         // underneath and navigate twice before the reader sees the first note.
         pendingActivation = drag.id
+          ? { kind: "node", id: drag.id }
+          : { kind: "theme", id: drag.group! }
       } else if (drag.moved || pinched) suppressedUntil = performance.now() + 300
       activeDrag = undefined
     }
@@ -1161,13 +1225,14 @@ export function createGlobalMap(
         event.altKey
       )
         return
-      const id = pendingActivation
+      const activation = pendingActivation
       pendingActivation = undefined
       event.preventDefault()
       event.stopPropagation()
       // Pointer capture can make stage itself the click target; don't rely on
       // an anchor handler. Keyboard and modified link clicks remain native.
-      navigate(id)
+      if (activation.kind === "node") navigate(activation.id)
+      else locateGroup(activation.id)
     },
     { capture: true },
   )
@@ -1367,6 +1432,7 @@ export function createGlobalMap(
       if (!saved) return undefined
       return {
         version: 1,
+        arrangement: "continuous-1",
         signature,
         selection: selection ? [...selection] : undefined,
         selected,
@@ -1384,6 +1450,7 @@ export function createGlobalMap(
         typeof n === "number" && Number.isFinite(n) && Math.abs(n) < 1e7
       if (
         view.version !== 1 ||
+        view.arrangement !== "continuous-1" ||
         view.signature !== signature ||
         !view.camera ||
         ![view.camera.x, view.camera.y, view.camera.k, view.width, view.height].every(finite) ||

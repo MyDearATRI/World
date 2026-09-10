@@ -46,13 +46,27 @@
 }
 .global-map-group {
   cursor: zoom-in;
+  pointer-events: none;
 }
 .global-map-group:focus-visible {
   outline: none;
 }
-.global-map-group:focus-visible rect {
-  stroke-width: 2.5;
-  stroke-opacity: 1;
+.global-map-group text {
+  font-weight: 500;
+  letter-spacing: 0.035em;
+  opacity: 0.78;
+  pointer-events: visiblePainted;
+  paint-order: stroke;
+  stroke: var(--paper, #f4f2ed);
+  stroke-width: 6px;
+  stroke-linejoin: round;
+}
+.global-map-group:hover text,
+.global-map-group:focus-visible text {
+  opacity: 1;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
 }
 .global-map::backdrop {
   background: #23374170;
@@ -142,20 +156,6 @@
   overflow: hidden;
   touch-action: none;
   user-select: none;
-}
-.global-map-canvas > g > g:first-child rect {
-  fill: #edf3f12e;
-  stroke-width: 1.2;
-  vector-effect: non-scaling-stroke;
-  stroke-opacity: 0.35;
-}
-.global-map-canvas > g > g:first-child text {
-  font-weight: 600;
-  pointer-events: none;
-  paint-order: stroke;
-  stroke: #f4f7f5;
-  stroke-width: 4px;
-  stroke-linejoin: round;
 }
 .global-map-edge {
   fill: none;

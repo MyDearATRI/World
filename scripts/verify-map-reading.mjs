@@ -48,6 +48,244 @@ const readReady = async (page, id) => {
 }
 const closeNumber = (a, b, tolerance = 1) => Math.abs(a - b) <= tolerance
 const sameCamera = (a, b) => ["x", "y", "k"].every((key) => closeNumber(a[key], b[key], 0.01))
+async function checkOpenThemeMap(page, name, expected) {
+  const evidence = await page.evaluate(() => {
+    const stage = document.querySelector("[data-global-map-stage]"),
+      bounds = stage.getBoundingClientRect(),
+      themes = [...stage.querySelectorAll("[data-global-map-group]")],
+      nodes = [...stage.querySelectorAll("[data-global-map-node]")],
+      labels = [...stage.querySelectorAll("[data-global-map-label]")]
+    const shapes = themes.flatMap((theme) =>
+      [...theme.querySelectorAll("rect,path,polygon,polyline,circle,ellipse,line")].map(
+        (shape) => ({
+          id: theme.dataset.globalMapGroup,
+          tag: shape.tagName,
+        }),
+      ),
+    )
+    const walls = []
+    for (let y = bounds.top + 12; y < bounds.bottom - 12; y += 28)
+      for (let x = bounds.left + 12; x < bounds.right - 12; x += 28) {
+        const theme = document.elementFromPoint(x, y)?.closest("[data-global-map-group]")
+        if (!theme) continue
+        const text = theme.querySelector("text")?.getBoundingClientRect()
+        if (
+          !text ||
+          x < text.left - 1 ||
+          x > text.right + 1 ||
+          y < text.top - 1 ||
+          y > text.bottom + 1
+        )
+          walls.push({ id: theme.dataset.globalMapGroup, x, y })
+      }
+    const annotation = labels[0] ?? themes[0]
+    return {
+      nodeIDs: nodes.map((node) => node.dataset.globalMapNode),
+      shapes,
+      walls,
+      themes: themes.map((theme) => ({
+        id: theme.dataset.globalMapGroup,
+        role: theme.getAttribute("role"),
+        tabIndex: theme.tabIndex,
+        name: theme.getAttribute("aria-label"),
+        text: theme.querySelector("text")?.textContent,
+      })),
+      layering:
+        Boolean(annotation) &&
+        nodes.every((node) =>
+          Boolean(annotation.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING),
+        ),
+      missingMarks: nodes
+        .filter((node) => {
+          const dot = node.querySelector(".global-map-dot"),
+            style = dot && getComputedStyle(dot)
+          return (
+            !dot ||
+            style.display === "none" ||
+            style.visibility === "hidden" ||
+            Number(style.opacity) === 0
+          )
+        })
+        .map((node) => node.dataset.globalMapNode),
+    }
+  })
+  const expectedIDs = new Set(expected.concepts.map((node) => node.id))
+  check(
+    `${name}: open field keeps exact unique object identities`,
+    evidence.nodeIDs.length === expectedIDs.size &&
+      new Set(evidence.nodeIDs).size === expectedIDs.size &&
+      evidence.nodeIDs.every((id) => expectedIDs.has(id)),
+    { count: evidence.nodeIDs.length, expected: expectedIDs.size },
+  )
+  check(
+    `${name}: themes have no enclosing geometry or broad hit walls`,
+    evidence.shapes.length === 0 && evidence.walls.length === 0,
+    { shapes: evidence.shapes, walls: evidence.walls },
+  )
+  check(
+    `${name}: theme controls retain keyboard semantics and names`,
+    evidence.themes.length > 0 &&
+      evidence.themes.every(
+        (theme) =>
+          theme.role === "button" && theme.tabIndex === 0 && theme.name && theme.text?.trim(),
+      ),
+    evidence.themes,
+  )
+  check(
+    `${name}: object marks remain above annotation layers`,
+    evidence.layering && evidence.missingMarks.length === 0,
+    { layering: evidence.layering, missingMarks: evidence.missingMarks },
+  )
+}
+async function checkThemeFocus(page, name) {
+  const group = page.locator("[data-global-map-group]").first(),
+    id = await group.getAttribute("data-global-map-group"),
+    before = (await snap(page)).globalMap
+  await group.focus()
+  await page.keyboard.press("Enter")
+  await mapReady(page)
+  const after = (await snap(page)).globalMap,
+    memberIDs = after.groups.find((group) => group.id === id)?.ids ?? []
+  check(
+    `${name}: theme Enter locates members without changing object positions`,
+    after.open &&
+      before.nodeIDs.length === after.nodeIDs.length &&
+      before.positions.every((node) => {
+        const next = after.positions.find((entry) => entry.id === node.id)
+        return next && closeNumber(node.x, next.x, 0.01) && closeNumber(node.y, next.y, 0.01)
+      }),
+    { id, members: memberIDs.length },
+  )
+  const themeFit = () =>
+    group.evaluate((group, ids) => {
+      const title = group.querySelector("text").getBoundingClientRect(),
+        stage = group.closest(".global-map-stage").getBoundingClientRect(),
+        members = new Set(ids),
+        marks = [
+          ...group.closest(".global-map-stage").querySelectorAll("[data-global-map-node]"),
+        ].filter((node) => members.has(node.dataset.globalMapNode))
+      const outside = marks
+        .filter((node) => {
+          const box = node.querySelector(".global-map-dot").getBoundingClientRect(),
+            x = box.x + box.width / 2,
+            y = box.y + box.height / 2
+          return (
+            x < stage.left - 1 || x > stage.right + 1 || y < stage.top - 1 || y > stage.bottom + 1
+          )
+        })
+        .map((node) => node.dataset.globalMapNode)
+      return {
+        titleVisible:
+          title.left >= stage.left - 1 &&
+          title.right <= stage.right + 1 &&
+          title.top >= stage.top - 1 &&
+          title.bottom <= stage.bottom + 1,
+        members: marks.length,
+        outside,
+      }
+    }, memberIDs)
+  const fit = await themeFit()
+  check(
+    `${name}: focused theme text and actual members fit the view`,
+    fit.titleVisible &&
+      memberIDs.length > 0 &&
+      fit.members === memberIDs.length &&
+      fit.outside.length === 0,
+    fit,
+  )
+  await page.keyboard.press("Space")
+  await mapReady(page)
+  check(
+    `${name}: theme Space remains in the same map and object set`,
+    (await snap(page)).globalMap.open &&
+      sameCamera(after.camera, (await snap(page)).globalMap.camera),
+  )
+  await page.locator("[data-global-map-fit]").click()
+  await mapReady(page)
+  const title = group.locator("text")
+  const textPoint = () =>
+    title.evaluate((text) => {
+      const group = text.closest("[data-global-map-group]"),
+        box = text.getBoundingClientRect(),
+        centerHit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2),
+        matrix = text.getScreenCTM()
+      for (let index = 0; index < text.getNumberOfChars(); index++) {
+        const extent = text.getExtentOfChar(index)
+        if (extent.width <= 0 || extent.height <= 0) continue
+        const point = new DOMPoint(
+          extent.x + extent.width / 2,
+          extent.y + extent.height / 2,
+        ).matrixTransform(matrix)
+        if (
+          document.elementFromPoint(point.x, point.y)?.closest("[data-global-map-group]") === group
+        )
+          return {
+            x: point.x,
+            y: point.y,
+            id: group.dataset.globalMapGroup,
+            boxCenterTarget:
+              centerHit
+                ?.closest("[data-global-map-node],[data-global-map-label],[data-global-map-group]")
+                ?.outerHTML.slice(0, 250) ?? null,
+          }
+      }
+      return null
+    })
+  const tapPoint = await textPoint()
+  if (!tapPoint) throw new Error(`No actual theme glyph can receive pointer input: ${name}`)
+  if (page.viewportSize().width === 390) {
+    await page.touchscreen.tap(tapPoint.x, tapPoint.y)
+  } else await page.mouse.click(tapPoint.x, tapPoint.y)
+  await mapReady(page)
+  const pointerFit = await themeFit(),
+    pointerMap = (await snap(page)).globalMap
+  check(
+    `${name}: a real theme-name click or tap locates its members`,
+    pointerMap.open &&
+      pointerMap.nodeIDs.length === before.nodeIDs.length &&
+      before.nodeIDs.every((id) => pointerMap.nodeIDs.includes(id)) &&
+      tapPoint.id === id &&
+      pointerFit.titleVisible &&
+      pointerFit.members === memberIDs.length &&
+      pointerFit.outside.length === 0,
+    { target: tapPoint, fit: pointerFit, camera: pointerMap.camera },
+  )
+  const point = await textPoint(),
+    beforeDrag = (await snap(page)).globalMap.camera
+  if (!point) throw new Error(`No actual theme glyph can receive a drag: ${name}`)
+  if (page.viewportSize().width === 390) {
+    const cdp = await page.context().newCDPSession(page)
+    await cdp.send("Input.dispatchTouchEvent", {
+      type: "touchStart",
+      touchPoints: [{ id: 1, x: point.x, y: point.y }],
+    })
+    for (let step = 1; step <= 8; step++)
+      await cdp.send("Input.dispatchTouchEvent", {
+        type: "touchMove",
+        touchPoints: [{ id: 1, x: point.x + step * 4, y: point.y + step * 3 }],
+      })
+    await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] })
+    await cdp.detach()
+  } else {
+    await page.mouse.move(point.x, point.y)
+    await page.mouse.down()
+    await page.mouse.move(point.x + 32, point.y + 24, { steps: 8 })
+    await page.mouse.up()
+  }
+  await mapReady(page)
+  const afterDrag = (await snap(page)).globalMap.camera
+  check(
+    `${name}: dragging theme text pans continuously without activating it`,
+    closeNumber(afterDrag.x - beforeDrag.x, 32, 1) &&
+      closeNumber(afterDrag.y - beforeDrag.y, 24, 1) &&
+      closeNumber(afterDrag.k, beforeDrag.k, 0.001) &&
+      (await snap(page)).globalMap.open,
+    { before: beforeDrag, after: afterDrag, target: point },
+  )
+  await group.focus()
+  await page.keyboard.press("Enter")
+  await mapReady(page)
+}
 await mkdir(output, { recursive: true })
 const preview = process.env.MAP_READING_BASE ? undefined : await startPreview({ port: 0 })
 const base = process.env.MAP_READING_BASE ?? `${preview.url}/World/`
@@ -89,6 +327,10 @@ try {
         (await snap(page)).globalMap.nodeIDs.length === model.concepts.length &&
           !(await snap(page)).overview,
       )
+      await checkOpenThemeMap(page, name, model)
+      await checkThemeFocus(page, name)
+      await page.locator("[data-global-map-fit]").click()
+      await mapReady(page)
       await shot(page, `${name}-entry`)
       await page.keyboard.press("Control+k")
       await page.locator("[data-topos-search-input]").fill(focus.title)
@@ -294,6 +536,8 @@ try {
     if (process.env.MAP_READING_WIDTH && String(width) !== process.env.MAP_READING_WIDTH) continue
     const context = await browser.newContext({
       viewport: { width, height: width === 1440 ? 1000 : width === 1024 ? 900 : 844 },
+      hasTouch: width === 390,
+      isMobile: width === 390,
     })
     const page = await context.newPage()
     const name = `atlas-${width}`
@@ -309,27 +553,8 @@ try {
         (await snap(page)).globalMap.nodeIDs.length === atlas.concepts.length &&
           new Set((await snap(page)).globalMap.nodeIDs).size === atlas.concepts.length,
       )
-      const group = page.locator("[data-global-map-group]").first()
-      await group.focus()
-      await page.keyboard.press("Enter")
-      await mapReady(page)
-      check(
-        `${name}: a named group is keyboard navigable`,
-        await page.locator("[data-global-map]").isVisible(),
-      )
-      check(
-        `${name}: focused group fits with its title`,
-        await group.evaluate((node) => {
-          const group = node.getBoundingClientRect(),
-            stage = node.closest(".global-map-stage").getBoundingClientRect()
-          return (
-            group.left >= stage.left - 1 &&
-            group.right <= stage.right + 1 &&
-            group.top >= stage.top - 1 &&
-            group.bottom <= stage.bottom + 1
-          )
-        }),
-      )
+      await checkOpenThemeMap(page, name, atlas)
+      await checkThemeFocus(page, name)
       await shot(page, name)
       const node = atlas.concepts.find((c) => !c.id.startsWith("math.region.") && c.sections.length)
       if (node) {
@@ -346,6 +571,96 @@ try {
     }
     await context.close()
   }
+  // A bounded migration fixture uses genuine public IDs and a current valid
+  // snapshot, but marks its saved view as the previous arrangement. Explicit
+  // manual coordinates survive; a poisoned old default camera/physics must not.
+  const legacyContext = await browser.newContext({ viewport: { width: 1440, height: 1000 } })
+  let legacyPage = await legacyContext.newPage()
+  try {
+    await legacyPage.goto(base + "topos.html")
+    await mapReady(legacyPage)
+    const current = await legacyPage.evaluate(() => history.state?.topos?.mapView)
+    if (!current?.physics?.nodes?.length) throw new Error("No actual map view for cache fixture")
+    const manual = {
+        id: current.physics.nodes[0].id,
+        x: current.physics.nodes[0].x + 241,
+        y: current.physics.nodes[0].y - 173,
+      },
+      poisonedCamera = { x: 543210, y: -432100, k: 0.07 }
+    const legacy = {
+      version: 1,
+      signature: current.signature,
+      points: [manual],
+      views: [
+        {
+          key:
+            current.selection === undefined ? "all" : JSON.stringify([...current.selection].sort()),
+          camera: poisonedCamera,
+          width: current.width,
+          height: current.height,
+          selected: current.selected,
+          layout: { columns: 3, headingSpace: 75 },
+          physics: {
+            ...current.physics,
+            settled: true,
+            nodes: current.physics.nodes.map((node, index) => ({
+              ...node,
+              x: 100000 + index * 200,
+              y: 200000,
+              anchorX: 100000 + index * 200,
+              anchorY: 200000,
+              vx: 0,
+              vy: 0,
+            })),
+          },
+        },
+      ],
+    }
+    // A different document entry must not inherit the current valid history
+    // snapshot or the departing page's later cache write.
+    await legacyPage.close()
+    legacyPage = await legacyContext.newPage()
+    await legacyPage.addInitScript((cache) => {
+      sessionStorage.setItem(
+        `topos-global-map:1:${location.pathname}:${cache.signature}`,
+        JSON.stringify(cache),
+      )
+      window.__legacyMapFixture = cache
+    }, legacy)
+    await legacyPage.goto(base + "topos.html?legacy-cache-fixture=1")
+    await mapReady(legacyPage)
+    const migrated = (await snap(legacyPage)).globalMap,
+      restored = migrated.positions.find((node) => node.id === manual.id)
+    check(
+      "legacy cache: manual coordinates survive without the old arrangement marker",
+      restored &&
+        closeNumber(restored.anchorX, manual.x, 0.01) &&
+        closeNumber(restored.anchorY, manual.y, 0.01),
+      {
+        expected: manual,
+        actual: restored && { id: restored.id, x: restored.anchorX, y: restored.anchorY },
+      },
+    )
+    check(
+      "legacy cache: obsolete default camera and physics do not replace the open field",
+      !sameCamera(migrated.camera, poisonedCamera) &&
+        migrated.positions.every(
+          (node) => Math.abs(node.anchorX) < 100000 && Math.abs(node.anchorY) < 100000,
+        ) &&
+        migrated.nodeIDs.length === model.concepts.length,
+      { camera: migrated.camera, count: migrated.nodeIDs.length },
+    )
+    const historyView = await legacyPage.evaluate(() => history.state?.topos?.mapView)
+    check(
+      "current history: open arrangement and actual camera are recorded together",
+      historyView?.arrangement === "continuous-1" &&
+        sameCamera(historyView.camera, migrated.camera),
+      { arrangement: historyView?.arrangement, camera: historyView?.camera },
+    )
+  } catch (error) {
+    report.errors.push({ name: "legacy-cache", error: error.stack })
+  }
+  await legacyContext.close()
   const fallback = await browser.newContext({
     viewport: { width: 390, height: 844 },
     reducedMotion: "reduce",
@@ -402,7 +717,11 @@ try {
   report.failed = report.checks.filter((c) => !c.passed).length + report.errors.length
   await writeFile(path.join(output, "report.json"), JSON.stringify(report, null, 2))
   console.log(
-    JSON.stringify({ passed: report.passed, failed: report.failed, errors: report.errors }),
+    JSON.stringify({
+      passed: report.passed,
+      failed: report.failed,
+      errors: report.errors.map(({ name, error }) => ({ name, error })),
+    }),
   )
   if (report.failed) process.exitCode = 1
 }
