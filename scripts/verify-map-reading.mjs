@@ -27,14 +27,25 @@ const mapReady = (page) =>
   page.waitForFunction(
     () => window.__topos?.snapshot().globalMap?.open && window.__topos.snapshot().globalMap.settled,
   )
-const readReady = (page, id) =>
-  page.waitForFunction(
+const readReady = async (page, id) => {
+  await page.waitForFunction(
     (id) =>
       window.__topos?.state.focus === id &&
       document.body.dataset.reader === "true" &&
       document.querySelector('.topos-unfolding[data-active="true"] .topos-prose'),
     id,
   )
+  // Public font subsets may still be loading when the source tree first exists.
+  // Match the reader's restoration lifecycle instead of assuming local-cache
+  // timing; this waits for readiness, not for a desired scroll assertion.
+  await page.evaluate(async () => {
+    void document.querySelector('.topos-unfolding[data-active="true"]')?.offsetHeight
+    await document.fonts.ready
+    await new Promise((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+    )
+  })
+}
 const closeNumber = (a, b, tolerance = 1) => Math.abs(a - b) <= tolerance
 const sameCamera = (a, b) => ["x", "y", "k"].every((key) => closeNumber(a[key], b[key], 0.01))
 await mkdir(output, { recursive: true })

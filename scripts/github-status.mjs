@@ -6,6 +6,7 @@ const repo = "MyDearATRI/World"
 const api = `https://api.github.com/repos/${repo}/actions/runs?branch=main&event=push&head_sha=${sha}&per_page=5`
 const deadline = Date.now() + 20 * 60_000
 let lastStatus = ""
+let deployed = false
 while (Date.now() < deadline) {
   const response = await fetch(api, {
     headers: { Accept: "application/vnd.github+json", "User-Agent": "World-publication-check" },
@@ -28,7 +29,10 @@ while (Date.now() < deadline) {
     if (run.status === "completed") {
       if (run.conclusion !== "success") throw new Error(`Publication failed: ${run.html_url}`)
       console.log("博客已更新：https://mydearatri.github.io/World/")
-      process.exit(0)
+      // Let Node close the fetch/proxy handles naturally. Forced process.exit
+      // can abort inside libuv on Windows after reporting a successful deploy.
+      deployed = true
+      break
     }
   } else if (!lastStatus) {
     console.log("推送已完成，等待 GitHub 创建发布任务……")
@@ -36,4 +40,7 @@ while (Date.now() < deadline) {
   }
   await delay(30_000)
 }
-throw new Error(`等待发布超时；提交已推送，可继续在 https://github.com/${repo}/actions 查看结果。`)
+if (!deployed)
+  throw new Error(
+    `等待发布超时；提交已推送，可继续在 https://github.com/${repo}/actions 查看结果。`,
+  )
