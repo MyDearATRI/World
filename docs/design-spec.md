@@ -1,5 +1,18 @@
 # Design specification
 
+## Persistent reading geography
+
+Place the selected-theme map beside the topic rail, on the page canvas. Keep a
+quiet full reading surface when opening a source; collapse and Back restore the
+same map. The name directory uses continuous rows. Named group entrances and an
+explicit current-neighborhood view support progressive scale.
+
+Keep arrows, relation labels and original evidence available together. Expose
+links outside the current scope and expand them deliberately. A text relation
+list remains usable when spatial labels cannot all fit. Do not move or remove a
+node because its name is hidden by another label. Map distances express layout;
+they do not certify mathematical dependence.
+
 ## Independent nodes and labels
 
 Node marks and their hit targets occupy a layer independent from name labels. Give marks a restrained paper halo and visible keyboard focus. Resolve name/node conflicts by placing or receding the name, never by removing the mark. Keep visible relationship endpoints even when one full name cannot fit; focus, pointer inspection and the locator still disclose the full name.

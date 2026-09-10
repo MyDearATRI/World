@@ -60,22 +60,31 @@ export function globalMapScene(
     members.set(group, list)
   }
   const definitions = [
-    ...topics,
+    ...(model.topics ?? []),
     { id: "map-other", title: "其他已公开对象", color: "#6c7f84" },
-  ].filter((topic) => members.has(topic.id))
-  const regions = definitions.map((topic) => {
-    const entries = members
-      .get(topic.id)!
-      .sort((a, b) => compare(a.title, b.title) || compare(a.id, b.id))
-    const columns = Math.max(1, Math.ceil(Math.sqrt(entries.length * 1.4)))
-    return {
-      topic,
-      entries,
-      columns,
-      width: columns * 220 + 90,
-      height: Math.ceil(entries.length / columns) * 150 + (layout.headingSpace ?? 75) + 55,
-    }
-  })
+  ]
+  // A topic owns the same world-space slot even when earlier topics are hidden.
+  // Reserving it from the complete public model prevents newly enabled branches
+  // from acquiring the origin already occupied by the retained current branch.
+  const regions = definitions
+    .map((topic) => {
+      const entries = model.concepts
+        .filter((concept) =>
+          topic.id === "map-other"
+            ? !(model.topics ?? []).some((known) => concept.topicIDs?.includes(known.id))
+            : concept.topicIDs?.includes(topic.id),
+        )
+        .sort((a, b) => compare(a.title, b.title) || compare(a.id, b.id))
+      const columns = Math.max(1, Math.ceil(Math.sqrt(entries.length * 1.4)))
+      return {
+        topic,
+        entries,
+        columns,
+        width: columns * 220 + 90,
+        height: Math.ceil(entries.length / columns) * 150 + (layout.headingSpace ?? 75) + 55,
+      }
+    })
+    .filter((region) => region.entries.length)
   const columns = Math.max(
     1,
     Math.min(
@@ -94,11 +103,15 @@ export function globalMapScene(
     ),
   )
   regions.forEach((region, index) => {
+    const visible = members.get(region.topic.id)
+    if (!visible?.length) return
+    const visibleIDs = new Set(visible.map((concept) => concept.id))
     const left = columnWidths.slice(0, index % columns).reduce((sum, width) => sum + width + 100, 0)
     const top = rowHeights
       .slice(0, Math.floor(index / columns))
       .reduce((sum, height) => sum + height + 100, 0)
-    const items = region.entries.map((concept, i) => {
+    const items = region.entries.flatMap((concept, i) => {
+      if (!visibleIDs.has(concept.id)) return []
       const saved = retained.get(concept.id)
       // A stable phyllotactic seed gives the physical solver room in two dimensions,
       // rather than pinning every concept to an identical rectangular row.
@@ -119,7 +132,7 @@ export function globalMapScene(
                 extentY / 2 +
                 (Math.sin(angle) * radius * extentY) / 2,
             }
-      return { id: concept.id, concept, group: region.topic.id, ...point }
+      return [{ id: concept.id, concept, group: region.topic.id, ...point }]
     })
     nodes.push(...items)
     const minX = Math.min(left + 10, Math.min(...items.map((node) => node.x)) - 45)
@@ -139,6 +152,35 @@ export function globalMapScene(
       labelWidth: columnWidths[index % columns] - 60,
     })
   })
+  // A retained drop can sit in another topic's reserved slot. Keep every old
+  // identity in place and find free reference positions only for incoming nodes.
+  const occupied = nodes.filter((node) => retained.has(node.id))
+  if (occupied.length) {
+    const clearance = 110
+    for (const node of nodes) {
+      if (retained.has(node.id)) continue
+      const seed = { x: node.x, y: node.y }
+      const intersects = () =>
+        occupied.some((point) => (node.x - point.x) ** 2 + (node.y - point.y) ** 2 < clearance ** 2)
+      for (let attempt = 1; intersects() && attempt <= 1024; attempt++) {
+        const radius = 24 * Math.sqrt(attempt)
+        const angle = attempt * Math.PI * (3 - Math.sqrt(5))
+        node.x = seed.x + radius * Math.cos(angle)
+        node.y = seed.y + radius * Math.sin(angle)
+      }
+      if (intersects()) node.x = Math.max(...occupied.map((point) => point.x)) + clearance
+      occupied.push(node)
+    }
+    for (const group of groups) {
+      const items = nodes.filter((node) => node.group === group.id)
+      const right = Math.max(group.x + group.width, ...items.map((node) => node.x + 210))
+      const bottom = Math.max(group.y + group.height, ...items.map((node) => node.y + 95))
+      group.x = Math.min(group.x, ...items.map((node) => node.x - 45))
+      group.y = Math.min(group.y, ...items.map((node) => node.y - (layout.headingSpace ?? 75)))
+      group.width = right - group.x
+      group.height = bottom - group.y
+    }
+  }
   return {
     nodes,
     groups,
@@ -277,27 +319,78 @@ export function placeMapLabels(
     a.x + a.width + 6 > b.x &&
     a.y < b.y + b.height + 6 &&
     a.y + a.height + 6 > b.y
+  // A warm layout normally accepts its old slot. Spatial buckets avoid scanning
+  // every dot and already placed name for each fallback candidate while dragging.
+  const cells = (x: number, y: number, w: number, h: number) => {
+    const keys: string[] = []
+    for (let a = Math.floor(x / 64); a <= Math.floor((x + w) / 64); a++)
+      for (let b = Math.floor(y / 64); b <= Math.floor((y + h) / 64); b++) keys.push(`${a}/${b}`)
+    return keys
+  }
+  const circleCells = new Map<string, MapLabelCircle[]>()
+  for (const circle of obstacles)
+    for (const key of cells(
+      circle.x - circle.radius - 5,
+      circle.y - circle.radius - 5,
+      (circle.radius + 5) * 2,
+      (circle.radius + 5) * 2,
+    )) {
+      const entries = circleCells.get(key) ?? []
+      entries.push(circle)
+      circleCells.set(key, entries)
+    }
+  const boxCells = new Map<string, MapLabelBox[]>()
+  const available = (box: MapLabelBox) => {
+    const keys = cells(box.x - 6, box.y - 6, box.width + 12, box.height + 12)
+    const checkedBoxes = new Set<MapLabelBox>(),
+      checkedCircles = new Set<MapLabelCircle>()
+    for (const key of keys) {
+      for (const other of boxCells.get(key) ?? [])
+        if (!checkedBoxes.has(other)) {
+          checkedBoxes.add(other)
+          if (intersects(box, other)) return false
+        }
+      for (const circle of circleCells.get(key) ?? [])
+        if (!checkedCircles.has(circle)) {
+          checkedCircles.add(circle)
+          const nearX = Math.max(box.x, Math.min(box.x + box.width, circle.x))
+          const nearY = Math.max(box.y, Math.min(box.y + box.height, circle.y))
+          if ((nearX - circle.x) ** 2 + (nearY - circle.y) ** 2 < (circle.radius + 5) ** 2)
+            return false
+        }
+    }
+    return true
+  }
+  const retain = (box: MapLabelBox) => {
+    boxes.push(box)
+    for (const key of cells(box.x - 6, box.y - 6, box.width + 12, box.height + 12)) {
+      const entries = boxCells.get(key) ?? []
+      entries.push(box)
+      boxCells.set(key, entries)
+    }
+  }
   for (const item of ordered) {
     if (item.width > width - 16 || item.height > height - 16) {
       omitted.push(item.id)
       continue
     }
-    const old = remembered.get(item.id),
-      candidates: MapLabelBox[] = []
-    const add = (x: number, y: number) =>
-      candidates.push({
-        id: item.id,
-        x: Math.max(8, Math.min(width - item.width - 8, x)),
-        y: Math.max(8, Math.min(height - item.height - 8, y)),
-        width: item.width,
-        height: item.height,
-      })
-    if (old && Math.hypot(old.x + old.width / 2 - item.x, old.y + old.height / 2 - item.y) < 220)
-      add(old.x, old.y)
-    for (const distance of [24, 48, 84, 132, 190])
+    const old = remembered.get(item.id)
+    const candidate = (x: number, y: number): MapLabelBox => ({
+      id: item.id,
+      x: Math.max(8, Math.min(width - item.width - 8, x)),
+      y: Math.max(8, Math.min(height - item.height - 8, y)),
+      width: item.width,
+      height: item.height,
+    })
+    let chosen: MapLabelBox | undefined
+    if (old && Math.hypot(old.x + old.width / 2 - item.x, old.y + old.height / 2 - item.y) < 220) {
+      const box = candidate(old.x, old.y)
+      if (available(box)) chosen = box
+    }
+    search: for (const distance of chosen ? [] : [24, 48, 84, 132, 190])
       for (let direction = 0; direction < 8; direction++) {
         const angle = (direction * Math.PI) / 4
-        add(
+        const box = candidate(
           item.x +
             Math.cos(angle) * distance -
             (Math.cos(angle) < -0.1
@@ -313,17 +406,12 @@ export function placeMapLabels(
                 ? item.height / 2
                 : 0),
         )
+        if (available(box)) {
+          chosen = box
+          break search
+        }
       }
-    const chosen = candidates.find(
-      (box) =>
-        !boxes.some((other) => intersects(box, other)) &&
-        !obstacles.some((circle) => {
-          const nearX = Math.max(box.x, Math.min(box.x + box.width, circle.x)),
-            nearY = Math.max(box.y, Math.min(box.y + box.height, circle.y))
-          return Math.hypot(nearX - circle.x, nearY - circle.y) < circle.radius + 5
-        }),
-    )
-    if (chosen) boxes.push(chosen)
+    if (chosen) retain(chosen)
     else omitted.push(item.id)
   }
   return { boxes, omitted }

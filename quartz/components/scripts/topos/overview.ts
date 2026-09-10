@@ -49,11 +49,11 @@ export function createTopicOverview(
   header.className = "overview-header"
   const eyebrow = add(
     "p",
-    model.mode === "atlas" ? "数学地图 · 分类标题" : "已有笔记 · 主题概览",
+    model.mode === "atlas" ? "数学地图 · 分类标题目录" : "已有笔记 · 名称目录",
     header,
   )
   eyebrow.className = "overview-eyebrow"
-  const back = add("button", "回到当前阅读", header)
+  const back = add("button", "回到知识地图", header)
   back.type = "button"
   back.dataset.overviewClose = "true"
   back.addEventListener("click", callbacks.close)

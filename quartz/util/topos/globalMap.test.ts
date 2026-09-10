@@ -14,6 +14,11 @@ import {
 import { createGlobalMapField } from "./globalMapField"
 import { topicIDs } from "./topics"
 import type { KnowledgeModel, Relation } from "./types"
+import prepared from "../../../knowledge/index.json"
+import mapping from "../../../knowledge/topos/note-topics.json"
+import type { KnowledgeIndex } from "../knowledge"
+import { createPublishedModel } from "./published"
+import { attachNoteTopics } from "./atlas"
 
 function fixture(): KnowledgeModel {
   const model = JSON.parse(readFileSync("knowledge/topos/prototype.json", "utf8")) as KnowledgeModel
@@ -63,6 +68,93 @@ test("layout stays deterministic under model/selection order and preserves manua
   const moved = globalMapScene(model, undefined, retained).nodes.find((node) => node.id === id)!
   assert.deepEqual({ x: moved.x, y: moved.y }, retained.get(id))
   assert.equal(new Set(first.nodes.map(({ x, y }) => `${x}/${y}`)).size, first.nodes.length)
+})
+
+test("enabling an earlier topic leaves the later topic's reserved world slot unchanged", () => {
+  const model = fixture()
+  const only = globalMapScene(model, ["second"])
+  const both = globalMapScene(model, ["first", "second"])
+  for (const node of only.nodes) {
+    if (node.concept.topicIDs?.includes("first")) continue
+    const expanded = both.nodes.find((other) => other.id === node.id)!
+    assert.deepEqual({ x: expanded.x, y: expanded.y }, { x: node.x, y: node.y })
+  }
+})
+
+test("the actual 86-to-159 public expansion preserves old anchors and gives incoming nodes free territory", () => {
+  const model = createPublishedModel(prepared as KnowledgeIndex)
+  attachNoteTopics(model, mapping)
+  const focus = model.concepts.find((node) => node.title === "度量拓扑与连续性的三种刻画")!
+  const theme = focus.topicIDs![0]
+  for (const legacyOrigin of [false, true]) {
+    const initial = globalMapScene(model, [theme])
+    assert.equal(initial.nodes.length, 86)
+    // Existing sessions can retain coordinates from the old single-topic origin.
+    if (legacyOrigin) {
+      const { x, y } = initial.groups[0]
+      for (const node of initial.nodes) {
+        node.x -= x
+        node.y -= y
+      }
+    }
+    const oldField = createGlobalMapField(initial.nodes, initial.relations)
+    stop(oldField)
+    const old = oldField.snapshot()
+    const known = new Map(old.nodes.map((node) => [node.id, node]))
+    const outsideEdge = model.relations.find(
+      (edge) => known.has(edge.source) !== known.has(edge.target),
+    )!
+    const outside = model.concepts.find(
+      (node) =>
+        node.id === (known.has(outsideEdge.source) ? outsideEdge.target : outsideEdge.source),
+    )!
+    const expanded = globalMapScene(
+      model,
+      [...new Set([theme, ...outside.topicIDs!])],
+      new Map(old.nodes.map((node) => [node.id, { x: node.x, y: node.y }])),
+    )
+    assert.equal(expanded.nodes.length, 159)
+    assert.equal(new Set(expanded.nodes.map((node) => node.id)).size, 159)
+    for (const node of expanded.nodes) {
+      const previous = known.get(node.id)
+      if (previous) {
+        assert.deepEqual({ x: node.x, y: node.y }, { x: previous.x, y: previous.y })
+      } else {
+        for (const other of expanded.nodes) {
+          if (node.id === other.id) continue
+          assert.ok(Math.hypot(node.x - other.x, node.y - other.y) >= 109.999)
+        }
+      }
+    }
+    const field = createGlobalMapField(expanded.nodes, expanded.relations)
+    const fresh = field.snapshot()
+    assert.equal(
+      field.restore({
+        ...fresh,
+        nodes: fresh.nodes.map((node) => known.get(node.id) ?? node),
+        restLengths: Object.fromEntries(
+          Object.entries(fresh.restLengths ?? {}).map(([id, value]) => [
+            id,
+            old.restLengths?.[id] ?? value,
+          ]),
+        ),
+        settled: false,
+      }),
+      true,
+    )
+    for (const node of field.nodes) {
+      const previous = known.get(node.id)
+      if (previous) {
+        assert.equal(node.anchorX, previous.anchorX)
+        assert.equal(node.anchorY, previous.anchorY)
+      }
+    }
+    assert.ok(stop(field) <= 120, "genuine settling should finish within two simulated seconds")
+    separated(field)
+    const resting = field.snapshot()
+    for (let frame = 0; frame < 60; frame++) assert.equal(field.step(1 / 60), false)
+    assert.deepEqual(field.snapshot(), resting)
+  }
 })
 
 test("fit puts every object inside desktop and narrow mobile viewports, including dragged outliers", () => {

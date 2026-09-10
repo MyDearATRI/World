@@ -1,6 +1,10 @@
 {
   "version": 1,
   "newFiles": [
+    "docs/map-performance-acceptance.md",
+    "quartz/util/topos/globalMapField.test.ts",
+    "scripts/verify-map-workflow.mjs",
+    "scripts/verify-map-reading.mjs",
     "quartz/util/topos/globalMapField.ts",
     "scripts/verify-node-space.mjs",
     "quartz/components/scripts/topos/globalMap.ts",

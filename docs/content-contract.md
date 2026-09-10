@@ -1,5 +1,13 @@
 # Content contract
 
+## Local frontier-atlas governance boundary
+
+The sibling Mathematics-Frontier-Atlas workspace and root MASTER_PROMPT_v2.md
+are explicitly excluded from the note exporter. Its charter, templates, process
+logs, fixtures and unapproved future research content are not publication inputs.
+The resumed interface work continues to use the existing approved snapshot;
+ordinary mathematical examples remain eligible under the existing note rules.
+
 ## Layout forces are not knowledge assertions
 
 The node-space correction may derive bounded visual mass, anchoring and spring coefficients from the existing public graph. It cannot add or reinterpret an edge. Occupancy repulsion applies even to objects without a recorded link and does not prove mathematical independence. Every displayed reason must be the existing relation's explanation, category, direction and evidence, with an explicit absence state where no explanation was recorded.

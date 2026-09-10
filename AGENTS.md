@@ -1,5 +1,21 @@
 # Website implementation rules
 
+## Resumed map and performance work (WO-005)
+
+The user resumed this work after adopting the local MASTER_PROMPT_v2. Execute
+one engineering work order against the current approved snapshot. No Vault export
+or frontier research is included. The local Mathematics-Frontier-Atlas charter,
+templates, logs and draft nodes remain excluded from publication.
+
+Published topic selection now belongs to one persistent map, with a secondary
+text directory. Reading and collapse retain source identity, scroll, selection,
+camera and manual positions through history. Earlier default grid-overview
+requirements below are historical. Use actual typed, directed, sourced relations,
+including explicit destinations outside the selected themes. Geometry is a reading
+aid, never a proof or prerequisite. Evaluate 2D/3D against a concrete relation task;
+do not invent a mathematical depth axis. Compare current browser diagnostics with
+the exact baseline and keep inactive rendering asleep.
+
 ## Stable, named topic exploration
 
 The latest user clarification concerns spatial behavior and information clarity, not frame throughput alone. Topic selection opens a stable named overview, with actual object types, full titles, exact unique counts, explicit filtering and bounded pages; all approved identities remain reachable. Only relevant, named objects appear in focused relation views. Do not fill the background with unnamed horizon dots. Overview placement is a navigation arrangement, never a mathematical relation. Keep actual relationship labels, directions and evidence, including links outside the current page.

@@ -100,6 +100,37 @@ test("read-only snapshot checks allow unrelated copies but publication remains s
   await assert.rejects(verifyManifest(f.root, { allowUnmanaged: true }), /changed/)
 })
 
+test("production rules exclude the local atlas workspace and master prompt without hiding mathematical examples", async (t) => {
+  const f = await fixture(t)
+  const production = JSON.parse(
+    await readFile(new URL("../publish.config.json", import.meta.url), "utf8"),
+  )
+  await f.source("MASTER_PROMPT_v2.md", "Private charter; not publication content")
+  await f.source("Mathematics-Frontier-Atlas/00_META/charter.md", "Private copied charter")
+  await f.source("Mathematics-Frontier-Atlas/00_META/logs/session.md", "Private process log")
+  await f.source(
+    "Mathematics-Frontier-Atlas/06_Topology_and_Homotopy/objects/test.md",
+    "Unapproved atlas draft",
+  )
+  await f.source("notes/Example.md", "# A mathematical example\n\nKeep this readable.\n")
+  const before = await readFile(path.join(f.sourceRoot, "MASTER_PROMPT_v2.md"))
+  const exported = await exportVault({
+    root: f.root,
+    sourceRoot: f.sourceRoot,
+    config: production,
+    diagnostics: false,
+  })
+  assert.equal(exported.manifest.notes.length, 3)
+  assert.ok(
+    exported.manifest.notes.some(
+      (entry: { source: string }) => entry.source === "notes/Example.md",
+    ),
+  )
+  assert.doesNotMatch(JSON.stringify(exported.manifest), /MASTER_PROMPT|Mathematics-Frontier-Atlas/)
+  assert.deepEqual(await readFile(path.join(f.sourceRoot, "MASTER_PROMPT_v2.md")), before)
+  await verifyManifest(f.root)
+})
+
 test("preserves source metadata and block embeds without rewriting code examples", async (t) => {
   const f = await fixture(t)
   await f.source("首页.md", "# Home\n\n![[First#^claim]]\n\n```markdown\n[[missing]]\n```\n")

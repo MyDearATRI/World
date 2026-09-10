@@ -1,4 +1,28 @@
 /* Reading owns the full surface. The field is preserved, but does no background work. */
+#topos-world[data-map="true"]
+  > :is(
+    #topos-canvas,
+    .topos-flat-canvas,
+    #topos-labels,
+    .topos-node-marks,
+    #topos-explanations,
+    #topos-communities,
+    #topos-relations,
+    .topos-annotation-leaders,
+    .topos-guide,
+    .topos-instruments,
+    .topos-relation-detail
+  ) {
+  display: none;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#topos-world[data-map="true"] .topos-global-map-trigger {
+  color: #164d62;
+  border-color: #53818d;
+}
+
 body[data-reader="true"] #topos-world {
   margin-left: 0;
   width: 100%;
@@ -83,6 +107,18 @@ body[data-reader="true"] #topos-world {
   flex-wrap: wrap;
   justify-content: flex-end;
   max-width: 194px;
+}
+#topos-world[data-reader="true"] .topos-unfolding-header {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  padding-block: 8px;
+  background: #fdfcf8;
+  border-bottom: 1px solid #e0e4de;
+}
+#topos-world[data-reader="true"] .topos-unfolding-header button {
+  min-height: 36px;
+  color: #245e73;
 }
 body[data-reader="true"] .topos-topics-trigger {
   display: block;
@@ -185,6 +221,9 @@ body[data-reader="true"] .topos-topic-sidebar:modal {
   }
 }
 @media (max-width: 480px) {
+  #topos-world[data-map="true"] .topos-identity {
+    display: none;
+  }
   body[data-reader="true"] #topos-world {
     --reading-inset: 10px;
   }

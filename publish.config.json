@@ -2,9 +2,18 @@
   "version": 1,
   "sourceRoot": "..",
   "home": "首页.md",
-  "excludeDirectories": ["website", "Prompts", "Templates", "backup", "backups", "备份"],
+  "excludeDirectories": [
+    "website",
+    "Mathematics-Frontier-Atlas",
+    "Prompts",
+    "Templates",
+    "backup",
+    "backups",
+    "备份"
+  ],
   "excludeFiles": [
     "AGENTS.md",
+    "MASTER_PROMPT_v2.md",
     "更新日志.md",
     "Haru_Obsidian_模板与提示词.md",
     "Haru_数学与物理笔记提示词.md"

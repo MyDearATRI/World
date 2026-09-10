@@ -1,5 +1,19 @@
 # Website acceptance
 
+## WO-005 map and reading tasks
+
+Use `node scripts/verify-map-workflow.mjs` for fresh all-theme timing diagnostics
+and `node scripts/verify-map-reading.mjs` for source-directed reading tasks.
+Record exact baseline and candidate runtime hashes. Do not call headless RAF
+observations physical FPS or production INP. Inspect the screenshots and distinguish
+automated viewport/touch tests from real device or assistive-technology testing.
+
+Verify search, full source mathematics, collapse, original passage restoration,
+typed relations with evidence, an out-of-scope destination, structural occurrences,
+Back, refresh, canonical new tabs and retained map camera. View the same task in
+the topic overview and focused neighborhood before deciding whether a third
+spatial dimension is necessary. Keep publication bounded by the unchanged manifest.
+
 ## Node occupancy, dragging and relationship reasons
 
 Drag real published nodes across another node and its name. Verify the objects remain rendered and independently hittable; a label-hidden flag must not remove a node or link. Check per-node target/force parameters, direct pointer following, related-neighbor response, collision separation including unlinked contact, finite release settling, and persistence across filtering, Back and refresh. Inspect the actual reason and evidence for highlighted relations against the source model. Never equate physical collision response with a new relation.

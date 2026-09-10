@@ -1,5 +1,19 @@
 # Project brief
 
+## Resumed map-first reading
+
+The map is the persistent entrance and return point for approved notes and title
+collections. Theme checkboxes change its scope directly; a plain name directory is
+secondary. Collapsing a reading returns to its spatial context and retains the
+passage, selected object, camera and positions. Topic collections are navigable
+regions, while real objects retain one identity across memberships.
+
+Relations remain inspectable as directed references, structural occurrences or
+sourced mathematical claims. Out-of-scope destinations are disclosed before
+explicit expansion. This work uses the existing snapshot only and does not advance
+any new research-charter phase. Current acceptance belongs in validation.md; the
+sections below preserve earlier interface decisions.
+
 ## Node occupancy and relational movement
 
 The current correction separates node bodies from annotation visibility. Dragging across a label must not delete, fade out or disable a semantically eligible node. Names can move or become secondary while the mark and canonical target remain accessible. Each node has bounded layout coefficients and its own preferred position; actual edges pull locally, physical contact repels, and damping ends the response. A collision between unlinked objects is a spatial event, never a newly asserted mathematical relationship.

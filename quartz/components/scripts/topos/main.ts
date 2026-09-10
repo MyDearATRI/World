@@ -3,7 +3,7 @@ import { createField, type FieldSnapshot } from "../../../util/topos/field"
 import { topicContext as deriveContext, topicIDs } from "../../../util/topos/topics"
 import { createTopicSidebar } from "./sidebar"
 import { createTopicOverview } from "./overview"
-import { createGlobalMap } from "./globalMap"
+import { createGlobalMap, type GlobalMapViewSnapshot } from "./globalMap"
 import { createReadingDirections } from "./readingDirections"
 import { computeAnnotations, type AnnotationPlacement } from "../../../util/topos/annotations"
 import type { Concept, KnowledgeModel, Lens, Section, ViewState } from "../../../util/topos/types"
@@ -17,6 +17,8 @@ type Saved = {
   readingScroll?: Record<string, number>
   directionFocus?: string
   modelSignature?: string
+  readingMapOrigin?: boolean
+  mapView?: GlobalMapViewSnapshot
 }
 const $ = <T extends HTMLElement = HTMLElement>(selector: string) =>
   document.querySelector<T>(selector)!
@@ -153,7 +155,7 @@ async function start() {
           ? (concepts.get(focus)?.topicIDs ?? model.topics?.slice(0, 1).map((t) => t.id))
           : undefined,
       overview:
-        published && (hash.get("view") === "topics" || (!hash.has("focus") && !hash.has("depth")))
+        published && hash.get("view") === "topics"
           ? {
               page: Math.max(0, Math.min(10000, Number(hash.get("page")) || 0)),
               query: (hash.get("query") ?? "").slice(0, 200),
@@ -304,7 +306,10 @@ async function start() {
     rendererInstances: 1,
   }
   let historyTimer: ReturnType<typeof setTimeout> | undefined
+  let activeHistoryEntry: string | undefined = history.state?.toposEntry
+  const recentMapViews = new Map<string, GlobalMapViewSnapshot>()
   const readingScroll = new Map<string, number>(Object.entries(saved?.readingScroll ?? {}))
+  let readingMapOrigin = saved?.readingMapOrigin ?? false
   const restoringScroll = new Set<string>()
   const scrollRestores = new Map<string, AbortController>()
   let pendingAnchor: { concept: string; anchor: string } | undefined
@@ -329,9 +334,10 @@ async function start() {
         topics: ids,
         focus: nextFocus,
         scale: 1,
-        overview: { page: 0, query: "", kind: "all" },
+        overview: undefined,
         unfolded: state.unfolded.filter((u) => visible.has(u.concept)),
       })
+      showMap(false)
     },
     focus(id) {
       focus(id)
@@ -349,17 +355,21 @@ async function start() {
       focusReading()
     },
     close() {
-      commit({ ...state, overview: undefined })
-      focusReading()
+      if (published) showMap()
+      else {
+        commit({ ...state, overview: undefined })
+        focusReading()
+      }
     },
   })
   world.append(overview.element)
-  const overviewButton = element("button", "topos-overview-trigger", "主题概览")
+  const overviewButton = element("button", "topos-overview-trigger", "名称目录")
   overviewButton.type = "button"
   overviewButton.dataset.openOverview = "true"
-  overviewButton.addEventListener("click", () =>
-    commit({ ...state, overview: { page: 0, query: "", kind: "all" } }),
-  )
+  overviewButton.addEventListener("click", () => {
+    globalMap.hide("history")
+    commit({ ...state, overview: { page: 0, query: "", kind: "all" } })
+  })
   $(".topos-utility").prepend(overviewButton)
   overviewButton.hidden = !published
   const isReading = () => published && !state.overview && state.scale >= 1.7
@@ -383,15 +393,27 @@ async function start() {
   const directions = createReadingDirections(model, {
     open: openReading,
     overview() {
-      commit({ ...state, overview: { page: 0, query: "", kind: "all" } })
-      overview.focus(state.focus)
+      showMap()
     },
   })
   world.append(directions.element)
   let mapDismissPending = false
   const globalMap = createGlobalMap(model, {
+    embedded: published,
     open: openReading,
+    onViewChange() {
+      if (history.state?.toposGlobalMap) remember()
+    },
+    onSelectionChange(ids) {
+      state = { ...state, topics: ids }
+      context = deriveContext(model, state)
+      field.setContext(context)
+      sidebar?.update(ids, state.focus)
+      remember()
+    },
     onClose(reason) {
+      world.dataset.map = "false"
+      if (reason === "navigate") readingMapOrigin = true
       // Navigating leaves the map as a real Back destination with its saved camera.
       if (reason !== "dismiss" || !history.state?.toposGlobalMap) return
       if (history.state.toposMapCanBack) {
@@ -404,20 +426,26 @@ async function start() {
       }
     },
   })
-  document.body.append(globalMap.element)
-  const globalMapButton = element("button", "topos-global-map-trigger", "全局地图")
+  world.append(globalMap.element)
+  const globalMapButton = element("button", "topos-global-map-trigger", "知识地图")
   globalMapButton.type = "button"
   globalMapButton.dataset.openGlobalMap = "true"
   globalMapButton.setAttribute("aria-haspopup", "dialog")
-  globalMapButton.addEventListener("click", () => {
-    remember()
-    history.pushState(
-      { topos: serialize(), toposCanBack: true, toposGlobalMap: true, toposMapCanBack: true },
-      "",
-      `${hash()}&map=global`,
-    )
+  function showMap(push = true) {
+    if (state.overview || isReading())
+      commit({ ...state, overview: undefined, scale: 1 }, push, true)
+    else if (push) {
+      remember()
+      history.pushState({ topos: serialize(), toposCanBack: true }, "")
+    }
+    history.replaceState({ ...history.state, toposGlobalMap: true, toposMapCanBack: true }, "")
+    world.dataset.map = "true"
     globalMap.show(state.topics, state.focus, globalMapButton)
-  })
+    if (push) globalMap.focusSelected()
+    remember()
+    wake()
+  }
+  globalMapButton.addEventListener("click", () => showMap())
   $(".topos-utility").prepend(globalMapButton)
   globalMapButton.hidden = !published
   let visibilityContext: typeof context | undefined
@@ -484,7 +512,8 @@ async function start() {
     const reading = unfoldings.get(state.focus)
     if (
       reading &&
-      !state.overview &&
+      isReading() &&
+      world.dataset.reader === "true" &&
       reading.dataset.active === "true" &&
       !restoringScroll.has(state.focus) &&
       reading.getClientRects().length > 0 &&
@@ -503,6 +532,8 @@ async function start() {
       camera: { ...renderer.view },
       modelSignature,
       readingScroll: Object.fromEntries(readingScroll),
+      readingMapOrigin,
+      mapView: globalMap.captureView(),
       directionFocus,
     }
   }
@@ -526,7 +557,9 @@ async function start() {
   }
   function remember() {
     const s = serialize()
-    history.replaceState({ ...history.state, topos: s }, "", hash())
+    activeHistoryEntry = history.state?.toposEntry ?? crypto.randomUUID()
+    recentMapViews.delete(activeHistoryEntry!)
+    history.replaceState({ ...history.state, toposEntry: activeHistoryEntry, topos: s }, "", hash())
     try {
       sessionStorage.setItem(key, JSON.stringify(s))
     } catch {
@@ -545,26 +578,28 @@ async function start() {
       raf = requestAnimationFrame(tick)
     }
   }
-  function commit(next: ViewState, push = true) {
+  function commit(next: ViewState, push = true, mapTransition = false) {
     pendingScale = undefined
     remember()
     state = next
     context = deriveContext(model, state)
-    field.setContext(context)
+    if (!mapTransition) field.setContext(context)
     if (push) {
       history.pushState({ topos: serialize(), toposCanBack: true }, "")
       history.replaceState(history.state, "", hash())
     }
-    update()
+    update(mapTransition)
     wake()
   }
   function focus(id: string, anchor?: string) {
     if (!concepts.has(id)) return
+    const fromMap = published && (globalMap.element.open || history.state?.toposGlobalMap)
+    if (published && globalMap.element.open) globalMap.hide("navigate")
     if (state.overview) state = { ...state, overview: { ...state.overview, anchor: id } }
     pendingAnchor = anchor
       ? { concept: id, anchor: decodeAnchor(anchor.replace(/^#/, "")) }
       : undefined
-    if (id === state.focus && isVisible(id) && !state.overview) {
+    if (id === state.focus && isVisible(id) && !state.overview && !fromMap) {
       zoom(Math.min(3, state.scale + 0.65))
       return
     }
@@ -575,6 +610,7 @@ async function start() {
         ...state,
         overview: undefined,
         focus: id,
+        scale: fromMap ? 2.1 : state.scale,
         topics:
           state.topics !== undefined && !isVisible(id)
             ? [...new Set([...state.topics, ...(concepts.get(id)?.topicIDs ?? [])])]
@@ -1069,6 +1105,10 @@ async function start() {
     close.type = "button"
     close.dataset.fold = "true"
     close.addEventListener("click", () => {
+      if (published) {
+        showMap()
+        return
+      }
       commit(
         { ...state, scale: 1, unfolded: state.unfolded.filter((u) => u.concept !== concept.id) },
         true,
@@ -1243,6 +1283,8 @@ async function start() {
     }
     root.onscroll = () => {
       if (
+        !isReading() ||
+        world.dataset.reader !== "true" ||
         state.focus !== concept.id ||
         state.overview ||
         root!.dataset.active !== "true" ||
@@ -1361,7 +1403,8 @@ async function start() {
       unfold(href.slice(8))
     }
   })
-  function update() {
+  function update(mapTransition = false) {
+    const compact = innerWidth < 600
     const reading = isReading()
     world.dataset.reader = String(reading)
     document.body.dataset.reader = String(reading)
@@ -1394,7 +1437,9 @@ async function start() {
       renderer.size.height,
       Boolean(state.overview),
     ].join("/")
-    const layoutChanged = layoutVersion !== nextLayout
+    // Collapsing into the independent map must not lay out the dormant field.
+    // Keep its version unchanged so a later field visit performs a full update.
+    const layoutChanged = !mapTransition && layoutVersion !== nextLayout
     if (layoutChanged) {
       layoutVersion = nextLayout
       world.dataset.focus = state.focus
@@ -1420,7 +1465,7 @@ async function start() {
               : "定义与公式"
             : "递归展开"
     if (output.textContent !== depthTitle) output.textContent = depthTitle
-    targetZoom = innerWidth < 600 ? 0.45 + state.scale * 0.065 : 0.79 + state.scale * 0.09
+    targetZoom = compact ? 0.45 + state.scale * 0.065 : 0.79 + state.scale * 0.09
     if (layoutChanged) {
       for (const b of document.querySelectorAll<HTMLElement>("button[data-lens]"))
         b.setAttribute("aria-pressed", String(b.dataset.lens === state.lens))
@@ -1431,7 +1476,7 @@ async function start() {
         a.dataset.focus = String(id === state.focus)
         a.dataset.previous = String(id === context.previous)
         a.setAttribute("aria-current", id === state.focus ? "true" : "false")
-        style(a, "width", `${id === state.focus ? focusedWidth : innerWidth < 600 ? 128 : 185}px`)
+        style(a, "width", `${id === state.focus ? focusedWidth : compact ? 128 : 185}px`)
       }
     }
     updateContent()
@@ -2141,7 +2186,7 @@ async function start() {
       .sort((a, b) => b.n.relevance - a.n.relevance)[0]?.n.id
   }
   function down(e: PointerEvent) {
-    if (state.overview || isReading()) return
+    if (state.overview || isReading() || globalMap.element.open) return
     if (e.button > 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return
     const target = e.target as HTMLElement
     if (
@@ -2250,7 +2295,7 @@ async function start() {
   world.addEventListener(
     "wheel",
     (e) => {
-      if (state.overview || isReading()) return
+      if (state.overview || isReading() || globalMap.element.open) return
       if (
         (e.target as HTMLElement).closest(
           ".topos-unfolding,.topos-help,.topos-relation-detail,.topos-search,.topos-guide",
@@ -2309,13 +2354,14 @@ async function start() {
   })
   document.addEventListener("keydown", (e) => {
     // Modal navigation owns its keys; Escape must not fold the reading underneath.
-    if (globalMap.element.open || document.querySelector(".topos-topic-sidebar:modal")) return
+    if (document.querySelector(".topos-topic-sidebar:modal")) return
     if (published && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
       e.preventDefault()
       if (search.open) search.close()
       else openSearch()
       return
     }
+    if (globalMap.element.open) return
     if ((e.target as HTMLElement).matches("input,textarea,select") || help.open || search.open)
       return
     if (state.overview) {
@@ -2332,7 +2378,8 @@ async function start() {
         return
       }
       if (state.scale >= 1.7) {
-        zoom(1, true)
+        if (published) showMap()
+        else zoom(1, true)
         return
       }
       if (state.trail.length) history.back()
@@ -2358,6 +2405,15 @@ async function start() {
     }
   })
   window.addEventListener("popstate", (e) => {
+    // popstate arrives after the native history pointer moves. Retain the view
+    // being left under its previous entry, even when input's save timer has not fired.
+    const departing = globalMap.captureView()
+    if (activeHistoryEntry && departing && globalMap.element.open) {
+      recentMapViews.set(activeHistoryEntry, departing)
+      if (recentMapViews.size > 32) recentMapViews.delete(recentMapViews.keys().next().value!)
+    }
+    activeHistoryEntry = e.state?.toposEntry
+    clearTimeout(historyTimer)
     const mapWasOpen = globalMap.element.open || mapDismissPending
     mapDismissPending = false
     if (!e.state?.toposGlobalMap && mapWasOpen) globalMap.hide("history")
@@ -2366,6 +2422,8 @@ async function start() {
     const s = e.state?.topos as Saved | undefined
     if (s && concepts.has(s.view.focus)) {
       restoreSaved(s)
+      readingMapOrigin = s.readingMapOrigin ?? false
+      globalMap.restoreView(recentMapViews.get(activeHistoryEntry ?? "") ?? s.mapView)
       pan = { x: renderer.view.x, y: renderer.view.y }
       readingScroll.clear()
       for (const [id, top] of Object.entries(s.readingScroll ?? {})) readingScroll.set(id, top)
@@ -2375,10 +2433,16 @@ async function start() {
       field.setContext(context)
     }
     contentVersion = ""
+    // History closes the dialog without the ordinary onClose callback. Restore
+    // the surface too, so Back from a collapsed map reveals the saved passage.
+    world.dataset.map = String(Boolean(e.state?.toposGlobalMap))
     update()
     wake()
-    if (e.state?.toposGlobalMap) globalMap.show(state.topics, state.focus, globalMapButton)
-    else if (mapWasOpen) globalMapButton.focus({ preventScroll: true })
+    if (e.state?.toposGlobalMap) {
+      world.dataset.map = "true"
+      globalMap.show(state.topics, state.focus, globalMapButton, { restoreView: true })
+      globalMap.focusSelected()
+    } else if (mapWasOpen && !isReading()) globalMapButton.focus({ preventScroll: true })
     else if (state.overview) overview.focus(state.overview.anchor ?? state.focus)
     else if (s?.directionFocus && directions.focus(s.directionFocus)) {
       /* Restore the actual direction entrance. */
@@ -2458,9 +2522,14 @@ async function start() {
   world.dataset.renderer = renderer.backend
   status.hidden = true
   update()
-  if (published && (initialGlobalMap || history.state?.toposGlobalMap)) {
+  if (
+    published &&
+    (initialGlobalMap || history.state?.toposGlobalMap || (!isReading() && !state.overview))
+  ) {
     history.replaceState({ ...history.state, toposGlobalMap: true }, "")
-    globalMap.show(state.topics, state.focus, globalMapButton)
+    world.dataset.map = "true"
+    globalMap.restoreView(saved?.mapView)
+    globalMap.show(state.topics, state.focus, globalMapButton, { restoreView: true })
   }
   remember()
   wake()
